@@ -375,6 +375,8 @@ function newGame() {
     paperUntil: null,    // a lost permit's paper lasts to this day, then falls back to the origin's
     paperFlag: null,     // the day an incident read the wrong paper (a company bar remembers PAPER_FLAG_DAYS)
     hangover: 0,         // last night's, set at the wake; DIAGNOSE reads it
+    cmdN: 0,             // commands typed (not ticks): a once-a-command rule reads it (the go-go torch)
+    boardTried: null,    // the day you last guessed Cloze's board — one go a night
     questPaid: {},       // qid → true once its reward is paid; a reopened quest never pays twice
     jobFired: null,      // { room, day, kind } — the last bar that took the keys back (2026-10-24)
     firedBars: {},       // room → day: bars that will never hire him as manager again
@@ -3608,6 +3610,13 @@ function _districtPath(a, b) {
     }
   }
   return null;
+}
+// A PAID STRETCH OF TIME THAT WOULD RUN INTO THE DAWN is refused before the money moves (review 2026-10-25: a massage
+// bought minutes before six took the money and ended the night without the hour)
+function _tooLateFor(turns, what) {
+  if (G.nightTurn + turns < NIGHT_TURNS) return false;
+  _say(`(${what || "That"} takes longer than the night has left — it is nearly six. Nothing is charged.)`, "dim");
+  return true;
 }
 function _passTime(n) {
   const startDay = G.day, g0 = G;

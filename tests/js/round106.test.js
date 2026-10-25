@@ -44,7 +44,8 @@ test("Desmond: the payday's condo bill is the new month's alone; the closing mon
   G.room = "pratumnak_soi5"; G.nightTurn = 2; run("rent a condo"); run("rent a condo"); assert.equal(G.hotel, "condo");
   G.room = "condo_room"; G.nightTurn = 100; _endNight("sleep"); G.payDay = G.day + 1 - INCOME_DAYS;
   G.room = "stinky_bar"; G.nightTurn = 20; quiet(); run("buy beer"); G.room = "condo_room"; G.nightTurn = 100; out = []; _endNight("sleep");
-  assert.deepEqual([G.month.spent, G.month.rent], [CONDO_RENT + CONDO_UTIL, CONDO_RENT + CONDO_UTIL]);
+  // signed the day before the payday: the advance was this month's rent, so the payday bills the electric (2026-10-25 review)
+  assert.deepEqual([G.month.spent, G.month.rent], [CONDO_UTIL, CONDO_UTIL]);
   const line = said().split("\n").find(l => /The month, to last night's close/.test(l)) || "";
   const n = +((line.match(/฿([\d,]+) spent/) || [])[1] || "0").replace(/,/g, "");
   assert.ok(n < 2 * (CONDO_RENT + CONDO_UTIL), "the closing month does not also carry the coming month's rent: " + line.slice(0, 90));

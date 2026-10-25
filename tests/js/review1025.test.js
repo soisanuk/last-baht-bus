@@ -136,3 +136,77 @@ test("the dog keeps the wallet too, and the Vic's curry makes you thirsty", () =
   sandbox(); G.room = "queen_vic"; G.thirst = 20; const card = _qvMenu().find(d => /curry/i.test(d.name || d.id || ""));
   if (card) { doCommand("buy " + (card.name || card.id).toLowerCase()); assert.ok(G.thirst >= 20, "the curry quenched thirst"); }
 });
+
+// ── the second pass: the 29 left by the first ─────────────────────────────────
+test("the end of the week starts the next trip clean; the night's own calls never survive it", () => {
+  sandbox(); G.lastBfBase = 4; G.crashInjury = true; G.lastBfId = "lek"; _newVacation();
+  assert.equal(G.lastBfBase, 10); assert.ok(!G.crashInjury); assert.equal(G.lastBfId, null);
+  sandbox(); G.room = "hotel_room"; G.pendingChoice = "synjob"; _endNight("sleep"); assert.equal(G.pendingChoice, null);
+});
+
+test("I DON'T DRINK is honoured by the quiz and the ride; DECLINE gives back what was poured", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-play.js", import.meta.url)), "utf8");
+  assert.match(src, /right === 3\) \{\n\s*if \(!\(G\.player && G\.player\.teetotal\)\) G\.soc\.drunk\+\+/);
+  sandbox(); G.soc.drunk = 0; G.room = "stinky_bar"; _compDrink(2); const u = G.lastComp.units; assert.ok(u >= 2);
+  doCommand("decline"); assert.equal(G.soc.drunk, 0);
+});
+
+test("the intro reads an orientation by its own words", () => {
+  assert.equal(_introMatch("bi, to be honest", ORIENTATIONS).id, "bi");
+  assert.equal(_introMatch("straight", ORIENTATIONS).id, "straight");
+});
+
+test("a paid hour that would run into dawn is refused before the money moves", () => {
+  sandbox(); G.nightTurn = NIGHT_TURNS - 3; const m = G.money;
+  assert.ok(_tooLateFor(10, "A proper hour")); assert.equal(G.money, m);
+  assert.ok(!_tooLateFor(2, "x"));
+});
+
+test("Cloze's board: one go a night, and a letter is not a word", () => {
+  sandbox(); G.room = "cloze"; const w = _boardWord();
+  t("answer " + w.rom.slice(0, 1)); assert.notEqual(G.boardWon, G.day, "one letter won it");
+  assert.match(t("answer " + w.rom), /One go a night/);
+});
+
+test("the cart asks who 'for X' is rather than buying it for you", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-encounters.js", import.meta.url)), "utf8");
+  assert.match(src, /For whom\? The saleng man waits/);
+});
+
+test("the condo: the advance is the first month, a short month is collected, the hotel's book is settled not wiped", () => {
+  sandbox("expat"); G.payDay = 1; G.room = "pratumnak_soi5"; G.money = 0; G.bank = 60000; G.hotelDebt = 900; G.nightTurn = 2;
+  doCommand("rent a condo"); doCommand("rent a condo"); assert.equal(G.hotel, "condo");
+  assert.equal(G.bank, 60000 - CONDO_RENT * CONDO_DEPOSIT_MONTHS - CONDO_RENT - 900, "the book came out of the same money");
+  const line = _condoMonth(); assert.match(line, /advance you paid at the desk/);
+});
+
+test("the platform's first payday is the days held, and the school's paper needs a month", () => {
+  sandbox("expat"); G.job = { kind: "teach", since: G.day - 3 };
+  assert.ok(_jobPay() < TEACH_PAY / 5, "three days is not a month");
+  G.job.firstPaid = true; assert.ok(_jobPay() >= TEACH_PAY * 0.4);
+});
+
+test("at your own bar the till is the house side of a game, and a bell's round rings into it", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-play.js", import.meta.url)), "utf8");
+  assert.match(src, /a game the house lost/); assert.match(src, /G\.bar\.ownBells/);
+});
+
+test("Cream, Sao and the Orchid read the room", () => {
+  const s = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.match(s, /function _chamAsk\(\) \{[\s\S]{0,300}_partyBlocksTrade\(\)/);
+  assert.match(s, /G\.nightTurn < 50 && !\(G\.party/);
+  sandbox(); G.room = "orchid_room"; G.money = 5000; const m = G.money; doCommand("tip 100"); assert.equal(G.money, m);
+});
+
+test("the free ride reads the fare charged; MOTOSAI HOME stops a man on the bench at the door; another hotel is a guest's", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
+  assert.match(src, /G\.money < \(typeof _motoFare === "function" \? _motoFare\(d\) : d\.price\)/);
+  assert.match(src, /ROOMS\[G\.motoHomeDoor\]\.dark && !G\.street/);
+  assert.match(src, /if \(_hotelOf && _hotelOf !== G\.hotel\) \{/);
+});
+
+test("a YES belongs to the newest prompt, and a blown box closes the heist job", () => {
+  const p = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
+  assert.match(p, /startsWith\("streambell:"\) && !\(G\.pendingChoice/);
+  sandbox(); G.quests.rabbit_heist = "active"; G.room = "kitten_office"; out = []; _boxBlown(); assert.equal(G.quests.rabbit_heist, "abandoned");
+});

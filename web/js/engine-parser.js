@@ -1314,7 +1314,7 @@ function _doGo(dirWord) {
   }
   // hotel rooms open for their guests only
   const _hotelOf = Object.keys(_HOTELS).find(k => _HOTELS[k].room === to);
-  if (_hotelOf && _hotelOf !== G.hotel && _flag("hasWallet")) {
+  if (_hotelOf && _hotelOf !== G.hotel) {   // it was keyed on the wallet, so in Act One you walked into another hotel's room (review 2026-10-25)
     _say(`The ${_HOTELS[_hotelOf].name} desk takes one practiced look at you: ` +
       "\"Guest, sir?\" Your key card opens a different hotel tonight. The " +
       `smile that follows is kind and absolutely final. (Your room is at the ${_HOTELS[G.hotel].name} — TRAVEL HOME.)`);
@@ -1915,7 +1915,7 @@ function _doTravel(arg) {
   // Don't spend the whole walk to arrive at shutters, or walk into the dawn
   // (expat playtest 2026-08-22: eleven turns to a bolted Orchid; 22 turns to a
   // hotel with 22 left in the night).
-  if (typeof _closesMidnight === "function" && _closesMidnight(dest) && !(typeof _lockedIn === "function" && _lockedIn(dest)) &&
+  if (typeof _closesMidnight === "function" && (_closesMidnight(dest) || (ROOMS[dest] && ROOMS[dest].closesAt != null)) && !(typeof _lockedIn === "function" && _lockedIn(dest)) &&
       G.nightTurn + hops >= _closeTurn(dest) && G.nightTurn < NIGHT_TURNS && !_guestThrough(dest)) {
     _say(_fmt("{v} shuts at {at} — {n} turns of soi from here puts you at its shutters. " +
       "Somewhere that's still open, or a MOTOSAI.", { v: _barName(dest), n: hops, at: _closeClock(dest) }), "dim");
@@ -6961,8 +6961,8 @@ const _COMP_BACK = [
 function _doRefuseDrink() {
   const fresh = G.lastComp && G.lastComp.room === G.room && G.turns - G.lastComp.turn <= 2;
   if (fresh) {
+    G.soc.drunk = Math.max(0, G.soc.drunk - ((G.lastComp && G.lastComp.units) || 1));
     G.lastComp = null;
-    G.soc.drunk = Math.max(0, G.soc.drunk - 1);
     _say(_pickVary(_COMP_BACK, "compback"));
     return;
   }
@@ -11761,7 +11761,7 @@ function _doBuy(arg) {
       _checkDrunk();
       return;
     }
-    if (G.money < _beerPrice()) {
+    if (G.money < _beerPrice() && !(typeof _atOwnBar === "function" && _atOwnBar()) && !(typeof _atJobBar === "function" && _atJobBar())) {   // his own drink is free: the price check ran first (review 2026-10-25)
       // "the cashier's calculator" in a room with no cashier — Cheap Charlie's
       // has no cast at all (Stan, round 35). Name the money-holder the bar has.
       const _tk = typeof _tillKeeper === "function" && _tillKeeper();
@@ -11865,7 +11865,8 @@ function _doBuy(arg) {
       _say(`${NPCS[id].name} lifts a hand before the cashier can reach for the chit. "Not a lady drink. I'm not on the book." A soda, at the price of a beer, and she thanks you for it properly. (-฿${_num(p)}, ฿${_num(G.money)} left.)`);
       return;
     }
-    if (G.money < _ladyPrice()) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: _ladyPrice(), m: G.money })); return; }
+    if (G.room === "orchid_room" && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }   // the room says nobody is working it (review 2026-10-25)
+    if (G.money < _ladyPrice() && !(typeof _atJobBar === "function" && _atJobBar() && typeof _jobBarStaff === "function" && _jobBarStaff(id))) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: _ladyPrice(), m: G.money })); return; }   // the manager's own girls' drinks are the house's (review 2026-10-25)
     // At the bar you OWN, the drink rings through your OWN till instead of
     // vanishing (Ronnie, 2026-08-26: ฿150 left the pocket, credited ฿0, gone from
     // the ecosystem). _ladyDrinkCharge does both sides.
@@ -11967,11 +11968,14 @@ function _doBuy(arg) {
           "the girls treat you like a regular.", "dim");
       _addHappy(2);
       if (_rand() < 0.5) {
-        G.soc.drunk++;
-        G.thirst = Math.max(0, G.thirst - 20);
-        _say("She flicks two fingers at the cashier and a cold one lands in front " +
-          "of you. On the house.", "dim");
-        _checkDrunk();
+        if (G.player && G.player.teetotal) _say("She flicks two fingers at the cashier and a cold soda lands in front of you — she heard you the first time. On the house.", "dim");   // I DON'T DRINK is honoured (review 2026-10-25)
+        else {
+          _compDrink(1);
+          G.thirst = Math.max(0, G.thirst - 20);
+          _say("She flicks two fingers at the cashier and a cold one lands in front " +
+            "of you. On the house.", "dim");
+          _checkDrunk();
+        }
       }
     }
     // drink-sniping the specific girl the regular was attending: bad form. Legacy
@@ -12321,11 +12325,12 @@ function _doRideBus(arg) {
       "For him the small hours are just the hours, and the wait is only a wait if " +
       "you are alone in it. You are not.)"), "dim");
     const wait = 3 + Math.floor(_rand() * 6);   // 18–48 minutes of kerb
-    const startDay = G.day;
+    const startDay = G.day, _g0 = G;
     G.busWaitTurn = G.turns;   // the drizzle's "a baht bus pulls away" is not printed while you wait for one (Priya, round 58)
     for (let i = 0; i < wait; i++) {
       _tick();
-      if (G.day !== startDay || G.pendingChoice === "vacation_end") return; // the night ended where you stood
+      if (G !== _g0 || G.day !== startDay || G.pendingChoice === "vacation_end") return; // the night ended where you stood (or Act One started over)
+      if (G.rain > 0) { _say("(The rain comes down and the kerb empties. Nothing with a bench in it is coming through that — wait it out, or find a roof.)", "dim"); return; }   // review 2026-10-25
       if (G.pendingEnc) {
         _say("(Headlights, twice — neither of them a songthaew. The street found " +
           "you before the bus did; flag another when this is done.)", "dim");
@@ -12643,7 +12648,7 @@ function _doMotosai(arg) {
     // while a paying man was still negotiating a fare (credit-analyst persona,
     // round 20). Walking home is always free and dawn always comes, so the
     // anti-soft-lock purpose survives the cap intact.
-    if (G.money < d.price && d.price === MOTOSAI_TOWN && G.pityRideDay !== G.day) {
+    if (G.money < (typeof _motoFare === "function" ? _motoFare(d) : d.price) && d.price === MOTOSAI_TOWN && G.pityRideDay !== G.day) {   // the fare charged, not the table price: ฿60 was stranded where ฿40 rode free (review 2026-10-25)
       G.pityRideDay = G.day;
       G.pityRides = (G.pityRides || 0) + 1;
       G.pityOwed = (G.pityOwed || 0) + d.price;   // "pay next time" is a promise the game keeps
@@ -12702,7 +12707,7 @@ function _doMotosai(arg) {
   if (G.motoHomeDoor && G.motoHomeDoor !== G.room && (_hops(G.room, G.motoHomeDoor) ?? 9) <= 3) {
     // a dark hotel soi is the headlight's job, not yours: set down at the door he was
     // bitten on the next step (Kwame, round 60), so the ride ends at the steps and you go in
-    G.room = ROOMS[G.motoHomeDoor].dark ? (_hotelRoomId() && Object.values(ROOMS[G.motoHomeDoor].exits || {}).includes(_hotelRoomId()) ? _hotelRoomId() : G.motoHomeDoor) : G.motoHomeDoor;
+    G.room = ROOMS[G.motoHomeDoor].dark && !G.street ? (_hotelRoomId() && Object.values(ROOMS[G.motoHomeDoor].exits || {}).includes(_hotelRoomId()) ? _hotelRoomId() : G.motoHomeDoor) : G.motoHomeDoor;   // a man on the bench stops at the door; the desk has his key (review 2026-10-25)
   }
   G.motoHomeDoor = null;
   if (extraTurns) { G.offstage = true; G.motoRiding = true; let ended; try { ended = _passTime(extraTurns); } finally { G.offstage = false; G.motoRiding = false; } if (ended) return; }
@@ -12948,6 +12953,8 @@ function _lightNotice() {
 function _gogoLightWarn() {
   const w = G.lightWarn;
   if (w.room !== G.room) { w.room = G.room; w.n = 0; }
+  if (w.cmd === G.cmdN && w.n > 0) return;   // a WAIT's ticks are one command (review 2026-10-25)
+  w.cmd = G.cmdN;
   w.n++;
   const npcs = _npcsHere();
   const mama = npcs.find(id => NPC_ROLES[id] === "mamasan");
@@ -13171,7 +13178,8 @@ function _doClinic() {
   // (Judith, round 47). It is on Second Road at the Central junction, and the
   // waiting room is there. And it takes the twenty minutes its own prose says
   // (Marek, round 53: one turn against "twenty minutes of imagining the worst")
-  _passTime(3);
+  if (_tooLateFor(G.room !== "second_rd_c" ? 5 : 3, "The clinic's twenty minutes")) return;
+  if (_passTime(3)) return;   // the night ended in the waiting room: the bike and the test belong to no new day (review 2026-10-25)
   if (G.room !== "second_rd_c" && G.mode !== "soi6") {
     // the bike there is a bike: it charged nothing (Malcolm, round 59)
     const _fare = _flag("helmetDelivered") ? 20 : MOTOSAI_TOWN, _ride = G.money >= _fare;
@@ -13655,6 +13663,7 @@ function _withHerTalk(npc, topic) {
   return false;
 }
 function _doDance(arg) {
+  if (G.room === "orchid_room" && arg && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   if (typeof _withHerNote === "function" && G.party && G.party.ids && G.party.ids.length) _withHerNote("dance");
   // DANCE WITH <her>: the named woman, not "a hostess materialises at your elbow"
   // with your own girl standing there (Rolf, round 55)
@@ -14109,6 +14118,7 @@ function _doWait(arg) {
 const _CABARET_PERFORMERS = ["mala", "petch"];
 
 function _doTip(arg) {
+  if (G.room === "orchid_room" && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   const amtM = arg.match(/(\d+)/);
   // A bare TIP <name> used to spend ฿20 silently — a figure the player never
   // chose and was never shown, the same class as the Connect 4 stake that was
@@ -18319,7 +18329,7 @@ let _rawAnswer = null; // the raw-cased line, for _convoAnswer's quote-back memo
 // English) runs inside the one the player typed, so a run of parse failures is counted once per thing typed.
 function doCommand(input) {
   if (_cmdDepth > 0) return _doCommandInner(input);
-  _cmdDepth++; _failedThis = false;
+  _cmdDepth++; _failedThis = false; if (G) G.cmdN = (G.cmdN || 0) + 1;
   try { return _doCommandInner(input); }
   finally { _cmdDepth--; if (!_failedThis && String(input == null ? "" : input).trim()) _failRun = 0; }
 }
@@ -18328,12 +18338,13 @@ function _doCommandInner(input) {
   G.askArmPrev = G.askArm || null; G.askArm = null;   // a "again to sign" arm holds for the NEXT command only (the lease, the notice — Victor, round 97)
   // YES / PAY to Nont's named fee: the locate he just priced (Mario, 2026-10-22)
   // a STREAM BELL with no bar named names its bar and waits for a yes (Wes, round 104: ฿1,630 on a bar he never named)
-  if (typeof G.askArmPrev === "string" && G.askArmPrev.startsWith("streambell:") && /^(?:yes|yeah|yep|ok|okay|sure|go on|ring it|do it|fine)[.!]*$/.test(String(_rawAnswer || "").toLowerCase().trim()) && typeof _doStreamBell === "function") {
+  // a prompt that armed AFTER the one-command arm owns the YES: it spent ฿1,440 on a stream bell the man meant for the rose seller (review 2026-10-25)
+  if (typeof G.askArmPrev === "string" && G.askArmPrev.startsWith("streambell:") && !(G.pendingChoice || G.pendingEnc || G.pendingBf || G.pendingFare || G.pendingSoapy || G.game) && /^(?:yes|yeah|yep|ok|okay|sure|go on|ring it|do it|fine)[.!]*$/.test(String(_rawAnswer || "").toLowerCase().trim()) && typeof _doStreamBell === "function") {
     G.streamBellOk = G.askArmPrev.slice(11); try { _doStreamBell(String(_barName(G.streamBellOk) || "")); } finally { G.streamBellOk = null; } _tick(); return;
   }
   // WHO'S ONLINE / IS SILVERFOX ON / STREAMS: the phone's own question, answered from the channels you know (Wes, round 104)
   if (/^(?:who'?s|who is|who'?s been|whos) online\b|^is (?:\S+(?: \S+)?) (?:on|online)\??$|^streams$|^stream list$|^(?:the )?channels$/i.test(String(_rawAnswer || "").trim()) && typeof _doWhosOnline === "function" && (/streams|channel|stream list/i.test(String(_rawAnswer || "")) || /online/i.test(String(_rawAnswer || "")) || _whaleIn(String(_rawAnswer || "")))) { _doWhosOnline(String(_rawAnswer || "")); _tick(); return; }
-  if (typeof G.askArmPrev === "string" && G.askArmPrev.startsWith("nont:") && /^(?:yes|yeah|yep|ok|okay|sure|deal|go on|pay(?: him| nont)?(?: (?:200|two hundred))?|fine|do it)[.!]*$/.test(String(_rawAnswer || "").toLowerCase().trim()) && typeof _nontLocate === "function") {
+  if (typeof G.askArmPrev === "string" && G.askArmPrev.startsWith("nont:") && !(G.pendingChoice || G.pendingEnc || G.pendingBf || G.pendingFare || G.pendingSoapy || G.game) && /^(?:yes|yeah|yep|ok|okay|sure|deal|go on|pay(?: him| nont)?(?: (?:200|two hundred))?|fine|do it)[.!]*$/.test(String(_rawAnswer || "").toLowerCase().trim()) && typeof _nontLocate === "function") {
     const _nid = G.askArmPrev.slice(5); G.nontPayNow = true;
     try { _nontLocate(String(NPCS[_nid] ? NPCS[_nid].name : _nid).toLowerCase()); } finally { G.nontPayNow = false; }
     _tick(); return;
@@ -20836,7 +20847,12 @@ function _introMatch(input, table) {
   const _KEY = { pension: /\b(pension|pensioner|retired|retire)\b/, redundancy: /\b(redundan|laid off|package|payout|let go)\b/, running: /\b(running|debts?|trouble|creditors|owe)\b/, pi: /\b(detective|police|copper|cop|investigat)\b/,
     business: /\b(business|investor|invest|capital|money to put)\b/, married: /\b(married|wife|my ex|divorce)\b/, monger: /\b(monger|regular|punter|twenty trips|been here (?:a )?(?:lot|many)|every year)\b/, nomad: /\b(nomad|laptop|online|remote|content|youtube|streamer|videos?)\b/, halfthai: /\b(thai mother|mum is thai|luk ?khrueng|half thai|half-thai)\b/,
     joker: /\b(joke|laugh|funny)\b/, straight: /\b(straight|honest|plain)\b/, charmer: /\b(charm|smooth)\b/, blunt: /\b(blunt|direct)\b/, whiteknight: /\b(help|rescue|save)\b/ };
-  const _byKey = () => { for (const e of table) if (_KEY[e.id] && _KEY[e.id].test(s)) return e; return null; };
+  // an orientation is read by its own words: "bi, to be honest" was straight because the personality key for "straight"
+  // also hears honest/plain (review 2026-10-25)
+  const _orient = typeof ORIENTATIONS !== "undefined" && table === ORIENTATIONS;
+  const _byKey = () => {
+    if (_orient) { if (/\b(?:bi|bisexual|both|either)\b/.test(s)) return table.find(e => e.id === "bi") || null; if (/\bstraight\b/.test(s)) return table.find(e => e.id === "straight") || null; return null; }
+    for (const e of table) if (_KEY[e.id] && _KEY[e.id].test(s)) return e; return null; };
   return table.find(e => e.id === s || e.label.toLowerCase() === s || (e.pick && _norm(e.pick) === _norm(s))) || _byKey() ||
     (s.length >= 4 ? table.find(e => e.label.toLowerCase().includes(s) || e.id.includes(s) || (e.pick && _norm(e.pick).includes(_norm(s)))) : null) ||
     byWords() || null;

@@ -56,7 +56,26 @@ records what was fixed (pinned in `tests/js/review1025.test.js`, plus updated pi
 | quests | ABANDON <nonsense> dropped the first active job and its item | a name must match; bare ABANDON asks which |
 | thai | สามสิบเอ็ด parsed as 14 | 31 |
 
-## Left, with the site (not yet fixed)
+## The second pass (the same day): the 29 left, fixed
+
+Every finding the first pass left was fixed and pinned (the second half of `tests/js/review1025.test.js`):
+the week's last night now starts the next trip clean, and a call armed on the night's last tick no longer survives the
+morning (the soak found that one when the dice shifted); I DON'T DRINK is honoured by the mama treat, the quiz's
+consolation and the ride's stops, and DECLINE gives back what was poured; the intro reads an orientation by its own words;
+MOTOSAI HOME stops a man on the bench at the door, another hotel's room is its guests' whatever is in your pocket, and the
+free ride reads the fare charged; the kerb wait ends for a downpour or a new game; the go-go torch warns once a command;
+TRAVEL meets the mall's shutter before the walk; a paid hour, the bath, the special and the clinic are refused before the
+money moves when they would run into the dawn (`_tooLateFor`); the cart asks who "for X" is; the barfine remembers who you
+left with only once the deal is paid; at your own bar a bell and a game's stakes go through your till and the guv'nor's own
+beer is never refused for a short pocket (nor the manager's girls' drinks); the killer entry and the lesson fee are not drink
+slips; Cloze's board is one guess a night and a letter is not a word; a YES belongs to the newest prompt; a blown box closes
+the heist job; Cream and Sao's car read the woman on your arm and the hour; the Orchid's women take no lady drinks, tips or
+dances; the condo bills the electric alone when the advance covered the month, collects a short month (from the deposit on
+MOVE OUT) and settles the hotel's book rather than wiping it; the platform's and the school's first payday is the days held
+and the school's paper needs a month; the agent is paid what was there and the rest is named as owed; the wrong-paper
+incident uses `_hm`.
+
+## What the first pass left (all fixed in the second, kept for the record)
 
 - **vacation** — the week's last night returns before the nightly reset block, so night 7's state carries into the next trip (`_endNight`, the `G.day > 7` branch, engine-play ~6450).
 - **sobriety** — the mama treat's free drink, the quiz consolation and a ride stop skip `_compDrink`, so I DON'T DRINK is not honoured; DECLINE hands back one unit of a heavy pour of two.

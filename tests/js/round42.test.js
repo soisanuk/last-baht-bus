@@ -411,6 +411,9 @@ test("the board is playable and the rule is enforced (Barry, Anders)", () => {
   const beer = _beerPrice();
   out = []; run("answer definitely-wrong-nonsense"); assert.ok(_BOARD_WRONG.some(l => text().includes(l.slice(0, 25))));
   assert.equal(_beerPrice(), beer, "a wrong answer buys nothing");
+  // right first time, as the doctrine says: a wrong guess spends the night's go (review 2026-10-25)
+  out = []; run("answer " + _boardWord().rom); assert.match(text(), /One go a night/);
+  G.day += 1;
   const w = _boardWord(); out = []; run("answer " + w.rom);
   assert.match(text(), /THERE it is/); assert.equal(_beerPrice(), Math.round(beer / 2), "half price, as the sign says");
   out = []; run("answer " + w.rom); assert.match(text(), /already had it/);

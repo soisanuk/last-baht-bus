@@ -99,7 +99,7 @@ test("DIAGNOSE and the piwin agree on the number (Dex)", () => {
 
 test("the night ride's whisky sets are drinks; a ride that ends at dawn gets the quiet coda (Dex)", () => {
   const src = readFileSync(join(here, "../../web/js/engine-systems.js"), "utf8");
-  assert.match(src, /if \(!\/viewpoint\|market\|somtam\/\.test\(venue\.key\)\) G\.soc\.drunk\+\+/);
+  assert.match(src, /if \(!\/viewpoint\|market\|somtam\/\.test\(venue\.key\)(?: && !\(G\.player && G\.player\.teetotal\))?\) G\.soc\.drunk\+\+/);
   assert.match(src, /reason === "dawn"\) \{\n\s*G\.lastBfHonest = true/);
 });
 

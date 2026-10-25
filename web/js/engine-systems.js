@@ -1903,11 +1903,6 @@ const _ST_SOI6_LINES = [
 ];
 
 function _bfResolve(kind) {
-  if (kind === "lt" || kind === "party") G.soc.leftFrom = G.room;
-  // who you went with, and how — so she remembers the night next time (Martin, round 85: a woman two
-  // nights after his bed said "you sit in my bar before — you watch, you don't talk to me")
-  if (G.pendingBf && G.pendingBf.id && (kind === "st" || kind === "lt" || kind === "party") && !(G.party && G.party.ids && G.party.ids.length && kind !== "party"))
-    (G.wentWith = G.wentWith || {})[G.pendingBf.id] = { day: G.day, kind: kind === "party" ? "out" : kind };   // the bar you walked her out of answers LAST NIGHT even if you sat longer elsewhere (Pieter, round 73)
   const { id, st, lt, party } = G.pendingBf;
   const bfWas = G.pendingBf;   // kept because the counteroffer below re-opens the ledger
   // With company already on your arm, the ledger only sells one thing: another
@@ -1987,6 +1982,12 @@ function _bfResolve(kind) {
     return;
   }
   G.money -= price;
+  // who you left with is written once the deal is struck — before, a long time you could not pay for was remembered (review 2026-10-25)
+  if (kind === "lt" || kind === "party") G.soc.leftFrom = G.room;
+  // who you went with, and how — so she remembers the night next time (Martin, round 85: a woman two
+  // nights after his bed said "you sit in my bar before — you watch, you don't talk to me")
+  if (id && (kind === "st" || kind === "lt" || kind === "party") && !(G.party && G.party.ids && G.party.ids.length && kind !== "party"))
+    (G.wentWith = G.wentWith || {})[id] = { day: G.day, kind: kind === "party" ? "out" : kind };   // the bar you walked her out of answers LAST NIGHT even if you sat longer elsewhere (Pieter, round 73)
   (G.soc.bfBar = G.soc.bfBar || {})[G.room] = id; // her colleagues saw you leave with her
   G.lastBfId = id; // so the LT ending's _conquestHappy knows who
   // butterflying: a regular of yours in the room watches you leave with another
@@ -2449,7 +2450,7 @@ function _nightRide(input) {
   const paid = Math.min(cost, G.money);
   G.money -= paid;
   seq.spent += paid; seq.stops++; seq.sanuk += venue.sanuk;
-  if (!/viewpoint|market|somtam/.test(venue.key)) G.soc.drunk++;   // a whisky set is a drink (Dex woke "stone sober" after six stops)
+  if (!/viewpoint|market|somtam/.test(venue.key) && !(G.player && G.player.teetotal)) G.soc.drunk++;   // a whisky set is a drink (Dex woke "stone sober" after six stops)
   _addBond(id, 1); // every stop deepens the bond
   _say(`${hop}\n\n${scene.replace(/\s*\[free\]/, "")}` +
     (paid ? ` (฿${_num(paid)}. ฿${_num(G.money)} left.)` : " (Free. The best things here are.)"), "win");
@@ -2833,6 +2834,7 @@ function _doMassage(arg) {
         { p: MASSAGE_LEGIT, m: G.money, n: name }));
       return;
     }
+    if (_tooLateFor(10, "A proper hour")) return;
     G.money -= MASSAGE_LEGIT; G.massageSpend = (G.massageSpend || 0) + MASSAGE_LEGIT;
     (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day;   // the table is paid: she talks now (Terence, round 57)
     const _ml = (G.massageLog = G.massageLog || {}); _ml[G.room] = { last: G.day, n: ((_ml[G.room] || {}).n || 0) + 1 };
@@ -2868,6 +2870,7 @@ function _doMassage(arg) {
       { p: MASSAGE_OIL, m: G.money, n: name }));
     return;
   }
+  if (_tooLateFor(10, "The oil hour")) return;
   G.money -= MASSAGE_OIL; G.massageSpend = (G.massageSpend || 0) + MASSAGE_OIL;
   G.soc.drunk = Math.max(0, G.soc.drunk - 1);
   (G.soc.massaged = G.soc.massaged || {})[G.room] = G.day; // the base is done; special is on the table
@@ -2908,6 +2911,7 @@ function _massageSpecial(she, name) {
       "is sweet about it, but the oil stays strictly therapeutic.");
     return;
   }
+  if (_tooLateFor(6, "The special")) return;
   G.money -= price; G.massageSpend = (G.massageSpend || 0) + price;   // the ledger names the table (László, round 73)
   (G.soc.special = G.soc.special || {})[G.room] = G.day;
   if (!hadBase && _passTime(3)) return;
@@ -3064,6 +3068,7 @@ function _soapyResolve(input) {
     return true;
   }
   G.pendingSoapy = null;
+  if (_tooLateFor(8, "The bath")) return true;
   G.money -= tier.price;
   G.soc.soapyDone = G.day;
   if (_passTime(8)) return true; // the long ritual eats a chunk of night
@@ -5443,6 +5448,7 @@ const _JOKE_TEXTS = [
 function _chamAsk() {
   if (!_flag("act1Done")) { _say("Cream laughs at you. \"You drunk na. Go home.\""); return; }
   if (G.pendingChoice) return;
+  if (_partyBlocksTrade()) return;   // the companion you paid for melted away and the night went to Cream (review 2026-10-25)
   if (!_flag("chamDone")) {
     _say("You ask it — the only question there is on this street, however you dress it. " +
       "Her eyes go wide. She actually pulls back in the chair, a hand flat on the table " +
@@ -5671,7 +5677,7 @@ function _bkkArcTick() {
     return;
   }
   // 3: the car is outside — the next night, at your hotel, before you go out
-  if (b.stage === 3 && G.day > b.invite && _isHotelRoom(G.room) && !G.pendingChoice) {
+  if (b.stage === 3 && G.day > b.invite && _isHotelRoom(G.room) && !G.pendingChoice && G.nightTurn < 50 && !(G.party && G.party.ids && G.party.ids.length)) {   // a family dinner is early and alone: it came at four in the morning with a girl on your arm (review 2026-10-25)
     b.stage = 4;
     G.pendingChoice = "bkkdinner";
     _bkkDinnerPrompt();
@@ -13310,9 +13316,13 @@ function _doAnswer(arg) {
   if (!arg) { _boardShow(); return; }
   if (G.boardWon === G.day) { _say("\"You already had it.\" She is amused. \"Let somebody else have a go — and drink your cheap beer.\""); return; }
   const a = String(arg).toLowerCase().replace(/[^a-z\u0E00-\u0E7F ]/g, "").trim();
-  const ok = a && (a === w.th || w.rom.toLowerCase().replace(/[^a-z ]/g, "").includes(a) ||
-    a.includes(w.rom.toLowerCase().replace(/[^a-z ]/g, "")) || (w.en && w.en.includes(a)) ||
-    (a.length > 2 && String(w.en).toLowerCase().includes(a)));
+  // "right first time" is the board's own rule: one guess a night, and a guess is a word — a single letter matched
+  // inside the romanisation and unlimited tries won the half price for one keystroke (review 2026-10-25)
+  if (G.boardTried === G.day) { _say("\"One go a night.\" She taps the board. \"Tomorrow, a new word. That is how the half price stays half.\""); return; }
+  const _rom = w.rom.toLowerCase().replace(/[^a-z ]/g, "").trim(), _en = String(w.en || "").toLowerCase();
+  const ok = a && (a === w.th || (a.length >= Math.min(3, _rom.length) && (_rom === a || _rom.split(/\s+/).includes(a) || a.includes(_rom))) ||
+    (a.length >= 3 && (_en === a || _en.split(/[\s/,]+/).includes(a))));
+  G.boardTried = G.day;
   if (!ok) { _say(_pickVary(_BOARD_WRONG, "boardwrong")); return; }
   G.boardWon = G.day;
   G.taughtBy = (G.taughtBy || 0) + 1;
@@ -13354,7 +13364,7 @@ function _doLesson(arg) {
       "cannot sell you.\"");
     return;
   }
-  G.money -= LESSON_PRICE;
+  G.money -= LESSON_PRICE; G.offTill = (G.offTill || 0) + LESSON_PRICE;   // a lesson is not a drink slip (review 2026-10-25)
   _say(_LESSON_OPEN[tier], "win");
   for (const p of take) {
     _say("  " + p.th + (p.rom ? "  " + p.rom : "") + (p.use ? "   — " + p.use : ""), "thai");
@@ -13711,6 +13721,7 @@ const _BOX_HEAT_LINES = [
 
 function _boxBlown() {
   _setFlag("rabbitBlown");
+  if (G.quests && G.quests.rabbit_heist === "active") G.quests.rabbit_heist = "abandoned";   // it stayed active forever, HINT sending you to PLACE a box Kesinee has (review 2026-10-25)
   const npcs = _npcsHere();
   const mama = "Kesinee";
   G.itemLoc.black_box = null;   // she has it now

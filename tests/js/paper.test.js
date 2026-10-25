@@ -77,7 +77,7 @@ test("a company bar: six nights through the books, the permit after thirty stood
 
 test("the incident: a stood shift on the wrong paper at a cash bar, on a night the hash says so — a fine and the job, never jail; a company bar then remembers", () => {
   moveIn("monger"); knownAt(cashBar); G.room = cashBar; run("talk to bert"); run("ask bert about a job"); run("take the job");
-  let day = G.day; while ((_hh(cashBar + ":" + day + ":paper", 97) % 100) >= MGR_INCIDENT_PCT) day++;   // the first night it fires, by the same hash
+  let day = G.day; while ((_hm(cashBar + ":" + day + ":paper", 97) % 100) >= MGR_INCIDENT_PCT) day++;   // _hm since the 2026-10-25 review   // the first night it fires, by the same hash
   G.day = day + 1; G.job.shiftDay = day; G.job.shiftStood = WORK_MIN_STOOD; G.money = 5000; G.room = "hotel_room"; const m0 = G.money; out = []; _jobNight();
   assert.equal(G.job, null); assert.ok(G.money <= m0 - POLICE_PAY * 2 + _hotelRate(G.hotel)); assert.equal(G.paperFlag, G.day);
   assert.match(said(), /Nobody is charged/); assert.doesNotMatch(said(), /jail|prison|cell/i);
@@ -91,6 +91,7 @@ test("the incident: a stood shift on the wrong paper at a cash bar, on a night t
 test("online English: from your room, grey, paid by the mornings; one job at a time; Waen's door; a holiday has none", () => {
   moveIn("nomad"); G.room = "beach_rd_c"; assert.match(t("teach online"), /starts from your room/);
   G.room = "hotel_room"; assert.match(t("teach online"), /Nobody in this town will ever ask what paper/); assert.equal(G.job.kind, "teach");
+  G.job.since = G.day - INCOME_DAYS;   // a month held: the first payday is prorated by the days held (2026-10-25 review)
   sleep(); G.month.rough = 3; assert.equal(_jobPay(), Math.round(TEACH_PAY * 0.7 / 100) * 100);
   G.day = G.payDay + 30; const b = G.bank; sleep(); assert.match(said(), /The platform paid ฿19,600 \(short — it counted 3 rough mornings\)/); assert.match(said(), /the platform/);
   assert.ok(G.bank > b, "into the account");

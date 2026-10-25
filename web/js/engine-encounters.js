@@ -409,7 +409,9 @@ function _salengBuy(input) {
     // parse optional "for [name]" suffix
     const forM = input.replace(/\bno\b|\bignore\b|\bleave\b|\bgo away\b/, "")
       .match(/\bfor\s+(\w+)\s*$/i);
-    const forId = forM ? _findNpc(forM[1]) : null;
+    let forId = forM ? _findNpc(forM[1]) : null;
+    if (forM && !forId && /^(?:her|she)$/i.test(forM[1]) && typeof _convoActive === "function") forId = _convoActive();
+    if (forM && !(forId && NPC_ROLES[forId]) && !/^(?:me|myself)$/i.test(forM[1])) { _say(`For whom? The saleng man waits, holding it up — he sells to the girls on this floor. (BUY <thing> FOR <her name>)`); return; }   // it silently bought it for you (review 2026-10-25)
     const forHer = forId && NPC_ROLES[forId];
     // determine item, price, and nutrition (shared with _doBuy routing)
     const m = _salengMatchItem(input);
