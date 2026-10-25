@@ -105,9 +105,10 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
   helper (`_topicKnown`, `_travelDests`, `_playOptions`, `_gameVerbs`, `_salengItems` are the pattern) and have every
   surface consume it. A new engine-answered conversation subject also goes in `_situationTopics` the day it ships, or a
   thumb cannot reach it.
-- **A modal gate is wired five ways**: its intercept in `_doCommandInner`, its redraw in `_renderResume`, its chips in
+- **A modal gate is an entry in `GATES`** (engine-core: its id, whether it carries across the night, what it asks) **and is
+  wired five ways**: its intercept in `_doCommandInner`, its redraw in `_renderResume`, its chips in
   `_chipSet`, its completion in `engineComplete`, and a recipe in `tools/modal-audit.mjs` (a gate with no recipe fails the
-  audit). Its prompt goes through one shared helper so the live prompt, the reprompt and the redraw are identical. A
+  audit) — `tests/js/gates.test.js` fails on a prompt missing from `GATES` or from any of the five. Its prompt goes through one shared helper so the live prompt, the reprompt and the redraw are identical. A
   non-answer ("what?", "what happens if I say yes?") must leave it up, commit nothing and cost no turn. A trigger never arms
   on top of a gate already up. A choice that ends a night asks once (`_endConfirm`).
 - **A new `G` field is one line in `newGame()` and one word in `STATE_SCHEMA`** (engine-core, beside it) — `deserializeGame`

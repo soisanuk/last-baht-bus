@@ -16722,7 +16722,8 @@ function engineComplete(input) {
   const ctx = (endsSpace ? words : words.slice(0, -1))
     .filter(w => !["the", "a", "an", "to", "at", "for", "with", "about", "my"].includes(w));
   let pool;
-  if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
+  if (G.pendingChoice === "intro") { const step = _INTRO_STEPS[G.introStep || 0]; pool = step ? step.table().map((e, i) => String(i + 1)) : []; }   // the one prompt with no completion (the gate registry, 2026-10-25)
+  else if (G.pendingChoice === "gameend") pool = ["visit pattaya", "start over", "share"];
   else if (G.pendingChoice === "vacation_end") pool = G.mode === "soi6" ? ["continue", "play again", "share", "restart"] : ["new vacation", "move to pattaya"];
   else if (G.pendingChoice === "soi6continue") pool = ["another week", "cancel the ticket", "not yet", "share"];
   else if (G.pendingChoice === "embassy") pool = ["take the plane", "stay"];

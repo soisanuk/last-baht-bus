@@ -752,6 +752,39 @@ const STATE_SCHEMA = {
     "townSaid usualSaid waiBack walletPointed wentHello whaleBell whaleBellAt witnessSaid workSaid ").trim().split(/\s+/),
 };
 
+// ── GATES: every G.pendingChoice prompt, in one place (the architecture review of 2026-10-25, finding 5) ──
+// A prompt is wired five ways — its answer in _doCommandInner, its redraw in _renderResume, its chips in _chipSet, its
+// completion in engineComplete, and a recipe in tools/modal-audit.mjs — and tests/js/gates.test.js fails on a prompt
+// that is not in this table or is missing a surface. `carry: true` is a prompt that belongs to the morning or survives
+// the night (it is armed at the wake, or it is a question across a day); every other prompt goes with the night that
+// raised it (_endNight clears it). `why` says in a line what the prompt asks.
+const GATES = {
+  intro:        { carry: true,  why: "the taxi ride's three questions: who you are" },
+  vacation_end: { carry: true,  why: "the week is over: a new trip, or move to Pattaya (or the Soi 6 week's card)" },
+  soi6continue: { carry: true,  why: "the Soi 6 week's CONTINUE: another week, or cancel the ticket" },
+  gameend:      { carry: true,  why: "the ending: visit Pattaya or start over" },
+  embassy:      { carry: true,  why: "destitute, the third morning: the consulate's plane, or the bench" },
+  keptby:       { carry: true,  why: "destitute: her offer of her mat" },
+  chamgift:     { carry: true,  why: "the morning after Cream: what to leave on the table" },
+  bkkdinner:    { carry: true,  why: "Sao's car to the Sathorn dinner" },
+  kidfavour:    { carry: true,  why: "Tan's read on the kid's run: owe him for the boy" },
+  affair:       { carry: false, why: "she stays after close: the affair's door" },
+  affaircrisis: { carry: false, why: "one of the affair's crises" },
+  bkkbill:      { carry: false, why: "the Sathorn dinner's bill" },
+  cham:         { carry: false, why: "Cream's GO or NOT TONIGHT" },
+  checkout:     { carry: false, why: "which hotel to move to" },
+  keptgirl:     { carry: false, why: "Bert with the bar phone: the kept girl's sponsor" },
+  kidprice:     { carry: false, why: "Nont's price for the kid's run" },
+  partner:      { carry: false, why: "the 51%: Candy or Tan, confirmed" },
+  rabbitjob:    { carry: false, why: "Eddy's interview: CARRY IT, KEYBOARD, THE KID, NOT ME" },
+  sellbar:      { carry: false, why: "SELL UP, confirmed" },
+  shift:        { carry: false, why: "a shift call at your own rail" },
+  sighting:     { carry: false, why: "she is at a kerb table with another farang" },
+  synjob:       { carry: false, why: "a procurement job offered at your own bar" },
+  tanfavour:    { carry: false, why: "Tan asks for a name on the staff list" },
+};
+function _gateCarries(id) { return !!(GATES[id] && GATES[id].carry); }
+
 // the nightly G.soc keys _endNight does not reset by hand, reset by type at dawn (salengBar and steered were never reset:
 // three carts a night became three a trip — the architecture review, 2026-10-25)
 let _SOC_HAND_RESET = null;

@@ -6233,7 +6233,7 @@ function _endNight(reason) {
   // a call the night itself put on the table (the procurement job, a shift call, the affair's door) goes with the night:
   // armed on the tick that ended it, it survived into the morning (the soak, 2026-10-25). The prompts that belong to
   // the morning or carry across it are kept.
-  if (G.pendingChoice && !["vacation_end", "gameend", "chamgift", "bkkdinner", "kidfavour", "intro", "soi6continue", "embassy", "keptby"].includes(G.pendingChoice)) G.pendingChoice = null;
+  if (G.pendingChoice && !_gateCarries(G.pendingChoice)) G.pendingChoice = null;   // GATES (engine-core) says which belong to the morning
   G.rideSeq = null; G.bfSeq = null;   // a ride or a bar-hop never outlives its night (review 2026-10-25: _onRide() stuck true)
   // the soapy's laminated menu and a barfine still on the table do not follow you
   // into the morning: SOAPY typed on the last turn of a night left its menu pending
