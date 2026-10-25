@@ -489,7 +489,7 @@ test("popular girls, draws, and the pre-midnight bundle are untouched (Mario)", 
   assert.ok(_barfinePrice("beer", "fon") > 0, "a popular girl's fine never closes");
   assert.ok(!_barfinePrices("beer", "fon").herMoney, "…so her quote is the bundle, as before");
   G.nightTurn = 40;
-  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400, lt: 700 }, "before midnight nothing changed");
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400 + LADY_ST, lt: 700 + LADY_LT, barSt: 400, barLt: 700 }, "before midnight nothing changed");
 });
 
 // ── Ray: the third man who won't bow — and the first to get in ──────────────

@@ -2216,7 +2216,7 @@ test("Soi 6 mamas: sharp operators take a quiet house cut; beer-bar mamas run wa
   state().stage = "vacation"; state().nightTurn = 40;
   state().room = "pink_lotus";
   assert.ok(_roomMamaOperator(), "an operator runs the flagship room");
-  assert.equal(_barfinePrices("soi6", "joy").st, 750, "her 10% cut lifts the ฿700 base — the subtle mama tax");
+  assert.equal(_barfinePrices("soi6", "joy").barSt, _round50(BF_SOI6 * 1.1), "her 10% cut lifts the bar's part — the subtle mama tax");
   state().room = "sunset_rail";
   assert.ok(!_roomMamaOperator(), "the beer-bar mama takes no cut");
 });
@@ -3881,7 +3881,7 @@ test("eating the moo ping fills you but spends the dog insurance", () => {
 
 test("barfine needs a room, then favor — then ends the night grandly", () => {
   state().room = "jasmine_garden";
-  state().money = 2000;
+  state().money = 8000;
   run("barfine fon");
   assert.match(lastOut(), /Sort your night out first/i);
   state().flags.act1Done = true;
@@ -3910,7 +3910,7 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   state().flags.act1Done = true;
   state().flags.hasWallet = true;
   state().room = "pink_lotus";
-  state().money = 1000;
+  state().money = 3000;
   state().nightTurn = 40; // 22:00 — base rate
   state().soc.drinks.joy = 4; state().soc.drinkCount = { joy: 1 };   // Soi 6's one drink (round 78)
   state().soc.streamBell = { pink_lotus: state().day * 1000 + state().nightTurn };   // the flow, not the camera: Pink Lotus's big tipper is online this hour (the digital barstool, 2026-10-22)
@@ -3920,9 +3920,8 @@ test("soi 6 barfine: upstairs, and the night carries on", () => {
   run("short time");
   assert.equal(state().room, "pink_lotus", "still on your stool");
   assert.equal(state().day, 2, "night continues");
-  // Pink Lotus's mama Nee is a sharp operator (type:"operator") — her quiet 10% house
-  // cut lifts the ฿700 base to ฿750, so ฿250 remains, not ฿300. The subtle mama tax.
-  assert.equal(state().money, 250);
+  // the room upstairs (Pink Lotus's operator mama lifts it 10%) and her own short-time money, paid to her
+  assert.equal(state().money, 3000 - _round50(BF_SOI6 * 1.1) - HER_FEE.soi6[0]);
   assert.match(lastOut(), /Upstairs/i);
 });
 
@@ -5161,19 +5160,20 @@ test("Darkside girls are veterans: no green tier past Sukhumvit", () => {
 test("barfine prices: LT costs more, Soi 6 early LT is prohibitive, midnight flattens", () => {
   state().flags.act1Done = true;
   state().nightTurn = 10; // early — peak
-  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 600, lt: 1050 });
-  assert.deepEqual(_barfinePrices("gogo", "lek"), { st: 1500, lt: 2250 });
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 600 + LADY_ST, lt: 1050 + LADY_LT, barSt: 600, barLt: 1050 });
+  assert.deepEqual(_barfinePrices("gogo", "lek"), { st: 1500 + HER_FEE.gogo[0], lt: 2250 + HER_FEE.gogo[1], barSt: 1500, barLt: 2250 });
   const s6 = _barfinePrices("soi6", "joy");
-  assert.equal(s6.st, 1050);
-  assert.ok(s6.lt > 2250, `Soi 6 early LT ฿${s6.lt} beats even a go-go fine`);
+  const _s6late = (() => { const t = state().nightTurn; state().nightTurn = 70; try { return _barfinePrices("soi6", "joy").barSt; } finally { state().nightTurn = t; } })();
+  assert.equal(s6.barSt, _s6late, "the room upstairs is flat all night, early or late");
+  assert.ok(s6.barLt >= 2000, `Soi 6 early take-out fine ฿${s6.barLt} is the dear one`);
   state().nightTurn = 40; // mid-evening: base ST, LT still dearer
-  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400, lt: 700 });
-  state().nightTurn = 65; // after midnight: same either way
+  assert.deepEqual(_barfinePrices("beer", "lek"), { st: 400 + LADY_ST, lt: 700 + LADY_LT, barSt: 400, barLt: 700 });
+  state().nightTurn = 65; // after midnight: the bar's part is the same either way
   const late = _barfinePrices("gogo", "lek");
-  assert.equal(late.st, late.lt, "the collapse flattens ST and LT");
+  assert.equal(late.barSt, late.barLt, "the collapse flattens the bar's ST and LT");
   assert.deepEqual(_barfinePrices("beer", "lek"), { st: LADY_ST, lt: LADY_LT, herMoney: true },
     "the bar's fine waived, both ways — and her money quoted alone");
-  assert.equal(_barfinePrices("beer", "fon").st, _barfinePrices("beer", "fon").lt, "popular girls: flat too");
+  assert.equal(_barfinePrices("beer", "fon").barSt, _barfinePrices("beer", "fon").barLt, "popular girls: flat too");
 });
 
 test("the negotiation gates input: reprompt, cancel, restore redraw, completion", () => {
@@ -5203,7 +5203,7 @@ test("short time: one round, off she goes, the night carries on", () => {
   run("barfine bua");
   const turns = state().turns;
   run("short time");
-  assert.equal(state().money, 3000 - 400);
+  assert.equal(state().money, 3000 - 400 - LADY_ST);
   assert.equal(state().day, 2, "the night carries on");
   assert.match(lastOut(), /gone within the hour|back to her stool/i);
   assert.ok(state().turns - turns >= 6, "the hour passed on the clock");

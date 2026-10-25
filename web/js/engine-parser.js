@@ -674,7 +674,7 @@ function _glossary(word) {
   const inBar = _inBar(), bt = (_room() || {}).barType;
   const fine = () => { try { const q = _barfinePrices(bt || "beer", null); return ` Here, now, short time is ฿${_num(q.st)} and long time ฿${_num(q.lt)}.`; } catch (e) { return ""; } };
   const G_ = {
-    "barfine|bar fine|bar-fine": () => `A barfine is what you pay the bar to take a girl off its floor — the bar loses a girl who sells drinks, so it charges for the gap. It is two fees in one number: the bar's fine, and her own money (฿${_num(LADY_ST)} short, ฿${_num(LADY_LT)} long), and on Soi 6 she tells you the number herself.` + (inBar && bt !== "pub" ? fine() : ""),
+    "barfine|bar fine|bar-fine": () => `A barfine is what you pay the bar to take a girl off its floor — the bar loses a girl who sells drinks, so it charges for the gap. It is two fees: the bar's fine, and her own money (here ฿${_num(_herFee(false))} short, ฿${_num(_herFee(true))} long, paid to her). On Soi 6 the short time is the room upstairs, a small fine, and taking her out for the night is a separate and much bigger one.` + (inBar && bt !== "pub" ? fine() : ""),
     "lady drink|lady drinks|ladydrink": () => `A lady drink is the drink you buy a girl so she can sit with you: ฿${_num(_ladyPrice())} here, of which about ฿${_num(LADY_CUT)} is hers. It is her wage, counted in chits in a cup, and it is the polite way to start a conversation in a bar.`,
     "short time|st": () => `Short time is the hour: upstairs on Soi 6, a short-time room elsewhere, and she is back on her stool afterwards. Long time is the night — she leaves the bar with you.`,
     "long time|lt": () => `Long time is the whole night: she leaves the bar with you and comes back tomorrow. Short time is the hour, and she goes back to work.`,
@@ -9404,12 +9404,12 @@ function _townTalk(npc, topic) {
           _say(`"For you?" ${n} laughs. "Upstairs, out, all night — no fine, nothing. I talk to mama myself. You are not customer, na."`); return true; } }
       if (_bt && _bt !== "pub" && (_up ? (_soi6 || _bt === "soi6") : _hm) && (NPC_ROLES[npc] || NPCS[npc].house || NPCS[npc].manager)) {
         const q = _barfinePrices(_bt, NPC_ROLES[npc] === "hostess" ? npc : null);
-        const fine = q.herMoney ? 0 : Math.max(0, q.st - LADY_ST), her = q.herMoney ? q.st : Math.min(q.st, LADY_ST);
+        const fine = q.herMoney ? 0 : (q.barSt != null ? q.barSt : Math.max(0, q.st - _herFee(false))), her = q.st - fine;
         // before nine the fine carries the early-doors premium: say so, and what it is after (Gary, round 79 —
         // "she told me the price, then the mama told me a different one" an hour later)
         let _later = "";
         if (G.nightTurn < 30 && !q.herMoney) { const nt = G.nightTurn; G.nightTurn = 30; try { const q2 = _barfinePrices(_bt, NPC_ROLES[npc] === "hostess" ? npc : null); if (q2.st !== q.st) _later = _reg === "floor" ? ` Before nine o'clock, na. After nine, short time ฿${_num(q2.st)}.` : _th ? ` That is the early price. After nine, short time ฿${_num(q2.st)}.` : ` That's the early-doors price; after nine it's ฿${_num(q2.st)} short time.`; } finally { G.nightTurn = nt; } }
-        const v = { n, st: _num(q.st), lt: _num(q.lt), fine: _num(fine), her: _num(her), herlt: _num(LADY_LT),
+        const v = { n, st: _num(q.st), lt: _num(q.lt), fine: _num(fine), her: _num(her), herlt: _num(_herFee(true)),
           drink: (_bt === "soi6" && NPC_ROLES[npc] === "hostess" && _knownTier(npc) < 2 && !((G.soc.drinkCount || {})[npc])) ? " One lady drink first, na." : "" };
         const lines = _hm
           ? (_reg === "floor"
@@ -15761,17 +15761,18 @@ function _barfineTalk(npc) {
   if (p.herMoney) return tinglish
     ? `“This hour? Bar finish already — no more fine, book is closed.” ${n} holds up one finger. “But her money is her money. Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}, and that go to HER, not to me.” A look that is not unfriendly and is not soft. “And I let a girl go for no fine only for a man I know, or a man who buy — one for himself, one for her. You buy nothing, you get a smile and goodnight.”`
     : `“Past midnight the bar's fine comes off — the book's closed for the night.” A tilt of the head. “Her money doesn't. Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}, and every baht of that is hers. Mind, she only lets a girl walk for nothing if she knows you, or she's watched you buy a drink each. Turn up cold at one in the morning and you'll get a very polite no.”`;
+  const bS = p.barSt != null ? p.barSt : p.st, bL = p.barLt != null ? p.barLt : p.lt, hS = p.st - bS;
   const two = `The fine is the bar's; what you settle with her is hers, and they are two different monies.`;
   if (role === "mamasan" || (npc && NPCS[npc].owner)) return tinglish
-    ? `“Barfine?” ${n} does not look anything up. “Short time ฿${_num(p.st)}. Long time ฿${_num(p.lt)}.” Two fingers, one folded down. “Is the BAR fine — for the girl not on the floor. What you give her after, that is you and her, not me. Same for everybody, tilac. Better you ask before, not after.” (BARFINE <name>)`
-    : `“Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}.” ${n ? n + " says it" : "It comes back"} flat, the way a number gets said by the person who set it. “${two} Ask before, not after — that's the only part that's ever a surprise.” (BARFINE <name>)`;
+    ? `“Barfine?” ${n} does not look anything up. “Short time ฿${_num(bS)}. Long time ฿${_num(bL)}.” Two fingers, one folded down. “Is the BAR fine — for the girl not on the floor. What you give her after, that is you and her, not me. Same for everybody, tilac. Better you ask before, not after.” (BARFINE <name>)`
+    : `“Short time ฿${_num(bS)}, long time ฿${_num(bL)}.” ${n ? n + " says it" : "It comes back"} flat, the way a number gets said by the person who set it. “${two} Ask before, not after — that's the only part that's ever a surprise.” (BARFINE <name>)`;
   if (role === "cashier") return tinglish
-    ? `“Barfine go in the book, not in my drawer.” ${n} taps the page anyway. “Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)} — that is the bar. Her money she keep. Two thing, always. You ask mama, she say same as me.” (BARFINE <name>)`
-    : `“It's ฿${_num(p.st)} short time, ฿${_num(p.lt)} long.” ${n ? n + " doesn't have to check" : "The answer comes from the till"}. “${two} People get that wrong and then they're cross about it later.” (BARFINE <name>)`;
-  if (role === "manager" || (npc && NPCS[npc].house)) return `“Fine's ฿${_num(p.st)} short time, ฿${_num(p.lt)} long.” A shrug. “${two} Mama handles the rest of it, and she's better at it than I am.” (BARFINE <name>)`;
+    ? `“Barfine go in the book, not in my drawer.” ${n} taps the page anyway. “Short time ฿${_num(bS)}, long time ฿${_num(bL)} — that is the bar. Her money she keep. Two thing, always. You ask mama, she say same as me.” (BARFINE <name>)`
+    : `“It's ฿${_num(bS)} short time, ฿${_num(bL)} long.” ${n ? n + " doesn't have to check" : "The answer comes from the till"}. “${two} People get that wrong and then they're cross about it later.” (BARFINE <name>)`;
+  if (role === "manager" || (npc && NPCS[npc].house)) return `“Fine's ฿${_num(bS)} short time, ฿${_num(bL)} long.” A shrug. “${two} Mama handles the rest of it, and she's better at it than I am.” (BARFINE <name>)`;
   return tinglish
-    ? `“Mamasan first, then me.” ${n ? n + " holds up two fingers." : ""} “Short time ฿${_num(p.st)} — bar take ฿${_num(Math.max(0, p.st - LADY_ST))}, ฿${_num(LADY_ST)} for me. Long time ฿${_num(p.lt)}. The rest, we talk after.” (BARFINE <name>)`
-    : `“The bar wants ฿${_num(p.st)} short time, ฿${_num(p.lt)} long. ${two}” (BARFINE <name>)`;
+    ? `“Mamasan first, then me.” ${n ? n + " holds up two fingers." : ""} “Short time ฿${_num(p.st)} — bar take ฿${_num(bS)}, ฿${_num(hS)} for me. Long time ฿${_num(p.lt)}. The rest, we talk after.” (BARFINE <name>)`
+    : `“The bar wants ฿${_num(bS)} short time, ฿${_num(bL)} long. ${two}” (BARFINE <name>)`;
 }
 function _priceTalk(npc) {
   const r = _room();

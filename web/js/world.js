@@ -390,7 +390,12 @@ const SOI6_ROOMS = new Set([
   "north_beach",
 ]);
 // Barfines (canon: go-gos and Soi 6 are the expensive end)
-const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
+const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 450, BF_GENTS = 900;
+// SOI 6 HAS TWO FEES, NOT ONE (Mario, 2026-10-26, from the guides and what he has seen): going UPSTAIRS is the
+// short-time bar fine for the on-site room (BF_SOI6, 400–500, flat through the night), and TAKING HER OUT for the night
+// is a separate, much dearer fine (SOI6_OUT: "often more than 2,000 if you want her early"), which falls as the soi
+// empties. Her own money is on top of either, paid to her.
+const SOI6_OUT = [2500, 2000, 1000];   // the take-out fine before 21:00, until midnight, after midnight
 // THE BARFINE IS TWO FEES (Mario, 2026-09-03). The quoted number bundles the
 // bar's fine and the lady's own money, the way a mamasan bundles it "doing the
 // arithmetic all night". After midnight a beer bar waives ITS fine — the
@@ -398,7 +403,10 @@ const BF_BEER = 400, BF_GOGO = 1000, BF_SOI6 = 700, BF_GENTS = 900;
 // still paid. The old model zeroed the bundle: a stranger's ฿0 short time at
 // one a.m., no drink bought, +สนุก, nothing moved (Stan, round 35). These are
 // what she wants when the bar wants nothing.
-const LADY_ST = 300, LADY_LT = 500;
+const LADY_ST = 1000, LADY_LT = 2000;   // her own money at a beer bar — the floor of the table below
+// HER OWN MONEY, by venue (Mario, 2026-10-26): negotiated with her and paid to her, separate from anything the bar takes.
+// A beer bar's girl asks least; Soi 6 asks 1,500–2,000 for short time; a top go-go asks most for the night.
+const HER_FEE = { beer: [LADY_ST, LADY_LT], pub: [LADY_ST, LADY_LT], soi6: [1500, 3000], gents: [1500, 2500], gogo: [2000, 3500] };
 const MOTEL_ROOM = 300;      // Somchith's: two hours, fan, towel in — the short-time motel off Soi 7
 // The Sabai's joiner fee is charged on the GUEST, not on the trade: the night clerk sees a woman
 // going up the stairs and cannot tell a bar girl from a pharmacist, and was never asked to

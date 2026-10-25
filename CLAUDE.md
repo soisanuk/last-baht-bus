@@ -307,8 +307,9 @@ favours, the Darkside a *jao pho* family; the envelope is what you pay when you 
 legally stand behind his own bar (`docs/bar-ownership-structures.md`): a work permit needs a company with ฿2m per permit.
 The paper by the till names the owner, never the rota (`_licenceOf`). You lose by being dropped, never accused.
 
-**The trade's prices** are two fees (the bar's fine and her money); after midnight a beer bar's fine is waived but hers is
-not; Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
+**The trade's prices** are two fees (the bar's fine and her money, `HER_FEE` by venue, paid to her); after midnight a beer
+bar's fine is waived but hers is not; on Soi 6 going upstairs is a small room fee (`BF_SOI6`, flat all night) and taking
+her out is a separate, much dearer fine (`SOI6_OUT`); Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
 beer (you pay for the seat). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
 floor is warned once and then fired — far easier to replace a manager than a good hostess — and is unhirable for a while
 set by his reputation, and never again at that bar.

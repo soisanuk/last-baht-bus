@@ -33,17 +33,21 @@ function _stDrinkBonus(id) {
   return n ? { n, line: _pickVary(_ST_DRINKS_PAID, "stdrinks")(NPCS[id].name) } : { n: 0 };
 }
 // the short time's money, said as the two fees it is: the bar's fine to the till, her own money to her
+// her own money for short time (0) or the night (1), by the venue she works: the room's barType, or the room you're in
+function _herFee(lt, room, bt) { const r = ROOMS[room || G.room]; bt = bt || (r && (r.barType || r.drinks)) || "beer"; return (HER_FEE[bt] || HER_FEE.beer)[lt ? 1 : 0]; }
 function _stPaid(price, name, verb) {
   if (!price) return `No fee crosses the till — she squared it with the mama herself — and ${name} ${verb}`;
-  if (price <= LADY_ST) return `฿${_num(price)} into ${name}'s own hand, and she ${verb}`;
-  return `฿${_num(price - LADY_ST)} to the till for the bar's fine, ฿${_num(LADY_ST)} into ${name}'s own hand, and she ${verb}`;
+  const her = _herFee(false);
+  if (price <= her) return `฿${_num(price)} into ${name}'s own hand, and she ${verb}`;
+  return `฿${_num(price - her)} to the till for ${_room().barType === "soi6" ? "the room upstairs" : "the bar's fine"}, ฿${_num(her)} into ${name}'s own hand, and she ${verb}`;
 }
 
 // …and the long time's: the bar's fine into the ledger, her own money into her hand (Ray, round 78:
 // "she goes home with you all night and gets nothing")
 function _ltPaid(price, name) {
-  if (price <= LADY_LT) return `฿${_num(price)} into ${name}'s own hand, and ${_bfPayee()} `;
-  return `฿${_num(price - LADY_LT)} to ${_bfPayee()} for the bar's fine, entered in the ledger with ceremony, ฿${_num(LADY_LT)} into ${name}'s own hand, and ${_bfPayee()} `;
+  const her = _herFee(true);
+  if (price <= her) return `฿${_num(price)} into ${name}'s own hand, and ${_bfPayee()} `;
+  return `฿${_num(price - her)} to ${_bfPayee()} for the bar's fine, entered in the ledger with ceremony, ฿${_num(her)} into ${name}'s own hand, and ${_bfPayee()} `;
 }
 
 function _barfinePrice(bt, id) {
@@ -51,6 +55,7 @@ function _barfinePrice(bt, id) {
   if (_barMarkup(G.room) !== 1) base = _round50(base * _barMarkup(G.room));   // the owner's board (the bar-failure cycle)
   const draw = id ? _isDraw(id) : false;
   if (draw) base = _round50(base * 1.5); // a prized draw is worth more to the bar
+  if (bt === "soi6") return base;   // the room upstairs costs what it costs all night
   if (G.nightTurn < 30) return _round50(base * 1.5);
   if (G.nightTurn >= 60) {
     if (draw) return base;                          // and gets no midnight discount
@@ -79,15 +84,16 @@ function _barfinePrices(bt, id) {
   // truth about the bar. It is not the truth about her: the lady's money is
   // separate and still paid (LADY_ST / LADY_LT), so the quote never reads as
   // free. No house cut on it either — the operator's cut is on the FINE.
-  if (st === 0) return { st: LADY_ST, lt: LADY_LT, herMoney: true };
-  if (G.nightTurn >= 60) lt = st;
-  else {
-    const mult = bt === "soi6" ? (G.nightTurn < 30 ? 3 : 2) :
-      bt === "gogo" ? 1.5 : bt === "gents" ? 1.5 : 1.75;
-    lt = _round50(st * mult);
-  }
-  if (_roomMamaOperator()) { st = _round50(st * 1.1); lt = _round50(lt * 1.1); }
-  return { st, lt };
+  const herST = _herFee(false, null, bt), herLT = _herFee(true, null, bt);
+  if (st === 0) return { st: herST, lt: herLT, herMoney: true };
+  // the bar's take-out fine: Soi 6 has its own (the room upstairs is not the night out); elsewhere a multiple of the fine
+  let ltBar;
+  if (bt === "soi6") { const d = id && _isDraw(id) ? 1.5 : 1; ltBar = _round50(SOI6_OUT[G.nightTurn < 30 ? 0 : G.nightTurn < 60 ? 1 : 2] * d * _barMarkup(G.room)); }
+  else if (G.nightTurn >= 60) ltBar = st;
+  else ltBar = _round50(st * (bt === "gogo" || bt === "gents" ? 1.5 : 1.75));
+  if (_roomMamaOperator()) { st = _round50(st * 1.1); ltBar = _round50(ltBar * 1.1); }
+  // the quote is the whole of it: the bar's part and hers
+  return { st: st + herST, lt: ltBar + herLT, barSt: st, barLt: ltBar };
 }
 
 // Which girls run games on a mark? MOST don't — it's the experienced
@@ -1343,7 +1349,9 @@ function _partyPrice(id, lt) {
   if (tier >= 2) return lt;
   let mult = tier === 1 ? PARTY_MULT_FACE : PARTY_MULT_STRANGER;
   mult += SEASON_PARTY_BUMP[_seasonTier()];   // the rail's fullness, priced into her night
-  return Math.max(lt, Math.round(lt * mult / 50) * 50);
+  // her whole night is HER money priced up; the bar's take-out fine is the bar's and does not double
+  const her = Math.min(lt, _herFee(true));
+  return Math.max(lt, Math.round((lt - her + her * mult) / 50) * 50);
 }
 function _partyLabel() {
   const ids = (G.party && G.party.ids) || [];
@@ -2090,7 +2098,7 @@ function _bfResolve(kind) {
         ? "short walk up the unlit alley off Soi 7 to Somchith's, the motel with no sign, where a ceiling fan is"
         : (_room().barType === "soi6" || _room().region === "Soi 6") ? "short climb up the stairs at the back of the bar to the room above it, where a ceiling fan is"   // Soi 6 is upstairs (Darren, round 66) — the middle's beer bars too (Ray, round 78)
         : "short walk to a short-time hotel with a ceiling fan";
-      _say((price ? (price > LADY_ST ? `฿${_num(price - LADY_ST)} to the ledger for the bar's fine, ฿${_num(LADY_ST)} into ${name}'s own hand, and a` : `฿${_num(price)} into ${name}'s own hand, and a`) : "A") +
+      _say((price ? (price > _herFee(false) ? `฿${_num(price - _herFee(false))} to the ledger for the bar's fine, ฿${_num(_herFee(false))} into ${name}'s own hand, and a` : `฿${_num(price)} into ${name}'s own hand, and a`) : "A") +
         ` ${motel} doing its slow count over the ` +
         `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
         `the door, and she's back on her stool at ${bar} before the song you left on has come round again. You amble ` +
@@ -6197,7 +6205,7 @@ function _careWaived(id) {
   if (c.lastDay === G.day) return;   // a NIGHT she gave you, however many times the apron came off
   c.lastDay = G.day; c.waived++; if (c.since == null) c.since = G.day;
 }
-function _careOwed(id) { const c = G.care && G.care[id]; return c ? LADY_LT * Math.max(1, c.waived) : 0; }
+function _careOwed(id) { const c = G.care && G.care[id]; return c ? _herFee(true, NPCS[id] && NPCS[id].room) * Math.max(1, c.waived) : 0; }
 const _CARE_ASK = [
   "tilac. i tell you something, no angry na 🙏 mama no take fine for you — ok, i ask her. but the fine is my money too, my cut. {w} nights now. i not ask you like customer. i ask you like you know me. (SEND {a} TO {N})",
   "you know when mama say no fine for you? that is ME say it. my money. {w} times now 😅 i not complain na. but i think you not know. now you know. (SEND {a} TO {N})",
@@ -6258,7 +6266,7 @@ function _careArrive(to) {
 // can let her thank you for the right thing.
 function _careSent(id, amt) {
   const c = G.care && G.care[id];
-  if (!c || (c.asked == null && !c.cold) || amt < LADY_LT) return false;
+  if (!c || (c.asked == null && !c.cold) || amt < _herFee(true, NPCS[id] && NPCS[id].room)) return false;
   const was = c.cold;
   c.asked = null; c.cold = false; c.waived = 0; c.since = null; delete c.pending;
   _addBond(id, was ? 1 : 2);

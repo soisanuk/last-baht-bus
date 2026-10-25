@@ -146,12 +146,13 @@ test("the mamasan quotes the number she sets — the cashiers promise she will",
   for (const id of mamas) {
     const room = _npcRoom(id);
     if (!ROOMS[room] || !ROOMS[room].barType) continue;
-    const bf = _barfinePrices(ROOMS[room].barType);
+    G.room = room; const bf = _barfinePrices(ROOMS[room].barType);
     for (const phrasing of ["barfine", "bar fine", "how much to take a girl out"]) {
       G.room = room; out = []; doCommand(`ask ${id} about ${phrasing}`);
       const said = text();
       assert.doesNotMatch(said, miss, `${id} answers "${phrasing}"`);
-      assert.ok(said.includes("฿" + bf.st) || said.includes("฿" + bf.lt),
+      // the house quotes the bar's fine (her own money is hers to say); either figure is what the till will charge
+      assert.ok([bf.st, bf.lt, bf.barSt, bf.barLt].some(v => v != null && said.includes("฿" + _num(v))),
         `${id} quotes what the till will charge ("${phrasing}")`);
     }
     // …and it is on her price list, because that is what the cashier promised

@@ -111,3 +111,18 @@ test("Mario: many beer bars house their girls in a shared room, and it varies fr
   assert.ok(housed > 0 && housed < beer.length, housed + " of " + beer.length);
   sandbox(); const r = beer.find(_barHouses); G.room = r; assert.match(_OTHER_LEDGER[3][3]("Ann"), /No rent/);
 });
+test("Mario: on Soi 6 the room upstairs and the take-out fine are two different fees, and her money is on top of either", () => {
+  sandbox(); G.room = "sweet_tamarind";
+  G.nightTurn = 20; const early = _barfinePrices("soi6", "sweet_tamarind_ple");
+  G.nightTurn = 70; const late = _barfinePrices("soi6", "sweet_tamarind_ple");
+  assert.equal(early.barSt, late.barSt, "the room upstairs costs the same all night");
+  assert.ok(early.barSt <= 500, "the room is a small fee: " + early.barSt);
+  assert.ok(early.barLt >= 2000 && early.barLt > late.barLt, "taking her out early is the dear fine, and it falls late");
+  assert.equal(early.st - early.barSt, HER_FEE.soi6[0]); assert.equal(early.lt - early.barLt, HER_FEE.soi6[1]);
+});
+test("Mario: her own money is by venue, beer bars least, and the night out prices up her money, not the bar's fine", () => {
+  assert.ok(HER_FEE.beer[0] < HER_FEE.soi6[0] && HER_FEE.soi6[1] <= HER_FEE.gogo[1]);
+  sandbox(); G.room = "sweet_tamarind"; G.nightTurn = 45;
+  const q = _barfinePrices("soi6", "sweet_tamarind_ple"), party = _partyPrice("sweet_tamarind_ple", q.lt);
+  assert.ok(party - q.lt <= HER_FEE.soi6[1] * 2, "the multiplier rides her night only: " + party + " vs " + q.lt);
+});

@@ -114,7 +114,7 @@ test("Soi 6 short time is upstairs and long time is out of the bar, and the mone
   G.soc.drinkCount = { [g]: 1 }; out = []; run("barfine " + NPCS[g].name.toLowerCase());
   assert.match(said(), /SHORT TIME [^·]*upstairs/); assert.match(said(), /LONG TIME [^·]*leaves the bar with you/);
   const st = G.pendingBf.st; out = []; run("short time");
-  assert.match(said(), new RegExp(`฿${_num(st - LADY_ST)} to the till for the bar's fine, ฿${_num(LADY_ST)} into ${NPCS[g].name}'s own hand`), "her money is seen to be paid");
+  assert.match(said(), new RegExp(`฿${_num(st - HER_FEE.soi6[0])} to the till for the room upstairs, ฿${_num(HER_FEE.soi6[0])} into ${NPCS[g].name}'s own hand`), "her money is seen to be paid");
 });
 
 test("more drinks, more fun — unless she is a throughput girl, who likes a man who goes straight up", () => {
@@ -156,7 +156,7 @@ test("a long time pays the bar's fine and her money, each named", () => {
   G.room = "sweet_tamarind"; const g = "sweet_tamarind_ple"; G.soc.drinkCount = { [g]: 1 };
   const saved = _rand; let lt;
   try { _rand = () => 0.99; run("barfine ple"); lt = G.pendingBf.lt; run("long time"); out = []; run("long time"); } finally { _rand = saved; }   // no game rolled on the honest night
-  assert.match(said(), new RegExp(`฿${_num(lt - LADY_LT)} to [^,]+ for the bar's fine, entered in the ledger with ceremony, ฿${_num(LADY_LT)} into Ple's own hand`));
+  assert.match(said(), new RegExp(`฿${_num(lt - HER_FEE.soi6[1])} to [^,]+ for the bar's fine, entered in the ledger with ceremony, ฿${_num(HER_FEE.soi6[1])} into Ple's own hand`));
 });
 
 test("on Soi 6 anyone working can say what upstairs, short time and her money are, at the till's prices", () => {
@@ -164,7 +164,7 @@ test("on Soi 6 anyone working can say what upstairs, short time and her money ar
   assert.match(askOf("sweet_tamarind", "ple", "short time"), new RegExp("฿" + _num(st)));
   assert.match(askOf("firecracker_bar", "fah", "upstairs"), /Upstairs|stairs/);
   assert.match(askOf("sweet_tamarind", "view", "the staircase"), /upstairs|stairs/);
-  assert.match(askOf("pink_lotus", "nee", "her money"), new RegExp("฿" + LADY_ST));
+  assert.match(askOf("pink_lotus", "nee", "her money"), new RegExp("฿" + _num(HER_FEE.soi6[0])));
 });
 
 test("LAST NIGHT is last night's exit, not the last exit ever", () => {

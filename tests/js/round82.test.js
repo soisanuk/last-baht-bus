@@ -35,7 +35,7 @@ test("the hours: Soi 6 at two, the Vic's pub at eleven, the clubs and the Darksi
   assert.equal(_closeTurn("night_heron"), 60);
   assert.equal(_closeTurn("lucky_tiger"), null, "a town beer bar runs to dawn");
   // the midnight pricing stays at midnight: the beer-bar book still closes at 60
-  assert.match(readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8"), /if \(G\.nightTurn >= 60\) lt = st;/);
+  assert.match(readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8"), /else if \(G\.nightTurn >= 60\) ltBar = st;/);
 });
 
 test("Soi 6 gives last call at half past one and walks you out at two", () => {
