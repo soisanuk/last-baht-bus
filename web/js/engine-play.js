@@ -4656,7 +4656,7 @@ function _affairTalk(id, tt) {
         `"The sun?" ${n} looks at the bar top so the floor cannot see her face. "${pl.sunSand ? "On the sand, my shoes in your hand. " : ""}I watch it with a customer before, many time. Not like that. Don't tell Lamai."`,
         `${n} smiles before she can stop it. "You fall asleep a little bit, before the sun. I let you. Is the first time I am not working at six o'clock."`]);
       if (/\bshoes?\b/.test(tt)) return pick("outshoes", [
-        `"My shoes?" ${n} laughs. "${pl.sunSand ? "Still sand inside. You carry them like a waiter carry a tray, very serious." : "Fine. I walk home in the flip-flops in my bag, like always. Staff know where the shoes go."}"`]);
+        `"My shoes?" ${n} laughs. "${pl.sunSand ? "Still sand inside. You carry them like a waiter carry a tray, very serious." : "Fine. I go home in the flip-flops in my bag, like always. Staff know where the shoes go."}"`]);
     } }
   if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut != null && G.day - a.lastOut === 2 && !a.soured) return pick("outlast2", [
     `"The other night?" ${n} keeps her voice down. "Is still in my head, boss. Not in here. In here I count the float."`]);
@@ -4948,9 +4948,9 @@ const _OTHER_LEDGER = {
 function _barHouses(room) { const r = ROOMS[room]; return !!(r && r.barType && _hm("barroom:" + room, 19) % 100 < 45); }
 // where a beer-bar girl rents: central Pattaya for most (six picks in eight), past the highway or up in Naklua for the rest
 const _LEDGER_ROOMS = [
-  { at: "in a soi behind Second Road", home: `When the bar is near enough for walking she walks it, at three in the morning, rather than pay the late fare — and says so without a flicker, because the late fare is the late fare and she can count. "Is not far." She considers that. "Is far when rain."` },
-  { at: "off Central Road, above a phone shop", home: `She walks home after work rather than pay the late fare, and says so without a flicker. "Ten minute. Twenty when I am tired."` },
-  { at: "in the sois between Second Road and Buakhao", home: `She walks it at three in the morning with her shoes in her hand. "Everybody walk. Only farang take motorbike for five minute."` },
+  { at: "in a soi behind Second Road", home: `A motorbike taxi home at three, the same piwin most nights, who gives her the price for people who come back. "Is not far." She considers that. "Is not far for motorbike."` },
+  { at: "off Central Road, above a phone shop", home: `Her friend from the next bar takes her home on the back of her scooter, and she pays in petrol and in waiting. "Walk? Three hundred metre?" She looks at you as if you have suggested swimming.` },
+  { at: "in the sois between Second Road and Buakhao", home: `She has her own bike, a scooter with a basket and a helmet she never wears, parked at the end of the soi. "Two minute. Everybody have motorbike. Only farang walk."` },
   { at: "the other side of Sukhumvit", rent: 0.5, home: `A friend with a bike takes her home after work, or the truck when the friend has a customer. "Half the rent of town. Far, but cheap. Here, cheap is better than near."` },
   { at: "up in Naklua, near the market", rent: 0.75, home: `A motorbike taxi home at three, which she prices against the room every month and the room still wins. "Naklua quiet. I like quiet when I finish."` },
 ];
