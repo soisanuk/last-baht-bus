@@ -10030,13 +10030,31 @@ function _kpChallenge() {
 function _insidePrice() { return !!(G.syn && G.syn.done && G.syn.done.cleaning); }
 function _barCogs() { return BAR_COGS * (_insidePrice() ? SYN_INSIDE_PRICE : 1); }
 
+// A NIGHT'S TAKE IS LOPSIDED, not even (Mario, 2026-10-26, from real POS reports: a girl's month ran 1–5 drinks on a dead
+// night, 10–20 on a normal one, 25–35 on a good one and 40–55 on a blowout). One die, read through the shape below, so
+// the dice stream is unchanged; the mean is the old even spread's (BAR_TAKINGS + BAR_SWING / 2), so the bar's month
+// balances as it did and only the nights feel different.
+const BAR_NIGHT_SHAPE = [   // [up to this share of nights, from × mean, to × mean]
+  [0.15, 0.30, 0.60],   // dead
+  [0.75, 0.75, 1.05],   // ordinary
+  [0.95, 1.20, 1.70],   // good
+  [1.00, 2.20, 3.20],   // a blowout
+];
+function _nightTake(u) {
+  const mean = BAR_TAKINGS + BAR_SWING / 2;
+  let lo = 0, avg = 0, f = 1;
+  for (const [hi, a, b] of BAR_NIGHT_SHAPE) { avg += (hi - lo) * (a + b) / 2; lo = hi; }
+  lo = 0;
+  for (const [hi, a, b] of BAR_NIGHT_SHAPE) { if (u < hi) { f = a + (b - a) * (u - lo) / (hi - lo); break; } lo = hi; }
+  return Math.round(mean * f / avg);
+}
 function _barNight(settleDay) {
   const b = G.bar;
   const day = (settleDay != null) ? settleDay : G.day;
   b.nights++;
   const tier = _seasonTierOn(day);
   const low = tier === "low" || tier === "deeplow";
-  let take = BAR_TAKINGS + Math.floor(_rand() * BAR_SWING);
+  let take = _nightTake(_rand());
   // the presence dilemma, in one line. Working your own rail is worth roughly
   // double an evening spent elsewhere — which is exactly what makes going out
   // a decision instead of a default.
@@ -10073,6 +10091,10 @@ function _barNight(settleDay) {
   const railLost = typeof _railLostOn === "function" ? _railLostOn(day) : 0;
   if (railLost) take = Math.round(take * (1 - railLost));
   (b.takeLog = b.takeLog || []).push(take); if (b.takeLog.length > BAR_RENT_REVIEW) b.takeLog.shift();   // the landlord's trailing look
+  // the barfines are their own line inside the take (a beer bar runs a barfine too): about a tenth of the money, counted
+  // in fines at the bar's own price by a pure hash of the night — the take is unchanged, only itemised
+  const fineEach = _round50(BF_BEER * (_barMarkup(b.room) || 1)), fineN = Math.max(0, Math.floor((take * BAR_FINE_SHARE + (_hm("fines:" + day + ":" + G.vacation, 23) % fineEach)) / fineEach));
+  b.lastFines = { n: fineN, amt: Math.min(take, fineN * fineEach) };
   // the girls' trailing month: the board's traffic, the thin floor, the rail that left — and a full
   // season covers a modest rise (a peak rail drinks at fifteen over; a trough rail does not)
   (b.trafficLog = b.trafficLog || []).push(mk.traffic * (b.shortStaff ? BAR_SHORT_STAFF : 1) * (1 - railLost) * (_seasonTakingsOn(day) >= 1 ? 1.06 : _seasonTakingsOn(day) <= LOW_SEASON + 0.1 ? 0.95 : 1));   // the wet cuts the other way: a dear board in the trough is a thin month by itself (Hal, round 62)
@@ -11122,8 +11144,8 @@ function _doBooks() {
   _sayLease();
   const ll = b.lastLines;
   if (ll) {
-    _say(_fmt("Last night: ฿{take} in{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs}{inside} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
-      { take: ll.take, evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
+    _say(_fmt("Last night: ฿{take} in{fines}{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs}{inside} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
+      { take: ll.take, fines: b.lastFines && b.lastFines.n ? _fmt(" (drinks ฿{d} · {n} barfine{s} ฿{f})", { d: _num(ll.take - (ll.evtIn || 0) - b.lastFines.amt), n: b.lastFines.n, s: b.lastFines.n === 1 ? "" : "s", f: _num(b.lastFines.amt) }) : "", evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
         lost: ll.lost ? _fmt(", ฿{l} short of what it would have been ({w})", { l: ll.lost, w: (ll.lostNotes || []).join(" · ") }) : "",
         nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: (ll.inside != null ? ll.inside : _insidePrice()) ? " (the uncle's inside price)" : "",   // the price the night was billed at (Kwame, round 60)
         mgr: (ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "") + (ll.salary ? _fmt(" · the flat salary ฿{s}", { s: ll.salary }) : "") + (ll.garnish ? _fmt(" · Nont's cut ฿{g}", { g: ll.garnish }) : ""),
@@ -12112,6 +12134,9 @@ const _OWL_AMULET = [
 ];
 
 const _OWL_LETTERS = [
+  // the ad and the month (2026-10-26, from real POS reports and the recruitment posts quoting them — structure only, nobody named)
+  ["A reader in Swindon writes: 'A bar on Soi 6 is advertising for girls online: a month's pay of a hundred and fifty thousand baht, a printed slip to prove it. My girlfriend wants to go and work there. Is it true?'",
+    "The slip is real, sir; the sentence under it is not. What gets photographed for those posts is the till's report for the whole floor, or one girl's money at the house's profit on a drink rather than her share of it, and the headline is the arithmetic of whichever reading sounds best. A good girl in a good month on that street does a couple of hundred lady drinks at seventy-odd baht each, and the salary on top; call it a fifth of the number in the post, before she has sent anything home. The bars are not lying about the till. They are letting you read it as her pocket."],
   // the plan that slipped (2026-10-23, the canon essay — pattern only)
   ["A reader on Soi 6 writes: 'The girl I see was going to open her shop this year. Now it is next year, and she will not say why. Should I offer to help?'",
     "No, squire. Something happened at home, and it was the sort of thing that is paid for quietly and never discussed, and she has already paid it. If you offer money you make it a story; if you ask, you make her tell it. Sit with her on the slow nights and let the shop be next year. The kindest thing a farang can do in this town is not need to know."],

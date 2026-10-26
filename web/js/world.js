@@ -205,6 +205,9 @@ const RENT_MULT    = { beer: 1, soi6: 3, gogo: 6, gents: 4, host: 2 };
 // Gentler than RENT_MULT, because a punter feels a drink price directly and
 // rent is the landlord's problem. Rounded to ฿10 by the helpers.
 const DRINK_MULT = { beer: 1, pub: 1, soi6: 1.25, gents: 1.5, gogo: 1.75, club: 1.75, host: 1.5 };
+// …and where a venue's beer is priced apart from its lady drinks (Mario, 2026-10-26: a Soi 6 receipt rings a beer at 140 and
+// the guides put customer drinks at 80–130, so the beer is 130 while the lady drink stays 190)
+const BEER_MULT = { soi6: 1.6 };
 // Author-time price for a given venue class, so a character who quotes a figure
 // quotes the one his own bar charges. Kyle counts his runway to the baht and
 // said "beer's eighty baht" while standing in a Soi 6 bar that charges a
@@ -228,6 +231,7 @@ const BAR_SHORT_STAFF  = 0.85;   // takings while the floor is thin — the visi
 // the procurement decision.
 const BAR_TAKINGS  = 3200;     // base take on an ordinary night
 const BAR_SWING    = 2800;     // …plus up to this, on the night's luck
+const BAR_FINE_SHARE = 0.10;    // the barfines' share of a night's take, itemised in BOOKS (real POS reports: about a tenth to a seventh)
 // Costs were a flat ฿3,000 a night, forever — the single biggest falsehood in
 // the model, and the central critique of the one persona who had actually run
 // two pubs (2026-08-23). Real bar costs are ~60-70% VARIABLE: a dead Tuesday is
@@ -15280,7 +15284,8 @@ const GROUP_WEEK_BASE = 1250;
 const GROUP_LADDER = [[60, 65], [80, 70], [100, 75], [120, 80]];   // [drinks a week, ฿ a drink]
 function _ladderWeek(n) { let r = 0; for (const [d, b] of GROUP_LADDER) if (n >= d) r = b; return GROUP_WEEK_BASE + n * r; }
 const BAR_QUOTA    = 30;   // lady drinks a month before the bonus starts
-const BAR_SALARY   = 9000; // the monthly base a Soi 6 bar pays; everything else is commission
+const BAR_SALARY   = 10000; // a beer-bar girl's monthly base (Mario, 2026-10-26); everything else is commission
+const SOI6_SALARY  = 15000; // a Soi 6 girl's: the bottom of the advertised 15–35k range, with her room upstairs on top
 const HOME_SEND    = 7000; // what a month typically sends north — before she has eaten
 const ROOM_RENT    = 4000; // a beer-bar girl's share of a rented room, two or three girls to it — most in central Pattaya, some past Sukhumvit (a Soi 6 girl lives upstairs at her bar)
 

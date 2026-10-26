@@ -3964,7 +3964,8 @@ function _doBell() {
   G.money -= price;
   // at your own bar the round is your stock and your girls' drinks: the price goes into your own till less what the stock
   // costs (it left the economy entirely — review 2026-10-25), and BOOKS names it
-  if (_atOwnBar() && G.bar) { const keep = Math.round(price * (1 - BAR_COGS)); G.bar.cash += keep; G.bar.ownBells = (G.bar.ownBells || 0) + keep; }
+  // the round you ring on your own rail goes through your own till, less its stock — and BOOKS names it, the way it names a lost stake
+  if (_atOwnBar() && G.bar) { const keep = Math.round(price * (1 - BAR_COGS)); G.bar.cash += keep; G.bar.ownBells = (G.bar.ownBells || 0) + keep; _barEvent(keep, "your bell on your own rail"); }
   const r = G.room;
   _ringBell(r);
   _say("You reach up and RING THE BELL.", "win");
@@ -4909,7 +4910,7 @@ const _OTHER_LEDGER = {
   3: [
     (n) => `${n} shows you her phone: a bank app, an amount, a date. "Every month, same day." ` +
       `฿${_num(HOME_SEND)} goes north — her mother, somebody's school fees, a roof somebody keeps meaning ` +
-      `to finish. The bar's salary is ฿${_num(BAR_SALARY)}; the rest is drinks, and drinks are you and ` +
+      `to finish. The bar's salary is ฿${_num(_room().barType === "soi6" ? SOI6_SALARY : BAR_SALARY)}; the rest is drinks, and drinks are you and ` +
       `men like you. "So." She locks the {{phone}} and puts it face-down, the way she does. "Now you ` +
       `know all my number. Nobody know all my number." It is not said as a burden. It is said as ` +
       `an accounting, handed over.`,

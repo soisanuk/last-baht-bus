@@ -4074,7 +4074,9 @@ function _beerPrice(room) {
   // …and Cloze's board: get tonight's word right and the drinks are half price
   // in here until dawn (the sign says the rule is enforced; now it is)
   const half = (room || G.room) === "cloze" && G.boardWon === G.day ? 0.5 : 1;
-  return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) * half / 10) * 10 - (r.beerOff || 0));
+  // a venue whose beer is priced apart from its lady drinks (Soi 6: the receipts ring a beer at 140 against a 210 lady drink)
+  const t = r.barType || r.drinks, bm = typeof BEER_MULT !== "undefined" && BEER_MULT[t] ? BEER_MULT[t] / ((typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1) : 1;
+  return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) * bm * half / 10) * 10 - (r.beerOff || 0));
 }
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
 // THE BELL IS A ROUND FOR EVERYONE IN THE ROOM, priced per head (Mario, 2026-10-10, on Ray: a

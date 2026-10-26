@@ -126,3 +126,19 @@ test("Mario: her own money is by venue, beer bars least, and the night out price
   const q = _barfinePrices("soi6", "sweet_tamarind_ple"), party = _partyPrice("sweet_tamarind_ple", q.lt);
   assert.ok(party - q.lt <= HER_FEE.soi6[1] * 2, "the multiplier rides her night only: " + party + " vs " + q.lt);
 });
+test("Economy: a bar's night is lopsided — dead, ordinary, good, a blowout — and its mean is the old even spread's", () => {
+  const xs = Array.from({ length: 1000 }, (_, i) => _nightTake(i / 1000)), mean = xs.reduce((a, b) => a + b) / xs.length;
+  assert.ok(Math.abs(mean - (BAR_TAKINGS + BAR_SWING / 2)) < 50, "mean " + mean);
+  const sorted = xs.slice().sort((a, b) => a - b), med = sorted[500];
+  assert.ok(sorted[999] > 2.5 * med && sorted[0] < 0.5 * med, "a blowout and a dead night: " + sorted[0] + " / " + med + " / " + sorted[999]);
+});
+test("Economy: Soi 6 beer is priced apart from its lady drink; beer bars unchanged", () => {
+  assert.equal(_beerPrice("pink_lotus"), 130); assert.equal(_ladyPrice("pink_lotus"), 190);
+  assert.equal(_beerPrice("lucky_tiger"), BEER_PRICE);
+});
+test("Economy: a beer-bar girl's base is ฿10,000 and a Soi 6 girl's the bottom of the advertised range", () => {
+  assert.equal(BAR_SALARY, 10000); assert.equal(SOI6_SALARY, 15000);
+});
+test("Economy: the Owl answers the job ad with the month a girl actually earns", () => {
+  assert.ok(_OWL_LETTERS.some(([q, a]) => /hundred and fifty thousand/.test(q) && /a fifth of the number/.test(a)));
+});
