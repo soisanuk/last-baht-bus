@@ -312,7 +312,8 @@ The paper by the till names the owner, never the rota (`_licenceOf`). You lose b
 bar's fine is waived but hers is not; on Soi 6 going upstairs is a small room fee (`BF_SOI6`, flat all night) and taking
 her out is a separate, much dearer fine (`SOI6_OUT`); a beer-bar girl's base is ฿10,000 a month (`BAR_SALARY`), a Soi 6 girl's
 ฿15,000 (`SOI6_SALARY`); Soi 6 beer is priced apart from its lady drink (`BEER_MULT`); a bar's night is lopsided, not even
-(`_nightTake`), and BOOKS names the barfines inside the take; Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
+(`_nightTake`), and BOOKS names the barfines inside the take; some nights the drawer comes up short of the slips
+(`_tillShort` — likelier on Bert's nights and when nobody counts), COUNT THE TILL at close names why and gets some back; Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
 beer (you pay for the seat); an ATM takes deposits in thousands (DEPOSIT). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
 floor is warned once and then fired — far easier to replace a manager than a good hostess — and is unhirable for a while
 set by his reputation, and never again at that bar.

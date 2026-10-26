@@ -196,3 +196,20 @@ test("Steve 9: her offer to pay her own fine takes 'take nook out' as yes, and '
     const d0 = G.day; run(say); assert.equal(G.day === d0 + 1, yes, say);
   }
 });
+// ── the count (Mario, 2026-10-27) ──
+const _ownerBar = () => { sandbox(); G.stage = "expat"; _setFlag("expatLife"); _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.bar.cash = 20000; };
+const _shortDay = () => { for (let d = 3; d < 200; d++) { G.day = d; if (_tillShort(d)) return d; } };
+test("The count: some nights the drawer is short; COUNT THE TILL at close names why and gets some back; uncounted, BOOKS says nobody knows", () => {
+  _ownerBar(); const d = _shortDay(), sh = _tillShort(d); assert.ok(sh);
+  G.room = "stinky_bar"; G.nightTurn = 40; assert.match(t("count the till"), /still putting money in/);
+  G.nightTurn = 65; const c = t("count the till"); assert.match(c, /short/);
+  _barNight(d); assert.equal(G.bar.lastShort ? G.bar.lastShort.amt : 0, Math.round(sh.amt * (1 - sh.back)));
+  G.bar.countedDay = null; _barNight(d); assert.equal(G.bar.lastShort.why, "uncounted");
+  out = []; run("books"); assert.match(said(), /nobody counted it/); assert.match(said(), /the count short ฿/);
+});
+test("The count: a short nobody counts makes the next likelier; a count resets it; a stood night leaks less", () => {
+  _ownerBar(); G.bar.leakHabit = 0;
+  const share = (stood) => { let n = 0; for (let d = 1; d <= 400; d++) { G.bar.workedLast = stood; G.bar.workedDay = d; if (_tillShort(d)) n++; } return n / 400; };
+  assert.ok(share(true) < share(false), "Bert's nights leak more than yours");
+  G.bar.leakHabit = 4; const habitual = share(false); G.bar.leakHabit = 0; assert.ok(habitual > share(false));
+});

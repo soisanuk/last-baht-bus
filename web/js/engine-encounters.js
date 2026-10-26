@@ -650,7 +650,7 @@ const _ENC = {
     // taking her up on it in a man's own words is a yes: "take nook out", "let's go", "come on then", "go with her"
     { const nm = String(name).toLowerCase();
       const said = String(input).toLowerCase().replace(nm, "her");
-      if (!_isRefusal(input) && /\b(?:take her (?:out|home|upstairs)|go (?:home |out |upstairs )?with her|let'?s go|come on|come with me|upstairs|barfine her)\b/.test(said)) input = "yes"; }
+      if (!_isRefusal(input) && /\b(?:take her (?:out|home|upstairs)|go (?:home |out |upstairs )?with her|let'?s go|come on|come with me|upstairs)\b/.test(said)) input = "yes"; }
     if (!/\b(yes|yeah|sure|ok|okay|of course|why not|please|no|nope|not tonight|sorry|pass|later|maybe)\b/.test(input)) { // word-bounded: "Manow" is
       // a tip, a drink, a walk: the offer lapses without a verdict and the command runs
       _say(`${name} reads the moment going past — a small smile, no harm done — and lets it go. (The offer lapses; she said she wouldn't ask twice, and she doesn't.)`, "dim");   // it used to say "still in the room" and YES then missed (Kenji, round 47)

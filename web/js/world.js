@@ -231,6 +231,13 @@ const BAR_SHORT_STAFF  = 0.85;   // takings while the floor is thin — the visi
 // the procurement decision.
 const BAR_TAKINGS  = 3200;     // base take on an ordinary night
 const BAR_SWING    = 2800;     // …plus up to this, on the night's luck
+// THE COUNT (Mario, 2026-10-27, from the trade's own advice: cash leakage is the fastest way to lose a bar). Some nights the
+// drawer comes up short of the slips; a night Bert runs is likelier than a night you stood, and a short nobody counts makes
+// the next one likelier. COUNT THE TILL at close catches it and gets some or all of it back. Nobody is ever accused.
+const TILL_SHORT_STOOD = 0.06, TILL_SHORT_AWAY = 0.15, TILL_SHORT_HABIT = 0.03, TILL_SHORT_HABIT_MAX = 0.10;
+const TILL_SHORT_KINDS = [   // [kind, least, most, the share a count gets back]
+  ["comp", 150, 600, 0.5], ["slate", 300, 1200, 1], ["float", 100, 500, 0.7], ["fingers", 500, 1500, 0],
+];
 const BAR_FINE_SHARE = 0.10;    // the barfines' share of a night's take, itemised in BOOKS (real POS reports: about a tenth to a seventh)
 // Costs were a flat ฿3,000 a night, forever — the single biggest falsehood in
 // the model, and the central critique of the one persona who had actually run

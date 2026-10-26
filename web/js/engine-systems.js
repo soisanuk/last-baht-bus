@@ -10048,6 +10048,34 @@ function _nightTake(u) {
   for (const [hi, a, b] of BAR_NIGHT_SHAPE) { if (u < hi) { f = a + (b - a) * (u - lo) / (hi - lo); break; } lo = hi; }
   return Math.round(mean * f / avg);
 }
+// the night's short, if there is one: a pure hash of the night, so a count at close and the morning's settle agree
+function _tillShort(day) {
+  const b = G.bar; if (!b || !b.room) return null;
+  const stood = b.workedLast && b.workedDay === day;
+  const rate = (stood ? TILL_SHORT_STOOD : TILL_SHORT_AWAY) + Math.min(TILL_SHORT_HABIT_MAX, (b.leakHabit || 0) * TILL_SHORT_HABIT);
+  if (_hm("tillshort:" + day + ":" + G.vacation, 31) % 1000 >= rate * 1000) return null;
+  const [kind, lo, hi, back] = TILL_SHORT_KINDS[_hm("tillkind:" + day + ":" + G.vacation, 17) % TILL_SHORT_KINDS.length];
+  return { kind, amt: Math.round((lo + (_hm("tillamt:" + day + ":" + G.vacation, 13) % (hi - lo + 1))) / 10) * 10, back };
+}
+const _TILL_CAUGHT = {
+  comp: (k, a) => `${k} counts the drawer against the slips and comes up ฿${_num(a)} short, and the slips say why before she does: a row of drinks with no chit, poured by one of the girls for friends from the bar opposite. ${k} says the name without looking at you. "I tell her, boss. She pay half."`,
+  slate: (k, a) => `Short ฿${_num(a)}, and the drawer knows exactly who: a regular drank on the book tonight and nobody chalked it. ${k} writes it on the slate now, with the date. "He pay. He always pay. He only forget to be asked."`,
+  float: (k, a) => `Short ฿${_num(a)}: change given out of the float for a thousand that was a five hundred. ${k} goes red, counts again, and finds most of it in the wrong slot.`,
+  fingers: (k, a) => `Short ฿${_num(a)}, and no slip and no story explains it. ${k} counts it twice and says nothing, which is its own kind of saying. Nobody is accused. Tomorrow the drawer is locked when the till is left.`,
+};
+// COUNT THE TILL — at your own bar from midnight: the night's drawer against its slips, with the till keeper
+function _doCountTill() {
+  if (!_barOwned() || !_atOwnBar()) { _say(_barOwned() ? "The till you count is your own, behind your own rail." : "You'd need a till of your own to count."); return; }
+  if (G.nightTurn < 60) { _say("The night is still putting money in. Count it at close — after midnight the drawer means something."); return; }
+  const b = G.bar;
+  if (b.countedDay === G.day) { _say("Counted already. The drawer is the drawer."); return; }
+  b.countedDay = G.day;
+  const k = (() => { const t = _tillKeeper(G.room); return t ? NPCS[t].name : "The till keeper"; })();
+  const sh = _tillShort(G.day);
+  _passTime(3);
+  if (!sh) _say(`You sit with ${k} and count the drawer against the slips, note by note. It agrees to the baht. ${k} looks faintly offended that you checked, and pleased that it came out.`);
+  else _say(_TILL_CAUGHT[sh.kind](k, sh.amt) + (sh.back ? ` (฿${_num(Math.round(sh.amt * sh.back))} of it back in the drawer by the morning.)` : " (None of it comes back. The lock on the drawer is what you bought.)"));
+}
 function _barNight(settleDay) {
   const b = G.bar;
   const day = (settleDay != null) ? settleDay : G.day;
@@ -10132,7 +10160,12 @@ function _barNight(settleDay) {
   // Nont's money comes off the top, nightly, until it is clear — he is the creditor who chases
   let garnish = 0;
   if (b.loan && b.loan.owed > 0) { garnish = Math.min(b.loan.owed, Math.round(take * NONT_LOAN_GARNISH)); b.loan.owed -= garnish; _loanPrincipal(b.loan, garnish, "nontGarnishPrin"); if (b.loan.owed <= 0) b.loan = null; }   // the till pays principal first too, so a pocket REPAY later carries the interest (the money audit, C)
-  const net = take - costs - garnish;
+  // the count: a short the drawer took tonight, less what a count at close got back; one nobody counted makes the next likelier
+  let short = 0, shortWhy = "";
+  { const sh = _tillShort(day);
+    if (sh) { const counted = b.countedDay === day; short = Math.min(take, counted ? Math.round(sh.amt * (1 - sh.back)) : sh.amt); shortWhy = counted ? sh.kind : "uncounted"; b.leakHabit = counted ? 0 : (b.leakHabit || 0) + 1; }
+    else if (b.countedDay === day) b.leakHabit = 0; }
+  const net = take - costs - garnish - short;
   b.cash += net;
   if (net > b.best) b.best = net;
   // a losing night is covered out of the till; when the till is empty the owner
@@ -10164,6 +10197,7 @@ function _barNight(settleDay) {
   const evt = evtIn - evtCost;
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
+  b.lastShort = short ? { amt: short, why: shortWhy } : null;
   b.lastLines = { day, railTurn: b.railTurn || 0, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
   return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc, garnish, markup: b.markup || "list", railLost };
@@ -11149,10 +11183,11 @@ function _doBooks() {
         lost: ll.lost ? _fmt(", ฿{l} short of what it would have been ({w})", { l: ll.lost, w: (ll.lostNotes || []).join(" · ") }) : "",
         nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: (ll.inside != null ? ll.inside : _insidePrice()) ? " (the uncle's inside price)" : "",   // the price the night was billed at (Kwame, round 60)
         mgr: (ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "") + (ll.salary ? _fmt(" · the flat salary ฿{s}", { s: ll.salary }) : "") + (ll.garnish ? _fmt(" · Nont's cut ฿{g}", { g: ll.garnish }) : ""),
-        proc: ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "",
+        proc: (ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "") + (b.lastShort ? _fmt(" · the count short ฿{s}", { s: _num(b.lastShort.amt) }) : ""),
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",
         who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
     if (ll.notes && ll.notes.length) _say(`(The night's own money: ${ll.notes.join(" · ")}.)`, "dim");
+    if (b.lastShort) _say(b.lastShort.why === "uncounted" ? `(The drawer came up ฿${_num(b.lastShort.amt)} short of the slips, and nobody counted it, so nobody knows why. COUNT THE TILL at close, the night you want to know.)` : `(The drawer was short, and you counted it: ฿${_num(b.lastShort.amt)} stayed gone — ${({ comp: "the girls' friends' drinks, half paid back", slate: "nothing, the slate covers it", float: "the change that never turned up", fingers: "money that walked" })[b.lastShort.why]}.)`, "dim");
     if (b.lastOwnDrinks) _say(`(Your own girls' drinks, on your chit and into the till: ฿${_num(b.lastOwnDrinks)}.)`, "dim");
     if (b.lastGuestDrinks) _say(`(The drinks of the girl you brought in from another bar, on your chit and into the till: ฿${_num(b.lastGuestDrinks)}.)`, "dim");
     if (b.lastOwnStock) _say(`(Your own glass: ฿${_num(b.lastOwnStock)} of wholesale off the till, nothing off your pocket.)`, "dim");

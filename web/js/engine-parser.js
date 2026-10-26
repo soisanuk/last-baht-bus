@@ -16654,6 +16654,7 @@ function _completePool(verb, ctx) {
       }
       return [];
     case "prices": case "board": return ctx.length >= 2 ? [] : ["cheap", "list", "up", "steep"];   // the owner's board
+    case "count": return ctx.length >= 2 ? [] : (_barOwned() && _atOwnBar() ? ["the till"] : []);   // the night's drawer against its slips
     case "terms": return ctx.length >= 2 ? [] : ["salary", "commission"];
     case "borrow": case "repay": case "draw": case "cashup":
     case "withdraw": case "withdrawal": case "withdrawl": case "deposit":
@@ -19442,6 +19443,7 @@ function _doCommandInner(input) {
       if (key) { doCommand("examine " + w); return; }
       if (/^(bars|fronts|doorways)$/.test(w)) { _say("You count the fronts you can see from here and lose the number by the next doorway. The town is mostly bars, and none of them stand still to be counted."); return; }
     } }
+  if (/^(?:count|check|cash up)(?: the)? (?:till|drawer|takings|cash|money)$|^cash up$|^cashup$/.test(lower) && _barOwned() && _atOwnBar()) { _doCountTill(); return; }
   if (/^count( the)? (stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(lower) || (lower === "count" && (!(_convoActive()) || (G.room === "jasmine_garden" && G.quests.covers === "active")))) {   // at the covers stool a bare COUNT is the tally, not a topic to Hong (Ingrid, round 103)
     if (!_inBar()) { _say("Nothing here worth counting except the bikes, and they don't stay still."); return; }
     const men = 2 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("count:" + G.room + ":" + G.day, 5) % 3);
@@ -19548,7 +19550,8 @@ function _doCommandInner(input) {
     case "set": if (/box|device/.test(arg || "")) { _doPlaceBox(arg); break; }   // SET DOWN THE BOX (its own case below was dead code until 2026-10-07)
       if (/\bprices?\b|\bboard\b/.test(arg)) { _doPrices(arg); break; } if (/\bterms\b|\bsalary\b|\bcommission\b/.test(arg)) { _doTerms(arg); break; }
       _say("Set what? PRICES or TERMS, at your own bar."); break;
-    case "draw": case "cashup": _doDraw(arg); break;
+    case "draw": _doDraw(arg); break;
+    case "cashup": if (!arg || /^(?:the )?(?:till|drawer|night)$/i.test(arg)) _doCountTill(); else _doDraw(arg); break;
     case "quests": case "quest": case "adventures": _doQuests(); break;
     case "journal": case "notes": case "diary": _doJournal(arg); break;   // the phone's notes: the frontier, then the record
     case "topics": case "subjects": { const _tw = arg ? _findNpc(String(arg).replace(/^(?:about|to|with|for)\s+/, "").trim()) : null;

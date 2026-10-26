@@ -401,13 +401,13 @@ test("PRICES: the board moves the till and the traffic, the girls' money rides t
   } finally { _rand = saved; }
 });
 test("TERMS SALARY keeps the floor at a wage; Nont lends to the bar and takes it off the top; the bar opposite walks the cycle from your doorway; list prices in season are never a notice", () => {
-  _owner(); const saved = _rand; _rand = () => 0.5;
+  _owner(); const saved = _rand, savedShort = _tillShort; _rand = () => 0.5; _tillShort = () => null;   // terms, not the till's leak: the count is pinned in round107.test
   try {
     out = []; run("terms salary"); assert.match(said(), /they stay/); assert.equal(_barTerms(), "salary");
     G.bar.markup = "steep"; G.season0 = 3;
     const wagesBefore = BAR_WAGES + BAR_MGR_NIGHT;
     for (let i = 0; i < 70; i++) _night(false);
-    assert.equal(G.bar.notice, null, "nobody leaves over the drinks on a salary");
+    assert.ok(!G.bar.notice, "nobody leaves over the drinks on a salary");
     assert.equal(G.bar.lastLines.wages + (G.bar.lastLines.mgr || 0), wagesBefore, "BOOKS wages line (base)"); // the salary rides the night's `wages` return
     // nothing unavoidable: list prices, commission, the cool months, half the nights stood — a season without a notice or a rise
     _owner(); G.bar.terms = "commission"; G.bar.markup = "list"; G.season0 = 10;
@@ -426,5 +426,5 @@ test("TERMS SALARY keeps the floor at a wage; Nont lends to the bar and takes it
     const t = _night(false); assert.match(t, /Nont's man took ฿\d+ off the top/); assert.ok(G.bar.loan.owed < 22000);
     out = []; run("debt"); assert.match(said(), /Nont, for the bar/);
     G.room = _npcRoom("nont"); G.money = 50000; out = []; run("repay"); assert.equal(G.bar.loan, null); assert.match(said(), /Square/);
-  } finally { _rand = saved; }
+  } finally { _rand = saved; _tillShort = savedShort; }
 });
