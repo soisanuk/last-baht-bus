@@ -8615,6 +8615,13 @@ function _lastNightHers(npc, w) {
   return _pickVary(pool, "lnhers:" + npc);
 }
 const _LASTNIGHT_TAN_HOW = (w) => {
+  // a short time is not how a night ENDS, so the ending's reason never saw it: the record of who you went with does
+  const _st = (w.upstairs && NPCS[w.upstairs] ? w.upstairs : null) || Object.keys(G.wentWith || {}).find(id => NPCS[id] && G.wentWith[id].kind === "st" && G.wentWith[id].day === (w.day != null ? w.day : G.day - 1));
+  if (_st && (w.reason === "sleep" || w.reason === "dawn" || !w.reason)) {
+    const _b = NPCS[_st].room && _barName(NPCS[_st].room) ? " at " + _barName(NPCS[_st].room) : "";
+    return _pickVary([`Upstairs with ${NPCS[_st].name}${_b}, an hour, and then home on your own feet. The stairs on that soi have no secrets; the girls tell each other before you are down them.`,
+      `${NPCS[_st].name}${_b} took you upstairs, and you went home after, alone. Short time is the soi's business; going home is yours, and you did it.`], "tanln:st");
+  }
   const who = w.with && NPCS[w.with] ? NPCS[w.with].name : "somebody", from = w.bar && _barName(w.bar) ? " from " + _barName(w.bar) : "";
   const where = w.endRoom && ROOMS[w.endRoom] ? ROOMS[w.endRoom].name : "the street";
   switch (w.reason) {
@@ -9953,8 +9960,10 @@ function _townTalk(npc, topic) {
       return true;
     }
     if (!ll) return pick("books", { rent: _barRent().toLocaleString(), note: BAR_MONTHLY.toLocaleString(), wages: BAR_WAGES.toLocaleString() });
-    const out = (ll.nut || 0) + (ll.cogs || 0) + (ll.wages || 0) + (ll.mgr || 0) + (ll.proc || 0) + (ll.evtCost || 0);
+    const out = (ll.nut || 0) + (ll.cogs || 0) + (ll.wages || 0) + (ll.mgr || 0) + (ll.proc || 0) + (ll.evtCost || 0) + (ll.short || 0);
     const nts = [...(ll.notes || []), ...(ll.lostNotes || [])];
+    // the drawer's short is on the page, so the till keeper says it
+    if (G.bar.lastShort) nts.push(G.bar.lastShort.why === "uncounted" ? `฿${_num(G.bar.lastShort.amt)} short in the drawer, nobody count it` : `the count find ฿${_num(G.bar.lastShort.found)} short, ฿${_num(G.bar.lastShort.found - G.bar.lastShort.amt)} come back`);
     const self = !!NPCS[npc].manager;   // Bert read "Bert ran it" off the page as if he were a stranger to himself (Lothar, round 67)
     return pick("lastnight", { take: _num(ll.take), out: _num(out), bert: ll.mgr ? `, ${self ? "me" : "Bert"} ฿${_num(ll.mgr)}` : "",
       who: ll.declaredOnly ? `Your name on the shift, but ${self ? "I" : "Bert"} ran it` : ll.worked ? "You stood it" : `${self ? "I" : "Bert"} ran it`,   // "stood" is the owner's word (Kwame, round 60)
@@ -12171,6 +12180,15 @@ function _doBuy(arg) {
     if (FOOD_STALLS[G.room]) _say(`(The one still trading here is ${FOOD_STALLS[G.room].name.replace(/^(a |an |the )/, "")} — BUY FOOD.)`, "dim");
     return;
   }
+  // the cart's stock, after the cart has gone: say it was the cart's, not the bar's
+  if (_inBar() && /\b(heels|shoes|lingerie|bra|bikini|dress|sandals|flip ?flops|lipstick|perfume|knickers|panties|top)\b/.test(String(arg || "").toLowerCase())) {
+    _say(_pickVary([
+      "That was the cart's, and the cart has rolled on to the next bar. The bar sells drinks; it has never once sold a pair of heels.",
+      "The saleng that had those is three bars down by now, girls round it like pigeons. Catch it there, or next time it parks.",
+      "Not from the bar. The cart with the clothes on it does its round, and it is somewhere else on its round now.",
+    ], "nocart"));
+    return;
+  }
   if (/\b(rose|roses|flower|flowers)\b/.test(String(arg || "").toLowerCase())) {
     // the rose is the flower seller's, not the bar's — "Not for sale here" after her
     // round has moved on read as a bug (Tomasz, round 54)
@@ -12613,6 +12631,8 @@ function _doMotosai(arg) {
     G.motoHomeDoor = Object.keys(ROOMS).find(r => Object.values(ROOMS[r].exits || {}).includes(_hr)) || null;
   } else G.motoHomeDoor = null;
   // the gentlemen's clubs, by class: "Don't know this one" (Ossie, round 70) — Thappraya, where the Boardroom is
+  // a bare "club" is three different nights (a gentlemen's club, a dance club, the host bar): he asks which
+  if (/^(?:a |the )?clubs?$/.test(w.trim())) { _say("“Club? Which club, boss?” He counts on his fingers. “Gentleman club — Thappraya. Dance club — Walking Street. The other club — Jomtien, Supertown.” (MOTOSAI TO THAPPRAYA · MOTOSAI TO WALKING STREET · MOTOSAI TO SUPERTOWN)", "dim"); return; }
   if (/\b(gentle?m[ae]n'?s?'? ?clubs?|gents'? ?clubs?|gents)\b/.test(w)) { _say("“Gentleman club?” He grins. “Thappraya. The Boardroom, the Velvet. Okay.”", "dim"); w = "thappraya"; }
   // the longest key that fits: "beach road south" took the "beach road" key (Fintan, round 60)
   const destKey = Object.keys(MOTOSAI_DESTS).filter(k => w.includes(k)).sort((a, b) => b.length - a.length)[0] ||
@@ -13974,10 +13994,11 @@ function _doTime() {
       : `(League night — killer pool, every third night — is ${inN === 1 ? "tomorrow" : "the night after next"}.)`, "dim");
   }
   _say(_atOwnBar() ? "(Your own rail: the barfine book is shut to you — the girls are staff, and the fee would be a fee to yourself.)" :   // the guv'nor was being quoted early-doors rates (Rolf, round 54)
-    t < 30 ? "(Early doors: barfines carry a premium until 21:00 — short time about half again, long time and a night out more than double, because she leaves the floor for the whole evening. Ask her the price.)" :
+    // the pricing follows the room you're in: a Soi 6 bar's room upstairs is the same all night, a beer bar's fine is not
+    t < 30 ? (_room().barType === "soi6" ? "(Early doors: the room upstairs costs what it always costs, but taking her out for the night is dearest before 21:00 — she leaves the floor for the whole evening. Ask her the price.)" : "(Early doors: barfines carry a premium until 21:00 — about half again, because she leaves the floor for the whole evening. Ask her the price.)") :
     (_closeTurn(G.room) != null && t >= _closeTurn(G.room) - 5 && t < _closeTurn(G.room)) ? `(This place shuts at ${_closeClock(G.room)} — last orders now.)` :   // the hour, said at the hour it matters (Declan, round 83)
     (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && t >= SOI6_CLOSE) ? "(The bars on Soi 6 shut at two. Whatever is still pouring is off the soi.)" :
-    t >= 60 ? (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? "(Past midnight: the bar's fine to take her out drops, but it does not go — this soi keeps its book till it shuts at two. Her own money never drops.)" : "(Past midnight: most beer bars have quietly dropped the barfine. Her own money is still hers.)") :
+    t >= 60 ? (_room().barType === "soi6" ? "(Past midnight: the room upstairs costs what it did, and the fine to take her out drops but does not go — a Soi 6 bar keeps its book till it shuts at two. Her own money never drops.)" : !_room().barType && _room().region === "Soi 6" ? "(Past midnight: the beer bars on this soi have dropped their fine; the Soi 6 bars keep theirs, smaller, till two. Her own money is hers either way.)" : _room().barType === "beer" || !_room().barType ? "(Past midnight: most beer bars have quietly dropped the barfine" + (_room().region === "Soi 6" ? " — the beer bars on this soi too; the Soi 6 bars keep theirs till two" : "") + ". Her own money is still hers.)" : "(Past midnight: the fine drops a little. Her own money is still hers.)") :
     "(Prime time. Standard rates apply.)", "dim");
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
   // status — the titular tension of the full game — simply doesn't apply here.
@@ -15786,6 +15807,8 @@ function _barfineTalk(npc) {
     : `“You own the place.” A shrug. “There's no fine to pay and nobody to pay it to. You'd just be a girl short on the floor.”`;
   // after midnight a beer bar closes its book: the BAR's fee is waived and hers
   // is not, so the quote must never read as free (the two-fee doctrine)
+  // the girl herself says the hour in her own words — the "I let a girl go" speech is the house's
+  if (p.herMoney && _self) return `“After midnight, mama don't take fine. Book close.” ${NPCS[npc].name} taps her own chest. “Only my money now — short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}. For me, not for the bar.” (BARFINE ${NPCS[npc].name.toUpperCase()})`;
   if (p.herMoney) return tinglish
     ? `“This hour? Bar finish already — no more fine, book is closed.” ${n} holds up one finger. “But her money is her money. Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}, and that go to HER, not to me.” A look that is not unfriendly and is not soft. “And I let a girl go for no fine only for a man I know, or a man who buy — one for himself, one for her. You buy nothing, you get a smile and goodnight.”`
     : `“Past midnight the bar's fine comes off — the book's closed for the night.” A tilt of the head. “Her money doesn't. Short time ฿${_num(p.st)}, long time ฿${_num(p.lt)}, and every baht of that is hers. Mind, she only lets a girl walk for nothing if she knows you, or she's watched you buy a drink each. Turn up cold at one in the morning and you'll get a very polite no.”`;
@@ -15989,8 +16012,9 @@ function _doTaoRai() {
     const r = _room();
     const bits = [`beer ฿${_num(_beerPrice())}`];
     if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);   // the Vic has no bar-girl economy (Neville, round 53)
+    else if (G.party && (G.party.ids || []).length) bits.push(`a drink for the woman with you ฿${_num(_ladyPrice())}`);   // …but the woman you brought in drinks, and it is charged
     bits.push(`water or soda ฿${_num(_beerPrice())} (the seat, not the bottle)`);
-    if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_num(_bellPrice(G.room))} right now (a drink a head — it moves with the room)`);
+    if (_inBar() && r.barType) bits.push(`the bell ฿${_num(_bellPrice(G.room))} right now (a drink a head — it moves with the room)`);   // the Vic rings one too, so it is quoted
     // the games take a stake: quoted before the frame goes up, not after (Liam, round 93)
     if (_barGamesHere()) bits.push(`Connect 4 ฿${_num(C4_STAKE)} a game · Jackpot ฿${_num(JP_MIN)}–${_num(JP_MAX)}`);
     if (r.pool) bits.push(`pool ฿${_num(POOL_STAKE)} a rack`);   // quoted ฿680, charged ฿760 an hour on (Dagny, round 91)
@@ -19443,7 +19467,18 @@ function _doCommandInner(input) {
       if (key) { doCommand("examine " + w); return; }
       if (/^(bars|fronts|doorways)$/.test(w)) { _say("You count the fronts you can see from here and lose the number by the next doorway. The town is mostly bars, and none of them stand still to be counted."); return; }
     } }
-  if (/^(?:count|check|cash up)(?: the)? (?:till|drawer|takings|cash|money)$|^cash up$|^cashup$/.test(lower) && _barOwned() && _atOwnBar()) { _doCountTill(); return; }
+  // THANK <someone present>: a thank-you is said, not asked about
+  { const tm = lower.match(/^(?:thanks?|thank you|cheers|kop khun(?: krap| ka)?)(?: you)?,? (?:to )?([a-z]+)(?: for (?:that|everything|the [a-z ]+|it))?[.!]*$/);
+    const tw = tm && _findNpc(tm[1]);
+    if (tw && _npcsHere().includes(tw)) {
+      const n = NPCS[tw].name;
+      _say(_pickVary(tw === "tan" ? [`"Nothing to thank, my friend." Tan lifts his cup an inch. "You did the walking."`, `Tan waves it off. "Thank me when I have done something."`, `"Okay," Tan says, which from him is a whole speech.`]
+        : NPC_ROLES[tw] && _hoursRegister(tw) === "floor" ? [`"Mai pen rai," ${n} says, pleased anyway.`, `${n} gives you a small wai back. "Welcome, na."`, `"For what?" ${n} laughs. "Okay. Welcome."`]
+        : [`${n} nods. "Any time."`, `"Don't mention it," ${n} says, and means it.`, `${n} raises a glass an inch: you're welcome.`], "thanks:" + tw));
+      if (typeof _convoStart === "function") _convoStart(tw);
+      return;
+    } }
+  if (/^(?:count|check|cash up)(?: the)? (?:till|drawer|takings|cash|money)$|^cash up$|^cashup$/.test(lower) && (_barOwned() || /\b(?:till|drawer)\b/.test(lower))) { _doCountTill(); return; }
   if (/^count( the)? (stools|men|customers|heads|people|the room|room|punters|the bar)$/.test(lower) || (lower === "count" && (!(_convoActive()) || (G.room === "jasmine_garden" && G.quests.covers === "active")))) {   // at the covers stool a bare COUNT is the tally, not a topic to Hong (Ingrid, round 103)
     if (!_inBar()) { _say("Nothing here worth counting except the bikes, and they don't stay still."); return; }
     const men = 2 + _regularsHere().length + (G.nightTurn >= 40 ? 2 : 0) + (_hh("count:" + G.room + ":" + G.day, 5) % 3);
@@ -20767,7 +20802,8 @@ function _shareCard() {
       (done ? " · week complete" : ` · night ${Math.min(G.day, 7)}/7`),
     // …and what you SPENT is the week's other number — not the pocket (that call stands), the money that went through the
     // soi: the stake plus the machine, less what is left (Marcus, round 96: "half the banter on a forum is what it cost")
-    ...(G.mode === "soi6" ? [`💸 ฿${_num(Math.max(0, SOI6_POCKET + (G.atmTotal || 0) + (G.atmFees || 0) - Math.max(0, G.money)))} spent`] : []),   // the machine's fee is spent too (Victor)
+    // pocket and account together, start to end: a deposit back into the account is not spending, and a win comes off it
+    ...(G.mode === "soi6" ? [`💸 ฿${_num(Math.max(0, (G.weekStart != null ? G.weekStart : SOI6_POCKET + SOI6_BANK) - Math.max(0, G.money) - Math.max(0, G.bank || 0)))} spent`] : []),
     "soisanuk.github.io/last-baht-bus",
   ];
 }
@@ -20816,6 +20852,7 @@ function _soi6Setup() {
   G.day = 1;              // Soi 6 starts fresh on day one — no lost first day
   G.money = SOI6_POCKET;
   G.bank = _originMoney(G.player && G.player.origin).bank;   // the week's stake is the origin's (Mario, 2026-10-20) — SOI6_BANK is the fallback
+  G.weekStart = G.money + G.bank;   // the card's "spent" is the week's money gone, start to end
   G.battery = 100;        // a solvent tourist charged up before going out — not the Act-One 13%
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time

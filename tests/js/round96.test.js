@@ -83,7 +83,7 @@ test("'it's my last night' is the leaving; the ATM clause adds its fee; the awni
 
 // ── Marcus ──
 test("the card: a calendar row, not a moon that reads as an eighth night; what the week cost", () => {
-  soi6(); G.money = 400; G.atmTotal = 2000; G.nightLog = ["home", "home", "barfine"];
+  soi6(); G.money = 400; G.atmTotal = 2000; G.bank -= 2000; G.nightLog = ["home", "home", "barfine"];
   const card = _shareCard().join("\n");
   assert.doesNotMatch(card, /🌙/); assert.match(card, /🗓 /); assert.match(card, /💸 ฿2,600 spent/, card);
   assert.doesNotMatch(card, /in pocket|left\b/, "the pocket stays off the card (round 24's call)");

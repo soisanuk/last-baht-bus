@@ -1976,6 +1976,8 @@ function _jpInput(input) {
   let move = g.pending.find(mv => mv.length === nums.length && mv.every((n, i) => n === nums[i]));
   if (!move && /sum/.test(input)) move = g.pending.find(mv => mv.length === 1);
   if (!move && /both|dice/.test(input)) move = g.pending.find(mv => mv.length === 2);
+  // one tile of the only pair that holds it is that pair: "flip 2" then "flip 3" was refused four times
+  if (!move && nums.length === 1) { const pr = g.pending.filter(mv => mv.length === 2 && mv.includes(nums[0])); if (pr.length === 1 && !g.pending.some(mv => mv.length === 1 && mv[0] === nums[0])) { move = pr[0]; _say(`(Both at once: ${move.join(" & ")}.)`, "dim"); } }
   if (!move) {
     _gameBoard();
     _say(_jpHint(g.pending, " — those are the choices."), "dim");
@@ -2410,7 +2412,7 @@ function _tableHint() {
   const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)));   // the fenced week's tables are inside the fence (Marcus, round 96)
   // the fenced week is one street whose doors are all on it, so every table on it is a table you can be told about
   const known = G.mode === "soi6" ? tables : tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]) || (!_venueUnfound(id)));   // a door on a street you walked is found (Marcus, round 96: TIME promised killer pool and nobody named a table)
-  const league = _leagueTonight() ? " Tonight is league night: killer pool, ฿100 in the ashtray, at the tables from eight." : "";
+  const league = _leagueTonight() ? " Tonight is league night: killer pool, ฿100 in the ashtray, at the tables all evening." : "";
   if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them." + league;
   const near = known.filter(id => ROOMS[id].region === _room().region);
   const pick = (near.length ? near : known).slice(0, 3);
@@ -2725,6 +2727,8 @@ function _startDarts(arg) {
   const _wid = _wm ? _findNpc(_wm[1].trim()) : null;
   const opp = _wid && _npcsHere().includes(_wid) ? NPCS[_wid].name : gh.id && _rand() < 0.5 ? gh.name : _L("a leathery expat with his own darts in a belt case");
   const stake = _takeStake(DARTS_STAKE);
+  // a figure typed after DARTS is not the stake: the house plays for its own, and says so
+  if (/\b\d{2,}\b/.test(String(arg || "")) && !/\b40\b/.test(String(arg || ""))) _say(`(Darts here is ฿${_num(DARTS_STAKE)} a game — the house's stake, not one you name.)`, "dim");
   G.game = { type: "darts", you: 501, opp: 501, oppName: opp.length > 22 ? "the old boy" : opp, oppSkill: 0.62, stake };
   _say(_fmt("Chalk up: 501 each, straight off, check out on a double. {n} throws " +
     "for the bull to start and lands it like breathing.", { n: _ucfirst(opp) }));
@@ -5822,7 +5826,7 @@ function _nightSnapshot() {
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     spcB: G.massageSpend || 0, strB: G.streamSpent || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
-    wonB: (G.offIn || 0) + (G.quizWon || 0), giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
+    wonB: (G.offIn || 0) + (G.quizWon || 0), quizB: G.quizWon || 0, giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -5926,7 +5930,8 @@ function _morningLedger() {
   // what came BACK into the pocket — a pot, a quiz prize, a note a woman pressed on you — nets into "down" and is named,
   // or "down ฿2,320" hides the ฿500 a man won at the quiz (Liam, round 93)
   const wonN = (G.offIn || 0) + (G.quizWon || 0) - (b.wonB != null ? b.wonB : (G.offIn || 0) + (G.quizWon || 0));
-  if (wonN > 0) bits.push("\u0e3f" + _num(wonN) + " back in at the tables and the quiz, netted in");
+  const quizN = (G.quizWon || 0) - (b.quizB != null ? b.quizB : (G.quizWon || 0));   // name the quiz only on a night it paid
+  if (wonN > 0) bits.push("\u0e3f" + _num(wonN) + (quizN > 0 && quizN < wonN ? " back in at the tables and the quiz" : quizN > 0 ? " back in from the quiz" : " back in at the tables") + ", netted in");
   const giftInN = (G.giftIn || 0) - (b.giftInB != null ? b.giftInB : (G.giftIn || 0));
   if (giftInN > 0) bits.push("\u0e3f" + _num(giftInN) + " pressed into your hand by somebody, netted in");
   const jobN = (G.jobPaid || 0) - (b.jobB != null ? b.jobB : (G.jobPaid || 0));   // a job's money, in cash, named (Vince, round 74: "up ฿3,100" for ฿4,000 of fees)
@@ -7237,7 +7242,7 @@ function _newVacation(opts) {
   G.itemLoc.wallet = "inventory";
   if (_soi6) {
     // the challenge's frame holds: the Vic's balcony room, the week's stake in the pocket, the account as you left it
-    G.hotel = "queenvic"; G.room = "qv_room"; G.money = SOI6_POCKET; G.nightTurn = 0;
+    G.hotel = "queenvic"; G.room = "qv_room"; G.money = SOI6_POCKET; G.nightTurn = 0; G.weekStart = G.money + (G.bank || 0);
     _say("");
     _say("A month at home, and then the same balcony over the same street, the same ceiling fan with the same opinions. " +
       `The soi has not noticed you were gone; the people on it have. ฿${_num(SOI6_POCKET)} in the pocket, the card in the wallet, seven nights on the clock.`, "win");

@@ -327,6 +327,7 @@ function newGame() {
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     atmIn: 0,          // notes put back into the account at a machine (DEPOSIT)
+    weekStart: null,   // pocket + account when the Soi 6 week began: the card's "spent" is start less end
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
     homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, barSat: {},   // the resident's integration pass (round 100)
@@ -690,7 +691,7 @@ const STATE_SCHEMA = {
     "pendingFare pendingSoapy quizPlayed rain rideSeq room roomWater roughLost safeTries salengCart selfBfId thirst " +
     "wakeTurn ").trim().split(/\s+/),
   trip: (
-    "atmDay atmToday care curseOwed everBond happy hotel lastNight lastNightSaid ledgerSeen loan loanSkipped " +
+    "atmDay atmToday care curseOwed everBond happy hotel weekStart lastNight lastNightSaid ledgerSeen loan loanSkipped " +
     "loanSkippedOwed money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
   life: (
     "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
@@ -740,7 +741,7 @@ const STATE_SCHEMA = {
     "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
     "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
     "leftLockIn lockIn mgrChat mgrShot patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
-    "steered streamJoy streamLast streamMine streamSeenBy tipBond tries ").trim().split(/\s+/),
+    "steered streamJoy streamLast streamMine streamSeenBy tanWas tipBond tries ").trim().split(/\s+/),
   socTrip: (
     "arriveBook arriveMoney askedHere awaySaid beats bondHeard bondSaid byeSaid chamDrinks clinicCompany coconutDone " +
     "comped craneDay declined depositNagDay dogScenesSeen drinks fonPour freeNight gapSeen gifted given glassRooms " +
@@ -1250,6 +1251,20 @@ function _isDarkHere() {
 // pointed to stays true until dawn). This is the single source of NPC presence;
 // read it, never `NPCS[id].room`, anywhere presence matters.
 const _TAN_ROUNDS = ["soi6_street", "soi6_west_in", "soi6_mid", "soi6_east_in", "soi6_deep"];   // the soi's five stretches
+const _TAN_LEAVES = ["Tan finishes his coffee, nods to you, and walks on down the soi.", "Tan checks the street the way he checks everything and drifts off up the soi, unhurried.", "Tan touches your arm — \"later, my friend\" — and moves on along the soi."];
+const _TAN_COMES = ["Tan comes strolling up the soi with a coffee in his hand and stops beside you as if he'd meant to.", "Tan wanders into the stretch you're standing on, sees you, and raises the cup.", "Tan appears at your elbow, from wherever he was, the way he does."];
+const _TAN_HOME = ["Tan looks at his watch, says \"midnight, my friend — home\", and walks off towards the car.", "\"Home,\" Tan says, as the clock turns over. \"Tomorrow, early.\" He goes."];
+// his round, narrated where it touches you: he leaves the stretch you're on, comes to it, or goes home at midnight
+function _tanWalkTick() {
+  if (!NPCS.tan || NPCS.tan.room !== "soi6_street" || !_flag("act1Done")) return;
+  if (G.convo === "tan") return;   // he is frozen while you talk
+  const now = _npcActive("tan") ? _npcRoom("tan") : null, was = G.soc.tanWas;
+  G.soc.tanWas = now;
+  if (was === undefined || was === now) return;
+  if (was === G.room && !now) _say(_pickVary(_TAN_HOME, "tanhome"), "dim");
+  else if (was === G.room) _say(_pickVary(_TAN_LEAVES, "tanleaves"), "dim");
+  else if (now === G.room) _say(_pickVary(_TAN_COMES, "tancomes"), "dim");
+}
 function _npcRoom(id) {
   // A companion you took OUT is wherever YOU are — one override here and every
   // presence consumer (TALK, BUY DRINK, kiss, PHOTO, the Here: line, the
@@ -3921,6 +3936,7 @@ function _tick() {
     (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
   G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
   if (!_onRide()) _railTick();
+  _tanWalkTick();   // Tan on his round: said when he comes or goes from where you stand
   _streamTick();   // the group's cameras at work (2026-10-22)     // the hour turns and somebody drains a glass and moves on
   _nokLeavesTick();
   _flowerTick(); // open-air-bar flower seller (once/night, when courting a girl)

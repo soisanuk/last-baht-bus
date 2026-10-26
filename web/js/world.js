@@ -9786,7 +9786,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Post-reveal greeting: he knows you saw him at the good table, and the
       // relationship recalibrates without a word of it being said out loud.
       { when: (st, G) => _flag("tanRevealed"),
-        text: "\"My friend.\" Tan comes off the car the same as always — and not the same at all, because " +
+        text: "\"My friend.\" Tan comes over the same as always — and not the same at all, because " +
           "now you both know what you saw, and he watches you decide, in real time, what to do about it. " +
           "You say nothing. Something behind his eyes files that away with what might, in a different man, " +
           "be respect. \"Good evening for a drive,\" he says pleasantly, and the town rearranges itself " +
@@ -9801,7 +9801,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // that is the whole of his character in the opening ("This part is not the
       // game. The game starts when you get out.").
       { when: (st, G) => !_flag("act1Done") && !_flag("hasWallet"),
-        text: "\"Ha — my airport friend.\" Tan comes off the car, and then reads your face and " +
+        text: "\"Ha — my airport friend.\" Tan comes over, and then reads your face and " +
           "stops being pleased about it. \"Ahh. No wallet.\" Not a question. He does not ask how, " +
           "which is its own kind of manners. \"It is not the worst thing that has happened on this road tonight, my friend, and it will not be the worst thing that happens to you here.\" A tip " +
           "of the chin down the soi, where the neon is doing its work. \"Somebody saw. Somebody always sees. You go and ask, and be polite when you ask — that part matters more here " +
@@ -9810,7 +9810,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"No wallet.\" Not a question. \"Somebody saw — somebody always sees. Go and ask, and be polite. I do not find it for you.\"" },
       // a three-year resident is not an airport friend finding his feet (Declan, r45)
       { when: (st, G) => _flag("expatLife"),
-        text: "\"My friend.\" Tan comes off the car the way he always does, as though he had been " +
+        text: "\"My friend.\" Tan comes over the way he always does, as though he had been " +
           "waiting precisely for you and precisely no time at all. \"You look like a man who lives " +
           "here. It suits you. It does not suit everybody.\"",
         short: "\"My friend. You look like a man who lives here.\"" },
@@ -9862,7 +9862,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "buy your way inside — you can only be let.\" A small shrug. \"I like him. He makes a " +
           "good coffee, for a man who drinks soda water.\"",
         short: "\"Eddy learned everything about this town except the one thing.\"" },
-      { text: "\"Ha — my airport friend.\" Tan comes off the car, genuinely pleased, or doing pleased so well " +
+      { text: "\"Ha — my airport friend.\" Tan comes over, genuinely pleased, or doing pleased so well " +
           "it makes no difference. \"Still got your wallet? ...Mostly. Good. Most of you I drop once and never " +
           "see again. The ones I see twice—\" a warm shrug \"—those are the interesting ones.\" He tips his " +
           "chin at the neon swallowing the soi. \"So. You are finding your feet. Anything you need, you " +
@@ -9877,7 +9877,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // promised to point, pointing nowhere (Marco, round 44). He is the hub;
       // he drove all of them too.
       { topic: "katoey|ladyboy|ladyboys|trans|cabaret|drag|drag show",
-        text: "\u201cAh. You remember what I said in the car.\u201d He is pleased, and does not " +
+        text: "\u201cAh \u2014 katoey.\u201d He is pleased you asked straight, and does not " +
           "make a thing of it. \u201cOkay. Three places, three different nights. Katoey\u2019s R Us, " +
           "on {{Soi Diamond}} off Walking Street \u2014 that is a BAR, you sit, you drink, you talk, " +
           "same as anywhere. The Peacock, out in Supertown on Thappraya, is the SHOW \u2014 " +
@@ -9973,11 +9973,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // who drives you for nothing (Wiremu, round 59). The terms are _tanCall's: after
       // the last bus or in the rain, once a trip.
       { topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car", req: ["act1Done"],
-        when: (st, G) => !(G.phone && G.phone.tanRideVac === G.vacation),
+        when: (st, G) => G.mode !== "soi6" && !(G.phone && G.phone.tanRideVac === G.vacation),
         text: "\"A ride?\" Tan pats the roof of the sedan. \"You have my number. When the buses are gone, or the sky " +
           "falls in, you call — once a trip, my friend, and I come. Before that the town has a thousand bikes and every one of them needs the fare, and I do not need anything.\" (CALL TAN)",
         short: "\"After the last bus, or in the rain. Once a trip. You have the number.\" (CALL TAN)" },
-      { topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car", req: ["act1Done"],
+      { topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car", req: ["act1Done"], when: (st, G) => G.mode !== "soi6",
         text: "\"You had yours this trip.\" Tan says it kindly, which makes it final. \"Next time you land, I am at the " +
           "airport. Tonight, the piwin on the corner. Tell him Tan says hello — he will charge you the same.\"",
         short: "\"You had yours this trip, my friend. The piwin on the corner.\"" },
@@ -10010,7 +10010,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "your name to anything, buy me a coffee. I meant the coffee. (BUY TAN A COFFEE)\"",
         short: "\"Coffee first. I said so in the car. (BUY TAN A COFFEE)\"" },
       { topic: "bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade", req: ["tanCoffee"],
-        text: "\"You had the coffee, so you know who owns what.\" A shrug against the car door. \"The rest is " +
+        text: "\"You had the coffee, so you know who owns what.\" A shrug. \"The rest is " +
           "only one question, and it is not the price. It is whose name goes on the fifty-one — " +
           "somebody you would hand your passport to. There are not many of those in any town.\"",
         short: "\"Who owns what, you know. Whose name goes on the fifty-one is the only question.\"" },
@@ -21465,6 +21465,13 @@ NPCS.hong.dialogue.unshift(
 );
 NPCS.ging.dialogue.unshift({ topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos|green neon|third road", when: (st, G) => G.itemLoc.bar_listing === "inventory", sets: ["gingSawSheet"], text: "She looks at the photographs the way she looks at a chit. \"Green neon, Third Road. I know it.\" The lanyard clicks. \"Long time ago Swedish bar — the old men still talk about it. Two year ago Russian name. Then Thai name, six month. Then nothing, shutter down. Now for sale again, no company, one point five.\" She hands the sheet back. \"Same unit, three signs. The man who buy it is the fourth sign. Buy the stools, not the building. Everybody know.\"", short: "\"Three signs on one unit in two years. The buyer is the fourth sign.\"" });
 NPCS.hong.dialogue.unshift({ topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos|green neon|third road", when: (st, G) => G.itemLoc.bar_listing === "inventory", text: "\"This one.\" Hong taps the middle photograph. \"My cousin work there when it was the Russian name. Three month, then the farang go home and the sign come down. Before that, Swedish. Same chairs every time.\" She hands it back. \"No company, it say. Correct. There never was one. You buy the chairs.\"", short: "\"My cousin worked there under the Russian name. Three months. You buy the chairs.\"" });
+// Tan's own invitation, "ask me about the town", answered; and the car on the Soi 6 week, where the week is one street
+NPCS.tan.dialogue.push({ topic: "town|the town|this town|about the town",
+  text: "\"The town.\" Tan looks down the soi the way a man looks at a river he has fished for years. \"Three things. Everybody here is selling something, and most of them tell you the price straight. The ones who do not tell you are the ones to watch. And nobody forgets a face — not the girls, not the mamas, not me.\" He turns his cup. \"So. Ask me a name, or a bar, or the police, or the money. Those I know.\"",
+  short: "\"Everybody sells, most say the price, nobody forgets a face. Ask me a name, a bar, the police, the money.\"" });
+NPCS.tan.dialogue.push({ topic: "lift|a lift|ride|a ride|taxi|a taxi|drive me|take me home|pick me up|car|your car|call you|phone you", when: (st, G) => G.mode === "soi6",
+  text: "\"The car?\" Tan nods towards the mouth of the soi, where it sits. \"This week you do not need it, my friend. The whole of your week is this one street, and I walk it every evening till midnight. Find me on it. After midnight I am home, and so should you be.\"",
+  short: "\"This week the street is the whole town. Find me on it before midnight.\"" });
 NPCS.hong.dialogue.push({ topic: "count|the count|the till|your till|the book|sign|the month|numbers|the register", text: "\"Count?\" Hong does not stop writing. \"The stools are there. Count what you like.\"", short: "\"The stools are there.\"" });
 NPCS.hong.dialogue.push({ topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos", text: "\"A sheet? Bring it. I read every sheet on this soi — somebody has to.\"", short: "\"Bring the sheet.\"" });
 NPCS.ging.dialogue.push({ topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos", when: (st, G) => (_flag("verifDone") || _flag("gingSawSheet")) && G.itemLoc.bar_listing !== "inventory", text: "\"The green neon one?\" The lanyard clicks. \"I see that sheet already. Same unit, same story — only the name change.\" She does not ask where the sheet went.", short: "\"I see that sheet already. Same unit.\"" });

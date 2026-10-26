@@ -78,7 +78,7 @@ test("CHECK BIN says what the cup does not count", () => {
 test("the quiz prize and a note pressed into your hand are named on the morning ledger", () => {
   G.room = "sunset_dreams"; _nightSnapshot(); G.money += 500; G.quizWon += 500; G.money += 20; G.giftIn += 20;
   G.day++; _morningLedger(); const l = G.lastNightSaid.join(" ");
-  assert.match(l, /฿500 back in at the tables and the quiz/); assert.match(l, /฿20 pressed into your hand/);
+  assert.match(l, /฿500 back in from the quiz/); assert.match(l, /฿20 pressed into your hand/);
 });
 
 test("short of cash at LONG TIME you are told so, not asked to confirm; HOW MUCH at the ledger is answered", () => {

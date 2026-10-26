@@ -4275,7 +4275,10 @@ function _tanAbout(topic) {
       const cls = r.invite ? "the room you are taken into, not the one you walk into. I have driven men to that gate. I have never driven one in"
         : r.barType === "gogo" ? "a go-go — chrome, a stage, a bell. The girls are paid to be looked at and the mamasan is paid to count who looks"
         : r.barType === "gents" ? "a gentleman's club. A villa, a curtain, air-con set to Norway. Nobody shouts there, which is the whole product"
-        : r.barType === "soi6" ? "a Soi 6 bar. A stool with a staircase behind it. Everybody knows what the staircase is for and nobody says"
+        : r.barType === "soi6" ? "a Soi 6 bar. A stool with a staircase behind it. Everybody knows what the staircase is for and nobody says. " +
+          // whose bar it is, which is the one thing about it he knows that you cannot see
+          (typeof _PLG_ROOMS !== "undefined" && _PLG_ROOMS.includes(rid) ? "This one is the group's — Pattaya Leisure's paper on the wall, and the till counted in an office"
+            : (() => { const o = _licenceOwner(rid); return o && NPCS[o] ? `This one is ${NPCS[o].name}'s own. Her name on the paper, her floor, her rules` : "This one is somebody's own, not the group's"; })())
         : r.barType === "pub" ? "a pub. Farang men who have stopped auditioning, and a kitchen that closes at eleven"
         : r.barType === "club" ? "a club. Loud, late, and the drink costs what the seat costs"
         : r.soapy ? "a soapy. A fishbowl with numbers on the discs. I take men there and I take them home, and I do not ask"
@@ -4312,7 +4315,7 @@ function _tanAbout(topic) {
   { const d = _pickDialogue("tan", t); if (d && d.topic) return false; }
   if (_TAN_READ[id]) {
     if (!_met(id)) { _say("“Meet him first, my friend. Then I tell you who he is — and I will already know.”"); return true; }
-    _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id]}.”`);
+    _say(`“${NPCS[id].name}.” The grin. “${_TAN_READ[id].charAt(0).toUpperCase() + _TAN_READ[id].slice(1)}.”`);   // the read is a clause, and here it opens a sentence
     return true;
   }
   const n = NPCS[id];
@@ -4822,8 +4825,10 @@ function _tanCall() {
   // nobody in this town answers a phone — except the man whose job is answering
   _say("Two rings. \"My friend.\" The one phone in Pattaya that answers.");
   if (G.mode === "soi6") {
-    _say("\"A ride? My friend — the whole week is one soi. You can fall home from " +
-      "anywhere on it. Enjoy the falling.\" Click.");
+    // he answers, and says where he is: on the soi till midnight, home after
+    const _tw = _npcWhere("tan");
+    _say(_tw ? `"A ride? My friend — the whole week is one soi. You can fall home from anywhere on it. I am on ${ROOMS[_tw].name}, walking." Click.`
+      : "\"Home, my friend. The soi shuts at two and so do I, a little earlier. You can fall home from anywhere on it. Tomorrow, early, at the car.\" Click.");
     return;
   }
   // ACT ONE. Measured, this is the opening's real difficulty: the beach is 19
@@ -10065,7 +10070,7 @@ const _TILL_CAUGHT = {
 };
 // COUNT THE TILL — at your own bar from midnight: the night's drawer against its slips, with the till keeper
 function _doCountTill() {
-  if (!_barOwned() || !_atOwnBar()) { _say(_barOwned() ? "The till you count is your own, behind your own rail." : "You'd need a till of your own to count."); return; }
+  if (!_barOwned() || !_atOwnBar()) { _say(_barOwned() ? `The till you count is your own, behind your own rail at ${_barName(G.bar.room)}.` : "You'd need a till of your own to count."); return; }
   if (G.nightTurn < 60) { _say("The night is still putting money in. Count it at close — after midnight the drawer means something."); return; }
   const b = G.bar;
   if (b.countedDay === G.day) { _say("Counted already. The drawer is the drawer."); return; }
@@ -10197,9 +10202,10 @@ function _barNight(settleDay) {
   const evt = evtIn - evtCost;
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
-  b.lastShort = short ? { amt: short, why: shortWhy } : null;
-  b.lastLines = { day, railTurn: b.railTurn || 0, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
-  return { take: take + evtIn, costs, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
+  // a short the count found is said even when all of it came back: the publican wants to know it happened
+  { const sh = _tillShort(day); b.lastShort = sh && (short || b.countedDay === day) ? { amt: short, why: shortWhy, found: sh.amt } : null; }
+  b.lastLines = { day, short, railTurn: b.railTurn || 0, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
+  return { take: take + evtIn, costs, short, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc, garnish, markup: b.markup || "list", railLost };
 }
 
@@ -10352,7 +10358,7 @@ function _railLostOn(day) {   // the share of the rail that left with the women 
 const _OPP_LINES = [
   ["The bar opposite has a new sign, lit, and a girl on every stool at eight. The owner — a big Dane, new this season — stands on the step with his arms folded, looking at a street that is looking at his bar.",
    "Across the road they are turning people away at ten. The Dane has bought a second fridge. You can hear his bell from here."],
-  ["The landlord's daughter is across the road with her clipboard, the way she comes to you on the thirtieth. She stays longer than a receipt takes. The Dane walks her to her bike and does not fold his arms.",
+  ["The landlord's daughter is across the road with her clipboard, the way she comes to you on rent day. She stays longer than a receipt takes. The Dane walks her to her bike and does not fold his arms.",
    "The Dane is on his step again, not looking at the street this time. Bert, passing with the ice: “Rent went up over there. Busy bar, busy landlord.”"],
   ["The board across the road has been rubbed out and rewritten, and the new numbers are not smaller. A punter reads it, laughs, and comes in here instead.",
    "Two of the Dane's girls are at a kerb table outside his bar, not working, because there is nobody to work. One of them is doing sums on her phone."],
@@ -11179,15 +11185,15 @@ function _doBooks() {
   const ll = b.lastLines;
   if (ll) {
     _say(_fmt("Last night: ฿{take} in{fines}{evt}{lost}. Out: nut ฿{nut} · stock ฿{cogs}{inside} · wages ฿{wages}{mgr}{proc}{cost} — {who}.",
-      { take: ll.take, fines: b.lastFines && b.lastFines.n ? _fmt(" (drinks ฿{d} · {n} barfine{s} ฿{f})", { d: _num(ll.take - (ll.evtIn || 0) - b.lastFines.amt), n: b.lastFines.n, s: b.lastFines.n === 1 ? "" : "s", f: _num(b.lastFines.amt) }) : "", evt: ll.evtIn ? _fmt(" (฿{e} of it the night's luck)", { e: ll.evtIn }) : "",
+      { take: ll.take, fines: b.lastFines && b.lastFines.n ? _fmt(" (drinks ฿{d} · {n} barfine{s} ฿{f})", { d: _num(ll.take - (ll.evtIn || 0) - b.lastFines.amt), n: b.lastFines.n, s: b.lastFines.n === 1 ? "" : "s", f: _num(b.lastFines.amt) }) : "", evt: ll.evtIn ? _fmt(" (฿{e} of it the night's own money, named below)", { e: ll.evtIn }) : "",
         lost: ll.lost ? _fmt(", ฿{l} short of what it would have been ({w})", { l: ll.lost, w: (ll.lostNotes || []).join(" · ") }) : "",
         nut: ll.nut, cogs: ll.cogs, wages: ll.wages, inside: (ll.inside != null ? ll.inside : _insidePrice()) ? " (the uncle's inside price)" : "",   // the price the night was billed at (Kwame, round 60)
         mgr: (ll.mgr ? _fmt(" · Bert ฿{m}", { m: ll.mgr }) : "") + (ll.salary ? _fmt(" · the flat salary ฿{s}", { s: ll.salary }) : "") + (ll.garnish ? _fmt(" · Nont's cut ฿{g}", { g: ll.garnish }) : ""),
-        proc: (ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "") + (b.lastShort ? _fmt(" · the count short ฿{s}", { s: _num(b.lastShort.amt) }) : ""),
+        proc: (ll.proc ? _fmt(" · the arrangements ฿{p}", { p: ll.proc }) : "") + (b.lastShort && b.lastShort.amt ? _fmt(" · the count short ฿{s}", { s: _num(b.lastShort.amt) }) : ""),
         cost: ll.evtCost ? _fmt(" · the night's own bill ฿{c}", { c: ll.evtCost }) : "",
         who: ll.declaredOnly ? "declared, not stood" : ll.worked ? "you stood it" : "Bert ran it" }), "dim");
     if (ll.notes && ll.notes.length) _say(`(The night's own money: ${ll.notes.join(" · ")}.)`, "dim");
-    if (b.lastShort) _say(b.lastShort.why === "uncounted" ? `(The drawer came up ฿${_num(b.lastShort.amt)} short of the slips, and nobody counted it, so nobody knows why. COUNT THE TILL at close, the night you want to know.)` : `(The drawer was short, and you counted it: ฿${_num(b.lastShort.amt)} stayed gone — ${({ comp: "the girls' friends' drinks, half paid back", slate: "nothing, the slate covers it", float: "the change that never turned up", fingers: "money that walked" })[b.lastShort.why]}.)`, "dim");
+    if (b.lastShort) _say(b.lastShort.why === "uncounted" ? `(The drawer came up ฿${_num(b.lastShort.amt)} short of the slips, and nobody counted it, so nobody knows why. COUNT THE TILL at close, the night you want to know.)` : `(The count found the drawer ฿${_num(b.lastShort.found)} short — ${({ comp: "the girls' friends' drinks", slate: "a regular's slate nobody chalked", float: "change given wrong", fingers: "money that walked" })[b.lastShort.why]}. ฿${_num(b.lastShort.found - b.lastShort.amt)} of it back in the drawer, ฿${_num(b.lastShort.amt)} gone${b.lastShort.amt ? " (on the out line)" : ""}.)`, "dim");
     if (b.lastOwnDrinks) _say(`(Your own girls' drinks, on your chit and into the till: ฿${_num(b.lastOwnDrinks)}.)`, "dim");
     if (b.lastGuestDrinks) _say(`(The drinks of the girl you brought in from another bar, on your chit and into the till: ฿${_num(b.lastGuestDrinks)}.)`, "dim");
     if (b.lastOwnStock) _say(`(Your own glass: ฿${_num(b.lastOwnStock)} of wholesale off the till, nothing off your pocket.)`, "dim");
@@ -11280,7 +11286,7 @@ function _barSettle(settleDay) {
   _say(_fmt(G.bar.cash < 0
     ? "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: empty, and ฿{short} behind it.)"
     : "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
-    { take: n.take, costs: n.costs + (n.evtCost || 0), cash: G.bar.cash, short: -G.bar.cash,
+    { take: n.take, costs: n.costs + (n.evtCost || 0) + (n.short || 0), cash: G.bar.cash, short: -G.bar.cash,
       low: n.low ? _L(" — low season") : "",
       who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
   if (n.declaredOnly)

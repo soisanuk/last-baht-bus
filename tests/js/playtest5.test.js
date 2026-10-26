@@ -951,7 +951,7 @@ test("ASK TAN ABOUT <someone> places them: the manifest men get his read, anyone
   G.known.wayne = true; G.talked.wayne = [0]; out = [];
   doCommand("ask tan about wayne");
   assert.match(text(), /Wayne/);
-  assert.match(text(), new RegExp(_TAN_READ.wayne.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  assert.match(text(), new RegExp(_TAN_READ.wayne.slice(0, 20).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));   // his read opens a sentence, capitalised
   out = []; doCommand("talk to tan");
   assert.doesNotMatch(text(), /here two days/);
 });
