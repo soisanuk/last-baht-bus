@@ -282,7 +282,8 @@ non-terminal. Nights run 18:00–06:00 in 120 turns.
 - *A man who only says no is not pitched by the game itself* (`_refusing()`); the street's own women still ask once.
 
 **The people.** **Tan** is ผู้กว้างขวาง — a broad person, mid-thirties, favours never money, the hidden hub who drove every
-origin; he meets you standing at his parked car, never at the wheel; the quarter-turned glass is his alone; his mixed
+origin; he meets you standing at his parked car, never at the wheel, then walks the soi by the hour until midnight and
+goes home (`_TAN_ROUNDS`); the quarter-turned glass is his alone; his mixed
 English is his. **Nont** is the priced fixer (luk khrueng, half American): ฿200 a locate, five percent on CASH, a mule
 account in plain sight. **Madam Oy** is fluent for a reason (eight years in Hong Kong; the character on her shoulder is 義,
 never printed). **Mort** writes the Owl's column, Baltimore by passport, a British paper's register by forty-one years.
@@ -312,7 +313,7 @@ bar's fine is waived but hers is not; on Soi 6 going upstairs is a small room fe
 her out is a separate, much dearer fine (`SOI6_OUT`); a beer-bar girl's base is ฿10,000 a month (`BAR_SALARY`), a Soi 6 girl's
 ฿15,000 (`SOI6_SALARY`); Soi 6 beer is priced apart from its lady drink (`BEER_MULT`); a bar's night is lopsided, not even
 (`_nightTake`), and BOOKS names the barfines inside the take; Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
-beer (you pay for the seat). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
+beer (you pay for the seat); an ATM takes deposits in thousands (DEPOSIT). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
 floor is warned once and then fired — far easier to replace a manager than a good hostess — and is unhirable for a while
 set by his reputation, and never again at that bar.
 

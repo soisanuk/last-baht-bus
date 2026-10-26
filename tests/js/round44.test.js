@@ -66,7 +66,7 @@ test("Tan keeps the promise he makes in the taxi", () => {
   // you right." — and then ASK TAN ABOUT LADYBOY / KATOEY / CABARET / HOST BAR
   // all missed. The one man who promised to point, pointing nowhere.
   for (const topic of ["ladyboy", "katoey", "cabaret", "drag", "host bar"]) {
-    G.room = "soi6_street"; G.known.tan = true; G.talked = {};
+    G.room = _npcRoom("tan"); G.known.tan = true; G.talked = {};
     out = []; run("ask tan about " + topic);
     assert.match(text(), /Katoey|Peacock|Adonis|Hyper/,
       `ASK TAN ABOUT ${topic.toUpperCase()} names a venue you can walk into`);

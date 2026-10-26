@@ -10647,7 +10647,7 @@ function _doStreamBell(arg) {
   _streamSeen("bell", room, null);
 }
 // the link takes the account and nothing else: say what takes notes
-const _STREAM_NOTES = "(The link only draws on the account. Notes in your pocket buy the same thing in the room: BUY <HER> A DRINK, or RING BELL.)";
+const _STREAM_NOTES = "(The link only draws on the account. A machine takes notes back in, in thousands — DEPOSIT <amount> at an ATM — or buy it in the room with them: BUY <HER> A DRINK, RING BELL.)";
 // WHAT THE ROOM YOU ARE IN SEES: the woman on your arm reads the screen over it, and a floor watches a man on its own stool
 // buy for another bar — once a night each, because the phone is in your hand in front of them
 const _STREAM_ARM_DRINK = [

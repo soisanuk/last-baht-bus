@@ -9676,10 +9676,10 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     work: "drive",   // which of his own topics answers "what do you do"
     name: "Tan", th: "ต้น", emoji: "🚕", personality: "operator",
     pronoun: "he",
-    room: "soi6_street",
+    room: "soi6_street", until: 60,   // he walks the soi till midnight and goes home (Mario, 2026-10-26)
     look: "Thai man of thirty-five, neat and forgettable, short black hair, plain grey polo shirt.",
-    desc: "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never " +
-      "drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
+    desc: "Your airport driver, on his slow round of the soi with his plain grey sedan parked at the mouth of it " +
+      "as though he never drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years " +
       "in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. " +
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",

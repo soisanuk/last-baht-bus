@@ -392,7 +392,7 @@ test("the kid path: Rabbit can't ask, Nont names a price, the run is offscreen, 
     "the kid is on the file; the player, who never touched the machine, is not");
   assert.match(text(), /young man|from the lake/i, "the officer names him without naming him");
   // Tan's version of the read arms the call
-  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  G.known.tan = true; G.nightTurn = 25; G.room = _npcRoom("tan");
   out = []; run("ask tan about kid");
   assert.equal(G.pendingChoice, "kidfavour");
   run("yes");
@@ -480,7 +480,7 @@ test("Tan gives the read — and nobody warned the player", () => {
   // the officer never says don't / lay low / a threat
   assert.doesNotMatch(text(), /\bor else\b|you will be|we will|don't you|if you/i);
   // Tan's read is the mechanic's voice
-  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  G.known.tan = true; G.nightTurn = 25; G.room = _npcRoom("tan");
   out = []; run("ask tan about laying low");
   assert.match(text(), /boring|footnote/i);
   assert.ok(_flag("ccibReadGiven"));
@@ -633,7 +633,7 @@ test("midnight in the office: OUT lets you out the back onto the soi", () => {
 });
 
 test("Tan knows Pattaya Leisure and knows who Rabbit is; Nont's Rabbit is history, not a ฿200 locate", () => {
-  G.known.tan = true; G.room = _npcRoom("tan"); G.nightTurn = 25;
+  G.known.tan = true; G.nightTurn = 25; G.room = _npcRoom("tan");
   out = []; run("ask tan about pattaya leisure");
   assert.match(text(), /pay to be allowed|tolerance/i);
   out = []; run("ask tan about rabbit");

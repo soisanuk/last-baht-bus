@@ -142,3 +142,18 @@ test("Economy: a beer-bar girl's base is ฿10,000 and a Soi 6 girl's the bottom
 test("Economy: the Owl answers the job ad with the month a girl actually earns", () => {
   assert.ok(_OWL_LETTERS.some(([q, a]) => /hundred and fifty thousand/.test(q) && /a fifth of the number/.test(a)));
 });
+test("Mario: the ATM takes deposits in thousands, no fee, into the account", () => {
+  sandbox(); G.money = 7500; G.bank = 0;
+  G.room = Object.keys(ROOMS).find(k => ROOMS[k].atm && ROOMS[k].region === "Soi 6");
+  assert.match(t("deposit 1500"), /thousands only/); assert.equal(G.money, 7500);
+  run("deposit 5000"); assert.equal(G.money, 2500); assert.equal(G.bank, 5000);
+  assert.ok(engineComplete("deposit ").includes("1000"));
+  G.room = "pink_lotus"; assert.match(t("deposit 1000"), /machine/); assert.equal(G.bank, 5000);
+});
+test("Mario: Tan walks the soi until midnight, then goes home", () => {
+  sandbox(); const seen = new Set();
+  for (let t2 = 10; t2 < 60; t2 += 10) { G.nightTurn = t2; seen.add(_npcRoom("tan")); assert.ok(_npcActive("tan")); assert.ok(_TAN_ROUNDS.includes(_npcRoom("tan"))); }
+  assert.ok(seen.size >= 2, "he moves: " + [...seen]);
+  G.nightTurn = 0; assert.equal(_npcRoom("tan"), "soi6_street", "the first hour, at his car where he dropped you");
+  G.nightTurn = 65; assert.ok(!_npcActive("tan"), "home after midnight");
+});

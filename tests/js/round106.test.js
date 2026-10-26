@@ -87,7 +87,7 @@ test("Mehmet: the punter, the slate man two bars up and the till company are ask
   _synState().done.screen = G.day - 1; assert.match(t("examine screen"), /new screen/);
 });
 test("Mehmet and Benoît: Tan's 'the Orchid' is the good table; Tan answers the merit call at his bar", () => {
-  sandbox(); G.room = _npcRoom("tan") || "soi6_west"; G.nightTurn = 30; quiet(); run("talk to tan");
+  sandbox(); G.nightTurn = 30; G.room = _npcRoom("tan"); quiet(); run("talk to tan");
   assert.match(t("ask tan about the orchid"), /good table|tables you do not ask/i);
   G.bar.calls = [{ id: "merit", day: G.day - 1, yes: true }]; assert.match(t("ask tan about the monks"), /monks|merit/i);
 });

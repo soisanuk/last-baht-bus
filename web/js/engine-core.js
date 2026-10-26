@@ -326,6 +326,7 @@ function newGame() {
     dog: null,           // the accidentally-adopted soi dog: { since: day, name? } once you've fed him
     dogNudgeDay: 0,      // last day the un-adopted dog made his half-block approach
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
+    atmIn: 0,          // notes put back into the account at a machine (DEPOSIT)
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
     homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, barSat: {},   // the resident's integration pass (round 100)
@@ -692,7 +693,7 @@ const STATE_SCHEMA = {
     "atmDay atmToday care curseOwed everBond happy hotel lastNight lastNightSaid ledgerSeen loan loanSkipped " +
     "loanSkippedOwed money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
   life: (
-    "_lastPick acctBase acctDay acctUntil acctWhy act1Best act1SafeDue act1Tries affair affairCool affairCoolWho " +
+    "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
     "bankNotes bar barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
@@ -1248,6 +1249,7 @@ function _isDarkHere() {
 // day, day-stable — unlike the hourly patron hop — so the location a player is
 // pointed to stays true until dawn). This is the single source of NPC presence;
 // read it, never `NPCS[id].room`, anywhere presence matters.
+const _TAN_ROUNDS = ["soi6_street", "soi6_west_in", "soi6_mid", "soi6_east_in", "soi6_deep"];   // the soi's five stretches
 function _npcRoom(id) {
   // A companion you took OUT is wherever YOU are — one override here and every
   // presence consumer (TALK, BUY DRINK, kiss, PHOTO, the Here: line, the
@@ -1271,6 +1273,12 @@ function _npcRoom(id) {
   if (id === "nok") {
     const hour = (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
     if (hour === 0) return "jomtien_beach";
+  }
+  // Tan walks the soi (Mario, 2026-10-26): the first hour at his car where he dropped you, then a stretch of Soi 6 an
+  // hour by a pure hash of the night, until midnight, when he goes home (`until` on his record). Frozen while you talk.
+  if (id === "tan" && NPCS.tan.room === "soi6_street") {
+    const hour = (G.convo === id && G.convoHour != null) ? G.convoHour : _nightHour();
+    if (hour > 0) return _TAN_ROUNDS[_hm("tanroam:" + G.vacation + ":" + G.day + ":" + hour, 29) % _TAN_ROUNDS.length];
   }
   // A character the WORLD moved. Declarative, because the alternative is a
   // special case in _npcRoom per character: {flag, room}, and when the flag is

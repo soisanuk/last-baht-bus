@@ -37,7 +37,7 @@ test("every regular has a night that is his, whatever the season — and Tan nam
     G.day = 2 + ((_anchorNight(id) - 2 + 7) % 7); assert.equal(_benchOut(id), false, `${id} on his night`);
   }
   G.day = 2 + ((_anchorNight("randy") - 2 + 7) % 7); G.nightTurn = 50;
-  G.room = "soi6_street"; G.known.randy = true; out = []; run("ask tan about randy");
+  G.room = _npcRoom("tan"); G.known.randy = true; out = []; run("ask tan about randy");
   assert.match(text(), new RegExp(_ANCHOR_NAMES[_anchorNight("randy")] + ", always"));
 });
 

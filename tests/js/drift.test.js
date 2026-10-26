@@ -193,11 +193,11 @@ test("Tan gives the habit, not the snapshot", () => {
   G.day = 3; G.known.nigel = true;
   G.room = _npcRoom("tan");
   doCommand("talk to tan");
-  G.nightTurn = 20; out = [];
+  G.nightTurn = 20; G.room = _npcRoom("tan"); out = [];
   doCommand("ask tan about nigel");
   assert.match(text(), /before ten|he moves/i, "the locator knows he drifts");
   assert.match(text(), /Lucky Tiger/, "and knows where he ends up");
-  G.nightTurn = 60; out = [];
+  G.nightTurn = 50; G.room = _npcRoom("tan"); out = [];   // after ten, and before midnight takes Tan home
   doCommand("ask tan about nigel");
   assert.match(text(), /drinks there most nights/, "after ten the plain answer is the true one");
 });

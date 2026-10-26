@@ -374,7 +374,7 @@ test("Tan does not describe forty women with one sentence", () => {
   // "She works the rail there. Sends money home, same as all of them" printed
   // about everybody — a locator that says one thing about the whole roster is
   // telling you about none of them.
-  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  G.nightTurn = 30; G.room = _npcWhere("tan") || NPCS.tan.room;
   doCommand("talk to tan");
   const seen = new Set();
   for (const who of ["lek", "ping", "noi", "rung", "oat", "dao", "mem", "bee"]) {
@@ -393,7 +393,7 @@ test("Tan's read on Mercedes does not contradict Mercedes", () => {
   // Her whole arc is a refusal of the generic line: "people see an old girl back
   // on the stool and they think — poor thing… I send my mother money when I
   // want. I chose it." Tan was saying the sentence she exists to correct.
-  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  G.nightTurn = 30; G.room = _npcWhere("tan") || NPCS.tan.room;
   G.known.mercedes = true;
   doCommand("talk to tan");
   out = []; doCommand("ask tan about mercedes");
@@ -406,7 +406,7 @@ test("Tan's signoff is a pool, not a catchphrase", () => {
   // A persona logged the identical closing line thirteen times in one session,
   // eight of them consecutive — the only place in the game she said repetition
   // felt machine-made.
-  G.room = _npcWhere("tan") || NPCS.tan.room; G.nightTurn = 30;
+  G.nightTurn = 30; G.room = _npcWhere("tan") || NPCS.tan.room;
   doCommand("talk to tan");
   const seen = new Set();
   for (const who of ["lek", "ping", "noi", "rung", "oat", "dao", "mem", "bee"]) {

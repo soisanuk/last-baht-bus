@@ -174,9 +174,9 @@ test("LAST NIGHT is last night's exit, not the last exit ever", () => {
 
 test("a word inside a word does not lock a subject: Tan's 'ice' was in 'price' and 'police'", () => {
   G.room = "soi6_street";
-  assert.doesNotMatch(askOf("soi6_street", "tan", "short time"), /Not yet, na/);
-  assert.match(askOf("soi6_street", "tan", "police"), /boys in brown/);
-  assert.match(askOf("soi6_street", "tan", "temple"), /Big Buddha/);
+  assert.doesNotMatch(askOf(_npcRoom("tan"), "tan", "short time"), /Not yet, na/);
+  assert.match(askOf(_npcRoom("tan"), "tan", "police"), /boys in brown/);
+  assert.match(askOf(_npcRoom("tan"), "tan", "temple"), /Big Buddha/);
   G.room = "stinky_bar"; assert.doesNotMatch(askOf("stinky_bar", "bert", "selling"), /pay grade|department/, "a word's START still gates: sell → selling");
 });
 

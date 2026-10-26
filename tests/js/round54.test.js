@@ -189,7 +189,7 @@ test("TIME at your own bar does not quote you the barfine rate; the torch is not
 });
 
 test("the partner answers as the partner, the barman knows whose name is on the fifty-one, and procurement is somebody's department", () => {
-  owner(); G.room = _npcRoom("tan"); G.nightTurn = 30;
+  owner(); G.nightTurn = 30; G.room = _npcRoom("tan");
   for (const t of ["bar", "partner", "stinky pinky"]) {
     out = []; _doTalkBody("tan", t);
     assert.match(text(), /Our bar|The paper is in a drawer/, `tan about ${t}`);

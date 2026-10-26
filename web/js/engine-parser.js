@@ -14861,7 +14861,21 @@ function _doAtmVerb() {
   }
   _doBalance();
   _say(`(WITHDRAW 1000) · (WITHDRAW 5000) · (WITHDRAW 10000) — ฿${_num(_atmFee())} fee, ` +
-    `฿${_num(_atmCap())}/day.`, "dim");
+    `฿${_num(_atmCap())}/day.` + (G.money >= 1000 ? " (DEPOSIT <amount>) puts notes back in, thousands only." : ""), "dim");
+}
+// DEPOSIT at the machine (Mario, 2026-10-26): notes back into the account, in thousands, no fee — what the stream and the
+// banking app draw on, so a full pocket is no longer a dead account
+function _doDeposit(arg) {
+  if (!_room().atm) { _say("Deposits go in at a machine — every nightlife area keeps one on the main drag. (ATM)"); return; }
+  if (!_flag("hasWallet") && !_flag("walletCard")) { _say("The machine wants the card before it takes your money, and the card was in the wallet."); return; }
+  const a = String(arg || "").toLowerCase().replace(/[,฿]|\bbaht\b/g, "").trim();
+  const n = /^(all|everything)$/.test(a) ? Math.floor(G.money / 1000) * 1000 : _amount(a);
+  if (!n || n < 1000 || n % 1000 !== 0) { _say(`The deposit slot takes notes in thousands only. (DEPOSIT <amount> — you have ฿${_num(G.money)} in pocket.)`); return; }
+  if (n > G.money) { _say(`You have ฿${_num(G.money)} in pocket; the machine can only take what you feed it.`); return; }
+  G.money -= n; G.bank = (G.bank || 0) + n;
+  G.offTill = (G.offTill || 0) + n;   // not a drink slip: CHECK BIN leaves it out
+  G.atmIn = (G.atmIn || 0) + n;
+  _say(`The machine takes the notes one at a time, thinks about each of them, and agrees. (฿${_num(n)} into the account — ฿${_num(G.money)} in pocket · ฿${_num(G.bank)} in the account.)`, "win");
 }
 
 // Filing a police report — right now only the hair-tonic shop shakedown has a
@@ -16231,7 +16245,7 @@ const _COMPLETE_VERBS = [
   // find for a player who goes looking.
   "flirt", "kiss", "ring bell", "barfine", "massage", "special", "soapy", "meet", "eat", "drink", "lesson", "answer", "notebook",
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
-  "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
+  "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "deposit", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
   "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
@@ -16589,6 +16603,7 @@ function _cAmounts(verb) {
     }
     case "withdraw": case "withdrawal": case "withdrawl":
       return ["1000", "5000", "10000", "20000"];   // her cap is the bank's, not your pocket's
+    case "deposit": return [1000, 5000, 10000].filter(v => v <= G.money).map(String);
     default: return [];
   }
 }
@@ -16627,7 +16642,7 @@ function _completePool(verb, ctx) {
     case "prices": case "board": return ctx.length >= 2 ? [] : ["cheap", "list", "up", "steep"];   // the owner's board
     case "terms": return ctx.length >= 2 ? [] : ["salary", "commission"];
     case "borrow": case "repay": case "draw": case "cashup":
-    case "withdraw": case "withdrawal": case "withdrawl":
+    case "withdraw": case "withdrawal": case "withdrawl": case "deposit":
       return ctx.length >= 2 ? [] : _cAmounts(verb);
     case "ask": {
       // Topic suggestions are gone: conversations run on TALK + the in-conversation
@@ -20233,6 +20248,7 @@ function _doCommandInner(input) {
     case "shower": case "wash": _doShower(); break;
     case "smoke": case "cigarette": case "ciggy": _doSmoke(); break;
     case "withdraw": case "withdrawal": case "withdrawl": _doWithdraw(arg); break;
+    case "deposit": _doDeposit(String(arg || "").replace(/^(?:in|into the account|to the account)\s*/i, "")); break;
     case "atm": _doAtmVerb(); break;
     case "balance": _doBalance(); break;
     case "report": case "file": _doReport(arg); break;

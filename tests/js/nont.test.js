@@ -155,7 +155,7 @@ test("the SIM his greeting promises is for sale; charge/transfer/delay are topic
   G.nontCashed = true; delete G.talked.nont;
   out = []; run("ask nont about delay"); assert.match(text(), /Nothing's late/);
   G.nontStuck = 475; out = []; run("ask nont about delay"); assert.match(text(), /Tomorrow/); G.nontStuck = 0;
-  G.room = "soi6_street"; G.known.nont = true; out = []; run("ask tan about nont"); assert.match(text(), /Rabbit's boy/);
+  G.room = _npcRoom("tan"); G.known.nont = true; out = []; run("ask tan about nont"); assert.match(text(), /Rabbit's boy/);
 });
 
 test("his cash-outs are not 'up on the night'; the noodle girl keeps Soi 6's hours; the club pickup needs a club behind you", () => {
