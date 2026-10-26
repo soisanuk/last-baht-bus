@@ -2172,6 +2172,9 @@ function _doTake(arg) {
       return;
     }
   }
+  // "get nook's number" is CONTACT, not picking up a fixture
+  { const nm = String(arg || "").toLowerCase().match(/^(?:([a-z]+)'?s|her) (?:number|phone number|line|line id)$/);
+    if (nm) { const _w = nm[1] ? _findNpc(nm[1]) : _convoActive(); if (_w && _npcsHere().includes(_w)) { doCommand("contact " + String(NPCS[_w].name).toLowerCase()); return; } } }
   // "take 300 from till" at your OWN bar is DRAW — "fixtures, not luggage" was said
   // to the man whose name is on the paperwork (Keith, round 40)
   if (_atOwnBar() && /\b(money|cash|till|baht|wages|drawer|\d+)\b/.test(arg)) { _doDraw(arg); return; }
@@ -11388,6 +11391,13 @@ function _ladyDrinkCharge(id) {
 }
 
 function _doBuy(arg) {
+  arg = String(arg || "");
+  // a pint, a lager: a beer, in a man's own words
+  arg = arg.replace(/\b(?:a |one )?(?:pints?|lager|bitter)\b/i, "beer");
+  // "buy nook a tequila", "a vodka for nook": what she drinks on the stool IS her lady drink
+  { const SP = "(?:tequila|vodka|whisk(?:e)?y|shot|cocktail|gin|rum|sang ?som|lady vodka)s?(?: shots?)?";
+    const mm = arg.match(new RegExp("^([a-z]+) (?:a |an |one |another )?" + SP + "$", "i")) || arg.match(new RegExp("^(?:a |an |one |another )?" + SP + " for ([a-z]+)$", "i"));
+    if (mm) { const _w = _findNpc(mm[1]); if (_w && _npcsHere().includes(_w) && NPC_ROLES[_w]) arg = "drink for " + mm[1]; } }
   // a COUNT was dropped in silence: BUY 2 BEERS and ซื้อเบียร์สองขวด each poured one (Thomas, round 92). The bar
   // pours them as you drink them, and says so; the number goes and the order stands.
   { const _q = String(arg || "").match(/^(?:([2-9]|two|three|four|five)\s+)(.+)$|^(.+?)\s+([2-9]|two|three|four|five)$/i);
@@ -13967,7 +13977,7 @@ function _doTime() {
     t < 30 ? "(Early doors: barfines carry a premium until 21:00 — short time about half again, long time and a night out more than double, because she leaves the floor for the whole evening. Ask her the price.)" :
     (_closeTurn(G.room) != null && t >= _closeTurn(G.room) - 5 && t < _closeTurn(G.room)) ? `(This place shuts at ${_closeClock(G.room)} — last orders now.)` :   // the hour, said at the hour it matters (Declan, round 83)
     (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && t >= SOI6_CLOSE) ? "(The bars on Soi 6 shut at two. Whatever is still pouring is off the soi.)" :
-    t >= 60 ? "(Past midnight: most beer bars have quietly dropped the barfine." + (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? " The soi shuts at two." : "") + ")" :
+    t >= 60 ? (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" ? "(Past midnight: the bar's fine to take her out drops, but it does not go — this soi keeps its book till it shuts at two. Her own money never drops.)" : "(Past midnight: most beer bars have quietly dropped the barfine. Her own money is still hers.)") :
     "(Prime time. Standard rates apply.)", "dim");
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
   // status — the titular tension of the full game — simply doesn't apply here.
@@ -14854,8 +14864,12 @@ function _doBalance() {
 
 function _doAtmVerb() {
   if (!_room().atm) {
-    _say(_flag("hasWallet")
-      ? "No ATM in reach. Every nightlife area keeps one on the main drag."
+    // the nearest machine, by the road — the same answer WITHDRAW gives
+    const near = Object.keys(ROOMS).filter(id => ROOMS[id].atm && (ROOMS[id].region === _room().region || (G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && SOI6_ROOMS.has(id))))
+      .sort((a, b) => (_hops(G.room, a) ?? 999) - (_hops(G.room, b) ?? 999))[0];
+    const _step = near && (_path(G.room, near) || [])[0], _ex = _room().exits || {}, dir = _step && Object.keys(_ex).find(k => _ex[k] === _step);
+    _say(_flag("hasWallet") || _flag("walletCard")
+      ? (near ? `No machine on this stretch. The nearest is at ${ROOMS[near].name}${dir ? ` — head ${String({ n: "north", s: "south", e: "east", w: "west" }[dir] || dir).toUpperCase()}` : ""}.` : "No ATM in reach. Every nightlife area keeps one on the main drag.")
       : "Your card was in the wallet, and the wallet is the whole problem. Solve that first.");
     return;
   }
@@ -17165,6 +17179,12 @@ function _mustDo(raw, partner, who) {
     if (who && _npcsHere().includes(who) && _isLeavingSaid(l.replace(/^(?:hi|hiya|hello|hey|evening|sawatdee)[a-z ,]*?,\s*/, ""))) {
       if (_lastByeDue(who)) { _lastNightBye(who); _tick(); return true; }
       _convoStart(who); if (_leavingTalk(who, l)) { _tick(); return true; } }
+    { const um = l.match(/^(?:take |go )?(?:up ?stairs|up the stairs) with ([a-z]+)$/) || l.match(/^how much (?:for|is|to take) ([a-z]+)(?: out)?$/);
+      if (um) { const _w = _findNpc(um[1]); if (_w && _npcsHere().includes(_w) && NPC_ROLES[_w] === "hostess") { doCommand("barfine " + String(NPCS[_w].name).toLowerCase()); return true; } } }
+    if ((partner || who) && NPC_ROLES[partner || who] === "hostess" && /\b(?:come|coming|go|going) (?:out )?(?:with me )?(?:for|to get|to grab) (?:something to eat|some food|food|a bite|dinner|a meal)\b|\b(?:fancy|want to|wanna) (?:get|grab|go for) (?:some )?(?:food|something to eat|a bite|dinner)(?: with me)?\b/.test(l)) {
+      doCommand("take " + String(NPCS[partner || who].name).toLowerCase() + " out"); return true; }
+    if (G.room === "queen_vic" && /^(?:a |the )?(?:full english(?: breakfast)?|english breakfast|fry ?-?up|breakfast)$/.test(l)) {
+      _say("Aoy laughs. \"Breakfast is the morning, love. This is the card.\"", "dim"); doCommand("menu"); return true; }
     let m = l.match(/^(?:a |one |another )?lady drinks? (?:for|to) ([a-z]+)$/);
     if (m) { doCommand("buy drink for " + m[1]); return true; }
     if (/^(?:how'?s it going|how are you|how you doing|how ya doing|you alright|alright)\b/.test(l) && who && _npcsHere().includes(who)) { doCommand("talk to " + String(NPCS[who].name).toLowerCase()); return true; }
@@ -18534,7 +18554,7 @@ function _doCommandInner(input) {
   if (/^(?:take|accept) (?:the |that |this )?job$/i.test(raw.trim()) && !G.jobOffer) { _say(G.job ? "You have a job already. (MONEY says which; QUIT JOB first if you want another.)" : "Nobody has offered you one tonight. (ASK the mamasan or the manager ABOUT A JOB.)"); return; }
   if (/^(?:quit|leave|resign|hand in|give up) (?:the |my )?(?:job|notice|rail)$|^resign$/i.test(raw.trim())) { _quitJob(); return; }
   if ((/^(?:teach online|online teaching|teach english online|start teaching online)$/i.test(raw.trim()) || (G.stage === "expat" && /^(?:teach|teach english|start teaching)$/i.test(raw.trim())))) { _doTeach(); return; }   // a bare TEACH on a holiday stays the lesson pointer
-  if (/^(?:where(?:'s| is| can i find)|is there|any) (?:a |the )?(?:pool table|table for pool|killer pool|pool|snooker)\b/i.test(raw.trim()) && !(/\bpool\b(?! table)/i.test(raw) && !/table|killer|snooker/i.test(raw) && G.hotel && _HOTELS[G.hotel] && (_HOTELS[G.hotel].pool || G.hotel === "condo"))) { _say(_tableHint()); return; }   // a man whose building has a pool means the pool (Willem, round 100)   // "ask around" (Marcus, round 96)
+  if (/^(?:where(?:'s| is| can i find)|is there|any|which bars? (?:has|have|got)|what bars? (?:has|have|got)) (?:a |the )?(?:pool tables?|table for pool|killer pool|pool|snooker)\b/i.test(raw.trim()) && !(/\bpool\b(?! table)/i.test(raw) && !/table|killer|snooker/i.test(raw) && G.hotel && _HOTELS[G.hotel] && (_HOTELS[G.hotel].pool || G.hotel === "condo"))) { _say(_tableHint()); return; }   // a man whose building has a pool means the pool (Willem, round 100)   // "ask around" (Marcus, round 96)
   // THE FLIGHT: "fly home", "go to the airport", "leave pattaya" were a parse failure and "Leave to where?" (Dougie, round 96)
   if (/^(?:fly home|fly back|go (?:to )?(?:the )?airport|(?:taxi|motosai|bike|grab|bus) to (?:the )?airport|leave pattaya|leave thailand|go home to [a-z ]+|check ?out early|cut (?:the|my) (?:trip|week) short)\b/i.test(raw.trim())) {
     if (G.mode === "soi6") _say(_pickVary(_SOI6_BOUND, "soi6bound"));

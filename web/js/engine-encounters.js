@@ -647,13 +647,17 @@ const _ENC = {
   },
   selfbf(input) {
     const name = NPCS[G.selfBfId] ? NPCS[G.selfBfId].name : "She";
+    // taking her up on it in a man's own words is a yes: "take nook out", "let's go", "come on then", "go with her"
+    { const nm = String(name).toLowerCase();
+      const said = String(input).toLowerCase().replace(nm, "her");
+      if (!_isRefusal(input) && /\b(?:take her (?:out|home|upstairs)|go (?:home |out |upstairs )?with her|let'?s go|come on|come with me|upstairs|barfine her)\b/.test(said)) input = "yes"; }
     if (!/\b(yes|yeah|sure|ok|okay|of course|why not|please|no|nope|not tonight|sorry|pass|later|maybe)\b/.test(input)) { // word-bounded: "Manow" is
       // a tip, a drink, a walk: the offer lapses without a verdict and the command runs
       _say(`${name} reads the moment going past — a small smile, no harm done — and lets it go. (The offer lapses; she said she wouldn't ask twice, and she doesn't.)`, "dim");   // it used to say "still in the room" and YES then missed (Kenji, round 47)
       return "passthrough";
     }
     G.selfBfId = null;
-    if (/yes|yeah|sure|ok|of course|why not|please/.test(input)) {
+    if (!_isRefusal(input) && /\b(?:yes|yeah|sure|ok|okay|of course|why not|please)\b/.test(input)) {   // whole words, and a refusal first: "nook" has an "ok" in it
       _say(`${name} settles her own fee with the till — a professional formality, ` +
         "handled in three seconds — and steers you out under the neon by the arm. " +
         "Being chosen, it turns out, is a different currency entirely.", "win");

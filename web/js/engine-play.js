@@ -2408,14 +2408,16 @@ function _startKiller() {
 function _tableHint() {
   const here = G.room;
   const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)));   // the fenced week's tables are inside the fence (Marcus, round 96)
-  const known = tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]) || (!_venueUnfound(id)));   // a door on a street you walked is found (Marcus, round 96: TIME promised killer pool and nobody named a table)
-  if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them.";
+  // the fenced week is one street whose doors are all on it, so every table on it is a table you can be told about
+  const known = G.mode === "soi6" ? tables : tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]) || (!_venueUnfound(id)));   // a door on a street you walked is found (Marcus, round 96: TIME promised killer pool and nobody named a table)
+  const league = _leagueTonight() ? " Tonight is league night: killer pool, ฿100 in the ashtray, at the tables from eight." : "";
+  if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them." + league;
   const near = known.filter(id => ROOMS[id].region === _room().region);
   const pick = (near.length ? near : known).slice(0, 3);
   const names = pick.map(id => _barName(id) + (near.length ? "" : ", over in " + ROOMS[id].region));
   const list = names.length === 1 ? names[0]
     : names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
-  return (near.length ? "No table in here. Nearest you know of: " : "No table in here. The ones you know: ") + list + ".";
+  return (near.length ? "No table in here. Nearest you know of: " : "No table in here. The ones you know: ") + list + "." + league;
 }
 
 const _KP_POT = [

@@ -1881,7 +1881,7 @@ function _bfPrompt(fresh) {
   // read the early long time as the price of going upstairs): short time is the room above the bar
   const _s6 = _room().barType === "soi6";
   const _stW = _s6 ? "upstairs, and she is back on her stool within the hour" : "one round, the night carries on";
-  const _ltW = _s6 ? "she leaves the bar with you for the night" : "overnight";
+  const _ltW = _s6 ? "she goes back to your room with you for the night" : "overnight, back to your room";
   // with company on your arm only one line of the menu can be bought (Martin, round 85)
   if (G.party && G.party.ids && G.party.ids.length) {
     _say(_fmt("(You have company already: TAKE HER OUT {pt} — she comes too, and the night keeps going · NO backs out.)", { pt: p(pt) }), "dim");
@@ -1889,9 +1889,9 @@ function _bfPrompt(fresh) {
   }
   _say(_fmt(pt > lt
     ? "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
-      "TAKE HER OUT {pt} — her whole night, priced like one · NO backs out.)"
+      "TAKE HER OUT {pt} — she comes with you to other bars and the night keeps going; her whole night, so it costs more · NO backs out.)"
     : "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
-      "TAKE HER OUT {pt} — she comes with you, and the night keeps going · NO backs out.)",
+      "TAKE HER OUT {pt} — she comes with you to other bars, and the night keeps going · NO backs out.)",
     { st: p(st), lt: p(lt), pt: p(pt), stw: _stW, ltw: _ltW }), "dim");
 }
 

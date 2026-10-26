@@ -6931,7 +6931,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "drink if you like. Fair warning — I'm poor company for a man who wants the fantasy. I ask too many " +
           "questions back.\" A small, testing smile: she's already decided how clever you are.",
         short: "\"Buy me a drink if you like. Fair warning: I ask too many questions back.\"" },
-      { topic: "book", text: "\"You saw it.\" Not embarrassed, just recalibrating. \"Accounting. Online, " +
+      { topic: "book", text: "\"The book?\" She slides a fat accounting textbook out from under the till, where it lives between customers. Not embarrassed, just recalibrating. \"Accounting. Online, " +
         "Ramkhamhaeng — cheap, no-name, a real degree at the end.\" Flat, factual. \"Two more years. This—\" a " +
         "small gesture at the bar \"—pays the fees and the rent while I do it. A job with terrible hours and no " +
         "tax. That's all it is to me.\"",
@@ -8515,7 +8515,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"HELLO handsome!\" She's already dancing a little, to a song only she hears. \"You buy me " +
           "tequila? I like you already, you have a nice face. Wait — what your name? Doesn't matter, I call " +
           "you handsome. HANDSOME.\" She's laughing before the joke arrives.",
-        short: "\"Handsome! Buy me tequila? I forget your name already — is okay, I call you handsome.\"",
+        short: "\"Handsome! You come back! Buy me tequila? I still call you handsome — is better than a name.\"",
         asks: { key: "return", q: "\"You come back tomorrow?\" She asks everyone this. \"I have SO much fun with you!\" She met you ninety seconds ago. She means it, though — that is the strange part. She has fun with everybody." } },
       // there's no earned layer. she is exactly what she looks like, cheerfully.
       { topic: "plan", text: "\"Plan?\" The word does not land. \"Tonight, I plan to have fun. Tomorrow—\" a " +
@@ -20595,7 +20595,7 @@ for (const [id, nodes] of Object.entries(_R79)) if (NPCS[id]) NPCS[id].dialogue.
 const _R84 = {
   nina: [
     { topic: "father|their father|husband|papa|babys father|baby father|the baby's father|kids father|kids' father",
-      text: "\"Their father?\" A short laugh, not unkind. \"Bangkok, long time, another wife. Is okay. I was better mother than he was husband, and everybody in the village know it.\"",
+      text: "\"My children's father?\" A short laugh, not unkind. \"I have two, grown now. Him? Bangkok, long time, another wife. Is okay. I was better mother than he was husband, and everybody in the village know it.\"",
       short: "\"Their father went to Bangkok and another wife. I was the better mother.\"" },
     { topic: "family|kids|children|son|daughter|baby",
       text: "\"Two. Grown now — one working Bangkok, one married.\" Nina says it the way you would say the weather, and then, because she cannot help it: \"The married one feed her husband properly. I check.\"",
@@ -20609,7 +20609,7 @@ const _R84 = {
     { topic: "money|send money|send home",
       text: "\"Now I send to my daughter, for the grandbaby.\" She shows you a photo before you can say no: a round face in a pink hat. \"Before, my kids. Now her kid. Always somebody to send, that is the life.\"",
       short: "\"I send for the grandbaby now. Always somebody to send.\"" },
-    { topic: "food|eat|khao pad|cart|the food|dinner",
+    { topic: "food|eat|khao pad|cart|the food|dinner|cooking|cook|your cooking|her cooking|what you cook",
       text: "\"Food is my job and nobody pay me for it.\" She is pleased with that. \"The cart outside, the som tam lady — I tell her you are my nephew, she give you more. You eat, I am happy. Easy.\"",
       short: "\"Food is my job, unpaid. You eat, I'm happy.\"" },
   ],

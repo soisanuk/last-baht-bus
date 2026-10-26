@@ -7028,7 +7028,7 @@ test("the ATM verb gates on your card and where you're standing", () => {
   // card in hand, but no ATM in this room
   state().room = "hotel_room"; state().day = 2;
   out = []; run("atm");
-  assert.match(lastOut(), /No ATM in reach|main drag/i);
+  assert.match(lastOut(), /No ATM in reach|main drag|nearest is at/i);
   // at an ATM, bare ATM shows the balance and how to draw
   state().room = "soi6_street";
   state().bank = 80000; state().money = 500; state().atmDay = 0; state().atmToday = 0;

@@ -157,3 +157,42 @@ test("Mario: Tan walks the soi until midnight, then goes home", () => {
   G.nightTurn = 0; assert.equal(_npcRoom("tan"), "soi6_street", "the first hour, at his car where he dropped you");
   G.nightTurn = 65; assert.ok(!_npcActive("tan"), "home after midnight");
 });
+// ── baseline 9 (Steve, the Soi 6 week, chips first) ──
+const _gd = () => Object.keys(ROOMS).find(k => ROOMS[k].bar === "Golden Dragon Bar");
+test("Steve 9: 'buy nook a tequila' is her lady drink; 'a pint' is a beer", () => {
+  sandbox(); _arriveAt(_gd()); quiet(); run("talk to nook");
+  const m0 = G.money; assert.doesNotMatch(t("buy nook a tequila"), /Not for sale/); assert.equal(m0 - G.money, _ladyPrice());
+  G.room = "queen_vic"; G.nightTurn = 4; assert.doesNotMatch(t("buy a pint"), /office hours|isn't open/);
+});
+test("Steve 9: 'get nook's number' asks for her number; 'upstairs with nook' and 'how much for nook' open her barfine", () => {
+  sandbox(); _arriveAt(_gd()); quiet(); (G.soc.drinkCount = G.soc.drinkCount || {}).nook = 1; run("talk to nook");
+  assert.doesNotMatch(t("get nook's number"), /fixtures/);
+  t("upstairs with nook"); assert.ok(G.pendingBf && G.pendingBf.id === "nook"); run("no");
+  t("how much for nook"); assert.ok(G.pendingBf && G.pendingBf.id === "nook"); run("no");
+});
+test("Steve 9: asking her out to eat is an invitation, not directions to a kitchen", () => {
+  sandbox(); _arriveAt(_gd()); quiet(); (G.soc.drinkCount = G.soc.drinkCount || {}).nook = 1; run("talk to nook");
+  t("fancy coming out for something to eat with me"); assert.ok(G.pendingBf && G.pendingBf.id === "nook");
+});
+test("Steve 9: ATM points the way to the nearest machine; 'which bar has a pool table' names one; breakfast at the Vic is the card", () => {
+  sandbox(); G.mode = "soi6"; G.room = "soi6_west_in"; assert.match(t("atm"), /nearest is at .* head [A-Z]+/);
+  G.room = "soi6_street"; G.nightTurn = 30; assert.match(t("which bar has a pool table"), /Nearest|The ones you know/);
+  G.room = "queen_vic"; assert.match(t("full english breakfast"), /KITCHEN/);
+});
+test("Steve 9: the menu says what TAKE HER OUT is, and TIME on Soi 6 does not say the fine is dropped", () => {
+  sandbox(); _arriveAt(_gd()); quiet(); (G.soc.drinkCount = G.soc.drinkCount || {}).nook = 1;
+  assert.match(t("barfine nook"), /TAKE HER OUT [^·]*other bars/); run("no");
+  G.nightTurn = 70; G.room = "soi6_mid"; assert.doesNotMatch(t("time"), /quietly dropped the barfine/);
+});
+test("Steve 9: Nina's father and Nangfah's book stand alone as chips; Nook's repeat hello does not forget a regular", () => {
+  assert.ok(!JSON.stringify(NPCS.nook.dialogue).includes("I forget your name already"));
+  sandbox(); G.nightTurn = 30; _arriveAt("sandy_toes"); quiet(); run("talk to nina");
+  assert.doesNotMatch(t("ask nina about father"), /"Their father\?"/);
+  assert.doesNotMatch(t("ask nina about her cooking"), /Not my story/);
+});
+test("Steve 9: her offer to pay her own fine takes 'take nook out' as yes, and 'nook' is not an 'ok'", () => {
+  for (const [say, yes] of [["take nook out", true], ["no, take nook out another time", false], ["not tonight nook", false], ["yes", true]]) {
+    sandbox(); G.nightTurn = 65; _arriveAt(_gd()); quiet(); G.selfBfId = "nook"; G.pendingEnc = "selfbf";
+    const d0 = G.day; run(say); assert.equal(G.day === d0 + 1, yes, say);
+  }
+});

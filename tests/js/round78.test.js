@@ -112,7 +112,7 @@ test("Soi 6 short time is upstairs and long time is out of the bar, and the mone
   G.room = "ruby_kiss"; G.nightTurn = 40;
   const g = _npcsHere().find(i => NPC_ROLES[i] === "hostess" && i !== "chompoo" && !_isDraw(i));   // a draw is held till midnight now Soi 6 runs to two
   G.soc.drinkCount = { [g]: 1 }; out = []; run("barfine " + NPCS[g].name.toLowerCase());
-  assert.match(said(), /SHORT TIME [^·]*upstairs/); assert.match(said(), /LONG TIME [^·]*leaves the bar with you/);
+  assert.match(said(), /SHORT TIME [^·]*upstairs/); assert.match(said(), /LONG TIME [^·]*back to your room with you/);
   const st = G.pendingBf.st; out = []; run("short time");
   assert.match(said(), new RegExp(`฿${_num(st - HER_FEE.soi6[0])} to the till for the room upstairs, ฿${_num(HER_FEE.soi6[0])} into ${NPCS[g].name}'s own hand`), "her money is seen to be paid");
 });
