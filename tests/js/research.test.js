@@ -123,39 +123,38 @@ test("a big gift from a man she doesn't know: half send it back, the rest write 
   assert.ok(_TOB_TAEN.some(l => said().includes(_fmt(l, { n: "Aom" }).slice(0, 30))), said());
   assert.ok(!G.owed.aom, "account closed"); assert.ok(G.hunger < 60, "fed");
 });
-test("her-farang is where obligation starts: the waived fine is her money, she says so once, and silence costs the waiver", () => {
-  G.bank = 20000; G.phone.contacts = { lek: true }; G.soc.drinks.lek = 14; G.room = _npcRoom("lek");
+test("her-farang squares the fine, her time is hers: pay her or don't — unpaid, she sours, refuses the next ask, and twice brings the number back", () => {
+  G.bank = 20000; G.money = 20000; G.phone.contacts = { lek: true }; G.soc.drinks.lek = 14; G.room = _npcRoom("lek");
+  const fee = _herFee(false), feeLT = _herFee(true);
+  const offDuty = () => { while (_hh("lek:" + G.day + ":" + G.vacation + ":life", 131) % 100 < 10) G.day++; };   // not her lady time
   const saved = _rand; _rand = () => 0.99;
   try {
-    for (const night of [0, 1]) {
-      while (_hh("lek:" + G.day + ":" + G.vacation + ":life", 131) % 100 < 10) G.day++;   // not her lady time
-      G.nightTurn = 40; out = []; run("barfine lek"); run("short time");
-      assert.match(said(), /squares it herself/, "waived, night " + night);
-      run("short time"); G.nightTurn = 45; out = []; run("barfine lek"); run("short time");
-      assert.equal(G.care.lek.waived, night + 1, "a NIGHT, however many times the apron came off");
-      G.room = "hotel_room"; out = []; _endNight("sleep"); G.room = _npcRoom("lek"); G.soc.drinks.lek = 14;
-    }
+    offDuty(); G.nightTurn = 40;
+    // the quote says it before the choice: no fine, her time named
+    out = []; run("barfine lek"); assert.match(said(), /no fine tonight/); assert.match(said(), new RegExp("฿" + _num(fee) + " short"));
+    // asked once the kind is chosen; a question leaves it up and costs nothing
+    run("short time"); assert.match(said(), /squares it herself/); assert.ok(G.pendingBf && G.pendingBf.herPay, "her time is asked");
+    assert.deepEqual(_chipSet().map(c => c.cmd), ["no", "pay her", "don't pay"]);
+    const m0 = G.money; out = []; run("what?"); assert.ok(G.pendingBf.herPay); assert.equal(G.money, m0);
+    // paid: into her hand, named, and nothing is owed
+    run("pay her"); assert.equal(G.money, m0 - fee); assert.match(said(), new RegExp("-฿" + _num(fee)));
+    assert.ok(!G.care || !G.care.lek || !G.care.lek.unpaid, "paid is square");
+    // not paid: she comes all the same, cooler, and the next ask is refused once
+    G.soc.drinks.lek = 14; G.nightTurn = 50; out = []; run("barfine lek"); run("short time"); const m1 = G.money; run("don't pay");
+    assert.equal(G.money, m1, "nothing crosses the till"); assert.ok(_HER_TIME_UNPAID.some(l => said().includes(_fmt(l, { n: "Lek" }).slice(0, 30))), said());
+    assert.equal(G.care.lek.unpaid, 1); assert.ok(G.care.lek.refuse);
+    G.soc.drinks.lek = 14; G.nightTurn = 55; out = []; run("barfine lek");
+    assert.ok(!G.pendingBf, "the next ask is hers to refuse"); assert.ok(_CARE_REFUSE.some(l => said().includes(_fmt(l, { n: "Lek" }).slice(0, 30))), said());
+    // NO at her time backs out, owing nothing
+    out = []; run("barfine lek"); run("short time"); run("no"); assert.ok(!G.pendingBf); assert.equal(G.care.lek.unpaid, 1);
+    // a second unpaid night: the mamasan names the number again, and she says so by text
+    out = []; run("barfine lek"); run("long time"); run("long time"); run("don't pay");
+    assert.ok(G.care.lek.cold && !_careOk("lek")); assert.ok(G.phone.inbox.some(m => m.from === "lek" && _CARE_COLD.includes(m.text)));
   } finally { _rand = saved; }
-  assert.equal(G.care.lek.asked, G.day, "the morning after the second night, she says it");
-  const ask = G.phone.inbox.find(m => m.from === "lek" && /SEND \d+ TO LEK/.test(m.text));
-  assert.ok(ask && ask.text.includes("SEND " + LADY_LT * 2 + " TO LEK"), "her money, two nights");
-  out = []; run("who"); assert.match(said(), /waiting on her night's money/);
-  // ignored for CARE_DAYS: no scene, a cooler bond, and the apron stays on
-  G.day += CARE_DAYS; _careTick();
-  assert.ok(G.care.lek.cold && !_careOk("lek")); assert.equal(G.soc.drinks.lek, 11);
-  assert.ok(G.phone.inbox.some(m => m.from === "lek" && _CARE_COLD.includes(m.text)));
-  G.soc.drinks.lek = 14; G.nightTurn = 40; G.room = _npcRoom("lek"); _rand = () => 0.99;
-  while (_hh("lek:" + G.day + ":" + G.vacation + ":life", 131) % 100 < 10) G.day++;
-  try { out = []; run("barfine lek"); assert.doesNotMatch(said(), /no fine tonight/); assert.match(said(), /฿\d+/, "the mamasan names it tonight"); run("no"); } finally { _rand = saved; }
-  // the money, understood — by transfer or across the rail — lifts it
-  out = []; run("send " + LADY_LT + " to lek");
-  assert.ok(_careOk("lek")); assert.ok(G.phone.inbox.some(m => m.from === "lek" && _CARE_THANKS.includes(m.text)));
-  // without her number she says it across her own rail
-  G.phone.contacts = {}; G.care.lek = { waived: CARE_WAIVED, since: 1, asked: null, cold: false }; _careTick();
-  assert.equal(G.care.lek.pending, "ask");
-  _rand = () => 0.99; try { out = []; _arriveAt(_npcRoom("lek")); } finally { _rand = saved; }
-  assert.match(said(), /my money|My cut/); assert.ok(!G.care.lek.pending);
-  out = []; run("tip lek " + LADY_LT * 2); assert.match(said(), /Now you know/); assert.equal(G.care.lek.asked, null);
+  // her night's money, sent, lifts it (the night she gave you ends first: the ride she offered, declined)
+  if (G.pendingEnc === "nightride") run("call it a night");
+  G.room = "hotel_room"; out = []; run("send " + feeLT + " to lek");
+  assert.ok(_careOk("lek")); assert.ok(!G.care.lek.refuse); assert.ok(G.phone.inbox.some(m => m.from === "lek" && _CARE_THANKS.includes(m.text)));
 });
 
 // ── Theme 6: face-loss is permanent ──────────────────────────────────────────

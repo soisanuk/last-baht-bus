@@ -22668,13 +22668,13 @@
    "lens": "score-chaser",
    "instrument": "",
    "claim": "A her-farang girl's waived short time every night is free สนุก",
-   "verdict": "design",
-   "note": "The waiver is the her-farang payoff; the care ledger is its cost. Put to Mario with the economy.",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-27: no longer free — her time is paid or not at the moment you ask",
    "cls": "E",
    "sev": "minor",
    "system": "economy",
    "between": "",
-   "pin": ""
+   "pin": "tests/js/research.test.js"
   },
   {
    "round": "86",
@@ -40252,12 +40252,12 @@
    "model": "opus",
    "lens": "ordinary-player-baseline",
    "claim": "Long time with Nook on N7 was entirely free, her own money too",
-   "verdict": "design",
-   "note": "her-farang waives the fine off the book and her care money follows (the care expectation) — Mario's call whether her own money should still be paid",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-27: her-farang squares the fine; her time on the clock is paid or not at the moment you ask — unpaid, she sours, refuses the next ask, and twice brings the number back",
    "cls": "E",
    "sev": "moderate",
    "system": "barfine",
-   "pin": null
+   "pin": "tests/js/research.test.js"
   },
   {
    "round": "baseline-9",
@@ -40382,12 +40382,12 @@
    "model": "opus",
    "lens": "ordinary-player-baseline",
    "claim": "Water in a bar ฿130",
-   "verdict": "design",
-   "note": "doctrine: water in a bar costs the beer — you pay for the seat (Mario)",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-27: water costs the cheapest alcoholic item (_waterPrice) — the beer, or the Moonshine's house shot",
    "cls": "E",
    "sev": "minor",
    "system": "drinks",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "baseline-9",
@@ -40422,11 +40422,10 @@
    "lens": "ordinary-player-baseline",
    "claim": "The week's money is too loose: ฿37,708 of ฿101,000 spent living large",
    "verdict": "design",
-   "note": "Mario's call: cut the Soi 6 week's bank (Steve suggests ~฿45–50k)",
+   "note": "Mario 2026-10-27: stays ฿100,000 — the weekly challenge is for fun, not for watching the wallet",
    "cls": "E",
    "sev": "moderate",
-   "system": "soi6",
-   "pin": null
+   "system": "soi6"
   },
   {
    "round": "108",
@@ -40889,12 +40888,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "TAKE HER OUT quoted ฿3,200 one night and ฿2,700 the next at the same hour",
-   "verdict": "design",
-   "note": "a regular pays the plain long time for her night (by bond) — Mario's call whether to say so",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-27: a regular's take-out varies with the venue and the hour (it is her long time there, then); the quote now says so",
    "cls": "E",
    "sev": "minor",
    "system": "barfine",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40902,12 +40901,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "A short time charged ฿0 to a regular, against 'her own money never drops'",
-   "verdict": "design",
-   "note": "her-farang waiver — same open call as baseline 9",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-27: her time is paid or not (PAY HER · DON'T PAY) — the fine alone is waived",
    "cls": "E",
    "sev": "moderate",
    "system": "barfine",
-   "pin": null
+   "pin": "tests/js/research.test.js"
   },
   {
    "round": "108",

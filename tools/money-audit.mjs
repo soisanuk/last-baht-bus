@@ -434,6 +434,8 @@ const drinks = (who, n) => Array.from({ length: n }, () => ({ c: "buy drink for 
 // stand a shift: wait at your own rail until it counts, answering any call put to you NO
 const standShift = (rounds = 8) => Array.from({ length: rounds }, () => ({ dyn: () =>
   G.pendingChoice ? [{ c: "no" }] : ((G.bar.stoodTurns || 0) >= WORK_MIN_STOOD + 2 ? [] : [{ c: "wait 5" }]) }));
+// her farang squares the fine; her time is paid into her hand, and the ledger must name it
+const herTime = { dyn: () => G.pendingBf && G.pendingBf.herPay ? [{ c: "pay her", rand: 0.99 }] : [] };
 const clearModal = { dyn: () => (G.pendingChoice || G.pendingEnc) ? [{ c: "no" }] : [] };
 // Nont's "account is having a moment" is a pure hash of (vacation, day, count): CASH until it sticks
 const cashUntilStuck = { dyn: () => {
@@ -480,6 +482,7 @@ const SCENARIOS = [
       { go: "candy_bar", c: "buy beer", slip: true, rand: 0.99 },
       ...drinks("@girl", 4),
       { c: "barfine @girl", rand: 0.99, expect: /LONG TIME/ }, { c: "long time", rand: 0.99 }, { c: "long time", rand: 0.99 },
+      herTime,
       clearModal,
     ],
   ] },

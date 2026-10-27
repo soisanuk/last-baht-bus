@@ -2502,6 +2502,7 @@ function oneST() {
   if (!G.pendingBf) return null;
   const h = G.happy;
   out = []; doCommand("short time");
+  if (G.pendingBf && G.pendingBf.herPay) doCommand("pay her");   // her farang squares the fine; her time is paid (Mario, 2026-10-27)
   return G.happy - h;
 }
 

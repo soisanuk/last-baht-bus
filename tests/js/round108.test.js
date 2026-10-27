@@ -139,3 +139,18 @@ test("Lorna: a girl's 'bar quiet, come see me' does not fit while he sits in her
   assert.equal(_textFits("pukky", "bar quiet tonight 😴"), false);
   G.room = "soi6_street"; assert.equal(_textFits("pukky", "bar quiet tonight 😴"), true);
 });
+
+// ── Mario's calls on the round's open design rows (2026-10-27) ──
+test("water in a bar costs the cheapest thing with alcohol in it — the beer, or the Moonshine's house shot", () => {
+  sandbox(); G.room = "stinky_bar"; assert.equal(_waterPrice(), _beerPrice());
+  const m = G.money; out = []; run("buy water"); assert.equal(G.money, m - _beerPrice());
+  G.room = "moonshine_bar"; assert.equal(_waterPrice(), Math.min(YA_DONG_SHOT, _beerPrice()));
+  const m2 = G.money; out = []; run("buy water"); assert.equal(G.money, m2 - _waterPrice());
+  out = []; run("why is water so expensive"); assert.doesNotMatch(said(), /price as beer|Water, beer, Coke/i, "no line there says it is the beer's price: " + said());
+});
+test("Lorna: a regular's TAKE HER OUT is her long time as this bar prices it at this hour, and the quote says so", () => {
+  sandbox(); _arriveAt("pink_lotus"); quiet(); G.soc.drinks.joy = 8; G.nightTurn = 40;
+  out = []; run("barfine joy"); assert.ok(G.pendingBf, said()); assert.equal(G.pendingBf.party, G.pendingBf.lt);
+  assert.match(said(), /you're a regular, so it is her long-time price here at this hour, no premium/); run("no");
+  const { lt } = _barfinePrices("soi6", "joy"); G.soc.drinks.joy = 4; assert.ok(_partyPrice("joy", lt) > lt, "a face pays the premium");
+});

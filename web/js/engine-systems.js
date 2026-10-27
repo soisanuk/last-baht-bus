@@ -1020,6 +1020,12 @@ function _doBarfine(arg) {
       "Pattaya, not a vending machine.”");
     return;
   }
+  // the night she gave you for nothing: the next ask is hers to refuse, and she does, once
+  if (G.care && G.care[id] && G.care[id].refuse) {
+    delete G.care[id].refuse;
+    _say(_fmt(_pickVary(_CARE_REFUSE, "carerefuse"), { n: name }));
+    return;
+  }
   if (bertAlly) {
     _say(`Word's got round that you did right by Bert, and the whole rail is a degree ` +
       `warmer for it. ${name} doesn't make you work for the yes — Bert's friends drink ` +
@@ -1845,8 +1851,14 @@ function _bfLtWarn() {
   const { lt, id, herMoney } = G.pendingBf;
   const n = id && NPCS[id] ? NPCS[id].name : "her";
   const waived = id && _bondTier(id) >= 3 && _careOk(id);
-  const price = waived ? "no fine for you" : lt > 0 ? `฿${_num(lt)}${herMoney ? ", her money" : ""}` : "no fine past midnight";
+  const price = waived ? `no fine for you, her time ฿${_num(_herFee(true))}` : lt > 0 ? `฿${_num(lt)}${herMoney ? ", her money" : ""}` : "no fine past midnight";
   _say(`(Long time — ${price}, and that is your night: the rest of it is ${n}'s, and the next thing is the morning. LONG TIME again to confirm · SHORT TIME keeps the night going · NO.)`, "dim");
+}
+// her time, asked once the fine is squared: the one shared prompt for the live ask, the reprompt and the redraw
+function _bfHerPayPrompt() {
+  const { herPay } = G.pendingBf;
+  _say(_fmt("(Her time: ฿{p}. PAY HER — into her hand · DON'T PAY — she comes all the same, and she keeps count · NO backs out.)",
+    { p: _num(herPay.fee) }), "dim");
 }
 // who takes the fine: the mamasan if one is on the floor, else the woman on the money, else her
 // ("฿500 to the mamasan" at a bar with no mamasan — Marguerite, round 67)
@@ -1868,10 +1880,18 @@ function _bfPrompt(fresh) {
   // (Alan playtest, 2026-08-17: the lovely reveal only fired AFTER committing).
   if (id && _bondTier(id) >= 3 && (st > 0 || lt > 0) && _careOk(id)) {
     const _mamaHere = _npcsHere().some(i => NPC_ROLES[i] === "mamasan" && i !== id);
+    // past midnight the book is shut already: there is no fine for her to wave away, only her time
+    if (G.pendingBf.herMoney) {
+      _say(`(No fine to square at this hour. What is left is ${NPCS[id].name}'s time: ` +
+        `฿${_num(_herFee(false))} short, ฿${_num(_herFee(true))} the night, yours to pay her or not. SHORT TIME · LONG ` +
+        "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
+      return;
+    }
     _say((_mamaHere ? `(The mamasan starts to name a number; ${NPCS[id].name} waves her quiet — `
       // a one-woman bar has nobody to name it: the two lines contradicted (Dieter, round 56)
       : `(${NPCS[id].name} would be the one to name a number, and doesn't — `) +
-      "for YOU there's no fine tonight, she'll square it herself. SHORT TIME · LONG " +
+      "for YOU there's no fine tonight, she'll square it herself. Her time is her own: " +
+      `฿${_num(_herFee(false))} short, ฿${_num(_herFee(true))} the night, yours to pay her or not. SHORT TIME · LONG ` +
       "TIME — overnight · TAKE HER OUT — she parties with you · or NO.)", "dim");
     return;
   }
@@ -1898,8 +1918,11 @@ function _bfPrompt(fresh) {
     ? "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
       "TAKE HER OUT {pt} — she comes with you to other bars and the night keeps going; her whole night, so it costs more · NO backs out.)"
     : "(SHORT TIME {st} — {stw} · LONG TIME {lt} — {ltw} · " +
-      "TAKE HER OUT {pt} — she comes with you to other bars, and the night keeps going · NO backs out.)",
-    { st: p(st), lt: p(lt), pt: p(pt), stw: _stW, ltw: _ltW }), "dim");
+      "TAKE HER OUT {pt} — she comes with you to other bars, and the night keeps going{reg} · NO backs out.)",
+    // a regular's night out is her long time as this bar prices it at this hour — it moves with the
+    // venue and the clock, and the stranger's premium is gone (Mario, 2026-10-27)
+    { st: p(st), lt: p(lt), pt: p(pt), stw: _stW, ltw: _ltW,
+      reg: id && lt > 0 && pt === lt && _bondTier(id) === 2 ? "; you're a regular, so it is her long-time price here at this hour, no premium" : "" }), "dim");
 }
 
 // The player answered the negotiation. kind: "st" | "lt" | "open" — open is
@@ -1965,17 +1988,32 @@ function _bfResolve(kind) {
     }
     kind = "lt";
   }
-  // her farang: at the top bond tier she squares the fine with the mamasan
-  // herself and comes off the clock — you stopped being a customer to her.
+  // her farang: at the top bond tier she squares the fine with the mamasan herself — you
+  // stopped being a customer to her. Her time is not the bar's to waive: the night off her
+  // stool is hers, and you pay her for it or you don't (see _careUnpaid).
   let offBook = false;
   if (_bondTier(id) >= 3 && price > 0 && _careOk(id)) {
+    const hp = bfWas.herPay;
+    if (!hp) {
+      const fee = _herFee(kind !== "st");
+      G.pendingBf = { ...bfWas, id, st, lt, room: G.room, herPay: { kind, fee } };
+      _say(_herMoney ? `The book is shut at this hour and there is no fine to square. The night off her stool is still ${name}'s — ฿${_num(fee)} she will not earn tonight.`
+        : `${name} doesn't so much as glance at the till. A word to the mamasan, a ` +
+        "nod, a roll of the eyes at the very idea of a fine for YOU. She squares it herself. " +
+        `The fine was the bar's, though; the night off her stool is hers — ฿${_num(fee)} she will not earn tonight.`, "win");
+      _bfHerPayPrompt();
+      return;
+    }
     offBook = true;
     price = 0;
-    _careWaived(id);   // what she squares it with is her own cut — she will say so (theme 1)
-    _say(`${name} doesn't so much as glance at the till. A word to the mamasan, a ` +
-      "nod, a roll of the eyes at the very idea of a fine for YOU — and she's already " +
-      "untying her apron. She squares it herself. You stopped being a customer to her " +
-      "a while ago.", "win");
+    if (hp.paid) {
+      G.money -= hp.fee;
+      _carePaid(id);
+      _say(_fmt(_pickVary(_HER_TIME_PAID, "hertimepaid") + " (-฿{p}, ฿{m} left.)", { n: name, p: _num(hp.fee), m: _num(G.money) }), "win");
+    } else {
+      _careUnpaid(id);
+      _say(_fmt(_pickVary(_HER_TIME_UNPAID, "hertimeunpaid"), { n: name }), "dim");
+    }
   }
   if (G.money < price) {
     if ((kind === "lt" || kind === "party") && st <= G.money && st < price) {
@@ -6211,25 +6249,43 @@ function _tobTaen(to) {
   }
 }
 
-// THE CARE EXPECTATION. Her-farang waives the fine (she squares it with mama herself);
-// what she squares it WITH is her own cut. The corpus's most common collision sits
-// exactly here — the loyal regular who thinks "no fine" means free and the woman who
-// thinks he knows — so she says it, once, in her voice, with the number (hers, LADY_LT a
-// night), through the phone if she has your number and across the rail if she hasn't.
+// THE CARE EXPECTATION. Her-farang squares the bar's fine for you with mama herself; her
+// time on the clock is still her own. A short time with the woman you are seeing is a night
+// off her stool, and the man pays her for it or he does not — asked at the moment he asks
+// her (Mario, 2026-10-27). Not paying costs nothing at the till: she comes all the same,
+// because she said yes. It costs her, and she keeps the count — cooler, the next ask
+// refused, and after CARE_UNPAID_COLD the mamasan names the number again like everybody's.
 function _careOk(id) { return !(G.care && G.care[id] && G.care[id].cold); }
-function _careWaived(id) {
-  const c = (G.care = G.care || {})[id] = G.care[id] || { waived: 0, since: null, asked: null, cold: false };
-  if (c.lastDay === G.day) return;   // a NIGHT she gave you, however many times the apron came off
-  c.lastDay = G.day; c.waived++; if (c.since == null) c.since = G.day;
+function _careRec(id) { return ((G.care = G.care || {})[id] = G.care[id] || { unpaid: 0, cold: false }); }
+function _careUnpaid(id) {
+  const c = _careRec(id);
+  c.unpaid = (c.unpaid || 0) + 1; c.refuse = true;
+  G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 2);
+  if (c.unpaid >= CARE_UNPAID_COLD && !c.cold) { c.cold = true; _careDeliver(id); }
 }
-function _careOwed(id) { const c = G.care && G.care[id]; return c ? _herFee(true, NPCS[id] && NPCS[id].room) * Math.max(1, c.waived) : 0; }
-const _CARE_ASK = [
-  "tilac. i tell you something, no angry na 🙏 mama no take fine for you — ok, i ask her. but the fine is my money too, my cut. {w} nights now. i not ask you like customer. i ask you like you know me. (SEND {a} TO {N})",
-  "you know when mama say no fine for you? that is ME say it. my money. {w} times now 😅 i not complain na. but i think you not know. now you know. (SEND {a} TO {N})",
-  "can i say something true? 🙏 no fine for you = no money for me that night. {w} nights. i happy to do it. but my room, my mama, same same every month. you understand na? (SEND {a} TO {N})",
+function _carePaid(id) { const c = G.care && G.care[id]; if (c) c.unpaid = 0; }
+// her time, paid into her hand — not the bar's money, hers (narration, register-free)
+const _HER_TIME_PAID = [
+  "You fold ฿{p} into {n}'s hand — not for the bar, for her time. She tucks it away without counting it, which is its own kind of thank-you.",
+  "฿{p} goes into {n}'s hand, under the rail, where the mamasan can pretend not to see it. “For my time?” A small smile. “You know how it work.”",
+  "You pay {n} for the night off her stool — ฿{p}, hers, not the bar's. It goes into her phone case behind the photo, and that is the end of the subject.",
+  "{n} doesn't look at the ฿{p} you press on her, which is how you know it mattered. “Okay. Now I am not working.” The apron comes off.",
 ];
-const _CARE_THANKS = [
-  "😭🙏 see? i KNOW you understand. ok. now we are square 💕",   // no "i not say again": the ledger asks again when the nights add up (Sunil, round 86)
+// …and not paid: she comes, because she said yes, and she counts
+const _HER_TIME_UNPAID = [
+  "{n} waits half a beat for something that doesn't come, then unties the apron anyway. She said yes, and she keeps her word. She keeps count, too.",
+  "Nothing crosses from your hand to hers. {n} notices, decides not to notice, and comes with you all the same — a night off the stool she will not be paid for.",
+  "{n} glances at your hand, then at your face, and something small closes behind the smile. “Okay,” she says. “Okay, tilac.” She comes. It costs her the night.",
+];
+// the next ask, after a night she gave you for nothing (Tinglish, hers)
+const _CARE_REFUSE = [
+  "{n} shakes her head before you finish — not angry. “Not tonight, tilac. Tonight I work.” She means the stool, and she means last time.",
+  "“Tonight no.” {n} says it kindly and does not explain, then explains anyway: “Last time I lose my night for you. Tonight I keep it.”",
+  "{n} laughs, a little. “You ask again already? Last time my time free for you. Free is finish. Tonight I sit here.”",
+  "{n} looks at the mamasan, then at you. “Mama ask me why I go with you for nothing. I don't have answer. So tonight — no.”",
+];
+const _CARE_THANKS = [   // money that answers it, by transfer or across the rail
+  "😭🙏 see? i KNOW you understand. ok. now we are square 💕",
   "🙏🙏 thank you na. not for the money. for that you listen. now is square",
   "💕 ok. now i not feel strange. you good man. jing jing",
 ];
@@ -6238,34 +6294,26 @@ const _CARE_COLD = [
   "mai pen rai. i understand. 🙂",
   "ok. 🙂 next time mama can say the number, easier for everybody",
 ];
-const _CARE_RAIL = [   // the same three beats, said across her bar when she has no number for you
-  "{n} waits until the mamasan is at the far end, then says it quietly, looking at the bottles and not at you: “No fine for you — that is my money, you know? {w} nights now. I not ask like customer. I ask like you know me.” A number, hers, said once: ฿{a}. Then she goes back to work. (SEND {a} TO {N}, or hand it to her — TIP {N} {a}.)",
-  "{n} has clearly been deciding whether to say it, and says it: “Mama no take fine for you because I say. {w} nights. My cut, tilac. Not the bar — me.” She is not angry and she is not asking twice. ฿{a} is the figure, and she will not name it again. (TIP {N} {a} · SEND {a} TO {N})",
-];
 const _CARE_RAIL_COLD = [
   "{n} is warm, and busy, and when the mamasan comes over to name the fine tonight she does not wave her off. Nothing is said about it. Nothing needs to be.",
   "The seat is still yours and the smile is real, and tonight the number for the night is the number — {n} lets the mamasan say it and looks at her phone while she does.",
 ];
-function _careDeliver(id, kind) {
-  const c = G.care[id], a = _careOwed(id), N = NPCS[id].name.toUpperCase();
-  const slots = { n: NPCS[id].name, N, w: c.waived, a };
-  if (kind === "ask") { const book = (G.phone.asks = G.phone.asks || {}); (book[id] = book[id] || []).push({ kind: "care", amt: a, day: G.day, paid: false }); }   // the book counts it (Marcus, round 61)
+// the cold, said once: by text if she has your number, across her rail if she hasn't
+function _careDeliver(id) {
+  const c = G.care[id];
   if (G.phone.contacts[id] && G.battery > 0) {
-    _pushMsg(id, _fmt(_pickVary(kind === "ask" ? _CARE_ASK : _CARE_COLD, "care" + kind + ":" + id), slots));
+    _pushMsg(id, _pickVary(_CARE_COLD, "carecold:" + id));
     _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
-  } else c.pending = kind;   // said across the rail the next time you sit with her
+  } else c.pending = "cold";
 }
-function _careTick() {   // the morning after: one ask, one answer window, one verdict on it
+function _careTick() {   // an old save's open ask still runs out: CARE_DAYS of silence, then the cold
   if (!G.care) return;
   for (const id of Object.keys(G.care)) {
     const c = G.care[id];
-    if (!c || !NPCS[id] || _maiDee(id)) continue;
-    if (c.asked == null && !c.cold && c.waived >= CARE_WAIVED) { c.asked = G.day; _careDeliver(id, "ask"); }
-    else if (c.asked != null && G.day - c.asked >= CARE_DAYS) {
-      c.cold = true; c.asked = null; c.waived = 0; c.since = null;
-      G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 3);
-      _careDeliver(id, "cold");
-    }
+    if (!c || !NPCS[id] || _maiDee(id) || c.asked == null || G.day - c.asked < CARE_DAYS) continue;
+    c.cold = true; c.asked = null;
+    G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 3);
+    _careDeliver(id);
   }
 }
 function _careArrive(to) {
@@ -6274,8 +6322,7 @@ function _careArrive(to) {
     const c = G.care[id];
     if (!c || !c.pending || _npcWhere(id) !== to || !_npcsHere().includes(id)) continue;
     const kind = c.pending; delete c.pending;
-    const slots = { n: NPCS[id].name, N: NPCS[id].name.toUpperCase(), w: c.waived, a: _careOwed(id) };
-    _say(_fmt(_pickVary(kind === "ask" ? _CARE_RAIL : _CARE_RAIL_COLD, "carerail" + kind), slots), kind === "ask" ? "" : "dim");
+    if (kind === "cold") _say(_fmt(_pickVary(_CARE_RAIL_COLD, "carerailcold"), { n: NPCS[id].name }), "dim");
   }
 }
 // money reaching her — a transfer or a note across the rail — answers the ask (or lifts the
@@ -6283,9 +6330,9 @@ function _careArrive(to) {
 // can let her thank you for the right thing.
 function _careSent(id, amt) {
   const c = G.care && G.care[id];
-  if (!c || (c.asked == null && !c.cold) || amt < _herFee(true, NPCS[id] && NPCS[id].room)) return false;
+  if (!c || (c.asked == null && !c.cold && !c.refuse) || amt < _herFee(true, NPCS[id] && NPCS[id].room)) return false;
   const was = c.cold;
-  c.asked = null; c.cold = false; c.waived = 0; c.since = null; delete c.pending;
+  c.asked = null; c.cold = false; c.unpaid = 0; delete c.refuse; delete c.pending;
   _addBond(id, was ? 1 : 2);
   return true;
 }
@@ -6360,6 +6407,10 @@ const _CARE_TALK = {
   asked: [
     n => `${n} knows exactly which text you mean. "The fine. Mama no take it for you — I say so. Is my cut too, tilac, my money." She says the number again, once, and not a third time. "Not a customer thing. You know me."`,
     n => `"My message?" ${n} does not pretend. "What I write is what I mean. The bar's fine is the bar's. The part mama let go for you — that part is mine. I tell you because you not know. Now you know."`,
+  ],
+  unpaid: [   // the night she gave you for nothing, asked about
+    n => `${n} doesn't make a scene of it. "Mama no take fine for you — I do that. But my time is my time, tilac. You know this one." She says it once.`,
+    n => `"The money?" ${n} looks at the bottles, not at you. "Fine is mama's. My night is mine. Last time you forget." A small shrug that is not small.`,
   ],
   settled: [
     n => `${n} waves it off before you finish. "Finish, na. You send, I say thank you, we not talk about it again." A beat. "You listen. That is the thing I remember."`,
@@ -6773,8 +6824,7 @@ function _playerSaidTalk(npc, topic) {
 function _careTalk(npc, topic) {
   const c = G.care && G.care[npc];
   if (!c || !/\b(cut|fine|my money|her money|text|message|night'?s money|waive|waived|mama no take|the number|two nights|nights)\b/.test(String(topic || "").toLowerCase())) return false;
-  const pool = c.cold ? _CARE_TALK.cold : c.asked != null ? _CARE_TALK.asked : (c.waived === 0 && c.since == null && (c.settled || true)) ? _CARE_TALK.settled : null;
-  if (!pool) return false;
+  const pool = c.cold ? _CARE_TALK.cold : c.asked != null ? _CARE_TALK.asked : (c.refuse || c.unpaid) ? _CARE_TALK.unpaid : _CARE_TALK.settled;
   _say(_pickVary(pool, "caretalk:" + npc)(NPCS[npc].name));
   return true;
 }

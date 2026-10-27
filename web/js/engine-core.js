@@ -4106,6 +4106,12 @@ function _beerPrice(room) {
   const t = r.barType || r.drinks, bm = typeof BEER_MULT !== "undefined" && BEER_MULT[t] ? BEER_MULT[t] / ((typeof DRINK_MULT !== "undefined" && DRINK_MULT[t]) || 1) : 1;
   return Math.max(10, Math.round(BEER_PRICE * _drinkMult(room) * bm * half / 10) * 10 - (r.beerOff || 0));
 }
+// WATER IN A BAR COSTS THE CHEAPEST THING WITH ALCOHOL IN IT — you pay for the seat, not the bottle
+// (Mario, 2026-10-27). That is the beer everywhere but the Moonshine Bar, whose house shot is cheaper.
+function _waterPrice(room) {
+  const r = room || G.room;
+  return Math.min(_beerPrice(r), r === "moonshine_bar" ? YA_DONG_SHOT : Infinity);
+}
 function _ladyPrice(room) { return Math.round(LADY_DRINK * _drinkMult(room) / 10) * 10; }
 // THE BELL IS A ROUND FOR EVERYONE IN THE ROOM, priced per head (Mario, 2026-10-10, on Ray: a
 // flat ฿300–380 "bought the whole bar a round" at Kitten Corner, five girls and the mamasan at

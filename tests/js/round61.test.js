@@ -88,7 +88,7 @@ test("the verdict closes every verb: FLIRT, SEE HOME, MESSAGE, TALK, the shut bo
   out = []; run("barfine lek"); assert.match(said(), /No, thank you|walked out of here by security/);
   G.lightOn = true; G.battery = 50; G.soc.torchNoticed = {}; out = []; _lightNotice(); assert.doesNotMatch(said(), /Lek/);
 });
-test("money-asks: never from a woman you sit with, never twice inside three days, 'again' needs a before; the care ask is in the book and she answers its words; the ledger shows a SEND", () => {
+test("money-asks: never from a woman you sit with, never twice inside three days, 'again' needs a before; her unpaid time is answered in her words; the ledger shows a SEND", () => {
   G.stage = "expat";   // the days add up past a week here, and a vacation's end would swallow the SEND
   G.phone.contacts = { nune: true }; G.room = _npcRoom("nune"); G.day = 3;
   assert.equal(_moneyAsk("nune"), null, "never while you sit on her stool");
@@ -97,11 +97,9 @@ test("money-asks: never from a woman you sit with, never twice inside three days
   // the scripted girl's first paid ask is not "again"
   G.phone.contacts.chaba = true; G.bank = 20000; G.day += 3; _moneyAsk("chaba"); const a = G.phone.asks.chaba[0];
   out = []; run("send " + a.amt + " to chaba"); assert.ok(!G.phone.inbox.some(m => /again/.test(m.text)));
-  // the care ask is counted, and answered across the rail
-  G.phone.contacts.lek = true; G.care = { lek: { waived: 2, since: 1, asked: null, cold: false } }; G.day += 1; _careTick();
-  assert.ok(G.phone.asks.lek.some(x => x.kind === "care" && !x.paid));
-  G.room = _npcRoom("lek"); G.soc.drinks.lek = 14; out = []; run("ask lek about cut"); assert.ok(_CARE_TALK.asked.some(f => said().includes(f("Lek").slice(0, 25))), said());
-  out = []; run("who"); assert.match(said(), /Lek .*asked 1×/);
+  // the night she gave you for nothing, asked about across her rail
+  G.phone.contacts.lek = true; G.care = { lek: { unpaid: 1, refuse: true, cold: false } }; G.day += 1;
+  G.room = _npcRoom("lek"); G.soc.drinks.lek = 14; out = []; run("ask lek about cut"); assert.ok(_CARE_TALK.unpaid.some(f => said().includes(f("Lek").slice(0, 25))), said());
   // the morning ledger sees the transfer
   G.room = "hotel_room"; G.sentTotal = 0; G.lastNight = { ...(G.lastNight || {}), sentB: 0 }; _endNight("sleep");
   G.bank = 9000; run("send 1500 to lek"); G.room = "hotel_room"; out = []; _endNight("sleep"); run("last night");

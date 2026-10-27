@@ -1364,8 +1364,10 @@ tomorrow, or drinks-only. Some women run a game on a stranger; COMPLAIN takes it
   a beer bar after midnight unless she is a `POPULAR_GIRLS` draw. `_barfinePrices` adds long time by class and, when the
   fine is zero, quotes her money alone (`LADY_ST`, `LADY_LT`).
 - The modal (`G.pendingBf`) is answered in `_doCommandInner`: SHORT TIME, LONG TIME (asked twice, `_bfLtWarn`), TAKE HER
-  OUT, NO, or a bare PAY (the open contract). `_bfResolve` pays (`_stPaid`, `_ltPaid`), waives at her-farang tier while
-  `_careOk`, rolls `_bfScamRoll` for an exploitable woman (`_bfExploitable`), may offer the `nightride`, or ends the night
+  OUT, NO, or a bare PAY (the open contract). `_bfResolve` pays (`_stPaid`, `_ltPaid`); at her-farang tier while
+  `_careOk` she squares the fine and the gate asks for her time (`G.pendingBf.herPay`, `_bfHerPayPrompt`: PAY HER, DON'T
+  PAY, NO) — unpaid, `_careUnpaid` cools her, refuses the next ask (`_CARE_REFUSE`) and after `CARE_UNPAID_COLD` sets the
+  cold that `_careSent` lifts. It rolls `_bfScamRoll` for an exploitable woman (`_bfExploitable`), may offer the `nightride`, or ends the night
   with `_endNight("barfine")`. Sex pays through `_conquestHappy`, the jading treadmill; condoms through `_stdBarfineRoll`.
 - An incident sets `G.bfIncident`; `_doComplain` at her bar refunds with the mamasan present.
 - `_maybeGoWithYou` and `_maybeSelfBarfine` let her open the subject herself.
@@ -1374,7 +1376,7 @@ tomorrow, or drinks-only. Some women run a game on a stranger; COMPLAIN takes it
 `G.bfStrikes`, `G.lastBfId`, `G.lastBfBase`, `G.jaded`, `G.wentWith`, `G.care`.
 
 **Constants.** `BF_BEER`, `BF_SOI6`, `BF_GOGO`, `BF_GENTS` (the bar's fine), `LADY_ST`, `LADY_LT` (her money),
-`POPULAR_GIRLS`, `SPONSOR_FLIP`, `CARE_WAIVED`, `CARE_DAYS`, `MOTEL_ROOM`, `JOINER_FEE`.
+`POPULAR_GIRLS`, `SPONSOR_FLIP`, `CARE_UNPAID_COLD`, `CARE_DAYS`, `MOTEL_ROOM`, `JOINER_FEE`.
 
 **Touches.** `ladydrinks` (tiers, `G.soc.drinkCount`), `social` (heat and `_favor`), `party`, `nightride`, `clinic`
 (`G.std`), the hotel's joiner fee (`_joinerFee`). A new refusal must go in both `_bfRefusal` and `_bfDayPeek`, or her talk
@@ -1391,7 +1393,7 @@ and the verb disagree.
 > **Verbs:** `barfine` · `complain`
 > **People:** `somchith`
 > **Rooms:** `short_time_motel`
-> **Code named above, by file:** engine-play.js — `_conquestHappy`, `_endNight`, `_favor`, `_joinerFee`, `_stdBarfineRoll` · engine-systems.js — `_barfinePrice`, `_barfinePrices`, `_bfDayPeek`, `_bfDayRefusal`, `_bfExploitable`, `_bfLtWarn`, `_bfPrompt`, `_bfRefusal`, `_bfResolve`, `_bfScamRoll`, `_careOk`, `_doBarfine`, `_doComplain`, `_isDraw`, `_ltPaid`, `_maybeGoWithYou`, `_maybeSelfBarfine`, `_sponsorInTown`, `_stPaid` · engine-parser.js — `_doCommandInner`, `_girlBusy`
+> **Code named above, by file:** engine-play.js — `_conquestHappy`, `_endNight`, `_favor`, `_joinerFee`, `_stdBarfineRoll` · engine-systems.js — `_CARE_REFUSE`, `_barfinePrice`, `_barfinePrices`, `_bfDayPeek`, `_bfDayRefusal`, `_bfExploitable`, `_bfHerPayPrompt`, `_bfLtWarn`, `_bfPrompt`, `_bfRefusal`, `_bfResolve`, `_bfScamRoll`, `_careOk`, `_careSent`, `_careUnpaid`, `_doBarfine`, `_doComplain`, `_isDraw`, `_ltPaid`, `_maybeGoWithYou`, `_maybeSelfBarfine`, `_sponsorInTown`, `_stPaid` · engine-parser.js — `_doCommandInner`, `_girlBusy`
 <!-- /facts -->
 
 ### Taking her out (`party`)

@@ -847,7 +847,7 @@ function _naturalHelp(lower) {
 // failure — "1", "short time", "calm down" all fell through (Darren, round 66). Two sites
 // print the parse miss (the verb switch's default and the venue-name fallback below it);
 // both ask this first.
-const _STALE_ANSWER_RE = /^(\d+|short ?time|long ?time|take her out|calm down|square up|flip( \d+)*|yes|no|nope|yeah|yep|stay|ride on|no thanks)$/;
+const _STALE_ANSWER_RE = /^(\d+|short ?time|long ?time|take her out|calm down|square up|flip( \d+)*|pay her|don.?t pay|yes|no|nope|yeah|yep|stay|ride on|no thanks)$/;
 function _staleModalAnswer(lower) {
   // …and the labels the LAST gate offered, whatever they were: the checkout's hotel names,
   // the Rabbit's CARRY IT, the terminal's ls, the lock-in's JOIN IN (modal-audit, 2026-10-07).
@@ -1029,6 +1029,8 @@ function _softName(arg) {
 }
 // What the house says when you query the price of a soft drink — the seat, said
 // by whoever is nearest the till.
+// a line that says the water costs the beer is only true where the beer is the cheapest drink
+function _cheapest(pool) { return _waterPrice() === _beerPrice() ? pool : pool.filter(l => !/\bbeer\b/i.test(l)); }
 const _SEAT_LINES = [
   "\"Same price as beer, tilac.\" A shrug that has done this a thousand times. \"You not pay for water. You pay for the seat. Seat is worth more than the drink — ask anybody who doesn't have one.\"",
   "\"Water, beer, Coke — one price.\" The cashier does not even look up. \"The bottle is twenty baht. The stool is the rest.\"",
@@ -11692,7 +11694,7 @@ function _doBuy(arg) {
     // In a bar the water and the soda cost what the cheapest alcohol costs —
     // you are paying for the SEAT, and the seat is worth more than the bottle
     // (Mario, 2026-09-04). A shop sells the bottle.
-    const price = _servesDrinks() ? _beerPrice() : soft ? 20 : 10;
+    const price = _servesDrinks() ? _waterPrice() : soft ? 20 : 10;
     if (_atOwnBar()) {   // your own stock: off the take, not your pocket (Des, round 41)
       G.thirst = Math.max(0, G.thirst - (soft ? 40 : 45));
       _ownStock(price, soft ? "a soda" : "a water");
@@ -11715,7 +11717,7 @@ function _doBuy(arg) {
     }
     const _sd = soft ? _softName(arg) : "";
     const _line = soft
-      ? _fmt(_L(_pickVary(_servesDrinks() ? _SOFT_LINES : _SOFT_SHOP, _servesDrinks() ? "soft" : "softshop")), { d: _sd, D: _sd[0].toUpperCase() + _sd.slice(1), p: price })
+      ? _fmt(_L(_pickVary(_servesDrinks() ? _cheapest(_SOFT_LINES) : _SOFT_SHOP, _servesDrinks() ? "soft" : "softshop")), { d: _sd, D: _sd[0].toUpperCase() + _sd.slice(1), p: price })
       : _L(_pickVary(_WATER_LINES, "water"));
     _say(_fmt("{line} (-฿{p}, ฿{m} left.)", { line: _line, p: price, m: G.money }));
     return;
@@ -15901,7 +15903,7 @@ function _priceTalk(npc) {
       ? `her own money ฿${_num(bf.st)} short time, ฿${_num(bf.lt)} long — the bar's fine comes off after midnight, hers does not`
       : `barfine ฿${_num(bf.st)} short time, ฿${_num(bf.lt)} long — the bar's, and what you settle with her is separate`);
   }
-  bits.push(`water or soda ฿${_num(_beerPrice())} — you pay for the seat, not the bottle`);
+  bits.push(`water or soda ฿${_num(_waterPrice())} — you pay for the seat, not the bottle`);
   if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_num(_bellPrice(G.room))} (a drink a head)`);   // priced per head, said so (Marcus, round 96)
   const _draw = _inBar() ? _npcsHere().find(x => NPC_ROLES[x] === "hostess" && _isDraw(x)) : null;
   if (_draw && _till) bits.push(`except ${NPCS[_draw].name} — the one they come for; her fine is half again, and no midnight discount`);   // "same for everybody" beside a ฿5,000 draw (Nadia, round 61)
@@ -16060,7 +16062,7 @@ function _doTaoRai() {
     const bits = [`beer ฿${_num(_beerPrice())}`];
     if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);   // the Vic has no bar-girl economy (Neville, round 53)
     else if (G.party && (G.party.ids || []).length) bits.push(`a drink for the woman with you ฿${_num(_ladyPrice())}`);   // …but the woman you brought in drinks, and it is charged
-    bits.push(`water or soda ฿${_num(_beerPrice())} (the seat, not the bottle)`);
+    bits.push(`water or soda ฿${_num(_waterPrice())} (the seat, not the bottle)`);
     if (_inBar() && r.barType) bits.push(`the bell ฿${_num(_bellPrice(G.room))} right now (a drink a head — it moves with the room)`);   // the Vic rings one too, so it is quoted
     // the games take a stake: quoted before the frame goes up, not after (Liam, round 93)
     if (_barGamesHere()) bits.push(`Connect 4 ฿${_num(C4_STAKE)} a game · Jackpot ฿${_num(JP_MIN)}–${_num(JP_MAX)}`);
@@ -16469,17 +16471,21 @@ function _chipSet() {
   //      modal tapping room chips.) pendingEnc is deliberately absent here:
   //      an encounter routes ANY command to its resolver as the snap
   //      reaction, so the room chips stay live there.
+  if (G.pendingBf && G.pendingBf.herPay) {
+    add("no", "no, thanks"); add("pay her", `pay her ฿${_num(G.pendingBf.herPay.fee)}`); add("don't pay");
+    return chips;
+  }
   if (G.pendingBf) {
-    const waived = G.pendingBf.id && _bondTier(G.pendingBf.id) >= 3;
+    const waived = G.pendingBf.id && _bondTier(G.pendingBf.id) >= 3 && _careOk(G.pendingBf.id);
     // NO comes FIRST: at the largest text only two money chips showed and "no, thanks" sat off the
     // right edge, so saying no meant a sideways scroll past two prices (Ron, round 82)
     add("no", "no, thanks");
     // with company on your arm the ledger sells one thing, another companion: ST and LT were offered and
     // refused the moment you picked one (Martin, round 85)
     const _withCo = G.party && G.party.ids && G.party.ids.length;
-    if (!_withCo) add("short time", waived ? "short time (no fine)" : `short time ฿${_num(G.pendingBf.st)}`);
-    if (!_withCo) add("long time", G.pendingBf.ltAsked ? "long time — that is the night" : waived ? "long time (no fine)" : `long time ฿${_num(G.pendingBf.lt)}`);
-    add("take her out", waived ? "take her out (no fine)"
+    if (!_withCo) add("short time", waived ? `short time (no fine, her ฿${_num(_herFee(false))})` : `short time ฿${_num(G.pendingBf.st)}`);
+    if (!_withCo) add("long time", G.pendingBf.ltAsked ? "long time — that is the night" : waived ? `long time (no fine, her ฿${_num(_herFee(true))})` : `long time ฿${_num(G.pendingBf.lt)}`);
+    add("take her out", waived ? `take her out (no fine, her ฿${_num(_herFee(true))})`
       : `take her out ฿${_num(G.pendingBf.party != null ? G.pendingBf.party : G.pendingBf.lt)}`);
     return chips;
   }
@@ -16904,7 +16910,7 @@ function engineComplete(input) {
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly)
       .map(k => _HOTELS[k].name.toLowerCase()), "stay"];
-  } else if (G.pendingBf) pool = ["short time", "long time", "take her out", "no"];
+  } else if (G.pendingBf) pool = G.pendingBf.herPay ? ["pay her", "don't pay", "no"] : ["short time", "long time", "take her out", "no"];
   else if (G.pendingSoapy) pool = [..._SOAPY_TIERS.map(t => String(t.num)), "star", "super star", "model", "no"];
   else if (raw === "__info " || raw === "__info") {
     // the column Mort keeps telling you to read, an hour's WAIT and the inbox were
@@ -18470,7 +18476,7 @@ function _renderResume() {
   if (G.pendingChoice === "barsale") { _barSalePrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
-  if (G.pendingBf) { _bfPrompt(); if (G.pendingBf.ltAsked) _bfLtWarn(); return; }
+  if (G.pendingBf) { if (G.pendingBf.herPay) { _bfHerPayPrompt(); return; } _bfPrompt(); if (G.pendingBf.ltAsked) _bfLtWarn(); return; }
   if (G.pendingSoapy) { _soapyPrompt(); return; }
   if (G.pendingFare) { _farePrompt(); return; }
 }
@@ -19115,11 +19121,33 @@ function _doCommandInner(input) {
   // and waving money through without terms (PAY/YES/OK) is the newbie's open
   // contract, resolved by whoever's holding the ledger (see _bfResolve).
   if (G.pendingBf && v !== "restart") {
+    // her time, once she has squared the fine: DON'T PAY is asked before the refusals, because
+    // "don't" is one of them and here it answers the money, not the night
+    if (G.pendingBf.herPay) {
+      const hp = G.pendingBf.herPay;
+      if (/^(?:don'?t|do not|won'?t)(?: pay(?: her)?)?\b|^(?:not paying|no money|nothing|leave it|free)$/.test(lower)) {
+        hp.paid = false; _tradeMark("yes"); _bfResolve(hp.kind); _tick(); return;
+      }
+      if (_isRefusal(lower) || /^(cancel|back out|forget it|never ?mind|walk)\b/.test(lower)) {
+        G.pendingBf = null; _tradeMark("no");
+        _say("You shake your head, and she laughs it off — tonight she stays on her stool, and nobody is owed anything.");
+        _tick(); return;
+      }
+      if (/^(pay|give|yes|yeah|ok(?:ay)?|sure|of course|tip)\b/.test(lower)) {
+        if (G.money < hp.fee) {
+          _say(_fmt("Her time is ฿{p}, and your pocket says ฿{m}.", { p: _num(hp.fee), m: _num(G.money) }) +
+            ((G.bank || 0) >= hp.fee - G.money ? " (The machine on the street has the rest: WITHDRAW <amount>, then PAY HER.)" : ""), "dim");
+          _bfHerPayPrompt(); return;
+        }
+        hp.paid = true; _tradeMark("yes"); _bfResolve(hp.kind); _tick(); return;
+      }
+      _bfHerPayPrompt(); return;
+    }
     // HOW MUCH at the ledger is answered: a waived fine is nothing, said (Liam, round 93 — it only redrew the prompt)
     if (/^(how much|tao rai|price|what'?s the price|how much is it)\??$/.test(lower)) {
       const pb = G.pendingBf, nm = NPCS[pb.id] ? NPCS[pb.id].name : "She";
       _say(_bondTier(pb.id) >= 3 && _careOk(pb.id)
-        ? `“Nothing, tilac.” ${nm} waves the ledger away. “I square it with mama.”`
+        ? `“No fine, tilac.” ${nm} waves the ledger away. “I square it with mama.” A beat. “My time is my time — ฿${_num(_herFee(false))} short, ฿${_num(_herFee(true))} the night.”`
         : `“Short time ฿${_num(pb.st)}, long time ฿${_num(pb.lt)}${pb.party ? `, all night out ฿${_num(pb.party)}` : ""}.”${pb.herMoney ? " Her money — the bar's book is closed." : ""}`, "dim");
       _bfPrompt();
       return;
@@ -20458,7 +20486,7 @@ function _doCommandInner(input) {
           break;
         }
         // "why does water cost the same as beer" — the seat (Mario, 2026-09-04)
-        _say(_pickVary(_SEAT_LINES, "seat"));
+        _say(_pickVary(_cheapest(_SEAT_LINES), "seat"));
         break;
       }
       _say("Nobody's quoting you a price right now. Save it for the man with the " +
@@ -20935,7 +20963,7 @@ function _soi6Opening() {
     "street, where it can keep. \"This soi,\" he says through the window, \"is enough town for one week.\"");   // where Tan dropped you, not a rule you set yourself (Mario, 2026-10-21); the room's price before the first bill (Ron, round 82)
   _say(_fmt("฿{bank} for the week sits in the bank. ฿{pocket} is in your pocket — the rest " +
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
-    { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),
+    { bank: _num(G.bank), pocket: _num(G.money),
       fee: _atmFee(), cap: _num(_atmCap()) }));
   if (G.condoms > 0) _say(_fmt("In the other pocket: your phone, and {n} condom{s} from the airport 7-Eleven — the one purchase of the trip you made sober. (INVENTORY)",
     { n: G.condoms, s: G.condoms === 1 ? "" : "s" }), "dim");

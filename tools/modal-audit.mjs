@@ -133,6 +133,7 @@ const STATES = {
   cli:   { gate: "game:cli", arm() { owner(); G.room = "kitten_office"; _startCli("plg_office"); }, decline: "exit" },
   // the barfine, the soapy's menu, the fare
   bf:    { gate: "bf", arm() { base(); G.room = "candy_bar"; G.soc.drinks.nan = 8; _doBarfine("nan"); }, decline: "no" },
+  bfher: { gate: "bf", arm() { base(); G.room = "candy_bar"; G.soc.drinks.nan = 14; _doBarfine("nan"); if (G.pendingBf) _bfResolve("st"); }, decline: "no" },   // her time, once she squares the fine
   soapy: { gate: "soapy", arm() { base(); G.room = "emperor_soapy"; G.money = 9000; _doSoapy(); }, decline: "no" },
   fare:  { gate: "fare", arm() { base(); G.room = "beach_rd_c"; G.nightTurn = 30; doCommand("wave"); doCommand("naklua road"); }, decline: "pay 15" },   // the fare is asked at the kerb you get off at; paying is the only way off it (the charter alone has WALK)
 };

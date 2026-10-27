@@ -266,7 +266,8 @@ consistent with it. What follows is the canon and doctrine this game has settled
 **The shape of the game.** A staged sandbox: `act1` (the wallet race, do-or-die — a dawn, a collapse, a blackout or a
 sunrise before the wallet is a hard fail and a reset) → `vacation` (seven nights) → `expat` (endless). The default entry is
 the Soi 6 week (Tan drops you at the top of the soi; CONTINUE is another week or cancel the ticket); the full beach opening
-sits behind the hidden `toggle full`. The long-game stat is สนุก (`G.happy`); 100 is สบายสบาย, celebrated once,
+sits behind the hidden `toggle full`. The Soi 6 week's money stays loose on purpose — the challenge is for fun, not for
+watching the wallet (Mario, 2026-10-27, declining a ฿50,000 week). The long-game stat is สนุก (`G.happy`); 100 is สบายสบาย, celebrated once,
 non-terminal. Nights run 18:00–06:00 in 120 turns.
 
 **Doctrines that recur everywhere.**
@@ -314,7 +315,7 @@ her out is a separate, much dearer fine (`SOI6_OUT`); a beer-bar girl's base is 
 ฿15,000 (`SOI6_SALARY`); Soi 6 beer is priced apart from its lady drink (`BEER_MULT`); a bar's night is lopsided, not even
 (`_nightTake`), and BOOKS names the barfines inside the take; some nights the drawer comes up short of the slips
 (`_tillShort` — likelier on Bert's nights and when nobody counts), COUNT THE TILL at close names why and gets some back; Soi 6 is one lady drink before upstairs; the bell is a round for everyone, priced per head; water in a bar costs the
-beer (you pay for the seat); an ATM takes deposits in thousands (DEPOSIT). The bar can be sold on without the affair's door (SELL UP): to Pattaya Leisure (the most money; the soi, Bert's rail and the White Rabbit turn), through Tan (clean; his fee is the profit and his standing drops), or to Bert with Candy as the fifty-one (the least money, only a bar standing up — the deposit and a fifty-one that was not hers are why he never bought it); how it stood when it went decides whether a floor hires the seller as manager (`G.barSale`: under water never, about even after `BAR_SALE_COOL`, making money at a premium). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
+cheapest thing with alcohol in it (`_waterPrice` — you pay for the seat); the woman you are seeing (her-farang) squares the bar's fine herself, but her time on the clock is hers — PAY HER or DON'T PAY at the moment you ask, and unpaid she sours, refuses the next ask, and after `CARE_UNPAID_COLD` lets the mamasan name the number again; a regular's take-out is her long time as that bar prices it at that hour; an ATM takes deposits in thousands (DEPOSIT). The bar can be sold on without the affair's door (SELL UP): to Pattaya Leisure (the most money; the soi, Bert's rail and the White Rabbit turn), through Tan (clean; his fee is the profit and his standing drops), or to Bert with Candy as the fifty-one (the least money, only a bar standing up — the deposit and a fifty-one that was not hers are why he never bought it); how it stood when it went decides whether a floor hires the seller as manager (`G.barSale`: under water never, about even after `BAR_SALE_COOL`, making money at a premium). A manager cannot barfine his own girls and drinks free at his own bar; a manager who turns his
 floor is warned once and then fired — far easier to replace a manager than a good hostess — and is unhirable for a while
 set by his reputation, and never again at that bar.
 
