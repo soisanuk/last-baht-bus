@@ -33,22 +33,17 @@ var NEWS_FEED = [
     "d": "26 Oct 2026"
   },
   {
-    "t": "Food trucks offer a starting point for aspiring entrepreneurs in Pattaya",
-    "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
-  },
-  {
     "t": "Pattaya explores pop-up night markets and art events to draw visitors",
     "s": "Pattaya Mail",
     "d": "26 Oct 2026"
   },
   {
-    "t": "Dutch TV host reported missing in Thailand left country in 2025, police say",
-    "s": "Khaosod English",
-    "d": "24 Oct 2026"
+    "t": "Pattaya prepares to clamp, lift and fine motorcycles occupying public parking spaces",
+    "s": "Pattaya Mail",
+    "d": "26 Oct 2026"
   },
   {
-    "t": "King, Queen set to see requiem performance",
+    "t": "Slow visa processing disrupts travel to Thailand",
     "s": "Bangkok Post",
     "d": "27 Oct 2026"
   },
@@ -58,30 +53,35 @@ var NEWS_FEED = [
     "d": "26 Oct 2026"
   },
   {
-    "t": "Israeli man arrested in Thailand on suspicion of drugging women, secretly filming sex",
-    "s": "The Jerusalem Post",
+    "t": "Thailand Imports Surge at Record Pace on AI, Energy Demand",
+    "s": "Bloomberg.com",
     "d": "26 Oct 2026"
   },
   {
-    "t": "Thailand Imports Surge at Record Pace on AI, Energy Demand",
-    "s": "Bloomberg.com",
+    "t": "Israeli man arrested in Thailand on suspicion of drugging women, secretly filming sex",
+    "s": "The Jerusalem Post",
     "d": "26 Oct 2026"
   },
   {
     "t": "Thailand welcomes US-Myanmar engagement, expects ASEAN talks on country's future",
     "s": "Reuters",
     "d": "23 Oct 2026"
+  },
+  {
+    "t": "Thailand plans to hike import taxes on BEVs in January",
+    "s": "Yahoo Finance",
+    "d": "27 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-26","USD":33.81,"AUD":23.75,"GBP":45.12,"EUR":37.82};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-27","temp":32,"humid":56,"code":2,"hi":32,"rain":35};
+var WX_NOW = {"date":"2026-10-27","temp":28,"humid":79,"code":0,"hi":33,"rain":35};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4012,"date":"2026-10-27","baht":64150};
+var GOLD = {"usd":4018,"date":"2026-10-27","baht":64250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79656,"thb":2686850};
+var BTC = {"usd":79753,"thb":2691670};
