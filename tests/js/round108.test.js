@@ -87,3 +87,55 @@ test("Lorna: the Vic quotes its bell; a cart's goods after it has gone are the c
   G.game = { type: "jp", tiles: jpNew(), pending: [[2, 3]], stake: 0, taught: {} };
   const before = G.game.tiles.join(""); run("flip 2"); assert.ok(!G.game || G.game.tiles.join("") !== before);
 });
+
+// ── the deferred nine ──
+test("Kemal: BOOKS lists the arrangements as a standing order beside the next bill", () => {
+  _ownerBar(); G.syn = { done: { cleaning: 3, pos: 4 } }; G.room = "stinky_bar";
+  assert.match(t("books"), /Standing: the arrangements, 2 of them — ฿240 a night .* about ฿7,200 a month/);
+});
+test("Kemal: no house text claims money moved from the float that BOOKS never shows", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /i pay him from the float|i buy from 7-eleven, i put the slip/);
+});
+test("Kemal: a masseuse whose number is spent or ghosted does not say he still has it", () => {
+  sandbox(); G.room = "jomtien_soi_7_oil"; G.nightTurn = 30; G.money = 5000; _setFlag("gaveNumber_joom"); G.offShift = null;
+  out = []; _massageSpecial("joom", "Joom"); assert.doesNotMatch(said(), /still have my number/);
+  G.offShift = { id: "joom", name: "Joom", home: "jomtien_soi_7_oil", day: G.day }; G.itemLoc.masseuse_note = "inventory"; G.soc.special = {};
+  out = []; _massageSpecial("joom", "Joom"); assert.match(said(), /still have my number/);
+  G.offShift = null; G.soc.special = { jomtien_soi_7_oil: G.day };
+  const n = NPCS.joom.dialogue.find(d => /You have my number/.test(d.text)); assert.ok(!n.when(_npcState("joom"), G));
+});
+test("Kemal: the till keeper answers about tonight, and a counted drawer is tonight's news", () => {
+  _ownerBar(); G.room = "stinky_bar"; G.nightTurn = 40; const tk = NPCS[_tillKeeper("stinky_bar")].name.toLowerCase();
+  const s = t("ask " + tk + " about tonight"); assert.doesNotMatch(s, /don't know|Not my department/); assert.match(s, /count|COUNT/i);
+  const d = _shortDay(); G.nightTurn = 70; G.bar.countedDay = null; run("count the till");
+  assert.match(t("ask " + tk + " about the till"), /under the slips/);
+});
+test("Oskar: Nee knows Gavin, and only a till keeper says 'the till, I know'", () => {
+  sandbox(); G.room = "pink_lotus"; G.nightTurn = 30; assert.match(t("ask nee about gavin"), /paper's man/);
+  assert.ok(_tillKeeper("pink_lotus") !== "nee");
+  for (let i = 0; i < 20; i++) assert.doesNotMatch(_topicMiss("nee"), /The till, I know/);
+});
+test("Oskar and Lorna: the Soi 6 week says what is in his pocket, and the beach morning's receipt is not", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" };
+  _soi6Setup(); out = []; _soi6Opening();
+  assert.match(said(), /condoms from the airport/); assert.notEqual(G.itemLoc.receipt, "inventory"); assert.notEqual(G.itemLoc.noodles, "inventory");
+});
+test("Oskar: Tan points at the scenery in his own voice, not the pub's", () => {
+  sandbox(); G.mode = "soi6"; G.nightTurn = 10; G.room = _npcRoom("tan");
+  const key = Object.keys(_room().reads || {})[0]; if (!key) return;
+  for (let i = 0; i < 6; i++) { G.soc.talkTurn = null; const s = t("ask tan about " + key); assert.doesNotMatch(s, /\bmate\b/); }
+  assert.ok(_FIXTURE_TAN.every(l => !/\bmate\b/.test(l)));
+});
+test("Lorna: the quiz chalkboard reads, and names the prize", () => {
+  sandbox(); for (let d = 2; d < 20; d++) { G.day = d; if (_quizDay()) break; }
+  G.room = _quizBars()[0]; G.nightTurn = 10; assert.match(t("examine chalkboard"), /FIVE RIGHT WINS ฿500/);
+});
+test("Lorna: ask a drinks-only girl about the barfine and the house's number comes too", () => {
+  sandbox(); G.room = _npcRoom("somo"); G.nightTurn = 30; assert.match(t("ask somo about barfine"), /The house's book, for a girl who does go: ฿[\d,]+ short time/);
+});
+test("Lorna: a girl's 'bar quiet, come see me' does not fit while he sits in her bar", () => {
+  sandbox(); G.room = _npcRoom("pukky"); G.soc.barTurns = {};
+  assert.equal(_textFits("pukky", "bar quiet tonight 😴"), false);
+  G.room = "soi6_street"; assert.equal(_textFits("pukky", "bar quiet tonight 😴"), true);
+});

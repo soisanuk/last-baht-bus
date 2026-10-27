@@ -40486,12 +40486,12 @@
    "model": "fable",
    "lens": "owner-who-counts",
    "claim": "Tan's arrangements show only per night, never on 'Next bill'",
-   "verdict": "deferred",
-   "note": "they bill nightly by design; a monthly figure on Next bill is a small addition",
+   "verdict": "fixed",
+   "note": "BOOKS prints a Standing line beside Next bill: count, nightly and monthly",
    "cls": "B",
    "sev": "minor",
    "system": "procurement",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40499,12 +40499,12 @@
    "model": "fable",
    "lens": "owner-who-counts",
    "claim": "Lamai's text says she paid the pool-table man from the float; BOOKS never shows it",
-   "verdict": "deferred",
-   "note": "flavour text claiming a movement; needs a class lint",
+   "verdict": "fixed",
+   "note": "the two house texts that claimed float spending rewritten; source pin",
    "cls": "R",
    "sev": "minor",
    "system": "barbooks",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40512,12 +40512,12 @@
    "model": "fable",
    "lens": "owner-who-counts",
    "claim": "Joom's prose says 'you still have my number' when MEET says you have nobody's",
-   "verdict": "deferred",
-   "note": "the massage shop's number line; not yet reproduced",
+   "verdict": "fixed",
+   "note": "the offer-stands line only while her number is in his pocket; the four shop nodes and the folk pool gated the same",
    "cls": "J",
    "sev": "minor",
    "system": "massage",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40577,12 +40577,12 @@
    "model": "fable",
    "lens": "owner-who-counts",
    "claim": "ASK CAKE ABOUT TONIGHT after midnight: 'This one I don't know'",
-   "verdict": "deferred",
-   "note": "the night in progress as a topic; BOOKS' 'tonight so far' exists",
+   "verdict": "fixed",
+   "note": "the till keeper/manager answers the night in progress, and a drawer counted tonight is tonight’s answer",
    "cls": "N",
    "sev": "minor",
    "system": "barbooks",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40720,12 +40720,12 @@
    "model": "fable",
    "lens": "follow-the-fixer",
    "claim": "Nee has never heard of Gavin; Nee says 'the till I know' when Jenny keeps it",
-   "verdict": "deferred",
-   "note": "cross-NPC knowledge; small",
+   "verdict": "fixed",
+   "note": "Nee has a Gavin node; the ‘till, I know’ miss only from the room’s till keeper",
    "cls": "N",
    "sev": "minor",
    "system": "conversation",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40746,12 +40746,12 @@
    "model": "fable",
    "lens": "follow-the-fixer",
    "claim": "Condoms he never bought",
-   "verdict": "deferred",
-   "note": "the Soi 6 week's starting kit is never announced",
+   "verdict": "fixed",
+   "note": "the Soi 6 opening names the condoms; the beach morning’s receipt and noodles are not in the week’s pocket",
    "cls": "B",
    "sev": "minor",
    "system": "soi6",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40811,12 +40811,12 @@
    "model": "fable",
    "lens": "follow-the-fixer",
    "claim": "Tan says 'mate' in a generic fallback",
-   "verdict": "deferred",
-   "note": "Tan is exempt from the voice filter by canon; the fallback line is generic",
+   "verdict": "fixed",
+   "note": "Tan has his own scenery lines (_FIXTURE_TAN)",
    "cls": "M",
    "sev": "minor",
    "system": "conversation",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40915,12 +40915,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "Condoms, a 7-Eleven receipt and noodles never bought",
-   "verdict": "deferred",
-   "note": "the week's starting kit is unannounced",
+   "verdict": "fixed",
+   "note": "the Soi 6 opening names the condoms; the beach morning’s receipt and noodles are not in the week’s pocket",
    "cls": "B",
    "sev": "minor",
    "system": "soi6",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40941,12 +40941,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "EXAMINE CHALKBOARD (quiz night) → not a thing; the prize never quoted",
-   "verdict": "deferred",
-   "note": "a quiz chalkboard scenery entry",
+   "verdict": "fixed",
+   "note": "the quiz chalkboard reads on quiz day and the street line names the prize (QUIZ_PRIZE, QUIZ_RUNNER)",
    "cls": "D",
    "sev": "minor",
    "system": "games",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -40954,12 +40954,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "ask somo about barfine answers about her lady-drink cut",
-   "verdict": "deferred",
-   "note": "topic overlap on her floor nodes",
+   "verdict": "fixed",
+   "note": "a drinks-only girl asked about the fine gives her reason and the house’s number",
    "cls": "L",
    "sev": "minor",
    "system": "filler",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   },
   {
    "round": "108",
@@ -41032,12 +41032,12 @@
    "model": "fable",
    "lens": "price-notebook",
    "claim": "Pukky texts 'bar quiet tonight' while he sits at her bar",
-   "verdict": "deferred",
-   "note": "the _textFits rule should hold; not reproduced yet",
+   "verdict": "fixed",
+   "note": "_textFits refuses come-see-me while he is in her bar; an invite counts him as seen there",
    "cls": "J",
    "sev": "minor",
    "system": "phone",
-   "pin": null
+   "pin": "tests/js/round108.test.js"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-22",
+  "generated": "2026-10-27",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 192,
@@ -688,7 +688,7 @@
       "th": "ต้น",
       "room": "soi6_street",
       "tags": [],
-      "desc": "Your airport driver, leaning on a plain grey sedan at the mouth of the soi as though he never drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. \"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable man on Soi 6 — which, on Soi 6, is its own kind of power.",
+      "desc": "Your airport driver, on his slow round of the soi with his plain grey sedan parked at the mouth of it as though he never drove off — mid-thirties, neat, a polo shirt you would forget the instant you looked away. Six years in Ohio for a film degree that paid nothing and taught him everything about how a shot is framed. \"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable man on Soi 6 — which, on Soi 6, is its own kind of power.",
       "rendered": true
     },
     {
@@ -2769,7 +2769,7 @@
       "age": 74,
       "nat": "American",
       "tags": [],
-      "desc": "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a spiral notebook and a biro he clicks while he watches the soi. He has been on this coast longer than most of the bars, and he is writing all of it down whether it likes it or not.",
+      "desc": "Seventy-four, horn-rimmed glasses and a Hawaiian shirt at war with itself, a spiral notebook and a biro he clicks while he watches the soi. He has been on this coast longer than most of the bars, and he is writing all of it down whether it likes it or not. The voice is American underneath, with forty-one years of a British paper's subs on top.",
       "rendered": true
     },
     {

@@ -361,6 +361,13 @@ function _drinksOnlyWhy(npc, topic) {   // "buy me one more and I tell you why" 
   const pool = typeof _LEDGER_DRINKS_ONLY !== "undefined" ? _LEDGER_DRINKS_ONLY : null;
   if (!pool) return false;
   _say(_pickVary(pool, "drinksonlywhy")(NPCS[npc].name));
+  // asked about the fine itself, she still gives the house's number — for a girl who does go
+  if (/\b(barfine|bar fine|fine|how much|price)\b/.test(String(topic || "").toLowerCase()) && _room().barType) {
+    const p = _barfinePrices(_room().barType, null);
+    _say(p.herMoney
+      ? _fmt("(The house's book, for a girl who does go: no bar fine this late, her own money ฿{st} short time, ฿{lt} the night. {n}'s answer is no.)", { st: _num(p.st), lt: _num(p.lt), n: NPCS[npc].name })
+      : _fmt("(The house's book, for a girl who does go: ฿{st} short time, ฿{lt} the night — the bar's fine and her own money together. {n}'s answer is no.)", { st: _num(p.st), lt: _num(p.lt), n: NPCS[npc].name }), "dim");
+  }
   return true;
 }
 function _bertLeverTalk(topic) {   // the manager answers the owner's levers — "above my pay grade" about a line he chalked himself (Hal, round 62)
@@ -2934,14 +2941,19 @@ function _massageSpecial(she, name) {
   // the on-premises wall, and the door it leaves open: her number, once per girl,
   // a real off-shift thread you carry — MEET her when the night's old, or she ghosts.
   const numKey = "gaveNumber_" + (she || G.room);
-  if (G.offShift) {
+  if (G.offShift && G.offShift.home === G.room && (G.offShift.id || null) === (she || null)) {
+    // her own number is still in his pocket: the offer stands
+    _say(`Afterward she taps the NO SEX sign and grins. “{{Boom boom}} no can here — but you still ` +
+      `have my number, na? Offer good: when I finish work, my place. Real one.”`, "dim");
+  } else if (G.offShift) {
     // already chasing someone's number — she reads it, unoffended
     _say(`Afterward she nods at the NO SEX sign, rueful — “{{Boom boom}} no can here, boss rule” — ` +
       `but you don't reach for a pen, and she laughs it off. “You have lady already, na? Mai pen rai.”`, "dim");
   } else if (_flag(numKey)) {
-    // she's written you her number before (once per girl); the offer just stands
-    _say(`Afterward she taps the NO SEX sign and grins. “{{Boom boom}} no can here — but you still ` +
-      `have my number, na? Offer good: when I finish work, my place. Real one.”`, "dim");
+    // she wrote her number once (once per girl) and that thread is closed — met or
+    // never answered — so she does not claim he still holds it
+    _say(`Afterward she taps the NO SEX sign and grins. “{{Boom boom}} no can here — boss rule.” ` +
+      `She doesn't reach for a pen this time; the beer mat was a once.`, "dim");
   } else {
     _setFlag(numKey);
     G.itemLoc.masseuse_note = "inventory";
@@ -6032,13 +6044,13 @@ function _maybeIncomingText() {
       "one girl sick tomorrow. i fix. you don't worry",
       "the uncle bring 3 crate short again. i write it. you pay only what come",
       "my mama ask what my boss is like. i say ok. she say only ok?? 555",
-      "the pool table man want cash friday. i pay him from the float, slip in the drawer. boss no need decide 555",
+      "the pool table man come fix the cushion. he say free if boss buy him one beer next time 555",
       "two farang ask tonight if bar for sale. i say no. correct na?",
       // deeper than a week of nightly texts: Lamai's ice man came round twice in seven nights (Benoît, round 104)
       "rain tonight. three customer. i send one girl home early, she happy, the till happy",
       "landlord nephew come look at the roof. he say nothing. i say nothing. roof still leak",
       "girl from Isan want start monday. good English, no tattoo. i say yes ok?",
-      "the bulb outside go again. i buy from 7-eleven, i put the slip in the drawer",
+      "the bulb outside go again. the uncle next door say he fix tomorrow. we see 555",
       "big group farang tonight, birthday. they sing very bad. they pay very good 555",
       "police drive past slow two time. nothing. just looking. i smile, they go",
       "my knee bad today. i sit more. the girls work more. everybody happy except my knee",
@@ -6094,7 +6106,7 @@ function _maybeIncomingText() {
   }
   // a woman you sat with TONIGHT does not text that you never come (Tomasz, round 54:
   // "you no come i sad" twenty minutes after he left her bar with a drink bought)
-  const _sawYou = ((G.soc.drinkCount || {})[id] || 0) > 0 || ((G.soc.barTurns || {})[_npcRoom(id)] || 0) >= 6 ||
+  const _sawYou = ((G.soc.drinkCount || {})[id] || 0) > 0 || ((G.soc.barTurns || {})[_npcRoom(id)] || 0) >= 6 || _npcRoom(id) === G.room ||
     !!(G.lastNightWas && G.lastNightWas.with === id && G.lastNightWas.day >= G.day - 1) ||   // "you no come i sad" the evening after her bike (Dieter, round 56)
     !!(G.lastRide && G.lastRide.id === id && G.lastRide.day >= G.day - 1) ||
     ((G.seenDay || {})[id] != null && G.seenDay[id] >= G.day - 1) || !!((G.homeSeen || {})[id] && G.homeSeen[id].day >= G.day - 1);   // she saw you, or woke in your flat (Laurie, round 102)
@@ -6430,7 +6442,8 @@ function _textFits(id, t) {
   if (!/bar quiet|nobody come|stool free|you come\?|have music|come see|come sit|i keep you seat|kick off/i.test(String(t))) return true;
   const r = typeof _npcRoom === "function" ? _npcRoom(id) : (NPCS[id] || {}).room;
   if (r && _closedNow(r)) return false;
-  if (r && ((G.soc.barTurns || {})[r] || 0) >= 2) return false;
+  // he is sitting in her bar right now: it is neither quiet nor missing him
+  if (r && (G.room === r || ((G.soc.barTurns || {})[r] || 0) >= 2)) return false;
   return true;
 }
 function _floorTextPick(id, pool) {
@@ -11168,6 +11181,11 @@ function _doBooks() {
     if (_tn.length) _say(_fmt("Tonight so far: {bits}.", { bits: _tn.join(" · ") }), "dim");
   }   // a water mid-night moved the till and BOOKS said nothing (Mick, round 57)
   { const _due = (b.lastMonthDay || 0) + 30 - G.day; if (_due >= 0) _say(_fmt("Next bill: rent and the note in {d} day{s}{free}.", { d: _due, s: _due === 1 ? "" : "s", free: b.rentFree ? " (a rent-free month)" : "" }), "dim"); }   // "every thirty days", never when (Mick, round 57)
+  { // the arrangements bill nightly, not on the month, so the next-bill line names them as a standing order
+    const _deals = (G.syn && G.syn.done) ? Object.keys(G.syn.done).filter(k => G.syn.done[k]).length : 0;
+    if (_deals) _say(_fmt("Standing: the arrangements, {n} of them — ฿{p} a night off the take, about ฿{m} a month. Billed nightly, from the night after each was agreed.",
+      { n: _deals, p: _num(_deals * SYN_JOB_NIGHT), m: _num(_deals * SYN_JOB_NIGHT * 30) }), "dim");
+  }
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
     up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
   if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");

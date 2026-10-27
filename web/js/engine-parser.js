@@ -416,7 +416,8 @@ function _masseuseTalk(t) {
     if (log && log.last < G.day) return _fmt(_pickVary(_FOLK_SHOP_BACK, "folkshopback"), { n: sw.name });
     return _fmt(_pickVary(_FOLK_SHOP_DOOR, "folkshopdoor"), { n: sw.name });
   }
-  if (G.soc.special && G.soc.special[rm] === G.day) return _pickVary(_FOLK_MASSEUSE_SPECIAL, "folkmassspecial");
+  // her number only while it is still in his pocket — a ghosted or spent one is not "you have my number"
+  if (G.soc.special && G.soc.special[rm] === G.day && G.offShift && G.offShift.home === rm) return _pickVary(_FOLK_MASSEUSE_SPECIAL, "folkmassspecial");
   if (G.soc.massaged && G.soc.massaged[rm] === G.day) return _pickVary(_FOLK_MASSEUSE_AFTER, "folkmassafter");
   const log = (G.massageLog || {})[rm];
   if (log && log.last < G.day) return _pickVary(_FOLK_MASSEUSE_BACK, "folkmassback");
@@ -2549,6 +2550,14 @@ function _doExamine(arg) {
   if (/^(?:the )?(?:new )?(?:screen|tv|telly|television|big screen)$/.test(String(arg).toLowerCase().trim()) && _atOwnBar() &&
       G.syn && G.syn.done && G.syn.done.screen != null && G.day > G.syn.done.screen) {
     _say("The new screen, enormous and sitting exactly level, where the old corner telly hung on its bracket. Somebody else's men put it up in an afternoon you weren't here for; the cable runs neatly into the wall, and nobody on the floor has touched the remote since. (WATCH TV)");
+    return;
+  }
+  // the quiz board out front on quiz day: the street line names it, so it reads
+  if (/^(?:the )?(?:quiz )?(?:chalk ?board|blackboard|board|quiz)$/.test(String(arg).toLowerCase().trim()) && _quizDay() && !(_room().reads && _room().reads.board) &&
+      (_quizBars().includes(G.room) || (!_room().barType && [...Object.values(_room().exits || {}), ...(_room().venues || [])].some(to => _quizBars().includes(to))))) {
+    const where = _quizBars().includes(G.room) ? "by the door" : "out on the pavement";
+    _say(_fmt("The chalkboard {w}, in three colours of chalk and one hand: QUIZ NIGHT TONIGHT 8–10. FIVE QUESTIONS. FIVE RIGHT WINS ฿{p} · FOUR RIGHT ฿{r}. NO PHONES. NO APPEAL. Under it, smaller, the last champions' names, most of them teachers from Rayong.",
+      { w: where, p: _num(QUIZ_PRIZE), r: _num(QUIZ_RUNNER) }));
     return;
   }
   // the card the consulate man left on your bench (Alun, round 104: it read as somebody else's)
@@ -6800,6 +6809,12 @@ const _FIXTURE_PUNTER = [
   "{n} shrugs. \"Never looked at it properly myself. You look, you tell me.\"",
   "\"It's not going anywhere,\" {n} says. \"Neither am I. Have a look.\"",
 ];
+// Tan is in no register but his own: fluent, unhurried, no pub idiom
+const _FIXTURE_TAN = [
+  "Tan tips his head at it. \"Look for yourself. The soi tells you more than I do, and it is cheaper.\"",
+  "\"That?\" Tan doesn't turn to look. \"Go and see. I have seen it.\"",
+  "Tan smiles at the question. \"Some things you look at. You don't ask a man about them.\"",
+];
 function _fixtureTalk(npc, topic) {
   if (/\b(next door|next-door|neighbou?rs?)\b/i.test(String(topic || ""))) return false;   // the bar next door is a place, not this room's door (Nee, round 77)
   const reads = _room().reads;
@@ -6816,8 +6831,8 @@ function _fixtureTalk(npc, topic) {
   if (!key) return false;
   if (key === "camera" && _streamBar()) return false;   // the camera is the stream's subject: it came with the group, not before the staff (Gareth, round 103)
   const reg = _hoursRegister(npc);
-  const pool = reg === "floor" ? _FIXTURE_FLOOR : reg === "house" ? (_thaiHouse(npc) ? _FIXTURE_THAI : _FIXTURE_HOUSE) : _FIXTURE_PUNTER;
-  _say(_fmt(_pickVary(pool, "fixture:" + reg), { n: NPCS[npc].name, k: key }));
+  const pool = npc === "tan" ? _FIXTURE_TAN : reg === "floor" ? _FIXTURE_FLOOR : reg === "house" ? (_thaiHouse(npc) ? _FIXTURE_THAI : _FIXTURE_HOUSE) : _FIXTURE_PUNTER;
+  _say(_fmt(_pickVary(pool, "fixture:" + (npc === "tan" ? "tan" : reg)), { n: NPCS[npc].name, k: key }));
   _say(`(EXAMINE ${key.toUpperCase()})`, "dim");
   return true;
 }
@@ -9945,6 +9960,38 @@ function _townTalk(npc, topic) {
     _say(_fmt(_pickVary(!list.length
       ? (reg === "floor" ? _ARR_NONE_FLOOR : _thaiHouse(npc) ? _ARR_NONE_THAI : _ARR_NONE_HOUSE)
       : (reg === "floor" ? _ARR_LIST_FLOOR : _thaiHouse(npc) ? _ARR_LIST_THAI : _ARR_LIST_HOUSE), "arr:" + reg + ":" + (list.length ? "list" : "none")), { n, L: _cap(L || ""), per }));
+    return true;
+  }
+  // the night in progress: the book closes at the count, so the house says what it has so far,
+  // and a drawer already counted tonight is tonight's news, not yesterday's
+  if ((/\b(tonight|this night|so far|the night|today)\b/.test(t) || (G.bar && G.bar.countedDay === G.day && /\b(till|drawer|short|shortfall|count|slate|float)\b/.test(t)))
+      && !/\blast night\b/.test(t) && _atOwnBar() && _flag("barPaid")) {
+    const b = G.bar, n = NPCS[npc].name;
+    if (NPC_ROLES[npc] === "hostess") {
+      _say(_pickVary([
+        `"Tonight?" ${n} looks down the rail. "Tonight is my glass and your glass, boss. The money, ask the till."`,
+        `${n} counts the stools with her eyes. "Tonight is okay. How much is okay, the till knows — I only know who is thirsty."`,
+      ], "hostesstonight:" + npc));
+      return true;
+    }
+    const bits = [b.ownStock ? `your glass ฿${_num(b.ownStock)} off` : "", b.ownDrinks ? `your girls' drinks ฿${_num(b.ownDrinks)} in` : "",
+      b.guestDrinks ? `your company's drinks ฿${_num(b.guestDrinks)} in` : "", ...(b.eventNotes || [])].filter(Boolean);
+    const th = _thaiHouse(npc);
+    const sofar = !bits.length ? "" : th ? ` What I write so far that is yours: ${bits.join(", ")}.` : ` On the page so far that's yours: ${bits.join(", ")}.`;
+    if (b.countedDay === G.day) {
+      const sh = _tillShort(G.day), back = sh && sh.back ? Math.round(sh.amt * sh.back) : 0;
+      _say(!sh ? (th ? `"We count already. The drawer agree to the baht." ${n} closes the book.` : `"Counted already. Drawer agrees with the slips to the baht."`) + sofar
+        : th ? `"We count already. ฿${_num(sh.amt)} under the slips${back ? `, ฿${_num(back)} come back by morning` : ", and it is gone"}. The rest you see in the book tomorrow."${sofar}`
+        : `"Counted already. ฿${_num(sh.amt)} under the slips${back ? `, ฿${_num(back)} of it back by the morning` : ", and that's gone"}. The rest is in the book tomorrow."${sofar}`);
+      return true;
+    }
+    _say(_fmt(_pickVary(th ? [
+      `"Tonight is not finish, boss." {n} taps the drawer. "I count at close. Morning, the book tell you everything."{s}`,
+      `{n} doesn't look up. "Tonight I write, I don't add. Adding is after midnight — then you can (COUNT THE TILL) with me."{s}`,
+    ] : [
+      `"Night's not done, boss." {n} nods at the drawer. "Nobody adds a till with the till still open. Morning, BOOKS has the lot."{s}`,
+      `"Ask me after midnight," {n} says. "Then we (COUNT THE TILL) and it means something."{s}`,
+    ], "tonightsofar:" + npc + (th ? ":th" : "")), { n, s: sofar }));
     return true;
   }
   if (/\b(the book|book|till|float|drawer|last night|crate|delivery|deliveries|slate|tab|comp|costs?|short|the 400|400|receipts?|the money|money)\b/.test(t) &&
@@ -20857,6 +20904,9 @@ function _soi6Setup() {
   G.visited = {}; // fresh — the opening describe shows qv_room's full desc, then marks it visited
   _setFlag("hasWallet");  // you kept your card this time
   _setFlag("act1Done");   // no lost-wallet story in this mode
+  // the beach morning's pocket (a 3 a.m. Buakhao receipt, half a packet of noodles) belongs to
+  // a night this week never had; the condoms stay, and the opening says so
+  G.itemLoc.receipt = null; G.itemLoc.noodles = null;
 }
 
 // The Soi 6 week's framing — always reached just after the taxi drops you (which
@@ -20872,6 +20922,8 @@ function _soi6Opening() {
     "comes out of the ATM on the street (฿{fee} a pull, ฿{cap} a day) when you need it.",
     { bank: _num(SOI6_BANK), pocket: _num(SOI6_POCKET),
       fee: _atmFee(), cap: _num(_atmCap()) }));
+  if (G.condoms > 0) _say(_fmt("In the other pocket: your phone, and {n} condom{s} from the airport 7-Eleven — the one purchase of the trip you made sober. (INVENTORY)",
+    { n: G.condoms, s: G.condoms === 1 ? "" : "s" }), "dim");
   // the goal word carries its own pronunciation the first time — a cold player's
   // win condition was "written in a script I can't read" (Tyler, 2026-08-26)
   _say("Goal: สบายสบาย — say it “sabai sabai”: easy-easy, the good life. Get happy. Max out the week. ★", "win");

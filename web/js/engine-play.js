@@ -2303,15 +2303,15 @@ function _quizInput(input) {
   G.quizLast = { room: G.room, day: G.day, right, present: _npcsHere().slice() };   // the town can say how it went (Fintan, round 60) — and who was there to see it (Dagny, round 91)
   _say(`Final score: ${right} of 5.`, "room");
   if (right === 5) {
-    G.money += 500; G.quizWon = (G.quizWon || 0) + 500;
+    G.money += QUIZ_PRIZE; G.quizWon = (G.quizWon || 0) + QUIZ_PRIZE;
     _setFlag("quizChamp");
     _say("A PERFECT ROUND. The host demands a bow; the bar demands a speech; the " +
-      `board demands your name in chalk. First prize: ฿500 off the till. ` +
+      `board demands your name in chalk. First prize: ฿${_num(QUIZ_PRIZE)} off the till. ` +
       `(฿${_num(G.money)} in pocket.)`, "win");
     _addHappy(5);
   } else if (right === 4) {
-    G.money += 200; G.quizWon = (G.quizWon || 0) + 200;
-    _say(`Second place overall — ฿200 and a round of applause you'll remember ` +
+    G.money += QUIZ_RUNNER; G.quizWon = (G.quizWon || 0) + QUIZ_RUNNER;
+    _say(`Second place overall — ฿${_num(QUIZ_RUNNER)} and a round of applause you'll remember ` +
       `longer than the money. (฿${_num(G.money)}.)`, "win");
     _addHappy(3);
   } else if (right === 3) {

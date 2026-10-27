@@ -2961,7 +2961,9 @@ function _topicMiss(npcId) {
   const pool = house && she ? (_thaiHouse(npcId) ? _TOPIC_MISS_THAI : _TOPIC_MISS_HOUSE) : (_thaiVoice(npcId) && npcId !== "tan" && npcId !== "nont") ? _TOPIC_MISS_TH : _TOPIC_MISS_EN;   // Tan is fluent: "That one I don't know, na" was his (László, round 73)
   // a woman out of her own bar (on your arm in another) does not say "this bar, I know everything about" (Martin, round 85)
   const _away = NPCS[npcId].room && NPCS[npcId].room !== G.room;
-  const _pool = _away ? pool.filter(f => !/this bar|my side of the counter/.test(String(f))) : pool;
+  let _pool = _away ? pool.filter(f => !/this bar|my side of the counter/.test(String(f))) : pool;
+  // "the till, I know" is the till keeper's line — a mamasan beside a cashier does not claim the drawer
+  if (_tillKeeper(G.room) !== npcId) _pool = _pool.filter(f => !/The till, I know/.test(String(f)));
   let line = _pickVary(_pool.length ? _pool : pool, "miss:" + npcId)(n.name);   // not the same brush-off twice running from one mouth (Desmond, round 63)
   if (!she && pool === _TOPIC_MISS_TH) line = line.replace("her head", "his head").replace("the wrong girl", "the wrong man");
   if (she && NPC_ROLES[npcId] === "mamasan") line = line.replace("the wrong girl", "the wrong mama");   // Candy is nobody's girl (Margarethe, round 47)
@@ -3569,7 +3571,7 @@ function _describeRoom(full, forceFull) {
       const played = near.every(to => G.quizPlayed && G.quizPlayed[to]);
       _say(near.map(_barName).join(" and ") +
         (near.length > 1 ? " have" : " has") + " a chalkboard out: QUIZ NIGHT " +
-        "TONIGHT 8-10 — PRIZES. " +
+        "TONIGHT 8-10 — FIVE RIGHT WINS ฿" + _num(QUIZ_PRIZE) + ". " +
         (played ? "You've had your go tonight; the board has your team's chalk on it." :
           G.nightTurn >= 20 ? "It's on right now; walk in and you're playing." :
           "Starts at 20:00; walk in during and you're playing."), "dim");

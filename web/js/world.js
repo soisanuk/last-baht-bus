@@ -7158,6 +7158,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "Careful now. \"The app tell me the numbers — how many girl, how late, which one move where. I make the " +
         "numbers happen. Is a job. Good pay, and I do not ask what I do not need to know.\" The tablet glows. " +
         "\"You ask a great many questions, for a tourist.\"" },
+      { topic: "gavin", text: "\"Khun Gavin.\" The tablet does not lower. \"He comes, he looks at the room, he says lovely. " +
+        "The app tell me what he think before he say it.\" A precise nod. \"He is the paper's man. I am the room's.\"",
+        short: "\"Gavin is the paper's man. I am the room's. The app tell me what he think before he say it.\"" },
     ],
   },
   peung: {
@@ -10622,7 +10625,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "has decided, for reasons of her own, that she likes you.",
     dialogue: [
       // the shop's memory of you, in Waan's voice (round 57)
-      { when: (st, G) => !!(G.soc.special && G.soc.special["smile_massage"] === G.day), text: "Waan goes bashful all over again, which is somehow worse. \"You have my number, na.\" She tugs the curtain straight. \"Here, the sign. After work, no sign.\"", short: "\"You have my number. After work, no sign.\"" },
+      { when: (st, G) => !!(G.soc.special && G.soc.special["smile_massage"] === G.day && G.offShift && G.offShift.id === "waan"), text: "Waan goes bashful all over again, which is somehow worse. \"You have my number, na.\" She tugs the curtain straight. \"Here, the sign. After work, no sign.\"", short: "\"You have my number. After work, no sign.\"" },
       { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["smile_massage"] === G.day), text: "With the hour paid Waan sits cross-legged on the next bed and chatters. \"Roi Et, me. My little brother very clever — computer. University next year.\" She wiggles her oily fingers. \"These pay the book.\"", short: "\"Roi Et. My little brother's university — these hands pay the book.\"" },
       { when: (st, G) => !!(G.massageLog && G.massageLog["smile_massage"] && G.massageLog["smile_massage"].last < G.day), text: "\"Heee — you come back!\" Waan claps once, then goes shy about having clapped. \"I think maybe you forget me. Come, come.\"", short: "\"You come back! Come, come.\"" },
       { rom: "sawatdee ka",
@@ -10673,7 +10676,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman, late thirties, sun-browned, hair in a clip, pink massage polo, amused sideways smile.",
     desc: "Late thirties, sun-browned from a life nearer the beach than the shop admits, hair in a clip and a pink polo with the shop's name coming off it. Joom has the step at Sunset and the sideways smile of somebody who has heard every line a farang has and rates them out of ten.",
     dialogue: [
-      { when: (st, G) => !!(G.soc.special && G.soc.special["jomtien_soi_7_oil"] === G.day), text: "\"Shh.\" Joom taps the sticker on the mirror with one knuckle, amused. \"Here, massage. You have my number, na — after work I am not Sunset, I am Joom.\" She rates you, visibly, and keeps the score to herself.", short: "\"Here, massage. After work I am Joom.\"" },
+      { when: (st, G) => !!(G.soc.special && G.soc.special["jomtien_soi_7_oil"] === G.day && G.offShift && G.offShift.id === "joom"), text: "\"Shh.\" Joom taps the sticker on the mirror with one knuckle, amused. \"Here, massage. You have my number, na — after work I am not Sunset, I am Joom.\" She rates you, visibly, and keeps the score to herself.", short: "\"Here, massage. After work I am Joom.\"" },
       { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["jomtien_soi_7_oil"] === G.day), text: "Joom wipes her hands and sits on the next bed, now that the hour is paid for. \"Chanthaburi, me. Fruit — durian, mangosteen, my family have the stall forty year.\" A shrug at the pink light. \"Stall pay the fruit. Here pay the school.\"", short: "\"Chanthaburi. The stall pays the fruit; here pays the school.\"" },
       { when: (st, G) => !!(G.massageLog && G.massageLog["jomtien_soi_7_oil"] && G.massageLog["jomtien_soi_7_oil"].last < G.day), text: "\"You come back!\" Joom points at your shoulder like a teacher at a board. \"Six out of ten again. Beach Road undo all my work. Sit.\"", short: "\"Six out of ten again. Sit.\"" },
       { text: "\"Massage? Sit, sit. You walk Jomtien all day, I can see from here — the legs tell me.\" Joom looks you over, openly scoring. \"Oil is good one. Six out of ten, your shoulder. I make it eight.\"", short: "\"Sit. Oil. I make your shoulder eight out of ten.\"" },
@@ -10733,7 +10736,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman, early thirties, long hair tied low, soft calm face, white massage shirt, silver bracelet.",
     desc: "Early thirties, hair tied low, the calm of a shop that is quieter than the town ones and in less of a hurry. Orapin doesn't work the step; she waits inside under the pink light, and the customers who find her tend to come back.",
     dialogue: [
-      { when: (st, G) => !!(G.soc.special && G.soc.special["lotus_oil"] === G.day), text: "Orapin is quieter now, and nearer. \"You have my number, na.\" Not a question. \"Here, massage. After work, I am me.\" Somebody comes in through the beads, and she becomes massage again without moving.", short: "\"Here, massage. After work, I am me.\"" },
+      { when: (st, G) => !!(G.soc.special && G.soc.special["lotus_oil"] === G.day && G.offShift && G.offShift.id === "orapin"), text: "Orapin is quieter now, and nearer. \"You have my number, na.\" Not a question. \"Here, massage. After work, I am me.\" Somebody comes in through the beads, and she becomes massage again without moving.", short: "\"Here, massage. After work, I am me.\"" },
       { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["lotus_oil"] === G.day), text: "With the hour paid, Orapin sits on the edge of the next bed and actually talks. \"Phetchabun. Mountains, cold in December, strawberries.\" She turns the bracelet on her wrist. \"I come here after the divorce. Naklua is quiet. I like quiet.\"", short: "\"Phetchabun. I came after the divorce. I like quiet.\"" },
       { when: (st, G) => !!(G.massageLog && G.massageLog["lotus_oil"] && G.massageLog["lotus_oil"].last < G.day), text: "\"You come back.\" Orapin says it the way you say the weather came back. She is already warming the oil. \"Same shoulder. Same farang. Lie down.\"", short: "\"Same shoulder, same farang. Lie down.\"" },
       { text: "\"Sawatdee ka.\" Orapin doesn't get up; she finishes folding the towel first. \"You want massage? Oil. One hour. No hurry here — Naklua is not Beach Road.\" The smallest smile. \"Lie down when you ready.\"", short: "\"Oil, one hour, no hurry. Lie down when you ready.\"" },
@@ -10793,7 +10796,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Fresh-faced Thai woman of twenty-one, soft round face, two braids, pastel green polo, eyes lowered, shy embarrassed smile.",
     desc: "Early twenties, two braids and a round face, new enough that she still reads the price list off the wall before she says it. Oiy sits on the end stool at Papaya, where the Walking Street crowd thins out, and practises her English on anybody who stops.",
     dialogue: [
-      { when: (st, G) => !!(G.soc.special && G.soc.special["papaya_massage"] === G.day), text: "Oiy goes pink and very quiet. \"You have my number, na.\" A glance at the older girls on the stools. \"Here they tease me. After work, nobody tease.\"", short: "\"Here they tease me. After work, nobody tease.\"" },
+      { when: (st, G) => !!(G.soc.special && G.soc.special["papaya_massage"] === G.day && G.offShift && G.offShift.id === "oiy"), text: "Oiy goes pink and very quiet. \"You have my number, na.\" A glance at the older girls on the stools. \"Here they tease me. After work, nobody tease.\"", short: "\"Here they tease me. After work, nobody tease.\"" },
       { when: (st, G) => !!(G.soc.massaged && G.soc.massaged["papaya_massage"] === G.day), text: "With the hour paid, Oiy is braver. \"Kalasin. The dinosaurs — you know? Dinosaur bones, museum.\" She beams. \"I grow up with my grandmother. She teach me massage first, on her legs. She is very old and very strict.\"", short: "\"Kalasin — dinosaur bones. My grandmother taught me, on her legs.\"" },
       { when: (st, G) => !!(G.massageLog && G.massageLog["papaya_massage"] && G.massageLog["papaya_massage"].last < G.day), text: "\"You come back!\" Oiy is genuinely delighted, and then remembers to be professional. \"Oil, three hundred baht, one hour.\" A giggle. \"I know you know.\"", short: "\"You come back! Three hundred baht — I know you know.\"" },
       { text: "\"Hello — massage?\" Oiy checks the price list on the wall before she says it. \"Oil, three hundred baht, one hour.\" She seems pleased to have got it right. \"My English not so good. You speak slow, I understand.\"", short: "\"Oil, three hundred baht, one hour. Speak slow, I understand.\"" },
@@ -15646,6 +15649,8 @@ const QV_MENU = [
 // queen_vic was the one bar missing from this list — a British pub is the most
 // natural quiz venue in the game, and in soi6 mode _quizBars() already returns
 // it, so the content existed and the full game could not see it (round 22).
+// what the board pays: five right, and four right
+const QUIZ_PRIZE = 500, QUIZ_RUNNER = 200;
 const QUIZ_BARS = ["queen_vic", 
   "candy_bar", "candy_bar_2", "lucky_tiger", "silk_rose", "jasmine_garden",
   "gold_rush", "starlight_bar", "midnight_sun", "stinky_bar", "khao_talo_bar",
