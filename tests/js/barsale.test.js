@@ -23,8 +23,8 @@ const owner = (partner = "partnerCandy") => {
   Object.assign(G.bar, { room: "stinky_bar", cash: 8000, owed: 1500000, arrears: 0, rentOwed: 0, rentShort: 0 });
   G.room = "stinky_bar"; G.nightTurn = 30;
 };
-// a trailing month at a given net a night: the shape _barHealth reads
-const month = perNight => { G.bar.netLog = Array(30).fill(perNight); };
+// an ownership at a given season-read net a night: the shape _barHealth reads
+const month = perNight => { G.bar.perf = { n: 30, adj: perNight * 30 }; };
 const due = () => _barRent() + BAR_MONTHLY;
 const nightsAt = cover => month(Math.round(due() * cover / 30));
 const askJob = () => {   // a cash bar whose floor knows him, asked the real way
@@ -43,9 +43,23 @@ test("health reads the trailing month against rent and the note: under, even, pr
   G.bar.rentOwed = 0; G.bar.loan = { owed: 9000 }; assert.equal(_barHealth(), "even", "a bar owing Nont is not a bar making money");
 });
 
-test("the real night logs what a buyer reads", () => {
-  owner(); G.bar.netLog = []; _barNight(G.day);
-  assert.equal(G.bar.netLog.length, 1);
+test("the real night counts for the whole ownership, each night read for its season", () => {
+  // the same thirty nights, traded in the deep low and in peak: the wet ones read better than they took, the peak ones worse
+  const run30 = m0 => {
+    owner(); G.season0 = m0; G.bar.perf = null; G.money = 1e7;
+    const saved = _rand; let raw = 0;
+    try { _rand = () => 0.5;
+      for (let d = 1; d <= 30; d++) { G.day = d; G.bar.lastMonthDay = 1; G.bar.workedLast = true; G.bar.workedDay = d; G.bar.stoodTurns = 60;
+        G.bar.loan = null; const c0 = G.bar.cash; _barNight(d); raw += G.bar.cash - c0; }
+    } finally { _rand = saved; }
+    return { raw, read: _barMonthNet().month, n: G.bar.perf.n };
+  };
+  const wet = run30(8), peak = run30(11);   // September, December
+  assert.equal(wet.n, 30); assert.equal(peak.n, 30);
+  assert.ok(wet.read > wet.raw, `a wet month reads above what it took (${wet.read} vs ${wet.raw})`);
+  assert.ok(peak.read < peak.raw, `a peak month reads below what it took (${peak.read} vs ${peak.raw})`);
+  // and it is the whole ownership, not a window: a second month adds to the count
+  _barNight(31); assert.equal(G.bar.perf.n, 31);
 });
 
 test("SELL UP without the affair offers three buyers, and a question leaves it up", () => {

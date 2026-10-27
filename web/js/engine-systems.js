@@ -9768,11 +9768,11 @@ function _sellBarNo() {
 // and a man who sold a thing he helped build is a man who needs his help no longer; Bert takes the note over with Candy
 // behind him, pays what his bank book holds, and can only carry a bar that is standing up.
 function _barMonthNet() {
-  const b = G.bar || {}, log = (b.netLog || []).slice(-30);
+  const b = G.bar || {}, p = b.perf || { n: 0, adj: 0 };
   const due = _barRent() + ((b.owed || 0) > 0 ? BAR_MONTHLY : 0);
-  // nothing logged (a save from before the log): read as even rather than as a bar that never took a baht
-  const month = log.length ? Math.round(log.reduce((x, y) => x + y, 0) * 30 / log.length) : due;
-  return { month, due, nights: log.length };
+  // nothing counted (a save from before the tally): read as even rather than as a bar that never took a baht
+  const month = p.n ? Math.round(p.adj * 30 / p.n) : due;
+  return { month, due, nights: p.n };
 }
 function _barHealth() {
   const b = G.bar; if (!b) return "even";
@@ -9782,12 +9782,12 @@ function _barHealth() {
   return "even";
 }
 function _barHealthLine() {
-  const b = G.bar || {}, h = _barHealth(), { month, due } = _barMonthNet();
-  const against = `against ฿${_num(due)} of rent and note`;
-  if (h === "profit") return `making money — about ฿${_num(month)} a month over the counter, ${against}`;
-  if (h === "even") return `about breaking even — ฿${_num(month)} a month over the counter, ${against}`;
+  const b = G.bar || {}, h = _barHealth(), { month, due, nights } = _barMonthNet();
+  const against = `against ฿${_num(due)} of rent and note${nights ? ` — ${nights} night${nights === 1 ? "" : "s"} of yours, each read for its season` : ""}`;
+  if (h === "profit") return `making money — about ฿${_num(month)} over the counter in an ordinary month, ${against}`;
+  if (h === "even") return `about breaking even — ฿${_num(month)} over the counter in an ordinary month, ${against}`;
   const behind = (b.rentOwed || 0) > 0 ? ", with the rent behind" : (b.arrears || 0) >= BAR_ARREARS_BITE ? ", two months behind on the note" : "";
-  return `under water — ${month < 0 ? `losing ฿${_num(-month)} a month` : `฿${_num(month)} a month over the counter`}, ${against}${behind}`;
+  return `under water — ${month < 0 ? `losing ฿${_num(-month)} in an ordinary month` : `฿${_num(month)} over the counter in an ordinary month`}, ${against}${behind}`;
 }
 function _barDebts() {
   const b = G.bar || {};
@@ -10297,8 +10297,12 @@ function _barNight(settleDay) {
     if (sh) { const counted = b.countedDay === day; short = Math.min(take, counted ? Math.round(sh.amt * (1 - sh.back)) : sh.amt); shortWhy = counted ? sh.kind : "uncounted"; b.leakHabit = counted ? 0 : (b.leakHabit || 0) + 1; }
     else if (b.countedDay === day) b.leakHabit = 0; }
   const net = take - costs - garnish - short;
-  // what a buyer reads: the trading month before Nont's cut, which is the bar's debt and not its trade
-  (b.netLog = b.netLog || []).push(take - costs - short); if (b.netLog.length > 30) b.netLog.shift();
+  // what a buyer reads: every night of the ownership as a night of an ordinary month — the margin scaled from the season
+  // it traded in to the year's mean, the fixed costs left fixed, and Nont's cut left out (the bar's debt, not its trade) —
+  // so a wet month broken even counts for more than a peak month that only just made money
+  { const sm = _seasonTakingsOn(day), mean = SEASON_MULT.reduce((x, y) => x + y, 0) / SEASON_MULT.length;
+    const p = b.perf = b.perf || { n: 0, adj: 0 };
+    p.n++; p.adj += Math.round((take - cogs) * mean / sm) - nut - wages - proc - short; }
   b.cash += net;
   if (net > b.best) b.best = net;
   // a losing night is covered out of the till; when the till is empty the owner
@@ -11304,7 +11308,7 @@ function _doBooks() {
     if (_deals) _say(_fmt("Standing: the arrangements, {n} of them — ฿{p} a night off the take, about ฿{m} a month. Billed nightly, from the night after each was agreed.",
       { n: _deals, p: _num(_deals * SYN_JOB_NIGHT), m: _num(_deals * SYN_JOB_NIGHT * 30) }), "dim");
   }
-  if ((b.netLog || []).length >= 7) _say(`What a buyer would read: ${_barHealthLine()}.`, "dim");
+  if (((b.perf && b.perf.n) || 0) >= 7) _say(`What a buyer would read: ${_barHealthLine()}.`, "dim");
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
     up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
   if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");

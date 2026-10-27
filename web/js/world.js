@@ -15358,9 +15358,9 @@ const AFFAIR_GOOD_DAYS   = 60;     // two months before the door can even appear
 const AFFAIR_GOOD_STRAIN = 4;      // and only if you are carrying it lightly by then
 const AFFAIR_SALE        = 150000; // what walking away with the note cleared leaves you
 // SELLING THE BAR ON: the bar can be sold with or without the affair's door, to one of three buyers, and how it stood
-// when it went follows the seller to every floor that might hire a manager. Its health is the trailing month's net
-// over rent and the note (_barHealth): below BAR_SALE_UNDER it is under water, BAR_SALE_PROFIT or more with nothing
-// owing it makes money, and between it is about even. Pattaya Leisure clear every debt and pay BAR_SALE_PLG over them;
+// when it went follows the seller to every floor that might hire a manager. Its health is the whole ownership's net,
+// every night read for its season and put as an ordinary month, over rent and the note (_barHealth): below
+// BAR_SALE_UNDER it is under water, BAR_SALE_PROFIT or more with nothing owing it makes money, and between it is even. Pattaya Leisure clear every debt and pay BAR_SALE_PLG over them;
 // Tan's buyer pays the same and Tan keeps it as his fee; Bert takes the note over with Candy behind him and pays
 // BAR_SALE_BERT out of his bank book — less what he will not carry — and cannot take a bar that is under water.
 const BAR_SALE_UNDER   = 0.6, BAR_SALE_PROFIT = 1.2;
