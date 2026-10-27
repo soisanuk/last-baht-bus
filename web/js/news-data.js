@@ -8,39 +8,39 @@ var NEWS_FEED = [
     "d": "27 Oct 2026"
   },
   {
-    "t": "Nothing can keep tourists away from Pattaya’s irresistible beaches",
+    "t": "Pattaya officials fine crane operator for placing stabilizers on pavement",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Good Samaritan pulls British man from wreck after fiery Pattaya crash",
+    "t": "French tourist suffering from memory loss receives caring help from Pattaya Police",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Pattaya backs tourist police volunteers with new uniforms",
+    "t": "Pattaya Bikini Beach Race marks 10th anniversary with 5,000 runners on Halloween",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Pattaya’s long-stalled Bali Hai Pier toilets near November opening",
+    "t": "Pattaya could be where your best years begin",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Mother asks police to re-examine her daughter’s fall from Pattaya condo",
-    "s": "Thaiger",
-    "d": "26 Oct 2026"
+    "t": "Pattaya residents ask why illegal beach mat rentals keep returning daily",
+    "s": "Pattaya Mail",
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Pattaya explores pop-up night markets and art events to draw visitors",
+    "t": "Watch your step, wear your life jacket, Pattaya Tourist Police remind Koh Larn visitors",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Pattaya prepares to clamp, lift and fine motorcycles occupying public parking spaces",
+    "t": "Thailand sees more business closures despite growth in new registrations",
     "s": "Pattaya Mail",
-    "d": "26 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
     "t": "Slow visa processing disrupts travel to Thailand",
@@ -48,18 +48,18 @@ var NEWS_FEED = [
     "d": "27 Oct 2026"
   },
   {
-    "t": "B35 billion seized from Mauerberger network",
-    "s": "Bangkok Post",
-    "d": "27 Oct 2026"
-  },
-  {
-    "t": "Flash floods inundate several areas of Thailand’s Phuket island after heavy rain",
-    "s": "AP News",
+    "t": "Thai hotel sector faces rising closures after widespread losses",
+    "s": "Nation Thailand",
     "d": "26 Oct 2026"
   },
   {
     "t": "Israeli man arrested in Thailand on suspicion of drugging women, secretly filming sex",
     "s": "The Jerusalem Post",
+    "d": "26 Oct 2026"
+  },
+  {
+    "t": "Flash floods inundate several areas of Thailand’s Phuket island after heavy rain",
+    "s": "AP News",
     "d": "26 Oct 2026"
   },
   {
@@ -76,12 +76,12 @@ var NEWS_FEED = [
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-27","USD":33.77,"AUD":23.75,"GBP":45.01,"EUR":37.65};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-28","temp":27,"humid":76,"code":0,"hi":31,"rain":64};
+var WX_NOW = {"date":"2026-10-28","temp":26,"humid":80,"code":0,"hi":31,"rain":64};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4018,"date":"2026-10-27","baht":64250};
+var GOLD = {"usd":4062,"date":"2026-10-27","baht":64900};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":80453,"thb":2717713};
+var BTC = {"usd":80816,"thb":2729426};
