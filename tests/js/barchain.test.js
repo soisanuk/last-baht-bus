@@ -1156,6 +1156,7 @@ test("SELL UP through the door wins the game's biggest single happiness, and the
 
 test("selling cold — without her door — is a buyer, not the ending (barsale.test has the three)", () => {
   running();
+  G.bar.nights = BAR_SALE_MIN;
   out = []; doCommand("sell up");
   assert.equal(G.pendingChoice, "barsale", "the buyers, not the sea");
   assert.match(out.join("\n"), /PLG — Pattaya Leisure/);

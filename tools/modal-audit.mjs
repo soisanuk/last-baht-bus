@@ -121,7 +121,7 @@ const STATES = {
   partner:      { gate: "choice:partner", arm() { base(); G.stage = "expat"; _setFlag("expatLife"); G.room = "candy_bar"; G.pendingChoice = "partner"; G.partnerWho = "candy"; _partnerPrompt(); }, decline: "no" },
   affair:       { gate: "choice:affair", arm() { owner(); G.affair = null; G.nightTurn = 56; _affairAsk("manow"); }, decline: "step back" },
   affaircrisis: { gate: "choice:affaircrisis", arm() { owner(); G.nightTurn = 40; _affairCrisisAsk(AFFAIR_CRISES[0]); } },
-  barsale:      { gate: "choice:barsale", arm() { owner(); G.affair = null; _doSellBar(); }, decline: "no" },
+  barsale:      { gate: "choice:barsale", arm() { owner(); G.affair = null; G.bar.nights = BAR_SALE_MIN; _doSellBar(); }, decline: "no" },
   sellbar:      { gate: "choice:sellbar", arm() { owner(); _setFlag("affairOffered"); G.affair.since = G.day - 70; _doSellBar(); }, decline: "no" },
   // games
   c4:    { gate: "game:c4", arm() { base(); _startC4(); }, decline: "quit" },

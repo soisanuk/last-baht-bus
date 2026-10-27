@@ -15384,6 +15384,7 @@ const BAR_SALE_UNDER   = 0.6, BAR_SALE_PROFIT = 1.2;
 const BAR_SALE_PLG     = { profit: 300000, even: 150000, under: 50000 };
 const BAR_SALE_BERT    = { profit: 100000, even: 60000, under: 0 };
 const BAR_SALE_REP     = 4;      // the soi's opinion of a man who sold to the group
+const BAR_SALE_MIN     = 90;     // nights the bar has traded before anyone will look at buying it: three months of books (Mario, 2026-10-27)
 const BAR_SALE_COOL    = 60;     // days before a floor will have the seller of a bar about even manage hers
 const BAR_SALE_PREMIUM = 1.25;   // a manager who sold a bar that made money is paid this over the going rate
 const AFFAIR_SCAR_DAYS   = 10;     // how long the floor stays wrong after a break

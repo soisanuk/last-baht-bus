@@ -20,7 +20,7 @@ const owner = (partner = "partnerCandy") => {
   _setFlag("act1Done"); _setFlag("hasWallet"); quiet();
   G.stage = "expat"; for (const f of ["expatLife", "barPremises", "barLicence", "barPartner", "barPaid", "barOpen", partner]) _setFlag(f);
   G.day = 40; G.money = 5000; G.bank = 10000; G.known.tan = true; G.known.bert = true; G.talked = Object.assign(G.talked || {}, { tan: [], bert: [], doug: [], fast_eddy: [] });
-  Object.assign(G.bar, { room: "stinky_bar", cash: 8000, owed: 1500000, arrears: 0, rentOwed: 0, rentShort: 0 });
+  Object.assign(G.bar, { room: "stinky_bar", cash: 8000, owed: 1500000, arrears: 0, rentOwed: 0, rentShort: 0, nights: BAR_SALE_MIN });
   G.room = "stinky_bar"; G.nightTurn = 30;
 };
 // an ownership at a given season-read net a night: the shape _barHealth reads
@@ -66,7 +66,9 @@ test("SELL UP without the affair offers three buyers, and a question leaves it u
   owner(); nightsAt(1.5);
   const s = t("sell up");
   assert.equal(G.pendingChoice, "barsale");
-  assert.match(s, /PLG — Pattaya Leisure/); assert.match(s, /TAN — Tan finds a buyer/); assert.match(s, /BERT — Bert takes the note/);
+  assert.match(s, /PLG — Pattaya Leisure/); assert.match(s, /TAN — he finds a buyer/); assert.match(s, /BERT — ฿/);
+  // the offers and nothing else: no debts, no till, no season read on the screen (Mario, 2026-10-27)
+  assert.doesNotMatch(s, /owed|note|ordinary month|season|till/);
   t("what happens if i sell to plg?"); assert.equal(G.pendingChoice, "barsale"); assert.ok(_barOwned(), "a question commits nothing");
   t("no"); assert.equal(G.pendingChoice, null); assert.ok(_barOwned());
 });
@@ -74,7 +76,7 @@ test("SELL UP without the affair offers three buyers, and a question leaves it u
 test("Bert cannot carry a bar under water, and the prompt says why", () => {
   owner(); nightsAt(0.2);
   const s = t("sell up");
-  assert.doesNotMatch(s, /BERT — /); assert.match(s, /cannot carry a hole/);
+  assert.doesNotMatch(s, /BERT — /); assert.match(s, /Bert would, if it were standing up/);
   t("bert"); assert.equal(G.pendingChoice, "barsale", "BERT is not an answer when he cannot buy");
 });
 
@@ -100,7 +102,7 @@ test("Tan: debts cleared, no money but the till, his fee named, his standing dow
   const bank0 = G.bank, syn0 = _faction("syndicate");
   t("sell up"); const s = t("tan");
   assert.equal(G.bank - bank0, 8000, "the till only — what it fetched over the debts is Tan's");
-  assert.match(s, new RegExp("฿" + _num(BAR_SALE_PLG.profit)));
+  assert.match(s, /my fee/);
   assert.equal(G.barSale.fee, BAR_SALE_PLG.profit);
   assert.ok(_faction("syndicate") < syn0);
   assert.equal(_npcRoom("bert"), "stinky_bar");
@@ -113,12 +115,23 @@ test("Bert: the note his, Candy's name on the paper, what his bank book holds le
   t("sell up"); const s = t("bert");
   assert.ok(_flag("barToBert"));
   assert.equal(G.bank - bank0, 8000 + BAR_SALE_BERT.even - 5000);
-  assert.match(s, /Never had the deposit, and never had a fifty-one that wasn't hers/);
-  assert.match(s, /Tan tears his copy/, "Tan's fifty-one goes to Candy");
+  assert.match(s, /Never had the deposit/); assert.match(s, /her name on the fifty-one/);
   assert.ok(G.rep > rep0);
   G.room = "stinky_bar"; assert.match(t("talk to bert"), /Customer/);
   assert.doesNotMatch(t("ask bert about opening"), /Nothing changes/, "the opening night does not come round again");
   assert.ok(!_barOwned());
+});
+
+test("nobody buys a bar with less than three months of books; BOOKS says how long; her door waits for nothing", () => {
+  owner(); nightsAt(1.5); G.bar.nights = BAR_SALE_MIN - 10;
+  assert.match(t("sell up"), /three months/); assert.equal(G.pendingChoice, null); assert.ok(_barOwned());
+  assert.match(t("books"), /10 more nights/);
+  G.bar.nights = BAR_SALE_MIN; t("sell up"); assert.equal(G.pendingChoice, "barsale");
+});
+test("the sale says, in one sentence, how it was run", () => {
+  for (const [cover, re] of [[1.5, /You ran it well, and it sold like it\. Enjoy the money/], [1.0, /You kept it standing/], [0.2, /You ran it into the ground/]]) {
+    owner(); nightsAt(cover); t("sell up"); assert.match(t("plg"), re);
+  }
 });
 
 test("the owner's lines stop after a sale: BOOKS, WORK, DRAW, Bert's 'Boss', and SELL UP again", () => {
