@@ -3,12 +3,12 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Greek driver gets pickup stuck on Jomtien Beach as tide rises",
+    "t": "Pattaya motorcycle taxi drivers ditch blue vests for 550 baht refunds",
     "s": "Thaiger",
-    "d": "25 Oct 2026"
+    "d": "27 Oct 2026"
   },
   {
-    "t": "Pattaya backs tourist police volunteers with new uniforms",
+    "t": "Nothing can keep tourists away from Pattaya’s irresistible beaches",
     "s": "Pattaya Mail",
     "d": "26 Oct 2026"
   },
@@ -18,7 +18,7 @@ var NEWS_FEED = [
     "d": "26 Oct 2026"
   },
   {
-    "t": "Nothing can keep tourists away from Pattaya’s irresistible beaches",
+    "t": "Pattaya backs tourist police volunteers with new uniforms",
     "s": "Pattaya Mail",
     "d": "26 Oct 2026"
   },
@@ -43,8 +43,23 @@ var NEWS_FEED = [
     "d": "26 Oct 2026"
   },
   {
+    "t": "Dutch TV host reported missing in Thailand left country in 2025, police say",
+    "s": "Khaosod English",
+    "d": "24 Oct 2026"
+  },
+  {
+    "t": "King, Queen set to see requiem performance",
+    "s": "Bangkok Post",
+    "d": "27 Oct 2026"
+  },
+  {
     "t": "Flash floods inundate several areas of Thailand’s Phuket island after heavy rain",
     "s": "AP News",
+    "d": "26 Oct 2026"
+  },
+  {
+    "t": "Israeli man arrested in Thailand on suspicion of drugging women, secretly filming sex",
+    "s": "The Jerusalem Post",
     "d": "26 Oct 2026"
   },
   {
@@ -53,35 +68,20 @@ var NEWS_FEED = [
     "d": "26 Oct 2026"
   },
   {
-    "t": "Thailand receives IWI's ARBEL anti-drone solution",
-    "s": "The Jerusalem Post",
-    "d": "26 Oct 2026"
-  },
-  {
     "t": "Thailand welcomes US-Myanmar engagement, expects ASEAN talks on country's future",
     "s": "Reuters",
     "d": "23 Oct 2026"
-  },
-  {
-    "t": "CPI | Thailand Tightens Payment Rules to Ease Cash Crunch for Small Firms",
-    "s": "PYMNTS.com",
-    "d": "26 Oct 2026"
-  },
-  {
-    "t": "Flooding in Bangkok and 20 provinces",
-    "s": "Bangkok Post",
-    "d": "26 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-10-26","USD":33.81,"AUD":23.75,"GBP":45.12,"EUR":37.82};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-27","temp":25,"humid":91,"code":3,"hi":32,"rain":57};
+var WX_NOW = {"date":"2026-10-27","temp":32,"humid":56,"code":2,"hi":32,"rain":35};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4015,"date":"2026-10-26","baht":64200};
+var GOLD = {"usd":4012,"date":"2026-10-27","baht":64150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79826,"thb":2697483};
+var BTC = {"usd":79656,"thb":2686850};
