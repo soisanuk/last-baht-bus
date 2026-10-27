@@ -9694,6 +9694,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // selling, asked before it is done: he can find the buyer the group is not, and the price of that is said
+      { topic: "a buyer|buyer|buyers|sell|selling|sell the bar|selling the bar|sale|the sale|sell up|sell it|find a buyer", when: (st, G) => _barOwned() && !_barGone(),
+        text: "\"Sell?\" Tan turns his glass a quarter. \"Then there are two buyers, my friend, and the street is not one of them. The group pays the most. Or I make one call — a family in Chonburi, a nephew who wants a bar. He pays what the bar owes, all of it, and what it fetches over that is my fee. You walk away clean, with nothing in the hand.\" " +
+          "He lets that be what it is. \"And after, you do not need me for a bar, and we are both a little poorer. When you mean it, say it — SELL UP.\"",
+        short: "\"The group pays the most. Or I find a man from Chonburi: the debts go, what it fetches over them is my fee. (SELL UP)\"" },
+      // to the group: his fifty-one went across with it, and what that cost is his business
+      { topic: "the sale|sale|the bar|stinky|the stinky|the group|pattaya leisure|plg|fifty-one|fifty one|the fifty-one", when: (st, G) => _flag("barToPlg"),
+        text: "\"The group.\" Tan says it without weight. \"It was your bar to sell, and they pay the most. This is true.\" " +
+          "He turns his glass a quarter. \"You sold to the people I would not have. Next time you call me first — or you don't. Both are allowed.\"",
+        short: "\"It was your bar to sell, and they pay the most. Next time you call me first — or you don't.\"" },
       // the bar he found a buyer for: the fee was fair, and so is the distance
       { topic: "the sale|sale|the bar|stinky|the stinky|the fee|fee|chonburi|the buyer", when: (st, G) => _flag("barSoldOn") && !!G.barSale && G.barSale.via === "tan",
         text: "\"The bar.\" Tan turns his glass a quarter, the way he does. \"The man from Chonburi pays the old man, pays the landlord on the day, and his nephew learns. Bert pours. Nothing moved.\" " +
@@ -13254,10 +13264,13 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Well, look who it is.\" Bert chalks the cue. \"New owner's from Chonburi — his nephew does the books, Tan's man does the asking, " +
           "and I pour. Same as ever, bud. Only now I know who I'm pouring for even less.\"",
         short: "\"New owner's from Chonburi. Nephew does the books, Tan's man does the asking, I pour.\"" },
-      { topic: "pattaya leisure|plg|the group|gavin|the sale|selling|why", when: (st, G) => _flag("barToPlg"),
+      { topic: "pattaya leisure|plg|the group|gavin|the sale|selling|why|the stinky|stinky|stinky pinky|the bar|your bar|my bar|the old bar", when: (st, G) => _flag("barToPlg"),
         text: "\"I'm not going to tell you what you should have done.\" Bert picks at the Singha label. \"You had a bar and a number, and the number was theirs. " +
           "Doug put his pension in that logo. Twenty years I kept it off this end of the road.\" He drinks. \"Nobody did anything wrong, bud. That's the bit I can't forgive.\"",
         short: "\"Doug put his pension in that logo. Nobody did anything wrong, bud — that's the bit I can't forgive.\"" },
+      { topic: "job|a job|work|manager|a manager|managing", when: (st, G) => _flag("barToPlg"),
+        text: "\"Me?\" Bert laughs into the Singha. \"I'm a customer, bud. Same as you. The Vic's got a manager, and he's not me, and he's not hiring a man who sold a bar to the group.\" He turns the bottle. \"Ask a mamasan. Ask one whose girl knows you. That's how it goes on this end of the road.\"",
+        short: "\"I'm a customer, bud. Ask a mamasan whose girl knows you.\"" },
       { topic: "the sale|selling|the bar|this bar|your bar|stinky|the stinky|candy|the paper|the note", when: (st, G) => _flag("barToBert"),
         text: "\"Mine.\" He lets the word sit on the bar a moment. \"Hers on paper, which I swore I'd never have, and the old man's note in my name every thirty days, which I've watched you sweat. " +
           "Turns out the deposit was the whole wall, bud. You climbed it; I just walked through the gap.\" He sets the chalk down square. \"Don't make a thing of it. I'll make a thing of it.\"",
@@ -13857,7 +13870,11 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // round 75 (Ruairi): a man who has met Tan asks the barman about him, and every Tan node was the partner's
       { topic: "tan|the driver|your driver|taxi|the taxi man", text: "\"Tan? The driver.\" Bert sets the glass down to think about it, which he does not do for most names. \"Never been in here, far as I know — and I'd know. Which is how you can tell he's smart. But there isn't a stool on this soi he couldn't find you, or a man on one he couldn't tell you about.\" He goes back to the glass. \"Ask him anything, bud. He'll tell you it's nothing. It's never nothing.\"", short: "\"Tan? Never been in here. Ask him anything — he'll say it's nothing. It's never nothing.\"" },
       // round 76 (Stelian): the bar is the owner's now, and Bert's "this bar?" speech was the buyer's
-      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], when: (st, G) => !_barGone(), text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the till, you turn up. Better than most.\"" },
+      // selling, asked of the man who would buy it if he could: who pays what, said without numbers he cannot know
+      { topic: "sell|selling|sell the bar|selling the bar|sell up|buy the bar|buying the bar|buyer|a buyer|the sale|what's it worth|worth|how much is the bar worth", req: ["barPaid"], when: (st, G) => _barOwned() && !_barGone(),
+        text: "\"Sell?\" Bert sets the cue across his knees. \"The group'd pay the most — they've wanted this corner two years. Tan knows people who aren't the group; his way you walk clean, and he keeps what's over. And me—\" he looks down the bar to where Candy is not \"—I never had the deposit. You paid it. If it's standing up when you go, I'd carry the old man's note.\" He chalks the tip. \"SELL UP when you mean it, boss. You'll get the numbers in writing.\"",
+        short: "\"The group pays most. Tan's way you walk clean. Me — if it's standing up, I'd carry the note. (SELL UP)\"" },
+      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], when: (st, G) => !_barGone(), text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the rail — Cake keeps the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the rail, Cake keeps the till, you turn up. Better than most.\"" },
     ],
   },
 
@@ -15281,7 +15298,7 @@ const WORK_NIGHTS = [
     id: "runner", weight: 2, happy: -1, money: -1800,
     text: "A table of six runs a tab all evening and then simply isn't there. " +
       "Bert saw it coming twenty minutes out and still couldn't stop it without " +
-      "making a scene in front of forty customers, which is exactly what they " +
+      "making a scene in front of the whole rail, which is exactly what they " +
       "were counting on.",
   },
 ];

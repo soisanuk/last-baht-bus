@@ -1208,7 +1208,7 @@ function _licenceOf(room) {
   const fmt = n => "\u0e3f" + _num(n);
   const samson = [...(NPCS.bill && NPCS.bill.bars || []), ...(NPCS.wimon && NPCS.wimon.bars || []), "hyper"];
   const nom = _licenceNominee(room);
-  if (room === "stinky_bar") {
+  if (room === "stinky_bar" && !_flag("barToPlg")) {   // sold to the group, it is on the group's paper (below)
     if (_barOwned() && G.bar && room === G.bar.room) {
       const tan = _flag("partnerTan");
       return { kind: "company", name: "Stinky Pinky Beach Bar Co., Ltd.", capital: 2000000, nominee: tan ? "Thanakorn Srisawat" : "Kanokwan Pholsiri",
@@ -1217,7 +1217,7 @@ function _licenceOf(room) {
     return { kind: "company", name: "Stinky Pinky Co., Ltd.", capital: 2000000, nominee: nom,
       line: `Stinky Pinky Co., Ltd., capital ${fmt(2000000)} — one work permit's worth, an American's, issued years ago to the owner Bert talks about and has not seen behind this rail since his heart started arguing with him. On 51.00 of it, in smaller type, ${nom.toUpperCase()}.` };
   }
-  if (_PLG_ROOMS.includes(room) || r.owner === "plg" || r.plg) return { kind: "company", name: "Pattaya Leisure (Holdings) Co., Ltd.", capital: 4000000, nominee: null, line: `Pattaya Leisure (Holdings) Co., Ltd., capital ${fmt(4000000)} — two permits' worth. The group's own name, which is not on the sign either, and the same paper in every room the group runs: one company, so that the whole of it opens or shuts at once.` };
+  if (_PLG_ROOMS.includes(room) || r.owner === "plg" || r.plg || (room === "stinky_bar" && _flag("barToPlg"))) return { kind: "company", name: "Pattaya Leisure (Holdings) Co., Ltd.", capital: 4000000, nominee: null, line: `Pattaya Leisure (Holdings) Co., Ltd., capital ${fmt(4000000)} — two permits' worth. The group's own name, which is not on the sign either, and the same paper in every room the group runs: one company, so that the whole of it opens or shuts at once.` };
   if (samson.includes(room)) return { kind: "company", name: "Samson Brothers Hospitality Co., Ltd.", capital: 4000000, nominee: null, line: `Samson Brothers Hospitality Co., Ltd., capital ${fmt(4000000)}: two work permits, one of them Bill's. Three beer bars, three clubs and a go-go on one company — the brothers bought the paperwork once and have been adding rooms to it since.` };
   if (room === "white_rabbit") return { kind: "company", name: "White Rabbit Naklua Co., Ltd.", capital: 2000000, nominee: NPCS.nuan ? NPCS.nuan.name : nom, line: `White Rabbit Naklua Co., Ltd., capital ${fmt(2000000)} — one permit, the manager's, so Eddy is on the paper as the one farang this room is allowed. On 51.00 of it: ${NPCS.nuan ? NPCS.nuan.name.toUpperCase() : nom.toUpperCase()}, which is what "he signs the papers" meant, word for word.` };
   if (room === "queen_vic") return { kind: "company", name: "Mind The Step Co., Ltd.", capital: 2000000, nominee: nom, line: `Mind The Step Co., Ltd., capital ${fmt(2000000)}, one permit — the pub's, since a farang pulls the pints. Somebody on this rail named the company, and the same somebody signs a column the same way.` };
@@ -3252,6 +3252,19 @@ function _revisitPick(pool, room) {
 }
 // A SENTENCE OF THE PAINT THAT SEATS THE WOMAN ON YOUR ARM is dropped while she is on it (Hal, round 96: "Kwan folds
 // napkins into cranes at the end of the rail" with Kwan listed "(with you)"). Her name, whole-word; the rest of the paint stands.
+const _STINKY_PLG_REVISIT = [
+  "Back into the Stinky Pinky — lime and cue chalk still, the trophies still three deep, and a card machine on the counter now.",
+  "The pool bar takes you back. The girl in the company polo on the door smiles the company smile; the end stool has a different man on it.",
+  "The Stinky again, the group's now: the same skunk over the door, a new menu in a plastic sleeve, the table brushed like a green.",
+  "You step back into the crack of cue balls. Across the junction the Blue Dog's rail faces the bay. The end stool is somebody else's.",
+];
+function _stinkySoldDesc(via, desc) {
+  const d = String(desc);
+  if (via === "bert") return d.replace("Bert — the manager — holds court", "Bert — the owner now, Candy's name on the fifty-one — holds court");
+  return d.replace(/^An American-run beer bar/, "A Pattaya Leisure beer bar now")
+    .replace(/Bert — the manager — holds court from the end stool with a bottomless Singha and opinions on everyone's break\./, "A girl in a company polo works the door, a card machine sits where Bert's chalk lived, and the end stool has nobody holding court from it.")
+    .replace("half of Bert's regulars ducked in here to dodge it once and never left", "half of the old regulars ducked in here to dodge it once and stayed, until the group bought it");
+}
 function _dropCompanionLines(text) {
   const ids = (G && G.party && G.party.ids) || [];
   if (!ids.length || typeof text !== "string") return text;
@@ -3319,9 +3332,12 @@ function _describeRoom(full, forceFull) {
   // (Mario, 2026-09-04): a man who stays out to dawn every night reads it more
   // often than he reads the daytime paint.
   const late = r.lateDesc && G.nightTurn >= _lateTurn(G.room);
-  if (full) _say(_dropCompanionLines(late ? (Array.isArray(r.lateDesc) ? _pickVary(r.lateDesc, "late:" + G.room) : r.lateDesc)
-    : (!firstTime && !forceFull && r.revisit ? _revisitPick(_atOwnBar() ? _OWNER_REVISIT : r.revisit, G.room)
-      : (_atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : r.desc))));   // owned, it is not "American-run" (Marta, round 63)
+  // a bar you sold is painted as its buyer runs it: the group's has no Bert in it, Bert's has him as its owner
+  const sold = G.room === "stinky_bar" && G.barSale && G.barSale.via !== "tan" ? G.barSale.via : null;
+  const lateP = sold === "plg" && Array.isArray(r.lateDesc) ? r.lateDesc.filter(l => !/\bBert\b/.test(l)) : r.lateDesc;
+  if (full) _say(_dropCompanionLines(late && lateP && lateP.length ? (Array.isArray(lateP) ? _pickVary(lateP, "late:" + G.room + (sold || "")) : lateP)
+    : (!firstTime && !forceFull && r.revisit ? _revisitPick(_atOwnBar() ? _OWNER_REVISIT : sold === "plg" ? _STINKY_PLG_REVISIT : r.revisit, G.room)
+      : (_atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : sold ? _stinkySoldDesc(sold, r.desc) : r.desc))));   // owned, it is not "American-run" (Marta, round 63)
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {
     // An item may carry a `sight:` line that places it in the scene ("...at the

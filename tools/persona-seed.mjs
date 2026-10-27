@@ -231,6 +231,28 @@ function remoteSeed() {
   if (G.month) G.month.spent = Math.max(G.month.spent || 0, G.month.rent || 0);   // the lease was signed outside any ledger: its month is spent, or the clamp eats the next nights (Desmond, round 106)
   return serializeGame();
 }
+// steady (round 109): a full-game tourist on his third night, already Nan's farang at the Candy Bar (her-farang:
+// she squares the fine, her time is PAY HER / DON'T PAY), and a regular at a go-go and a Soi 6 bar, so the
+// take-out price can be read across venues and hours
+function steadySeed() {
+  newGame();
+  G.player = { origin: "monger", personality: "charmer", orientation: "straight", said: {}, lang: "en", teetotal: false };
+  G.season0 = 1; G.stage = "vacation"; _setFlag("act1Done"); _setFlag("hasWallet"); G.day = 3;
+  for (const [id, n] of [["nan", 14], ["mind", 8], ["joy", 8]]) {
+    G.soc.drinks[id] = n; G.phone.contacts[id] = true; G.talked[id] = [0];
+    (G.metDay = G.metDay || {})[id] = 1; (G.seenDay = G.seenDay || {})[id] = G.day - 1;
+  }
+  G.money = 30000; G.bank = 120000; G.battery = 100; G.room = _hotelRoomId(); G.nightTurn = 0;
+  G.hunger = 10; G.thirst = 10; _setFlag("roomSafeOpened"); G.act1SafeDue = false; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
+// month (round 109): the Soi 6 man who cancelled the ticket on a redundancy pot big enough for a condo — no
+// roof of his own yet, no job, the thirty-day clock at its start
+function monthSeed() {
+  stayedSeed("redundancy", 8000, 90000);
+  G.room = "qv_room"; G.nightTurn = 0; G.hunger = 10; G.thirst = 10; quiet(); G.encDone = {}; _nightSnapshot();
+  return serializeGame();
+}
 function reload(blob) { newGame(); deserializeGame(blob); }
 
 // ── build ──
@@ -256,6 +278,8 @@ const seeds = {
   hunter: hunterSeed(),
   bench: benchSeed(),
   remote: remoteSeed(),
+  steady: steadySeed(),
+  month: monthSeed(),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -376,6 +400,19 @@ try {
   const re = { watch: /Jade Lounge/.test(rw), bell: G.bank < b0, tenant: G.hotel === "condo" };
   console.log("remote:", JSON.stringify(re));
   if (!re.watch || !re.bell || !re.tenant) throw new Error("remote seed cannot reach its drive");
+  // Steady: Nan's barfine stops at her time, and DON'T PAY sets her refusal
+  reload(seeds.steady); G.nightTurn = 30; G.room = _npcRoom("nan"); out = []; doCommand("barfine nan");
+  const st = { here: _npcsHere().includes("nan"), tier: _bondTier("nan") };
+  if (G.pendingBf && !G.pendingBf.herPay) doCommand("short time");
+  st.herPay = !!(G.pendingBf && G.pendingBf.herPay); doCommand("don't pay");
+  st.refuse = !!(G.care && G.care.nan && G.care.nan.refuse);
+  console.log("steady:", JSON.stringify(st));
+  if (!st.here || st.tier < 3 || !st.herPay || !st.refuse) throw new Error("steady seed cannot reach its drive");
+  // Month: an expat on a pot who can afford the condo's lease
+  reload(seeds.month); G.room = "pratumnak_soi5"; G.nightTurn = 2; out = []; doCommand("rent a condo"); doCommand("rent a condo");
+  const mo = { stage: G.stage, pot: _originMoney(G.player.origin).kind === "pot", condo: G.hotel === "condo", job: !!G.job };
+  console.log("month:", JSON.stringify(mo));
+  if (mo.stage !== "expat" || !mo.pot || !mo.condo || mo.job) throw new Error("month seed cannot reach its drive");
 } finally { _rand = saved; }
 
 for (const [name, blob] of Object.entries(seeds)) {

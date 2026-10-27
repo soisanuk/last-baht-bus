@@ -1021,11 +1021,8 @@ function _doBarfine(arg) {
     return;
   }
   // the night she gave you for nothing: the next ask is hers to refuse, and she does, once
-  if (G.care && G.care[id] && G.care[id].refuse) {
-    delete G.care[id].refuse;
-    _say(_fmt(_pickVary(_CARE_REFUSE, "carerefuse"), { n: name }));
-    return;
-  }
+  // her refusal holds for the night it is said in: one drink later is the same night
+  if (G.care && G.care[id] && (G.care[id].refuse || G.care[id].refuseDay === G.day)) { const c = G.care[id]; delete c.refuse; c.refuseDay = G.day; _say(_fmt(_pickVary(_CARE_REFUSE, "carerefuse"), { n: name })); return; }
   if (bertAlly) {
     _say(`Word's got round that you did right by Bert, and the whole rail is a degree ` +
       `warmer for it. ${name} doesn't make you work for the yes — Bert's friends drink ` +
@@ -1282,7 +1279,7 @@ function _bfRefusalSay(id, r) {
       "shoulder, all smiles and steel: “This one very popular, she bring me many " +
       "customer. You want? Twenty-five lady drink, five thousand bar fine.” It is " +
       "not a price. It is a NO with a number on it. (Come back after midnight, when " +
-      "the floor is thin — she'll be cheaper, but never cheap.)",
+      "the floor is thin and the mama will let her go — at her own price, which is never cheap.)",
     till: NPCS[id] && NPCS[id].owner
       ? `${name} looks along her own bar — eight stools, a till, an ice bin and nobody else ` +
         `behind any of it — and the answer is in the look before she says it. “And who stands ` +
@@ -1900,7 +1897,7 @@ function _bfPrompt(fresh) {
   // (Lionel, round 36) — it is the draw's midnight pricing; say so
   if (id && _isDraw(id) && G.nightTurn >= 60)
     _say(`(${NPCS[id].name} is this bar's draw — the mama gives no midnight discount on her, and after ` +
-      "twelve the fine is the same whichever way you take her.)", "dim");
+      "twelve the bar's fine is the same whichever way you take her — her own money is not.)", "dim");
   if (G.pendingBf.herMoney)
     _say("(No bar fine past midnight — the book is closed, and the mama wants nothing. " +
       "What follows is HER money, and she names it herself.)", "dim");
@@ -1991,7 +1988,7 @@ function _bfResolve(kind) {
   // her farang: at the top bond tier she squares the fine with the mamasan herself — you
   // stopped being a customer to her. Her time is not the bar's to waive: the night off her
   // stool is hers, and you pay her for it or you don't (see _careUnpaid).
-  let offBook = false;
+  let offBook = false, unpaid = false;
   if (_bondTier(id) >= 3 && price > 0 && _careOk(id)) {
     const hp = bfWas.herPay;
     if (!hp) {
@@ -2008,10 +2005,11 @@ function _bfResolve(kind) {
     price = 0;
     if (hp.paid) {
       G.money -= hp.fee;
+      _giftNote(id, { kind: "time", amt: hp.fee });
       _carePaid(id);
       _say(_fmt(_pickVary(_HER_TIME_PAID, "hertimepaid") + " (-฿{p}, ฿{m} left.)", { n: name, p: _num(hp.fee), m: _num(G.money) }), "win");
     } else {
-      _careUnpaid(id);
+      _careUnpaid(id); unpaid = true;
       _say(_fmt(_pickVary(_HER_TIME_UNPAID, "hertimeunpaid"), { n: name }), "dim");
     }
   }
@@ -2035,6 +2033,8 @@ function _bfResolve(kind) {
     return;
   }
   G.money -= price;
+  // her share of it went into her hand, and the morning ledger says so beside the tips
+  { const her = Math.min(price, _herFee(kind !== "st")); if (her > 0) _giftNote(id, { kind: "time", amt: her }); }
   // who you left with is written once the deal is struck — before, a long time you could not pay for was remembered (review 2026-10-25)
   if (kind === "lt" || kind === "party") G.soc.leftFrom = G.room;
   // who you went with, and how — so she remembers the night next time (Martin, round 85: a woman two
@@ -2145,10 +2145,10 @@ function _bfResolve(kind) {
         : "short walk to a short-time hotel with a ceiling fan";
       _say((price ? (price > _herFee(false) ? `฿${_num(price - _herFee(false))} to the ledger for the bar's fine, ฿${_num(_herFee(false))} into ${name}'s own hand, and a` : `฿${_num(price)} into ${name}'s own hand, and a`) : "A") +
         ` ${motel} doing its slow count over the ` +
-        `proceedings. ${name} is businesslike and cheerful and gone within the hour — a kiss at ` +
-        `the door, and she's back on her stool at ${bar} before the song you left on has come round again. You amble ` +
-        `back a few minutes behind her, and the night picks you up where it left off. (฿${_num(G.money)} left.)`, "win");
-      _conquestHappy(5, id);
+        `proceedings. ${name} is ${unpaid ? "quiet, and kind about it, and gone within the hour — no kiss at the door this time" : "businesslike and cheerful and gone within the hour — a kiss at the door"}, ` +
+        `and she's back on her stool at ${bar} before the song you left on has come round again. You amble ` +
+        `back a few minutes behind her, and the night picks you up where it left off. (฿${_num(G.money)} left.)`, unpaid ? "dim" : "win");
+      _conquestHappy(unpaid ? 2 : 5, id);
       G.offstage = true; // the hour away — the bar's ambient (saleng, etc.) isn't your scene
       // cap the skip so a late-night ST doesn't fast-forward you PAST dawn into an
       // involuntary rough wake — you got the short time; keep your last turns to get home.
@@ -6259,7 +6259,7 @@ function _careOk(id) { return !(G.care && G.care[id] && G.care[id].cold); }
 function _careRec(id) { return ((G.care = G.care || {})[id] = G.care[id] || { unpaid: 0, cold: false }); }
 function _careUnpaid(id) {
   const c = _careRec(id);
-  c.unpaid = (c.unpaid || 0) + 1; c.refuse = true;
+  c.unpaid = (c.unpaid || 0) + 1; c.refuse = true; c.unpaidDay = G.day;
   G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 2);
   if (c.unpaid >= CARE_UNPAID_COLD && !c.cold) { c.cold = true; _careDeliver(id); }
 }
@@ -6289,6 +6289,12 @@ const _CARE_THANKS = [   // money that answers it, by transfer or across the rai
   "🙏🙏 thank you na. not for the money. for that you listen. now is square",
   "💕 ok. now i not feel strange. you good man. jing jing",
 ];
+const _CARE_UNPAID_TEXT = [   // the morning after a night off her stool you did not pay for — said once, not a bill
+  "last night ok na 🙂 but my time not free. i lose one night money. next time you remember",
+  "good morning. last night i not work for you, i just go. mama ask me why. i say nothing 🙂",
+  "you sleep good? me ok. only one thing — my night is my money. you know na",
+  "morning na. i not angry. only i count, same every girl. 🙂",
+];
 const _CARE_COLD = [
   "ok na. up to you. 🙂",
   "mai pen rai. i understand. 🙂",
@@ -6306,10 +6312,14 @@ function _careDeliver(id) {
     _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
   } else c.pending = "cold";
 }
-function _careTick() {   // an old save's open ask still runs out: CARE_DAYS of silence, then the cold
+function _careTick() {   // the morning after a night she gave you for nothing, she says so once; an old save's open ask still runs out
   if (!G.care) return;
   for (const id of Object.keys(G.care)) {
     const c = G.care[id];
+    if (c && NPCS[id] && c.unpaidDay != null && G.day > c.unpaidDay && !c.cold && c.toldDay !== c.unpaidDay && !_maiDee(id)) {
+      c.toldDay = c.unpaidDay;
+      if (G.phone.contacts[id] && G.battery > 0) { _pushMsg(id, _pickVary(_CARE_UNPAID_TEXT, "careunpaidtext:" + id)); _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim"); }
+    }
     if (!c || !NPCS[id] || _maiDee(id) || c.asked == null || G.day - c.asked < CARE_DAYS) continue;
     c.cold = true; c.asked = null;
     G.soc.drinks[id] = Math.max(0, (G.soc.drinks[id] || 0) - 3);
@@ -6332,7 +6342,7 @@ function _careSent(id, amt) {
   const c = G.care && G.care[id];
   if (!c || (c.asked == null && !c.cold && !c.refuse) || amt < _herFee(true, NPCS[id] && NPCS[id].room)) return false;
   const was = c.cold;
-  c.asked = null; c.cold = false; c.unpaid = 0; delete c.refuse; delete c.pending;
+  c.asked = null; c.cold = false; c.unpaid = 0; delete c.refuse; delete c.refuseDay; delete c.pending;
   _addBond(id, was ? 1 : 2);
   return true;
 }
@@ -8265,7 +8275,9 @@ function _barOwnerNudge() {
   if (G.bar.workedDay === G.day) return;          // already on tonight
   if (G.bar.nudgeDay === G.day) return;           // once a night
   G.bar.nudgeDay = G.day;
-  _say(_pickVary(_BAR_OWNER_NUDGE, "barowner"), "dim");
+  // "the takings say so" is a claim about a bar he has been standing: a man who stands it most nights is not told otherwise
+  const b = G.bar, stoodMost = (b.nights || 0) >= 2 && (b.worked || 0) * 2 >= (b.nights || 0);
+  _say(_pickVary(stoodMost ? _BAR_OWNER_NUDGE.filter(l => !/takings say so/.test(l)) : _BAR_OWNER_NUDGE, "barowner" + (stoodMost ? ":stood" : "")), "dim");
 }
 
 function _doWork() {
@@ -9882,14 +9894,14 @@ function _barSaleDo(via) {
   const cleared = [d.arrears ? `฿${_num(d.arrears)} of arrears` : "", d.rent ? `฿${_num(d.rent)} of rent` : "", d.nont ? `Nont's ฿${_num(d.nont)}` : ""].filter(Boolean);
   _say("");
   if (via === "plg") {
-    _say(`Gavin is at the door by four, which tells you how long the paper has been ready: the golf shirt, a lager he does not drink, a folder with the bar's name already typed on the tab. The lawyer is the group's lawyer and the figure is the figure — the old man's note settled to the baht${cleared.length ? `, ${cleared.join(", ")} with it` : ""}, and ฿${_num(paid)} over that into your account by the Friday. "Laurent always said you were the only one who made him wait," Gavin says, and means it kindly.`, "alert");
+    _say(`Gavin is at the door before you have finished the call, which tells you how long the paper has been ready: the golf shirt, a lager he does not drink, a folder with the bar's name already typed on the tab. The lawyer is the group's lawyer and the figure is the figure — the old man's note settled to the baht${cleared.length ? `, ${cleared.join(", ")} with it` : ""}, and ฿${_num(paid)} over that into your account while he is still finishing the lager${tanPartner ? `. Tan's fifty-one goes across to the group's own Thai name on the same paper; Tan signs where the lawyer points and does not read it, and the fee for that is between him and Gavin` : ""}. "Laurent always said you were the only one who made him wait," Gavin says, and means it kindly.`, "alert");
     _say("The sign stays, because the name is worth something. The menu changes, a card machine goes on the counter, a girl in a company polo goes on the door, and the stools keep their dents. Bert carries the cue out under his arm the same week and does not look at you while he does it.", "alert");
   } else if (via === "tan") {
     _say(`Tan does it the way he does everything: one {{phone}} call you do not hear, one table where you sit and do not speak, and a man from Chonburi with a family company and a nephew who wants a bar. The old man's note is settled${cleared.length ? `, and ${cleared.join(", ")}` : ""}, the landlord is told by somebody he listens to, and the Stinky opens the next night exactly as it was — Bert behind the rail, the girls on their stools, nothing about the room changed.`, "alert");
     _say(`"What it fetched over what it owed — ฿${_num(fee)} — is the fee," Tan says at the car, and does not dress it up. "This is fair." He opens the door, and does not get in. "A man who sells a thing I helped him build, my friend, does not need my help any more. This is also fair."`, "alert");
   } else {
     _say(`Bert hears you out with the cue across his knees, and is quiet long enough that you wonder. "Twenty-two years I wanted my name on one of these, bud. Never had the deposit, and never had a fifty-one that wasn't hers." He looks down the bar to where Candy is not, and is. She could have bought it any year she liked; she never would, because it was the one thing he wanted that was not hers. "You paid the deposit. The note I can carry. It's a month — I've carried months."`, "alert");
-    _say(`Candy comes in at nine and does the paper in an afternoon: the old man's note in Bert's name, her name on the fifty-one${tanPartner ? " where Tan's was — Tan tears his copy once, cleanly, and says a man leaving does not owe" : ""}, and ฿${_num(paid)} out of a Bangkok Bank book Bert has kept since before the flood. "Her name over my door after all," Bert says on his first night, and is not unhappy about it. "But it's my till."`, "win");
+    _say(`Candy comes in the next day and does the paper in an afternoon: the old man's note in Bert's name, her name on the fifty-one${tanPartner ? " where Tan's was — Tan tears his copy once, cleanly, and says a man leaving does not owe" : ""}, and ฿${_num(paid)} out of a Bangkok Bank book Bert has kept since before the flood. "Her name over my door after all," Bert says on his first night, and is not unhappy about it. "But it's my till."`, "win");
   }
   if (till) { _bankIn(till); (G.bankNotes = G.bankNotes || []).push("the Stinky's till"); }
   if (paid) { _bankIn(paid); (G.bankNotes = G.bankNotes || []).push(via === "plg" ? "Pattaya Leisure, for the Stinky" : "Bert, for the Stinky"); }
@@ -10343,7 +10355,9 @@ function _barNight(settleDay) {
   if (b.loan && b.loan.owed > 0) { garnish = Math.min(b.loan.owed, Math.round(take * NONT_LOAN_GARNISH)); b.loan.owed -= garnish; _loanPrincipal(b.loan, garnish, "nontGarnishPrin"); if (b.loan.owed <= 0) b.loan = null; }   // the till pays principal first too, so a pocket REPAY later carries the interest (the money audit, C)
   // the count: a short the drawer took tonight, less what a count at close got back; one nobody counted makes the next likelier
   let short = 0, shortWhy = "";
-  { const sh = _tillShort(day);
+  // read once, before workedLast is consumed below: a second read sees the night as unstood and can find a short the count did not
+  const tillSh = _tillShort(day);
+  { const sh = tillSh;
     if (sh) { const counted = b.countedDay === day; short = Math.min(take, counted ? Math.round(sh.amt * (1 - sh.back)) : sh.amt); shortWhy = counted ? sh.kind : "uncounted"; b.leakHabit = counted ? 0 : (b.leakHabit || 0) + 1; }
     else if (b.countedDay === day) b.leakHabit = 0; }
   const net = take - costs - garnish - short;
@@ -10385,7 +10399,7 @@ function _barNight(settleDay) {
   // the itemised night, for BOOKS — one "in" and one "out" hid a ฿400 gap a
   // twenty-year publican could not name (Keith, round 40)
   // a short the count found is said even when all of it came back: the publican wants to know it happened
-  { const sh = _tillShort(day); b.lastShort = sh && (short || b.countedDay === day) ? { amt: short, why: shortWhy, found: sh.amt } : null; }
+  { const sh = tillSh; b.lastShort = sh && (short || b.countedDay === day) ? { amt: short, why: shortWhy, found: sh.amt } : null; }
   b.lastLines = { day, short, railTurn: b.railTurn || 0, inside: _insidePrice(), take: take + evtIn, nut, cogs, wages: BAR_WAGES, salary: b.terms === "salary" ? BAR_SALARY_NIGHT : 0, mgr: worked ? 0 : BAR_MGR_NIGHT, proc, garnish, evtIn, evtCost, worked, declaredOnly, notes, lost, lostNotes };
   return { take: take + evtIn, costs, short, evtCost, net: net + evt, low, friction, fromPocket, underwater, declaredOnly,
     worked, away: b.away, nut, cogs, wages, proc, garnish, markup: b.markup || "list", railLost };
@@ -12699,7 +12713,8 @@ function _doColumn() {
   _say(_owlPick(_OWL_LEADS, 1));
   // the standing first-week slot: gone once you've been here a week (a resident reads past it)
   if ((G.vacation || 1) <= 1 && G.day <= 7) _say("• " + _owlPick(_OWL_ARRIVED, 53)(), "dim");
-  _say("• " + _owlPick(_OWL_LISTINGS, 7), "dim");
+  // the Stinky's listing is Bert's bar as the Owl knows it: not while it is yours, nor once the group has it
+  _say("• " + _owlPick(_barOwned() || (G.barSale && G.barSale.via !== "bert") ? _OWL_LISTINGS.filter(l => !/^STINKY BAR/.test(l)) : _OWL_LISTINGS, 7), "dim");
   // one-shot: if the amulet went back and the Owl has not had his say yet, he
   // gets it this issue instead of a pooled letter
   let letter, reply;

@@ -1382,7 +1382,7 @@ tomorrow, or drinks-only. Some women run a game on a stranger; COMPLAIN takes it
 (`G.std`), the hotel's joiner fee (`_joinerFee`). A new refusal must go in both `_bfRefusal` and `_bfDayPeek`, or her talk
 and the verb disagree.
 
-**Tests.** `engine.test.js`, `research.test.js`, `round35.test.js`, `round78.test.js`, `round93.test.js`,
+**Tests.** `engine.test.js`, `research.test.js`, `round109.test.js`, `round35.test.js`, `round78.test.js`, `round93.test.js`,
 `rulings1022.test.js`, `saveload.test.js`, `chips.test.js`; `tools/offer-audit.mjs` (`offer-audit.test.js`),
 `tools/modal-audit.mjs`, `tools/memory-audit.mjs`.
 
@@ -2221,7 +2221,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `money` (`G.thaiAccount`), `expat-jobs` and `expat-condo` (both paid or billed inside `_incomeTick`), `hotels` (`_chargeRent`, the downgrade ladder), `barbooks` (an owner is never destitute). `_monthRoom` inside `_chargeRent` feeds the month's rent; a new roof that bills elsewhere must feed `G.month` itself.
 
-**Tests.** tests/js/income.test.js, destitute.test.js, paper.test.js, round97.test.js, round98.test.js, round100.test.js, round101.test.js, round104.test.js; `tools/modal-audit.mjs` (the `keptby` and `embassy` recipes).
+**Tests.** tests/js/income.test.js, destitute.test.js, paper.test.js, round97.test.js, round98.test.js, round100.test.js, round101.test.js, round104.test.js, round109.test.js; `tools/modal-audit.mjs` (the `keptby` and `embassy` recipes).
 
 **Design docs.** none.
 
@@ -2254,7 +2254,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `expat-month` (pay, paper), `barfine` and `party` (`_myFloorGirl` gates both; `_partyArrive` reports "brought"), `police` (rep sets the ban). A verb his own floor treats differently must read `_atJobBar()`/`_jobBarStaff()`.
 
-**Tests.** tests/js/paper.test.js, school.test.js, mgrfloor.test.js, rulings1022.test.js, round100.test.js, round102.test.js, deferred1024.test.js, predicates.test.js.
+**Tests.** tests/js/paper.test.js, school.test.js, mgrfloor.test.js, rulings1022.test.js, round100.test.js, round102.test.js, deferred1024.test.js, predicates.test.js, round109.test.js.
 
 **Design docs.** docs/bar-ownership-structures.md (the ฿2m-per-permit company grid).
 
@@ -2318,7 +2318,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `barbooks` (everything after opening), `procurement` (Tan's route unlocks the jobs), `affair` (its door is the sale that ends the game), `expat-jobs` (`G.barSale` decides whether a floor hires the seller), `money` (the deposit is a transfer, never an ATM pull; a sale's money lands through `_bankIn`). Tests that call `_barDeposit()` directly must settle the lease or expect key money on the first rent.
 
-**Tests.** tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), barsale.test.js, round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
+**Tests.** tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), barsale.test.js, round109.test.js, round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
 
 **Design docs.** docs/bar-ownership-structures.md, docs/factions-thai.md, docs/bar-failure-cycle.md.
 

@@ -145,6 +145,9 @@ test("her-farang squares the fine, her time is hers: pay her or don't — unpaid
     assert.equal(G.care.lek.unpaid, 1); assert.ok(G.care.lek.refuse);
     G.soc.drinks.lek = 14; G.nightTurn = 55; out = []; run("barfine lek");
     assert.ok(!G.pendingBf, "the next ask is hers to refuse"); assert.ok(_CARE_REFUSE.some(l => said().includes(_fmt(l, { n: "Lek" }).slice(0, 30))), said());
+    // …and holds the night: one more ask is the same night
+    out = []; run("barfine lek"); assert.ok(!G.pendingBf, "the refusal holds the night");
+    G.day++; offDuty(); G.nightTurn = 40;
     // NO at her time backs out, owing nothing
     out = []; run("barfine lek"); run("short time"); run("no"); assert.ok(!G.pendingBf); assert.equal(G.care.lek.unpaid, 1);
     // a second unpaid night: the mamasan names the number again, and she says so by text
