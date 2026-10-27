@@ -16407,6 +16407,7 @@ function _chipSet() {
     return chips;
   }
   if (G.pendingChoice === "sellbar") { add("yes", "yes — sell up"); add("no", "not yet"); return chips; }
+  if (G.pendingChoice === "barsale") { add("plg", "PLG — Pattaya Leisure"); if (_barSaleTanOk()) add("tan", "TAN — his buyer"); if (_barSaleBertOk()) add("bert", "BERT — with Candy"); add("no", "keep it"); return chips; }
   // 1b) the bus has just asked where you're going: its stops lead the bar (three surfaces — the
   // parser took a typed stop and the prose listed them, but a thumb had nothing to press)
   if (G.busAskTurn != null && G.turns - G.busAskTurn <= 1 && (G.busAskStops || []).length && !G.pendingChoice && !G.game && !G.pendingEnc) {
@@ -16857,7 +16858,7 @@ function _completePool(verb, ctx) {
       if (ctx[1] === "bell") return _streamRoomsKnown().filter(id => id !== G.room).map(id => String(_barName(id) || "").toLowerCase());
       return Object.keys(NPCS).filter(x => NPC_ROLES[x] === "hostess" && _streamBar(NPCS[x].room) && NPCS[x].room !== G.room &&
         _npcWhere(x) === NPCS[x].room && _streamRoomsKnown().includes(NPCS[x].room)).map(x => NPCS[x].name.toLowerCase());
-    case "sell": return _flag("affairOffered") && !_flag("barSold") ? ["up", "bottles"] : ["bottles"];
+    case "sell": return _barOwned() ? ["up", "bottles"] : ["bottles"];
     case "wait": return ["until midnight", "until 9pm", "10"];
     default: return [];
   }
@@ -16898,6 +16899,7 @@ function engineComplete(input) {
     pool = c ? [["1", c.a], ["2", c.b], ["3", c.c]].filter(([, o]) => o).map(([n]) => n) : ["1", "2"];
   }
   else if (G.pendingChoice === "sellbar") pool = ["yes", "no"];
+  else if (G.pendingChoice === "barsale") pool = ["plg"].concat(_barSaleTanOk() ? ["tan"] : [], _barSaleBertOk() ? ["bert"] : [], ["no"]);
 
   else if (G.pendingChoice === "checkout") {
     pool = [...Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly)
@@ -16921,6 +16923,7 @@ function engineComplete(input) {
       pool.push("debt");
     if (_barOwned() && G.room === "stinky_bar" && G.bar && G.bar.cash > 0)
       pool.push("draw");
+    if (_barOwned()) pool.push("sell up");
     return pool; // a menu, not a completion: no prefix filtering
   }
   else if (G.game && !ctx.length) pool = _gameVerbs();
@@ -18464,6 +18467,7 @@ function _renderResume() {
   if (G.pendingChoice === "affair") { _affairPrompt(); return; }
   if (G.pendingChoice === "affaircrisis") { _affairCrisisPrompt(); return; }
   if (G.pendingChoice === "sellbar") { _sellBarPrompt(); return; }
+  if (G.pendingChoice === "barsale") { _barSalePrompt(); return; }
   if (G.game) { _renderGame(); return; }
   if (G.pendingEnc) { _renderEncounter(); return; }
   if (G.pendingBf) { _bfPrompt(); if (G.pendingBf.ltAsked) _bfLtWarn(); return; }
@@ -18906,6 +18910,17 @@ function _doCommandInner(input) {
     if (/^(yes|sell|do it|sign)\b/.test(lower)) { _sellBarYes(); return; }
     if (/^(no|not|nope|stay|keep)\b/.test(lower)) { _sellBarNo(); return; }
     _sellBarPrompt();
+    return;
+  }
+
+  // selling the bar on: three buyers or none; a question about them is not an answer
+  if (G.pendingChoice === "barsale") {
+    if (/^(what|how|why|who|which|is|does|do|can|will|would|should|explain|tell)\b|\?\s*$/.test(lower)) { _barSalePrompt(); return; }
+    if (_isRefusal(lower) || /^(no|not|nope|keep|stay|neither|none)\b/.test(lower)) { _barSaleNo(); return; }
+    if (/^(?:sell (?:it )?(?:to )?)?(plg|pattaya leisure|the group|group|gavin)\b/.test(lower)) { _barSaleDo("plg"); return; }
+    if (_barSaleTanOk() && /^(?:sell (?:it )?(?:through |via |to )?)?(?:through |via )?(tan|tan's buyer)\b/.test(lower)) { _barSaleDo("tan"); return; }
+    if (_barSaleBertOk() && /^(?:sell (?:it )?(?:to )?)?(bert|candy|bert and candy)\b/.test(lower)) { _barSaleDo("bert"); return; }
+    _barSalePrompt();
     return;
   }
 
@@ -19811,7 +19826,7 @@ function _doCommandInner(input) {
     case "sell":
       // SELL UP / SELL BAR = the affair's door (engine-systems); everything else
       // stays Nok's bottle trade, including bare SELL on the beach
-      if (/^(up|bar|the bar|the stinky|stinky)$/.test((arg || "").trim())) _doSellBar();
+      if (/^(up|out|bar|the bar|the stinky|stinky|(?:the )?bar (?:to|through|via) .+|(?:it )?(?:to|through|via) (?:plg|pattaya leisure|the group|gavin|tan|bert|candy))$/.test((arg || "").trim())) _doSellBar();
       else _doSellBottles(arg);
       break;
     case "buy": _doBuy(arg); break;   // ORDER is the demand case below: a beer is a purchase, "order him" is not

@@ -2241,6 +2241,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 - The manager: ASK the mamasan or manager ABOUT A JOB → `_jobOffer` (needs a woman of that floor at regular; refuses a bar in `G.firedBars`, a sacking inside `_mgrBanDays`, or a flagged paper). TAKE THE JOB → `_takeJob`. A company bar (`_companyBar`) pays through the books; any other pays an envelope.
 - WORK at the job bar → `_mgrShift`; `_tick` counts `G.job.shiftStood`. At the wake `_jobNight` counts a stood night (`WORK_MIN_STOOD`), grants the permit after `MGR_PERMIT_AFTER`, rolls the wrong-paper incident (`MGR_INCIDENT_PCT`: a fine and the job, never jail), and counts short weeks (`MGR_STRIKES`).
 - Floor trouble: `_jobTrouble(kind)` (another bar's woman brought in, an insult to his girl, security walking him out) is counted once a night inside `MGR_TROUBLE_DAYS`; at `MGR_COUNSEL` the mama's word is said by `_jobCounselTick`; the next trouble, or being kicked out, is `_jobFire`: keys back, `G.jobFired`, `G.firedBars`, permit to grace.
+- A man who owned a bar is asked what it was when it went (`G.barSale`, from `barchain`): under water — sold or lost for the rent — and no floor hires him (`_SANK_BAR_NO`); about even and he waits `BAR_SALE_COOL` days; making money and the offer is `BAR_SALE_PREMIUM` over the rate, kept on `G.job.prem` and paid by `_mgrPay`.
 - The school: Jerry's node sets `G.jobOffer`; `_jobNight` counts weekday lates. The stringer: Mort's node sets `G.stringer`; `_stringerPay` pays for fixtures read (`_stringerOwed`).
 - `_jobPay` on the payday: the platform, school and company into the account; a cash bar's envelope waits as `G.envelopeDue`, handed over by staff at the bar.
 - At the job bar: `_atJobBar`, `_onShift`, `_jobBarStaff`, `_myFloorGirl` (no barfine of his own girls, `_JOB_BARFINE_NO`; his drinks are the house's).
@@ -2260,7 +2261,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 > **Verbs:** `teach` · `take` · `quit`
 > **Predicates:** `_atJobBar()` · `_jobBarStaff()`
 > **People:** `david` · `mort` · `waen`
-> **Code named above, by file:** engine-core.js — `_atJobBar`, `_jobBarStaff`, `_myFloorGirl`, `_onShift`, `_repTier`, `_tick` · engine-play.js — `_companyBar`, `_doTeach`, `_jobCounselTick`, `_jobFire`, `_jobNight`, `_jobOffer`, `_jobPay`, `_jobTrouble`, `_mgrBanDays`, `_mgrShift`, `_roughFactor`, `_stringerOwed`, `_stringerPay`, `_takeJob` · engine-systems.js — `_JOB_BARFINE_NO`, `_partyArrive`
+> **Code named above, by file:** engine-core.js — `_atJobBar`, `_jobBarStaff`, `_myFloorGirl`, `_onShift`, `_repTier`, `_tick` · engine-play.js — `_SANK_BAR_NO`, `_companyBar`, `_doTeach`, `_jobCounselTick`, `_jobFire`, `_jobNight`, `_jobOffer`, `_jobPay`, `_jobTrouble`, `_mgrBanDays`, `_mgrPay`, `_mgrShift`, `_roughFactor`, `_stringerOwed`, `_stringerPay`, `_takeJob` · engine-systems.js — `_JOB_BARFINE_NO`, `_partyArrive`
 <!-- /facts -->
 
 ### The condo (`expat-condo`)
@@ -2306,28 +2307,29 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 - The deposit: `_barDepositDue` on arrival at the Stinky → `_barDeposit` takes `BAR_DEPOSIT` from account then pocket, sets `barPaid`, sets the note, says the rent out loud, then `_leaseAsk` states key money by season. PAY KEY MONEY (`_leaseCash`, notes at a discount) or TRANSFER KEY MONEY (`_leaseTransfer`); unpaid, it is billed with the first rent.
 - Tan's favour (`partnerTan` only): `_tanFavourDue` in `_tick` → `_tanFavour` arms `tanfavour`; `_tanFavourYes`/`_tanFavourNo`, once ever, refusing costs nothing.
 - The exit: when the affair offers it, SELL UP → `_doSellBar` → `sellbar` modal → `_sellBarYes` (`AFFAIR_SALE` banked, `barSold`) → `_gameEnd` → `gameend` modal: VISIT PATTAYA (`_visitPattaya`, `_visitHome` after a week) or START OVER.
-- `_barOwned()` and `_atOwnBar()` are the predicates the rest of the game reads.
+- Selling it on: SELL UP without the affair's door → `_doSellBar` arms the `barsale` modal (`_barSalePrompt`). `_barHealth` reads the trailing month (`G.bar.netLog`, the operating net `_barNight` logs) against rent and the note: `under` below `BAR_SALE_UNDER` or with the rent behind or two months on the note, `profit` at `BAR_SALE_PROFIT` with nothing owing, `even` between. `_barSaleDo(via)`: every buyer clears the note, the arrears, the rent and Nont; the till comes with the seller. **PLG** pays `BAR_SALE_PLG[health]` over the debts, and the soi turns: `rep` down `BAR_SALE_REP`, indie and samson down, trust down for `_plgSore()` (Bert's rail, `_bertRail()`, and the White Rabbit), Bert to the Vic (`movesTo` on `barToPlg`). **TAN** pays the seller nothing but the till; the same figure is Tan's fee, named, and syndicate standing and Tan's trust drop. **BERT** (`_barSaleBertOk`: not under water, Bert at the Stinky) takes the note over with Candy as the fifty-one — the deposit and a fifty-one that was not hers were why he never bought it — and pays `BAR_SALE_BERT[health]` less the arrears and Nont; indie and rep up, the rail warm. `G.barSale` records the sale (`_barLost` writes one too, as `lost`/`under`), and `_jobOffer` reads it: under water is never a manager, about even waits `BAR_SALE_COOL` days, a bar sold making money is offered `BAR_SALE_PREMIUM` over the rate (`_mgrPay`).
+- `_barOwned()` and `_atOwnBar()` are the predicates the rest of the game reads; `_barGone()` (lost, sold to the sea or sold on) gates every owner's line after.
 
-**State.** Flags `barPartner`, `partnerTan`, `partnerCandy`, `barPaid`, `barOpen`, `tanAsked`, `barSold`. For life: `G.bar` (room, owed, lease, rentFree, pocketDrawn), `G.partnerWho`, `G.tanFavourDay`, `G.lifeStats`, `G.endKind`, `G.visitUntil`.
+**State.** Flags `barPartner`, `partnerTan`, `partnerCandy`, `barPaid`, `barOpen`, `tanAsked`, `barSold`, `barSoldOn`, `barToPlg`, `barToBert`. For life: `G.bar` (room, owed, lease, rentFree, pocketDrawn, netLog), `G.barSale`, `G.partnerWho`, `G.tanFavourDay`, `G.lifeStats`, `G.endKind`, `G.visitUntil`.
 
-**Constants.** `BAR_PRICE`, `BAR_DEPOSIT`, `BAR_MONTHLY`, `LEASE_KEY_MONTHS`, `LEASE_CASH_OFF` (by season), `LEASE_WET_FREE`, `LAWYER_FEE`, `COFFEE_PRICE`, `AFFAIR_SALE`.
+**Constants.** `BAR_PRICE`, `BAR_DEPOSIT`, `BAR_MONTHLY`, `LEASE_KEY_MONTHS`, `LEASE_CASH_OFF` (by season), `LEASE_WET_FREE`, `LAWYER_FEE`, `COFFEE_PRICE`, `AFFAIR_SALE`, `BAR_SALE_UNDER`, `BAR_SALE_PROFIT`, `BAR_SALE_PLG`, `BAR_SALE_BERT`, `BAR_SALE_REP`, `BAR_SALE_COOL`, `BAR_SALE_PREMIUM`.
 
-**Touches.** `barbooks` (everything after opening), `procurement` (Tan's route unlocks the jobs), `affair` (the only door to SELL UP), `money` (the deposit is a transfer, never an ATM pull). Tests that call `_barDeposit()` directly must settle the lease or expect key money on the first rent.
+**Touches.** `barbooks` (everything after opening), `procurement` (Tan's route unlocks the jobs), `affair` (its door is the sale that ends the game), `expat-jobs` (`G.barSale` decides whether a floor hires the seller), `money` (the deposit is a transfer, never an ATM pull; a sale's money lands through `_bankIn`). Tests that call `_barDeposit()` directly must settle the lease or expect key money on the first rent.
 
-**Tests.** tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
+**Tests.** tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), barsale.test.js, round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
 
 **Design docs.** docs/bar-ownership-structures.md, docs/factions-thai.md, docs/bar-failure-cycle.md.
 
 <!-- facts: barchain -->
 > *Generated by `tools/gen-architecture.mjs` from `docs/systems.json` and the source — do not edit by hand.*
 > **Verbs:** `transfer`
-> **Prompts (`G.pendingChoice` and the like):** `partner` · `tanfavour` · `sellbar` · `gameend`
+> **Prompts (`G.pendingChoice` and the like):** `partner` · `tanfavour` · `sellbar` · `barsale` · `gameend`
 > **Quests:** `plg_deal` · `plg_flip` · `orchid_recon` · `nominee_deal` · `bar_premises` · `bar_licence` · `bar_partner` · `bar_opening`
 > **Soak counters:** `tan.favour.asked`
 > **Predicates:** `_atOwnBar()`
 > **People:** `bert` · `wayne` · `gavin` · `candy` · `tan`
 > **Rooms:** `stinky_bar`
-> **Code named above, by file:** engine-core.js — `_align`, `_tick` · engine-play.js — `_goExpat` · engine-systems.js — `_atOwnBar`, `_barDeposit`, `_barDepositDue`, `_barOwned`, `_doSellBar`, `_gameEnd`, `_leaseAsk`, `_leaseCash`, `_leaseTransfer`, `_partnerNo`, `_partnerPrompt`, `_partnerYes`, `_sellBarYes`, `_tanFavour`, `_tanFavourDue`, `_tanFavourNo`, `_tanFavourYes`, `_visitHome`, `_visitPattaya`
+> **Code named above, by file:** engine-core.js — `_align`, `_bankIn`, `_tick` · engine-play.js — `_goExpat`, `_jobOffer`, `_mgrPay` · engine-systems.js — `_atOwnBar`, `_barDeposit`, `_barDepositDue`, `_barGone`, `_barHealth`, `_barLost`, `_barNight`, `_barOwned`, `_barSaleBertOk`, `_barSaleDo`, `_barSalePrompt`, `_bertRail`, `_doSellBar`, `_gameEnd`, `_leaseAsk`, `_leaseCash`, `_leaseTransfer`, `_partnerNo`, `_partnerPrompt`, `_partnerYes`, `_plgSore`, `_sellBarYes`, `_tanFavour`, `_tanFavourDue`, `_tanFavourNo`, `_tanFavourYes`, `_visitHome`, `_visitPattaya`
 <!-- /facts -->
 
 ### Running the bar (`barbooks`)

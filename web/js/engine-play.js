@@ -4697,9 +4697,37 @@ const _FORMER_BOSS = [
   n => `"Hey — the man who sold us." ${n} says it without any edge at all. "New boss okay. Not like you. Okay."`,
   n => `${n} wais you properly, which she never did when you signed her wages. "You look happy. Good. Somebody should."`,
 ];
+// Bert's rail after the bar is sold on: the group's buyer is a man they used to drink with, Bert's buyer the man who
+// gave Bert the one thing he wanted. A greeting, not a refusal — asked anything, they answer as themselves.
+const _SOLD_RAIL_COLD = [
+  n => `${n} looks up, and then back at his glass. "Pattaya Leisure." That is the whole of the conversation he had planned.`,
+  n => `${n} moves his stool an inch, which on this rail is a speech. "Heard what you got for it. Hope it was enough."`,
+  n => `${n} nods the way you nod at a man you used to know. He does not say anything about it, and that is the whole of what he says.`,
+  n => `"Evening." ${n} says it to the bar, not to you, and the rail goes on about the pool cushion as if you were somebody's cousin.`,
+  n => `${n} lifts his glass a quarter-inch, which is the least a man can do and exactly what he does. "Bert's at the Vic now. You'll know that."`,
+];
+const _SOLD_RAIL_WARM = [
+  n => `${n} raises his glass before you are on the stool. "The man who sold it to Bert. Best thing anybody's done on this road in years."`,
+  n => `"There he is." ${n} shifts up a stool. "Bert's been insufferable all week. Behind his own rail. You did that."`,
+  n => `${n} grins. "You know he's written his name on the docket? In capitals. Twenty-two years."`,
+  n => `${n} tips his glass at the till. "Candy's name on the paper and Bert's on the till. Took the pair of them long enough. Took you, apparently."`,
+];
+// the White Rabbit's women after a sale to the group: the group let them go from Soi 6, three of them in one night
+const _SOLD_RABBIT_COLD = [
+  n => `${n} sees you and the smile stays exactly where it was, which is how you know it went. "You sell to Pattaya Leisure, na. Everybody know." She goes back to the ice.`,
+  n => `"Pattaya Leisure buy your bar?" ${n} does not wait for the answer. "They buy ours too, before. Then one night, three of us, finish." She does not sit down.`,
+  n => `${n} wais you, correctly and no more. "Khun Eddy say you sell to the group." A shrug that is not small. "Okay. Your money."`,
+  n => `"Hello, customer." ${n} puts a little weight on the last word, then lets it go. "Soi 6 is all the group now. You help. Never mind."`,
+];
 function _ownBarTalk(id, topic) {
-  if (_flag("barSold") && !topic && G.bar && NPCS[id] && NPCS[id].filler && NPC_ROLES[id] && _npcRoom(id) === G.bar.room) {
+  if (_flag("barToPlg") && !topic && _met(id) && NPC_ROLES[id] && _npcRoom(id) === "white_rabbit" && G.room === "white_rabbit" && !(NPCS[id] && NPCS[id].filler)) {
+    _say(_pickVary(_SOLD_RABBIT_COLD, "soldrabbit")(NPCS[id].name)); return true;
+  }
+  if ((_flag("barSold") || _flag("barSoldOn")) && !topic && NPCS[id] && NPCS[id].filler && NPC_ROLES[id] && _npcRoom(id) === "stinky_bar") {
     _say(_pickVary(_FORMER_BOSS, "formerboss")(NPCS[id].name)); return true;
+  }
+  if ((_flag("barToPlg") || _flag("barToBert")) && !topic && id !== "bert" && _met(id) && _npcRoom(id) === G.room && _bertRail().includes(id)) {
+    _say(_flag("barToPlg") ? _pickVary(_SOLD_RAIL_COLD, "soldrailcold")(NPCS[id].name) : _pickVary(_SOLD_RAIL_WARM, "soldrailwarm")(NPCS[id].name)); return true;
   }
   if (!_ownBarStaff(id)) return false;
   // the affair girl is past the staff registers entirely — her tier-3 bond
@@ -7121,7 +7149,7 @@ function _ageBooks(off) {
     const v = book[k]; if (Array.isArray(v)) v.forEach(shiftDay); else shiftDay(v);
   }
   if (G.gifts && typeof G.gifts === "object") for (const k of Object.keys(G.gifts)) (Array.isArray(G.gifts[k]) ? G.gifts[k] : []).forEach(shiftDay);
-  shiftDay(G.lastNightWas); shiftDay(G.lastRide); shiftDay(G.chamLast);
+  shiftDay(G.lastNightWas); shiftDay(G.lastRide); shiftDay(G.chamLast); shiftDay(G.barSale);
   if (Array.isArray(G.streetLog)) G.streetLog.forEach(shiftDay);
   // …and the absolute-day deadlines: a bank review begun on one trip ran into every later one, and a payout due "in a
   // week" never came to a man whose next trip started at day 1 (review 2026-10-25)
@@ -7346,7 +7374,7 @@ function _myJobTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
   if (!(G.job && G.job.kind === "manager" && (/^(?:my |the |your )?(?:job|shifts?|nights?|wages?|pay|envelope|payday|rail|work here)$/.test(t.trim()) || /\b(my job|my shifts?|my nights?|my wages?|my pay|the envelope|my money|what you pay me|my rail)\b/.test(t)))) return false;   // the parser hands "my job" over as "job"
   if (!((NPCS[npc].room === G.job.room || (NPCS[npc].bars || []).includes(G.job.room)) && (NPC_ROLES[npc] || NPCS[npc].manager || NPCS[npc].house))) return false;
-  const j = G.job, n = NPCS[npc].name, reg = _hoursRegister(npc), base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY;
+  const j = G.job, n = NPCS[npc].name, reg = _hoursRegister(npc), base = _mgrPay(j);
   _say(reg === "floor" ? `"Your job?" ${n} counts on her fingers. "${j.nights} night a week. This month you stand ${j.stood || 0}. Mama pay on the payday${j.corp ? ", through the book" : ", in envelope"} — ฿${_num(base)} if you stand all. You stand half, she pay half. Simple, na."`
     : _hh(npc + ":myjob", 7) % 2 ? `"Your nights?" ${n} counts them off without the book. "${j.nights} a week, ฿${_num(base)} a month ${j.corp ? "through the books" : "in an envelope"} on the payday, pro rata — ${j.stood || 0} stood this month so far. Stand the rest and the envelope is fat."`
     : `"Your nights." ${n} does not need the book. "${j.nights} a week, ฿${_num(base)} a month ${j.corp ? "through the books" : "in an envelope"} on the payday, pro rata — ${j.stood || 0} stood this month so far. Stand them and it's yours; skip them and it isn't."`);
@@ -7385,15 +7413,24 @@ function _jobOffer(room, npc) {
   if (G.job && (G.job.room === room)) { _say(`You have a rail — this one. (QUIT JOB to give it back.)`); return true; }
   if ((G.firedBars || {})[room] != null) { _say(`${n} almost laughs. "You? No. I have manager now. New one. He is not good — he is fine. Fine is enough." She says it without heat, which is worse — and it is not a no for now.`); return true; }   // never again at the bar that let him go (Mario, 2026-10-24)
   if (_mgrBanned()) { const tier = _repTier(); _say(`${n} has heard about ${_barName(G.jobFired.room)}; the soi is one long rail. ${tier >= 1 ? `"Manager, no. Not yet." A small shrug. "People say you are okay, so — not long. Drink, okay. Behind my bar, not yet."` : tier <= -1 ? `"Manager? No." She does not dress it up. "Not for a long time. People talk about you, and not nice. Drink, okay — you pay first."` : `"Manager, no. Not now." She does not say how long now is. "Drink, okay. Behind my bar, no."`}`); return true; }   // a sacked manager is unhirable as one for a while (Mario, 2026-10-24)
+  { const sale = G.barSale, sold = sale && (sale.via === "lost" ? "lost" : "sold");
+    // how his own bar went is the reference every floor asks for: under water is never, about even is not yet
+    if (sale && sale.health === "under") { _say(_pickVary(_SANK_BAR_NO, "sankbar")(n, sold)); return true; }
+    if (sale && sale.health === "even" && G.day - sale.day < BAR_SALE_COOL) {
+      const left = BAR_SALE_COOL - (G.day - sale.day);
+      _say(`${n} weighs it. "You sell the Stinky — not good, not bad, just tired, people say." A small shrug. "Give it time. Ask me again in ${left} day${left === 1 ? "" : "s"}, when the soi is talking about somebody else. Drink, okay."`); return true;
+    } }
   const _held = !!G.job;   // the terms are told to a man who holds a job; taking it needs QUIT JOB first (Dmitri, round 102: he quit blind to hear the next offer)
   const company = _companyBar(room);
   if (!_floorKnowsYou(room) && _held) { _say(G.job.kind === "teach" ? "You have a job; the mornings are spoken for. (QUIT JOB first.)" : G.job.kind === "school" ? "You have a job — the school, eight o'clock Monday to Friday. One at a time. (QUIT JOB first.)" : `You have a rail — ${_jobName()}. One at a time. (QUIT JOB first.)`); return true; }   // a floor that does not know him has no terms to tell
   if (!_floorKnowsYou(room)) { _say(`"${n}" shrugs: "A job? Knowing a face is not enough. One of my girls has to call you hers first — a regular, not a man who comes sometimes. Then I ask."`.replace(/^"[^"]*" shrugs/, `${n} shrugs`)); return true; }
   if (company && G.paperFlag != null && G.day - G.paperFlag < PAPER_FLAG_DAYS) { _say(`${n} does not quite look at you. "The company checked. There was a night with the police and a paper that was not right. Not for a while."`); return true; }
   if (G.jobFired && G.day - G.jobFired.day < _mgrBanDays() + MGR_FIRED_NEWS) _say(`${n} remembers ${_barName(G.jobFired.room)}; the soi does not forget a manager it sacked. "My girls first, manager second," she says, before anything else. "You know this now, I think."`, "dim");
-  if (!_held) G.jobOffer = { room, corp: company, day: G.day };
-  if (company) _say(`"A manager? We could use one." ${n} names it the way a company names things — by the paper. "฿${_num(MGR_PERMIT_PAY)} a month, through the books. Six nights. Stand them and after a month the company puts you on its paper — a work permit, a bank book, the lot. Miss your nights and the company notices, because the company counts." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
-  else _say(`"A manager? Mm." ${n} looks at the till, then at you. "฿${_num(MGR_CASH_PAY)} a month, in an envelope. Four nights a week — you stand them, I pay them; you don't, I don't. No paper: this bar has no company behind it to put you on one, so if the police ever come in on a bad night, that is your bad night." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
+  const _prem = G.barSale && G.barSale.health === "profit", pay = _mgrPay({ corp: company, prem: _prem });
+  if (!_held) G.jobOffer = { room, corp: company, day: G.day, prem: _prem };
+  if (_prem) _say(`"You are the one who sold the Stinky when it made money," ${n} says, before anything else, and it changes the number.`, "dim");
+  if (company) _say(`"A manager? We could use one." ${n} names it the way a company names things — by the paper. "฿${_num(pay)} a month, through the books. Six nights. Stand them and after a month the company puts you on its paper — a work permit, a bank book, the lot. Miss your nights and the company notices, because the company counts." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
+  else _say(`"A manager? Mm." ${n} looks at the till, then at you. "฿${_num(pay)} a month, in an envelope. Four nights a week — you stand them, I pay them; you don't, I don't. No paper: this bar has no company behind it to put you on one, so if the police ever come in on a bad night, that is your bad night." (TAKE THE JOB · or not — the offer keeps till dawn.)`);
   if (_held) _say(`(You hold a job already — ${_jobName()}. One at a time: QUIT JOB first, then ask again.)`, "dim");
   return true;
 }
@@ -7405,7 +7442,7 @@ function _takeJob() {
     G.job = { kind: "school", since: G.day, lates: 0, paidOnce: false }; G.jobOffer = null;
     _say(`Done. A contract, a timetable, and a gate at eight o'clock Monday to Friday. The school's paper takes a month; the mornings start tomorrow. (QUIT JOB to leave it; MONEY says where you stand.)`, "win"); return;
   }
-  G.job = { kind: "manager", room: o.room, corp: o.corp, nights: o.corp ? MGR_PERMIT_NIGHTS : MGR_CASH_NIGHTS, stood: 0, weekStood: 0, weekStart: G.day, strikes: 0, since: G.day, shiftDay: null, shiftStood: 0 };
+  G.job = { kind: "manager", room: o.room, corp: o.corp, prem: !!o.prem, nights: o.corp ? MGR_PERMIT_NIGHTS : MGR_CASH_NIGHTS, stood: 0, weekStood: 0, weekStart: G.day, strikes: 0, since: G.day, shiftDay: null, shiftStood: 0 };
   G.jobOffer = null;
   _say(`Done. ${_barName(o.room)} has a manager. ${o.corp ? "Six nights a week, through the books; the paper comes after a month of them." : "Four nights a week, cash in an envelope, and nobody's paper."} (WORK there to stand a shift; QUIT JOB to leave it.)`, "win");
 }
@@ -7451,6 +7488,15 @@ function _quitJob() {
 // One trouble a night, counted inside a window; the mama has a word at MGR_COUNSEL, and the next one inside the
 // window after the word is the keys. Never a morality tale: the arithmetic of the trade, said out loud both times.
 // how long a sacked manager is unhirable as one: his name on the soi, read when he asks (Mario, 2026-10-24: "base it on rep")
+// a manager's month: the going rate, and more for a man who sold his own bar while it made money
+function _mgrPay(j) { const base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY; return j.prem ? Math.round(base * BAR_SALE_PREMIUM / 1000) * 1000 : base; }
+// a floor turning down the man whose own bar went under (sold or lost): never, and said in the trade's arithmetic
+const _SANK_BAR_NO = [
+  (n, how) => `${n} has heard what the Stinky was worth the week it ${how === "lost" ? "went for the rent" : "was sold"}. "Manager? No." She does not dress it up. "A man who sink his own bar does not run mine. Drink, okay."`,
+  (n) => `"You?" ${n} looks at the till, then at you, and the arithmetic is on her face before it is in her mouth. "Your bar go under — everybody know. My girls need a manager who bring money, not one who lose it. No."`,
+  (n) => `${n} is kind about it, which is how you know it is final. "The soi talk about the Stinky, na. Under water, then gone. Nobody give the rail to that man — not me, not anybody. Sorry."`,
+  (n) => `${n} does not even look at the till. "Manager is for a man whose own bar made money. Yours did not, and the whole soi watched it not." A shrug. "Sit, drink, be a customer. That I like."`,
+];
 function _mgrBanDays() { const t = typeof _repTier === "function" ? _repTier() : 0; return MGR_UNHIRABLE[Math.max(-2, Math.min(2, t)) + 2]; }
 function _mgrBanned() { return !!(G.jobFired && G.day - G.jobFired.day < _mgrBanDays()); }
 function _jobBoss(room) {   // who runs the floor he manages: its mamasan, here or not
@@ -7578,7 +7624,7 @@ function _jobPay() {   // the month's share, on the payday: what the nights earn
   if (j.kind === "teach") return Math.round(TEACH_PAY * _roughFactor() * _part / 100) * 100;
   if (j.kind === "school") return Math.round(SCHOOL_PAY * _part / 100) * 100;
   const need = Math.max(1, Math.round(j.nights * INCOME_DAYS / 7)), frac = Math.min(1, (j.stood || 0) / need);
-  const base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY;
+  const base = _mgrPay(j);
   return Math.round(base * frac / 100) * 100;
 }
 // ── THE CONDO (Mario, 2026-10-20) — see CONDO_RENT in world.js for the doctrine ──

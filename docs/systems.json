@@ -811,7 +811,7 @@
   },
   {
    "id": "barchain",
-   "name": "Buying the bar: premises, licence, the 51% fork, the deposit, the lease, Tan's favour",
+   "name": "Buying the bar: premises, licence, the 51% fork, the deposit, the lease, Tan's favour — and selling it on",
    "verbs": [
     "transfer"
    ],
@@ -832,6 +832,7 @@
     "partner",
     "tanfavour",
     "sellbar",
+    "barsale",
     "gameend"
    ],
    "quests": [

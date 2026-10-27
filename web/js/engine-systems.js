@@ -8225,6 +8225,8 @@ function _doWork() {
     _say(_flag("barSold")
       ? "You're retired, in the specific and enviable sense. If your hands miss the " +
         "rail, there's a noodle counter in Prachuap that could use them mornings."
+      : _flag("barSoldOn")
+      ? `Not any more — you sold it on, and the rail is ${_barBuyerName()}'s. Behind somebody else's bar is a manager's job, and they ask what your own bar was when it went.`
       : _flag("barLost")
       ? "Not any more. You can stand at that rail as long as you like; you " +
         "just have to buy the drinks like everybody else."
@@ -9614,22 +9616,20 @@ function _doSellBar() {
   if (!_barOwned()) {
     _say(_flag("barSold")
       ? "Sold, signed, and spent on a life. The Stinky trades on without you, which was the whole idea."
+      : _flag("barSoldOn") ? `Sold already — ${_barBuyerName()} has it. There is nothing of yours behind that rail but the dents.`
+      : _flag("barLost") ? "There is nothing to sell. The room went for the rent, and the paper with it."
       : "Nothing to sell. Your worldly goods fit in a hotel safe.");
     return;
   }
-  if (_flag("affairOffered") && !(_affairLive() && !(G.affair && G.affair.soured))) {
-    _say("Sell the Stinky? The reason you had for selling has gone, or gone sour, and the old man's handshake price was only ever for that reason. You run it, or it runs you.");   // the "you got out with the girl" ending printed after the break (review 2026-10-25)
+  // the door she opened is the only sale that ends the game; any other is a buyer and a life that carries on
+  if (_flag("affairOffered") && _affairLive() && !(G.affair && G.affair.soured)) {
+    G.pendingChoice = "sellbar";
+    _sellBarPrompt();
     return;
   }
-  if (!_flag("affairOffered")) {
-    _say("Sell the Stinky? There's exactly one buyer on this soi and everybody knows " +
-      "who — and a man who walks in NEEDING to sell gets the needing-to-sell price: " +
-      "the note cleared and a handshake. Bert would say you'd want a reason worth " +
-      "more than the bar. You haven't got one. Yet.");
-    return;
-  }
-  G.pendingChoice = "sellbar";
-  _sellBarPrompt();
+  if (_flag("affairOffered")) _say("The reason you had for selling has gone, or gone sour, and the old man's handshake price went with it. What is left is a bar, and what a buyer will pay for one.", "dim");
+  G.pendingChoice = "barsale";
+  _barSalePrompt();
 }
 function _sellBarPrompt() {
   _say(_fmt("Sell up — the note cleared, ~฿{n} banked, and the rest of it hers and yours? " +
@@ -9762,6 +9762,117 @@ function _sellBarNo() {
     "again that week — she said it once, which for her was the whole of the asking.");
 }
 
+// ── SELLING THE BAR ON (see BAR_SALE_PLG in world.js) ───────────────────────
+// Three buyers, and none of them ends the game: after, you are an expat without a bar, as after a loss. The group pays
+// best and the soi remembers who had it from you; Tan's buyer clears it clean and Tan keeps what it fetched as his fee,
+// and a man who sold a thing he helped build is a man who needs his help no longer; Bert takes the note over with Candy
+// behind him, pays what his bank book holds, and can only carry a bar that is standing up.
+function _barMonthNet() {
+  const b = G.bar || {}, log = (b.netLog || []).slice(-30);
+  const due = _barRent() + ((b.owed || 0) > 0 ? BAR_MONTHLY : 0);
+  // nothing logged (a save from before the log): read as even rather than as a bar that never took a baht
+  const month = log.length ? Math.round(log.reduce((x, y) => x + y, 0) * 30 / log.length) : due;
+  return { month, due, nights: log.length };
+}
+function _barHealth() {
+  const b = G.bar; if (!b) return "even";
+  const { month, due } = _barMonthNet();
+  if ((b.rentOwed || 0) > 0 || (b.arrears || 0) >= BAR_ARREARS_BITE || month < due * BAR_SALE_UNDER) return "under";
+  if (month >= due * BAR_SALE_PROFIT && !((b.arrears || 0) > 0) && !(b.loan && b.loan.owed > 0)) return "profit";
+  return "even";
+}
+function _barHealthLine() {
+  const b = G.bar || {}, h = _barHealth(), { month, due } = _barMonthNet();
+  const against = `against ฿${_num(due)} of rent and note`;
+  if (h === "profit") return `making money — about ฿${_num(month)} a month over the counter, ${against}`;
+  if (h === "even") return `about breaking even — ฿${_num(month)} a month over the counter, ${against}`;
+  const behind = (b.rentOwed || 0) > 0 ? ", with the rent behind" : (b.arrears || 0) >= BAR_ARREARS_BITE ? ", two months behind on the note" : "";
+  return `under water — ${month < 0 ? `losing ฿${_num(-month)} a month` : `฿${_num(month)} a month over the counter`}, ${against}${behind}`;
+}
+function _barDebts() {
+  const b = G.bar || {};
+  return { note: Math.max(0, b.owed || 0), arrears: Math.max(0, b.arrears || 0), rent: Math.max(0, b.rentOwed || 0),
+    nont: Math.max(0, (b.loan && b.loan.owed) || 0) };
+}
+function _barSaleTanOk() { return !!(_met("tan") || (G.known && G.known.tan) || (G.phone && G.phone.contacts && G.phone.contacts.tan)); }
+function _barSaleBertOk() { return _barHealth() !== "under" && _npcRoom("bert") === "stinky_bar"; }
+function _barSaleBertPays() { const d = _barDebts(); return Math.max(0, BAR_SALE_BERT[_barHealth()] - d.arrears - d.nont); }
+function _barBuyerName() {
+  const v = G.barSale && G.barSale.via;
+  return v === "plg" ? "Pattaya Leisure" : v === "bert" ? "Bert" : v === "tan" ? "a man from Chonburi Tan found" : "somebody else";
+}
+// the rail that is Bert's: the Stinky's people who are not its staff
+function _bertRail() { return Object.keys(NPCS).filter(id => NPCS[id].room === "stinky_bar" && !NPC_ROLES[id] && !NPCS[id].filler); }
+// who takes a sale to the group personally: Bert's rail, and the White Rabbit, whose owner sold the group his Soi 6 bar
+// at forty cents and whose women it let go
+function _plgSore() { return _bertRail().concat(Object.keys(NPCS).filter(id => NPCS[id].room === "white_rabbit" && !NPCS[id].filler)); }
+function _barSalePrompt() {
+  const h = _barHealth(), d = _barDebts(), owed = d.note + d.arrears + d.rent + d.nont, p = BAR_SALE_PLG[h];
+  const till = Math.max(0, (G.bar && G.bar.cash) || 0);
+  _say(`Sell the Stinky on? A buyer reads it as ${_barHealthLine()}${owed ? ` — and ฿${_num(owed)} owed on it, the note included` : ""}. Whoever buys it clears that; the till${till ? `, ฿${_num(till)},` : ""} comes with you.`, "alert");
+  _say(`PLG — Pattaya Leisure buy it, and ฿${_num(p)} over the debts lands in your account. They have wanted it two years, and the soi will know who had it from you: Bert's rail first, the White Rabbit next, then every floor that ever lost a girl to the group.`, "dim");
+  if (_barSaleTanOk()) _say(`TAN — Tan finds a buyer who is not the group: the debts cleared, the bar stays the bar, and the ฿${_num(p)} it fetches over them is his fee. He does it exactly, and he does not forget that you sold.`, "dim");
+  if (_barSaleBertOk()) {
+    const bp = _barSaleBertPays();
+    _say(`BERT — Bert takes the note over, with Candy behind him: ฿${_num(bp)} out of his bank book${d.arrears || d.nont ? ", after the arrears and Nont he will not carry" : ""}, and the Stinky his at last. The least money, and the soi's good word.`, "dim");
+  } else if (_npcRoom("bert") === "stinky_bar") _say("(Bert would, if it were standing up. He can carry a note; he cannot carry a hole.)", "dim");
+  const opts = ["PLG"].concat(_barSaleTanOk() ? ["TAN"] : [], _barSaleBertOk() ? ["BERT"] : []);
+  _say(`(${opts.join(" · ")} · NO — keep it.)`, "alert");
+}
+function _barSaleNo() {
+  G.pendingChoice = null;
+  _say("You keep it. The bar opens at six, the way it does, and it does not know how close it came.");
+}
+function _barSaleDo(via) {
+  G.pendingChoice = null;
+  const b = G.bar, h = _barHealth(), d = _barDebts(), tanPartner = _flag("partnerTan");
+  const till = Math.max(0, b.cash || 0);
+  const paid = via === "plg" ? BAR_SALE_PLG[h] : via === "bert" ? _barSaleBertPays() : 0;
+  const fee = via === "tan" ? BAR_SALE_PLG[h] : 0;
+  const cleared = [d.arrears ? `฿${_num(d.arrears)} of arrears` : "", d.rent ? `฿${_num(d.rent)} of rent` : "", d.nont ? `Nont's ฿${_num(d.nont)}` : ""].filter(Boolean);
+  _say("");
+  if (via === "plg") {
+    _say(`Gavin is at the door by four, which tells you how long the paper has been ready: the golf shirt, a lager he does not drink, a folder with the bar's name already typed on the tab. The lawyer is the group's lawyer and the figure is the figure — the old man's note settled to the baht${cleared.length ? `, ${cleared.join(", ")} with it` : ""}, and ฿${_num(paid)} over that into your account by the Friday. "Laurent always said you were the only one who made him wait," Gavin says, and means it kindly.`, "alert");
+    _say("The sign stays, because the name is worth something. The menu changes, a card machine goes on the counter, a girl in a company polo goes on the door, and the stools keep their dents. Bert carries the cue out under his arm the same week and does not look at you while he does it.", "alert");
+  } else if (via === "tan") {
+    _say(`Tan does it the way he does everything: one {{phone}} call you do not hear, one table where you sit and do not speak, and a man from Chonburi with a family company and a nephew who wants a bar. The old man's note is settled${cleared.length ? `, and ${cleared.join(", ")}` : ""}, the landlord is told by somebody he listens to, and the Stinky opens the next night exactly as it was — Bert behind the rail, the girls on their stools, nothing about the room changed.`, "alert");
+    _say(`"What it fetched over what it owed — ฿${_num(fee)} — is the fee," Tan says at the car, and does not dress it up. "This is fair." He opens the door, and does not get in. "A man who sells a thing I helped him build, my friend, does not need my help any more. This is also fair."`, "alert");
+  } else {
+    _say(`Bert hears you out with the cue across his knees, and is quiet long enough that you wonder. "Twenty-two years I wanted my name on one of these, bud. Never had the deposit, and never had a fifty-one that wasn't hers." He looks down the bar to where Candy is not, and is. She could have bought it any year she liked; she never would, because it was the one thing he wanted that was not hers. "You paid the deposit. The note I can carry. It's a month — I've carried months."`, "alert");
+    _say(`Candy comes in at nine and does the paper in an afternoon: the old man's note in Bert's name, her name on the fifty-one${tanPartner ? " where Tan's was — Tan tears his copy once, cleanly, and says a man leaving does not owe" : ""}, and ฿${_num(paid)} out of a Bangkok Bank book Bert has kept since before the flood. "Her name over my door after all," Bert says on his first night, and is not unhappy about it. "But it's my till."`, "win");
+  }
+  if (till) { _bankIn(till); (G.bankNotes = G.bankNotes || []).push("the Stinky's till"); }
+  if (paid) { _bankIn(paid); (G.bankNotes = G.bankNotes || []).push(via === "plg" ? "Pattaya Leisure, for the Stinky" : "Bert, for the Stinky"); }
+  if (till) _say(`(The till comes with you: ฿${_num(till)}.)`, "dim");
+  if (_affairLive()) _affairEnd("bleed");
+  G.lifeStats = { day: G.day, nights: b.nights || 0, stood: b.worked || 0, happy: G.happy };
+  G.barSale = { day: G.day, via, health: h, paid, fee, till };
+  _setFlag("barSoldOn"); if (via === "plg") _setFlag("barToPlg"); if (via === "bert") _setFlag("barToBert");
+  G.flags.barOpen = false;
+  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
+  const trust = (id, n) => { const st = _npcState(id); st.trust = Math.max(0, Math.min(5, (st.trust || 0) + n)); };
+  if (via === "plg") {
+    _align("plg", 2); _align("indie", -3); _align("samson", -1);
+    G.rep = Math.max(REP_MIN, (G.rep || 0) - BAR_SALE_REP);
+    for (const id of _plgSore()) trust(id, -3);
+    _addHappy(-4, "the Stinky is the group's now, and you sold it them");
+    _say("(The soi has heard who had it from you — Bert and his rail first, Eddy's White Rabbit next. STANDING says where that leaves you.)", "dim");
+  } else if (via === "tan") {
+    _align("syndicate", -2); trust("tan", -2);
+    _addHappy(-3, "the bar is somebody else's");
+    _say("(Tan's people heard it before you did. STANDING says where that leaves you.)", "dim");
+  } else {
+    _align("indie", 2); G.rep = Math.min(REP_MAX, (G.rep || 0) + 1);
+    for (const id of _bertRail()) trust(id, 1);
+    trust("candy", 1);
+    _addHappy(2, "the Stinky is Bert's at last");
+  }
+  _say(h === "profit" ? "(It went making money, and the soi knows it: a floor that wants a manager will want you, and pay for the name.)"
+    : h === "even" ? `(It went about even. A floor that wants a manager will want a little time first — ${BAR_SALE_COOL} days, give or take, before the soi is talking about somebody else.)`
+    : "(It went under water, and the soi knows that too. Nobody on it will give you a rail to manage.)", "dim");
+}
+
 // ── The bar's books ──────────────────────────────────────────────────────────
 // The purchase is seller-financed (see the constants in world.js): a deposit
 // that empties you, then BAR_MONTHLY to the old man every thirty days for six
@@ -9847,6 +9958,8 @@ const _SEASON_MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 
 function _barOwned() { return _flag("barOpen") && !!G.bar; }
+// the bar was his and is not: sold to the sea, sold on, or lost for the rent — a line about owning it is false after any
+function _barGone() { return _flag("barLost") || _flag("barSold") || _flag("barSoldOn"); }
 
 // ── The deposit ──────────────────────────────────────────────────────────────
 // The one moment in the arc where the money has to actually exist. Fires at
@@ -10184,6 +10297,8 @@ function _barNight(settleDay) {
     if (sh) { const counted = b.countedDay === day; short = Math.min(take, counted ? Math.round(sh.amt * (1 - sh.back)) : sh.amt); shortWhy = counted ? sh.kind : "uncounted"; b.leakHabit = counted ? 0 : (b.leakHabit || 0) + 1; }
     else if (b.countedDay === day) b.leakHabit = 0; }
   const net = take - costs - garnish - short;
+  // what a buyer reads: the trading month before Nont's cut, which is the bar's debt and not its trade
+  (b.netLog = b.netLog || []).push(take - costs - short); if (b.netLog.length > 30) b.netLog.shift();
   b.cash += net;
   if (net > b.best) b.best = net;
   // a losing night is covered out of the till; when the till is empty the owner
@@ -10977,7 +11092,7 @@ function _barArrearsTick(m) {
     b.rentWarned = true;
     _say(_pickVary(_RENT_LATE, "rentlate"), "alert");
     _say("(Rent is the one that has teeth. Miss it again and the room is " +
-      "somebody else's. BOOKS.)", "dim");
+      "somebody else's. BOOKS — or SELL UP, while it is still yours to sell.)", "dim");
   }
   if (b.rentOwed === 0) b.rentWarned = false;
   if (b.arrears <= 0) { b.shortStaff = false; return; }
@@ -11063,6 +11178,7 @@ function _barLost(cause) {
   // losing the bar and the reason you kept it in the same week
   if (_affairLive()) _affairEnd("bleed");
   _setFlag("barLost");
+  G.barSale = { day: G.day, via: "lost", health: "under", paid: 0, fee: 0, till: 0 };   // a bar taken for the rent went under water, and every floor knows it
   G.flags.barOpen = false;
   const _nontOwed = Math.max(0, (G.bar && G.bar.loan && G.bar.loan.owed) || 0);   // Nont's loan was forgiven with the bar (review 2026-10-25)
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
@@ -11091,7 +11207,7 @@ const _DRAW_LINES = [
 ];
 function _doDraw(arg) {
   if (!_barOwned()) {
-    _say(`${_flag("barLost")
+    _say(`${_flag("barLost") || _flag("barSoldOn")
       ? "There is no till of yours to take anything out of. There was."
       : "You'd need a till of your own to take anything out of. (Yours is the Stinky Pinky's, once it's yours.)"}`);
     return;
@@ -11134,6 +11250,8 @@ function _doBooks() {
       ? "The books are somebody else's problem now, at the fair price, with the " +
         "note cleared. The only ledger you keep these days fits on the back of a " +
         "noodle-shop receipt, and it balances."
+      : _flag("barSoldOn")
+      ? `The books are ${_barBuyerName()}'s now. Yours fit on a beer mat: what it went for, and what it was when it went — ${({ profit: "making money", even: "about even", under: "under water" })[(G.barSale && G.barSale.health) || "even"]}.`
       : _flag("barLost")
       // The ending says it reopens as the Stinky Pinky with a menu, a card
       // machine and a girl on the door — and BOOKS said a phone shop stood
@@ -11186,6 +11304,7 @@ function _doBooks() {
     if (_deals) _say(_fmt("Standing: the arrangements, {n} of them — ฿{p} a night off the take, about ฿{m} a month. Billed nightly, from the night after each was agreed.",
       { n: _deals, p: _num(_deals * SYN_JOB_NIGHT), m: _num(_deals * SYN_JOB_NIGHT * 30) }), "dim");
   }
+  if ((b.netLog || []).length >= 7) _say(`What a buyer would read: ${_barHealthLine()}.`, "dim");
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
     up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
   if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");
@@ -11236,6 +11355,7 @@ function _doBooks() {
     _say("(You can settle either of them now, out of the till or your own pocket: " +
       (b.rentOwed > 0 ? "PAY RENT" : "") + (b.rentOwed > 0 && b.arrears > 0 ? " \u00b7 " : "") +
       (b.arrears > 0 ? "PAY THE NOTE" : "") + ".)", "dim");
+  if (b.rentOwed > 0 || b.arrears >= BAR_ARREARS_WARN) _say(`(Or SELL UP: Pattaya Leisure will buy it, Tan can find a buyer who isn't the group, and Bert would take the note over${_barSaleBertOk() ? "" : " — if it were standing up"}.)`, "dim");
   if (_flag("partnerCandy"))
     _say("Supply, ice, the screen, the cleaning — Candy's side of the paper, and nobody rings you about any of it. Yours is the stool the farang regulars can see.", "dim");
   const friction = (G.syn && G.syn.friction) || 0;

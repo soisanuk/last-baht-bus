@@ -382,6 +382,7 @@ function newGame() {
     questPaid: {},       // qid → true once its reward is paid; a reopened quest never pays twice
     jobFired: null,      // { room, day, kind } — the last bar that took the keys back (2026-10-24)
     firedBars: {},       // room → day: bars that will never hire him as manager again
+    barSale: null,       // { day, via: plg|tan|bert|lost, health: profit|even|under, paid, fee, till } — how his bar went, which every floor hiring a manager reads
     job: null,           // { kind: "teach" } or { kind: "manager", room, corp, nights, stood, weekStood, weekStart, strikes, shiftDay, shiftStood }
     jobOffer: null,      // a bar's terms, on the table till dawn ({ room, corp, day })
     payDay: null,        // the expat stage's clock: the day the last payday fell (set by _goExpat), INCOME_DAYS apart
@@ -696,7 +697,7 @@ const STATE_SCHEMA = {
   life: (
     "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
-    "bankNotes bar barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
+    "bankNotes bar barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
     "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast cherryDay cliLockedDay cliSat " +
     "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
@@ -779,6 +780,7 @@ const GATES = {
   kidprice:     { carry: false, why: "Nont's price for the kid's run" },
   partner:      { carry: false, why: "the 51%: Candy or Tan, confirmed" },
   rabbitjob:    { carry: false, why: "Eddy's interview: CARRY IT, KEYBOARD, THE KID, NOT ME" },
+  barsale:      { carry: false, why: "SELL UP: Pattaya Leisure, Tan's buyer, Bert — or keep it" },
   sellbar:      { carry: false, why: "SELL UP, confirmed" },
   shift:        { carry: false, why: "a shift call at your own rail" },
   sighting:     { carry: false, why: "she is at a kerb table with another farang" },
@@ -1301,7 +1303,7 @@ function _npcRoom(id) {
   // — the losing ending says in as many words that he doesn't stay, and then he
   // was still on his stool four days later telling the man who bought it and
   // lost it that the old man would carry him (round 24, Keith).
-  if (n.movesTo && _flag(n.movesTo.flag)) return n.movesTo.room;
+  if (n.movesTo && [].concat(n.movesTo.flag).some(f => _flag(f))) return n.movesTo.room;
   // …and the rail drifts early doors (see _hopsNow / _hopRoom).
   if (_hopsNow(id)) return _hopRoom(id);
   return n.room;

@@ -1154,12 +1154,12 @@ test("SELL UP through the door wins the game's biggest single happiness, and the
   assert.match(out.join("\n"), /retired|Prachuak|Prachuap/, "WORK knows he sold");
 });
 
-test("selling cold — without her door — is refused in Bert's voice, not a wall", () => {
+test("selling cold — without her door — is a buyer, not the ending (barsale.test has the three)", () => {
   running();
   out = []; doCommand("sell up");
-  assert.equal(G.pendingChoice, null, "no confirm without the reason");
-  assert.match(out.join("\n"), /needing-to-sell price|reason worth/, "the voiced truth about the one buyer");
-  assert.ok(_barOwned(), "and the bar is still yours");
+  assert.equal(G.pendingChoice, "barsale", "the buyers, not the sea");
+  assert.match(out.join("\n"), /PLG — Pattaya Leisure/);
+  assert.ok(_barOwned(), "and the bar is still yours until a buyer is named");
 });
 
 test("the break scars the till for a while, and losing the bar mid-affair is the bleed", () => {

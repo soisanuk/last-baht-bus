@@ -89,6 +89,13 @@ const CLASS = {
   "engine-parser.js:_doTalkCore|spoken for": [W_, "the witness rule's comment quoting _REL_GREET"],
   "engine-systems.js:_keptPrompt|the floor sees": [C_, "Bert's phone: letting him send it sets G.bar.floorQuietUntil — the floor moments stop and say so once, and BOOKS names it (quietshift.test)"],
   // ── consequence: a mechanic keeps it ───────────────────────────────────────────────
+  // selling the bar on: G.barSale is read by every floor's _jobOffer, the rail and the Rabbit greet by it (barsale.test)
+  "engine-play.js:_jobOffer|the soi is talking": [C_, "G.barSale health even: _jobOffer waits BAR_SALE_COOL days, then hires (barsale.test)"],
+  "engine-play.js:_SANK_BAR_NO|the whole soi watched": [C_, "G.barSale health under: _jobOffer refuses for good (barsale.test)"],
+  "engine-systems.js:_barSalePrompt|the soi will know": [C_, "a sale to the group: rep, indie and _plgSore trust fall; the rail and the Rabbit greet cold (_ownBarTalk, barsale.test)"],
+  "engine-systems.js:_barSaleDo|the soi has heard": [C_, "a sale to the group or through Tan: standing moved by _barSaleDo and read by STANDING (barsale.test)"],
+  "engine-systems.js:_barSaleDo|the soi knows": [C_, "G.barSale health: _jobOffer reads it — premium, cool-down or never (barsale.test)"],
+  "engine-systems.js:_barSaleDo|the soi is talking": [C_, "G.barSale health even: _jobOffer's BAR_SALE_COOL (barsale.test)"],
   "engine-parser.js:_ANSWER_GOSSIP|the soi talks": [C_, "the grapevine catch in _convoAnswer (G.player.said)"],
   "engine-parser.js:_TAN_TOWN|the soi knew": [C_, "the owner rows: the town knows who owns the bar"],
   "engine-parser.js:_TAN_TOWN|the whole soi knows": [C_, "the owner rows"],

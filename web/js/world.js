@@ -9694,6 +9694,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "\"I drive and I fix,\" he says, and both are true, and neither is the whole of it. The most forgettable " +
       "man on Soi 6 — which, on Soi 6, is its own kind of power.",
     dialogue: [
+      // the bar he found a buyer for: the fee was fair, and so is the distance
+      { topic: "the sale|sale|the bar|stinky|the stinky|the fee|fee|chonburi|the buyer", when: (st, G) => _flag("barSoldOn") && !!G.barSale && G.barSale.via === "tan",
+        text: "\"The bar.\" Tan turns his glass a quarter, the way he does. \"The man from Chonburi pays the old man, pays the landlord on the day, and his nephew learns. Bert pours. Nothing moved.\" " +
+          "He looks at you, pleasant and exact. \"The fee was fair, my friend. You asked me to make a thing go away, and it went. Now you are a man who does not need me for a bar.\"",
+        short: "\"Nothing moved. The fee was fair. Now you are a man who does not need me for a bar.\"" },
       // his home life is not yours to ask about (Mario, 2026-10-07) — but a miss line read as
       // though he had none; he closes it, politely, in his own voice
       { topic: "wife|your wife|married|are you married|girlfriend|your girlfriend|love life|kids|children|your family|your home|home|where do you live",
@@ -12182,6 +12187,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "know what he was doing. He pours you one and himself nothing. “Pattaya Leisure are in the " +
           "paper. Not us. Sit down.”",
         short: "“You're still here. So am I. Pattaya Leisure are in the paper — not us.”" },
+      // the group bought his Soi 6 bar at forty cents; a man who sold them his is a man he knows the shape of
+      { when: (st, G) => _flag("barToPlg"),
+        text: "Eddy looks at you over the shades for a long second, and does not pour anything. “Pattaya Leisure.” He says it the way he " +
+          "says it about his own old bar, like a diagnosis. “Forty cents on the dollar they gave me. What'd they give you — sixty? Seventy?” " +
+          "He lets the soda water go flat in front of him. “No hard feelings, friend. That's the trouble. Nobody ever has hard feelings. That's how they win.”",
+        short: "“Pattaya Leisure. Nobody ever has hard feelings, friend — that's how they win.”" },
       { when: (st, G) => !!G.dog,
         text: "He's down off the stool before he's looked at you, one hand out flat, palm down, " +
           "and the dog decides in about a second that this is a man who has fed dogs. “Hello, " +
@@ -13215,7 +13226,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     manager: true, // the bar-manager NPC type (see _managerHere/_buyManDrink); NOT in NPC_ROLES, so girl-logic ignores him
     look: "American man of sixty-five, heavy forearms, grey crew cut, faded polo, bottle of Singha.",
         // "Bert doesn't stay." — the losing ending, honoured.
-    movesTo: { flag: "barLost", room: "queen_vic" },
+    movesTo: { flag: ["barLost", "barToPlg"], room: "queen_vic" },   // the group's bar is not his, whichever way it got there
 desc: "The Stinky's manager — American, sixty-something, forearms like dock rope, a " +
       "Singha that never empties and never seems to get him drunk. Candy's man, and " +
       "once the manager of her bars; now he runs the Stinky for its ailing owner and, " +
@@ -13228,12 +13239,35 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "bell|the bell",
         text: "\"The bell?\" Bert nods at it. \"Ring it and the whole bar drinks on you. Expensive way to be liked, and the only one that works on the first night.\" (RING BELL)",
         short: "\"Ring it and the whole bar drinks on you.\" (RING BELL)" },
+      // SOLD ON. To the group: he is at the Vic (movesTo) and says it once, plainly. To Tan's buyer: still behind the
+      // rail, for a man from Chonburi. To him: his own bar at last, with her name on the paper.
+      { when: (st, G) => _flag("barToPlg"),
+        text: "Bert is on a stool at the Vic with a Singha he paid for, which is a sentence you never expected to need. He sees you and does not move along. " +
+          "\"Bud.\" A long pull. \"Two years they waited for that bar, and in the end they didn't have to outlast me. They only had to outbid you.\" " +
+          "He turns back to the darts. \"Sit where you like. It's a free country. Theirs, mostly.\"",
+        short: "\"In the end they didn't have to outlast me, bud. They only had to outbid you.\"" },
+      { when: (st, G) => _flag("barToBert"),
+        text: "\"Customer.\" Bert says it with relish. \"Twenty-two years, and the first time I've said it to a man from my own side of the till.\" " +
+          "He taps the docket, where his name is written in capitals. \"Her name's on the paper. Mine's on that. Sit down, bud — you know where everything is.\"",
+        short: "\"Customer. Her name's on the paper, mine's on the docket. Sit down, bud.\"" },
+      { when: (st, G) => _flag("barSoldOn") && !!G.barSale && G.barSale.via === "tan",
+        text: "\"Well, look who it is.\" Bert chalks the cue. \"New owner's from Chonburi — his nephew does the books, Tan's man does the asking, " +
+          "and I pour. Same as ever, bud. Only now I know who I'm pouring for even less.\"",
+        short: "\"New owner's from Chonburi. Nephew does the books, Tan's man does the asking, I pour.\"" },
+      { topic: "pattaya leisure|plg|the group|gavin|the sale|selling|why", when: (st, G) => _flag("barToPlg"),
+        text: "\"I'm not going to tell you what you should have done.\" Bert picks at the Singha label. \"You had a bar and a number, and the number was theirs. " +
+          "Doug put his pension in that logo. Twenty years I kept it off this end of the road.\" He drinks. \"Nobody did anything wrong, bud. That's the bit I can't forgive.\"",
+        short: "\"Doug put his pension in that logo. Nobody did anything wrong, bud — that's the bit I can't forgive.\"" },
+      { topic: "the sale|selling|the bar|this bar|your bar|stinky|the stinky|candy|the paper|the note", when: (st, G) => _flag("barToBert"),
+        text: "\"Mine.\" He lets the word sit on the bar a moment. \"Hers on paper, which I swore I'd never have, and the old man's note in my name every thirty days, which I've watched you sweat. " +
+          "Turns out the deposit was the whole wall, bud. You climbed it; I just walked through the gap.\" He sets the chalk down square. \"Don't make a thing of it. I'll make a thing of it.\"",
+        short: "\"Hers on paper, mine on the till. The deposit was the whole wall — you climbed it, I walked through the gap.\"" },
       // after the sale he is the new owner's manager, and says so without ceremony (Rolf, round 55)
       { when: (st, G) => _flag("barSold"),
         text: "\"Well, look who it is.\" Bert sets a Singha on the rail before you've sat, and doesn't ring it. \"New owner's a Swede. " +
           "Pays on time, knows nothing, asks me everything. You'd hate him.\" He chalks the cue. \"How's the sea?\"",
         short: "\"Look who it is. New owner's a Swede — knows nothing, asks me everything. How's the sea?\"" },
-      { when: (st, G) => _flag("barPaid") && !_flag("barSold"),
+      { when: (st, G) => _flag("barPaid") && !_barGone(),
         text: "\"Boss.\" Bert doesn't look up from the cue he's chalking, which is how he says hello to " +
           "the man whose name is on the register. \"Till's honest, ice is in, Doug's on his third and " +
           "pretending it's his first. Anything you want to know, BOOKS knows it before I do.\"",
@@ -13285,18 +13319,18 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease && G.bar.lease.paid),
         text: "\"That's that handled. He's not a man who sends receipts, so if you're waiting on one, don't.\"",
         short: "\"Done.\"" },
-      { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid"),
+      { topic: "note|the note|old man|arrears", when: (st, G) => _flag("barPaid") && !_barGone(),
         text: "\"฿" + BAR_MONTHLY.toLocaleString("en-US") + " a month to Ohio, six years, and he won't chase you. That's the whole " +
           "of it, and it's the worst bit — a man who chases, you can argue with.\" He wipes the same " +
           "patch twice. \"Walk it round when you're behind, and you can say how much. He won't thank " +
           "you. He won't not thank you either.\" (PAY THE NOTE · PAY NOTE <amount>)",
         short: "\"฿" + BAR_MONTHLY.toLocaleString("en-US") + " a month, he won't chase. PAY THE NOTE, or PAY NOTE <amount>.\"" },
-      { topic: "rent|landlord", when: (st, G) => _flag("barPaid"),
+      { topic: "rent|landlord", when: (st, G) => _flag("barPaid") && !_barGone(),
         text: "\"Every thirty days, to a guy who's never late collecting and never early with anything " +
           "else. Miss it once, his daughter comes by with a book. Miss it twice, I've told you what " +
           "happens.\" A beat. \"Settle it the moment it's owing. Before the daughter, ideally.\" (PAY RENT)",
         short: "\"Every thirty days. Miss it twice and you know. PAY RENT when it's owing.\"" },
-      { topic: "cash|notes|getting cash|hard cash", when: (st, G) => _flag("barPaid"),
+      { topic: "cash|notes|getting cash|hard cash", when: (st, G) => _flag("barPaid") && !_barGone(),
         text: "\"Notes? The machine — twenty a day on a wallet card, more once you have a Thai bank book. The " +
           "till, if it's had a night. Or there's a kid with a table in the Old Market turns bank into " +
           "notes for a cut — Tan knows him.\" (ASK TAN ABOUT NONT)",
@@ -13315,7 +13349,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "trick and it always was. They don't beat you. They outlast you.\u201d",
         short: "\u201cThey got it in the end. They don't beat you, bud. They outlast you.\u201d" },
       // the owner of the bar they tried to buy (Pri, r45: his cold-open fired at the man whose name is on the float)
-      { when: (st, G) => _flag("barPaid") && !_flag("barLost"),
+      { when: (st, G) => _flag("barPaid") && !_barGone(),
         topic: "pattaya leisure|plg|the group",
         text: "\u201cPattaya Leisure.\u201d Bert chalks the cue, which is what he does instead of spitting. \u201cThey " +
           "wanted this bar. Sent a guy in a golf shirt to buy it off a dying man for a number that " +
@@ -13752,7 +13786,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // the same happy room with nobody able to say what the arrangement is.
       {
         topic: "opening", chip: false,
-        req: ["expatLife", "barPartner", "barPaid", "partnerCandy"], notFlags: ["barOpen"],
+        req: ["expatLife", "barPartner", "barPaid", "partnerCandy"], notFlags: ["barOpen", "barLost", "barSold", "barSoldOn"],
         sets: ["barOpen"],
         fx: (st, G) => { _align("indie", 2); _align("plg", -1); },
         text: "Nothing changes, which is the point.\n\nThe sign stays. The trophies " +
@@ -13777,7 +13811,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       },
       {
         topic: "opening", chip: false,
-        req: ["expatLife", "barPartner", "barPaid", "partnerTan"], notFlags: ["barOpen"],
+        req: ["expatLife", "barPartner", "barPaid", "partnerTan"], notFlags: ["barOpen", "barLost", "barSold", "barSoldOn"],
         sets: ["barOpen"],
         fx: (st, G) => { _align("indie", 1); },
         text: "Nothing changes, which is the point.\n\nThe sign stays, the trophies " +
@@ -13823,7 +13857,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // round 75 (Ruairi): a man who has met Tan asks the barman about him, and every Tan node was the partner's
       { topic: "tan|the driver|your driver|taxi|the taxi man", text: "\"Tan? The driver.\" Bert sets the glass down to think about it, which he does not do for most names. \"Never been in here, far as I know — and I'd know. Which is how you can tell he's smart. But there isn't a stool on this soi he couldn't find you, or a man on one he couldn't tell you about.\" He goes back to the glass. \"Ask him anything, bud. He'll tell you it's nothing. It's never nothing.\"", short: "\"Tan? Never been in here. Ask him anything — he'll say it's nothing. It's never nothing.\"" },
       // round 76 (Stelian): the bar is the owner's now, and Bert's "this bar?" speech was the buyer's
-      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the till, you turn up. Better than most.\"" },
+      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], when: (st, G) => !_barGone(), text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the till, you turn up. Better than most.\"" },
     ],
   },
 
@@ -15323,6 +15357,18 @@ const AFFAIR_DRAG_SOUR   = 0.85;   // …and worse once the floor has turned (fl
 const AFFAIR_GOOD_DAYS   = 60;     // two months before the door can even appear
 const AFFAIR_GOOD_STRAIN = 4;      // and only if you are carrying it lightly by then
 const AFFAIR_SALE        = 150000; // what walking away with the note cleared leaves you
+// SELLING THE BAR ON: the bar can be sold with or without the affair's door, to one of three buyers, and how it stood
+// when it went follows the seller to every floor that might hire a manager. Its health is the trailing month's net
+// over rent and the note (_barHealth): below BAR_SALE_UNDER it is under water, BAR_SALE_PROFIT or more with nothing
+// owing it makes money, and between it is about even. Pattaya Leisure clear every debt and pay BAR_SALE_PLG over them;
+// Tan's buyer pays the same and Tan keeps it as his fee; Bert takes the note over with Candy behind him and pays
+// BAR_SALE_BERT out of his bank book — less what he will not carry — and cannot take a bar that is under water.
+const BAR_SALE_UNDER   = 0.6, BAR_SALE_PROFIT = 1.2;
+const BAR_SALE_PLG     = { profit: 300000, even: 150000, under: 50000 };
+const BAR_SALE_BERT    = { profit: 100000, even: 60000, under: 0 };
+const BAR_SALE_REP     = 4;      // the soi's opinion of a man who sold to the group
+const BAR_SALE_COOL    = 60;     // days before a floor will have the seller of a bar about even manage hers
+const BAR_SALE_PREMIUM = 1.25;   // a manager who sold a bar that made money is paid this over the going rate
 const AFFAIR_SCAR_DAYS   = 10;     // how long the floor stays wrong after a break
 const AFFAIR_FAMILY_ASK  = 15000;  // the roof in Nong Khai — the ask that always comes
 
