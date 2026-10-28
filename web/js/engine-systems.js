@@ -9918,7 +9918,11 @@ function _barSaleDo(via) {
   } else {
     _say(`Bert hears you out with the cue across his knees. "Twenty-two years I wanted my name on one of these, bud. Never had the deposit." Candy does the paper the next day, her name on the fifty-one, and ฿${_num(paid)} comes out of a bank book Bert has kept since before the flood. "Her name over my door after all," he says. "But it's my till."`, "win");
   }
-  if (till) { _bankIn(till); (G.bankNotes = G.bankNotes || []).push("the Stinky's till"); }
+  if (till) {
+    _bankIn(till); (G.bankNotes = G.bankNotes || []).push("the Stinky's till");
+    // said plainly, for a player who has never sold a business (Mario, 2026-10-28): the buyer pays for the bar, not its cash
+    _say(`(The ฿${_num(till)} in the till comes with you, into your account${paid ? " on top of the price" : ""}. A buyer pays for the bar itself — the lease, the fittings, the name and the regulars — not for the money it has already made. That money was always yours.)`, "dim");
+  }
   if (paid) { _bankIn(paid); (G.bankNotes = G.bankNotes || []).push(via === "plg" ? "Pattaya Leisure, for the Stinky" : "Bert, for the Stinky"); }
   if (_affairLive()) _affairEnd("bleed");
   G.lifeStats = { day: G.day, nights: b.nights || 0, stood: b.worked || 0, happy: G.happy };

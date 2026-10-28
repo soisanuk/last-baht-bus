@@ -229,3 +229,13 @@ test("Kieran: the juristic office answers rent, guests and the key from the leas
   assert.match(t("ask the office about moving out"), /MOVE OUT/);
   assert.doesNotMatch(t("ask the office about the pool"), /Pool, no/);   // the condo has a pool (_HOTELS.condo.pool)
 });
+test("the sale says, in plain words, that the till's cash is the seller's and goes to his account", () => {
+  for (const via of ["plg", "tan", "bert"]) {
+    owner(); G.bar.cash = 12000; G.room = "stinky_bar"; const b0 = G.bank; out = []; _barSaleDo(via);
+    assert.match(said(), /฿12,000 in the till comes with you/);
+    assert.match(said(), /not for the money it has already made/);
+    assert.ok(G.bank >= b0 + 12000);
+    if (via === "tan") assert.doesNotMatch(said(), /on top of the price/);
+  }
+  owner(); G.bar.cash = 0; G.room = "stinky_bar"; out = []; _barSaleDo("plg"); assert.doesNotMatch(said(), /in the till comes with you/);
+});
