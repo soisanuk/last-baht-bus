@@ -9944,6 +9944,16 @@ function _barSaleDo(via) {
     for (const id of _plgSore()) trust(id, -3);
     _addHappy(-4, "the Stinky is the group's now, and you sold it them");
     _say("(The soi has heard who had it from you. STANDING says where that leaves you.)", "dim");
+    if (h === "profit") {
+      _say("\"And the Orchid,\" Gavin says at the door, the paper signed. \"Laurent likes a man who built something and knew when to sell it. The rope is down for you now — come for a drink.\" (The Orchid Room, on Soi 6, is open to you.)", "dim");
+      // a bar that made money keeps the man who made it: the group's books, the premium, the permit after a month (Mario, 2026-10-28)
+      const pay = _mgrPay({ corp: true, prem: true, room: "stinky_bar" });
+      if (!G.job) {
+        G.jobOffer = { room: "stinky_bar", corp: true, day: G.day, prem: true };
+        _say(`"One more thing." Gavin taps the doorframe. "The Stinky needs a manager who knows where the fuse box is. Stay on behind the rail you built — ฿${_num(pay)} a month through our books, six nights a week, and the company puts you on its paper after a month. Think about it tonight."`);
+        _say("(TAKE THE JOB to stay on as its manager · DECLINE THE JOB if not. The offer stands tonight.)", "dim");
+      } else _say(`"And if you ever want the rail back," Gavin says, "we'd have you as manager — ฿${_num(pay)} a month, our books. You've a job already, I hear. Quit it, and ask us."`, "dim");
+    }
   } else if (via === "tan") {
     _align("syndicate", -2); trust("tan", -2);
     _addHappy(-3, "the bar is somebody else's");

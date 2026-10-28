@@ -1193,6 +1193,9 @@ const _LICENCE_CO = [["Siam Neon", "Entertainment"], ["Golden Orchid", "Entertai
 // the research's nominee test (one person, many venues, no apparent means), there to be noticed (Graham, round 74:
 // "a Thai name on 51.00 … that I am never given")
 const _LICENCE_NOMINEE = ["Orathai Wongsuwan", "Supaporn Kaewmanee", "Orathai Wongsuwan", "Wanpen Chaiyasit", "Kanya Boonmee", "Orathai Wongsuwan", "Rattana Saetang", "Siriluk Thongdee"];
+// THE ORCHID'S ROPE: a friend of the group by standing, or the man who sold the group a bar that made money
+// (Mario, 2026-10-28) — the one test the door and the doorman both read
+function _orchidOpen() { return _faction("plg") >= 2 || !!(G.barSale && G.barSale.via === "plg" && G.barSale.health === "profit"); }
 const _PLG_ROOMS = ["pink_lotus", "kitten_corner", "golden_dragon", "orchid_room", "jade_lounge", "peach_lounge"];   // the group's own rooms by the game's own prose: Kesinee "runs one of their bars", the Dragon's "new owners", the flagship, the back room
 function _licenceNominee(room) { return _LICENCE_NOMINEE[_hh("nom:" + room, 29) % _LICENCE_NOMINEE.length]; }
 // THE OWNER, NOT THE ROTA (Graham, round 74: the Hive's frame changed its name between Wednesday and Sunday): the woman

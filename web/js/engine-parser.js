@@ -578,7 +578,7 @@ function _promptedFolk(arg, topic) {
   }
   if (G.room === "pink_lotus" && /\b(doorman|door ?man|bouncer|the man at the door|security|rope)\b/.test(a)) {
     // the man who read your face off a phone could not be spoken to (Declan, round 58)
-    _say(_faction("plg") >= 2   // the same test the rope itself uses
+    _say(_orchidOpen()   // the same test the rope itself uses
       ? "The doorman unhooks the rope without looking at his phone this time. \"Good evening.\" That is the whole conversation, and it is a warm one, for him."
       : "The doorman looks at you, then at his phone, then back. \"Members, sir.\" Nothing else. There is no second sentence in his job.", "dim");
     return true;
@@ -1432,7 +1432,7 @@ function _arriveAt(to) {
   // The Orchid Room is Pattaya Leisure's members-only back room — the velvet rope only
   // lifts for a friend of the group (Gavin's "doors open for our friends"). Do the
   // errand, earn the standing, get in. It's also the one place Laurent Vasseur ever is.
-  if (to === "orchid_room" && _faction("plg") < 2) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
+  if (to === "orchid_room" && !_orchidOpen()) { _say(_pickVary(_ORCHID_BOUNCER, "orchidrope")); return; }
   // sent by Candy, introduced to Rose, or arrived via Doyle's recon — any of the
   // three is a reason the wall has a door in it tonight
   if (to === "nottys_place" && !_nottysOpen()) {

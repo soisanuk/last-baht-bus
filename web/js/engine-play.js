@@ -7391,7 +7391,7 @@ function _debtsLine() {
 function _paper() { return G.paper || (G.stage === "expat" ? "tourist" : null); }
 function _paperBase() { const om = _originMoney(G.player && G.player.origin); return om.paper || "tourist"; }
 function _paperWord(p) { return p === "permit" ? "a work permit" : p === "longstay" ? "a long-stay visa" : "a tourist stamp"; }
-function _companyBar(room) { const r = ROOMS[room]; return !!r && (r.barType === "gogo" || r.barType === "gents" || _PLG_ROOMS.includes(room)); }   // a company behind it: the only paper that can carry a permit (the ฿2m grid)
+function _companyBar(room) { const r = ROOMS[room]; return !!r && (r.barType === "gogo" || r.barType === "gents" || _PLG_ROOMS.includes(room) || (room === "stinky_bar" && _flag("barToPlg"))); }   // the Stinky is the group's paper once they bought it   // a company behind it: the only paper that can carry a permit (the ฿2m grid)
 function _floorKnowsYou(room) { return (typeof _staffAt === "function" ? _staffAt(room) : []).some(id => NPC_ROLES[id] === "hostess" && _knownTier(id) >= 2); }
 function _roughFactor() { const m = G.month || {}; return 1 - Math.min(0.6, RETAINER_ROUGH * (m.rough || 0)); }
 function _paperTalk(npc) {
@@ -7471,7 +7471,7 @@ function _jobOffer(room, npc) {
   if (company && G.paperFlag != null && G.day - G.paperFlag < PAPER_FLAG_DAYS) { _say(`${n} does not quite look at you. "The company checked. There was a night with the police and a paper that was not right. Not for a while."`); return true; }
   if (G.jobFired && G.day - G.jobFired.day < _mgrBanDays() + MGR_FIRED_NEWS) _say(`${n} remembers ${_barName(G.jobFired.room)}; the soi does not forget a manager it sacked. "My girls first, manager second," she says, before anything else. "You know this now, I think."`, "dim");
   // the premium is the soi's respect for a bar run well; an independent floor does not pay it to the man who sold one to the group
-  const _plgSold = !!(G.barSale && G.barSale.via === "plg"), _prem = !!(G.barSale && G.barSale.health === "profit") && !(_plgSold && !company), pay = _mgrPay({ corp: company, prem: _prem });
+  const _plgSold = !!(G.barSale && G.barSale.via === "plg"), _prem = !!(G.barSale && G.barSale.health === "profit") && !(_plgSold && !company), pay = _mgrPay({ corp: company, prem: _prem, room });
   if (!_held) G.jobOffer = { room, corp: company, day: G.day, prem: _prem };
   if (_prem) _say(`"You are the one who sold the Stinky when it made money," ${n} says, before anything else, and it changes the number.`, "dim");
   else if (_plgSold && !company && G.barSale.health === "profit") _say(`"You ran the Stinky well," ${n} says. "And then you sell it to the group." Nothing more on that; the number she names is the ordinary one.`, "dim");
@@ -7558,7 +7558,10 @@ function _quitJob() {
 // window after the word is the keys. Never a morality tale: the arithmetic of the trade, said out loud both times.
 // how long a sacked manager is unhirable as one: his name on the soi, read when he asks (Mario, 2026-10-24: "base it on rep")
 // a manager's month: the going rate, and more for a man who sold his own bar while it made money
-function _mgrPay(j) { const base = j.corp ? MGR_PERMIT_PAY : MGR_CASH_PAY; return j.prem ? Math.round(base * BAR_SALE_PREMIUM / 1000) * 1000 : base; }
+// a beer bar pays a beer bar's wage whoever owns it — the company adds the paper, not the money; a Soi 6 bar,
+// a go-go and a gentlemen's club pay the company rate (Mario, 2026-10-28)
+function _mgrBeer(room) { return !!(room && ROOMS[room] && /^(beer|pub)$/.test(ROOMS[room].barType || "")); }
+function _mgrPay(j) { const base = j.corp && !_mgrBeer(j.room) ? MGR_PERMIT_PAY : MGR_CASH_PAY; return j.prem ? Math.round(base * BAR_SALE_PREMIUM / 1000) * 1000 : base; }
 // a floor turning down the man whose own bar went under (sold or lost): never, and said in the trade's arithmetic
 const _SANK_BAR_NO = [
   (n, how) => `${n} has heard what the Stinky was worth the week it ${how === "lost" ? "went for the rent" : "was sold"}. "Manager? No." She does not dress it up. "A man who sink his own bar does not run mine. Drink, okay."`,

@@ -299,3 +299,28 @@ test("Mehmet (106): 'Back already?' is within the hour of the short time, never 
 test("Hennie (109): Tan's promise about coming into the bar is one his next visit keeps", () => {
   assert.ok(!NPCS.tan.dialogue.some(d => /will not come again until/.test(d.text || "")));
 });
+test("Mario: a profitable bar sold to the group opens the Orchid's rope; a bar sold even, or to Bert, does not", () => {
+  const door = () => Object.keys(ROOMS).find(r => Object.values(ROOMS[r].exits || {}).includes("orchid_room"));
+  soldTo("plg"); G.barSale.health = "profit"; G.flags = Object.assign(G.flags, {}); assert.ok(_orchidOpen());
+  G.room = door(); const dir = Object.keys(ROOMS[G.room].exits).find(k => ROOMS[G.room].exits[k] === "orchid_room"); G.nightTurn = 40; run(dir); assert.equal(G.room, "orchid_room");
+  soldTo("plg"); G.barSale.health = "even"; if (_faction("plg") < 2) assert.ok(!_orchidOpen());
+  soldTo("bert"); if (_faction("plg") < 2) assert.ok(!_orchidOpen());
+  owner(); G.bar.cash = 2000; G.room = "stinky_bar"; out = []; const saved = _barHealth; _barHealth = () => "profit";
+  try { _barSaleDo("plg"); assert.match(said(), /The rope is down for you now/); } finally { _barHealth = saved; }
+});
+test("Mario: a profitable bar sold to the group comes with the manager's job at the premium, on the group's books", () => {
+  owner(); G.bar.cash = 2000; G.room = "stinky_bar"; out = []; const saved = _barHealth; _barHealth = () => "profit";
+  try { _barSaleDo("plg"); } finally { _barHealth = saved; }
+  assert.match(said(), /Stay on behind the rail you built/);
+  assert.ok(G.jobOffer && G.jobOffer.room === "stinky_bar" && G.jobOffer.corp && G.jobOffer.prem);
+  assert.ok(_companyBar("stinky_bar"));
+  out = []; run("take the job"); assert.equal(G.job && G.job.kind, "manager"); assert.equal(G.job.room, "stinky_bar");
+  // a beer bar's wage with the premium — less than a Soi 6 manager's at the same premium (Mario)
+  assert.equal(_mgrPay(G.job), Math.round(MGR_CASH_PAY * BAR_SALE_PREMIUM / 1000) * 1000);
+  assert.ok(_mgrPay(G.job) < _mgrPay({ corp: true, prem: true, room: "pink_lotus" }));
+  assert.equal(_mgrPay({ corp: true, room: "pink_lotus" }), MGR_PERMIT_PAY);
+  // an even sale gets no offer
+  owner(); G.bar.cash = 2000; G.room = "stinky_bar"; out = []; _barHealth = () => "even";
+  try { _barSaleDo("plg"); } finally { _barHealth = saved; }
+  assert.ok(!G.jobOffer); assert.doesNotMatch(said(), /Stay on behind the rail/);
+});
