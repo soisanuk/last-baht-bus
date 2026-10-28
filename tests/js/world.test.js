@@ -104,7 +104,7 @@ test("room signs reference real sign entries", () => {
 });
 
 test("gossip chain flags connect: every required flag is set somewhere", () => {
-  const settable = new Set(["knowWasHere", "waiedOy", "waiedPloy", "greetedFon", "walletLost", "walletBack", "walletCard", "walletEver",
+  const settable = new Set(["chamSlip", "knowWasHere", "waiedOy", "waiedPloy", "greetedFon", "walletLost", "walletBack", "walletCard", "walletEver",
     "wonLeague",   // set by _endGame on a killer-pool league win (Bert's champion node)
     "coversCounted", "fiftyoneSigned", "benjawanSeen", "presaleLapsed",   // the laundering quests: _questTick counts the stools; _giveShares signs; EXAMINE LICENCE sees the name twice (2026-10-08)
     "barLost", "barSold", "barSoldOn", "barToPlg", "barToBert",   // the bar going: _barLost, _sellBarYes, _barSaleDo

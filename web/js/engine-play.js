@@ -11,6 +11,7 @@
 // C4_STAKE / POOL_STAKE / JP_* live in world.js now — Aek quotes POOL_STAKE in her dialogue, and world.js loads first
 
 function _barGamesHere() {
+  if (G.room === "orchid_room") return false;   // no Connect 4 frame under the strobe (Pascal, round 111)
   const bt = _room().barType;
   return bt === "beer" || bt === "soi6";
 }
@@ -336,7 +337,7 @@ function _lastCall(id) {
   const here = _npcsHere();
   const mama = here.find(n => NPC_ROLES[n] === "mamasan");
   // no BARFINE nudge in a pub with no bar girls, nor to a man with company on his arm (Martin, round 85)
-  const sellable = here.some(n => NPC_ROLES[n] === "hostess") && _room().barType !== "pub" && !(G.party && G.party.ids && G.party.ids.length) && !(_atJobBar());
+  const sellable = here.some(n => NPC_ROLES[n] === "hostess") && _room().barType !== "pub" && !(G.party && G.party.ids && G.party.ids.length) && !(_atJobBar()) && G.room !== "orchid_room";   // the Orchid's girls are the corner tables' (Pascal, round 111)
   if (_onShift()) { _say(_fmt("Last call — yours to call, boss: {when} to closing, and the floor is looking at you for the nod.", { when }), "alert"); return; }   // the manager is not sold a barfine by his own floor (Willem, round 100)
   if (!sellable) {
     _say(_fmt("Last call — chairs start going up on the far tables: {when} to closing. " +
@@ -1507,7 +1508,7 @@ function _closingTick() {
     if (G.nightTurn === BAND_END_TURN && r.liveMusic && (r.musicEveryNight || _isBandNight()) && !(_onRide()))
       _say(_pickVary(["The band plays its last song like it is the first, unplugs, and is drinking at the bar inside five minutes. The speakers take over, louder than they need to be.",
         "Last set. The singer thanks everybody in three languages, the drummer is already winding cable, and the room goes over to the sound system without anybody quite noticing.",
-        "The band packs up at one, as bands here do — amps on a trolley, guitars in soft cases, the bassist paid in notes at the till. The playlist comes up behind them."], "bandend"), "dim"); }
+        "The band packs up at one, as bands here do — amps on a trolley, guitars in soft cases, the bassist counting notes into a bum bag. The playlist comes up behind them."], "bandend"), "dim"); }
   // a man on the back of her bike is not in the bar he left: its two o'clock shut on him mid-ride and took
   // the ride and the long-time night with it (Sunil, round 86 — the 02:00 close made it reachable)
   if (_onRide()) return;
@@ -3938,6 +3939,7 @@ function _doThrowCover(targetWord) {
 // ─ The bell ─
 
 function _doBell() {
+  if (G.room === "orchid_room") { _say("Your hand goes up for a bell out of habit, and there isn't one. The Orchid has no bell — a bell is for rooms that want the pavement to hear, and this room has no pavement."); return; }   // (Pascal, round 111)
   // …except the one the street itself names. Naklua Road's prose puts a brass
   // bell on Notty's wall, and RING BRASS BELL answered "no bell out here"
   // (Gerry, round 34). It exists; what you lack is the standing to use it.
@@ -6293,7 +6295,7 @@ function _endNight(reason) {
       shiftLeft: (G.job && G.job.kind === "manager" && G.job.shiftDay === G.day && (G.job.shiftLast || 0) < (_closeTurn(G.job.room) == null ? NIGHT_TURNS : _closeTurn(G.job.room)) - 3) ? (G.job.shiftLast || 0) : null,   // he left before the shutter: the floor saw him go   // the manager's night (Brendan, round 102)
       seenHome: Object.keys(G.soc.seenHome || {}).find(k => G.soc.seenHome[k] === G.day) || null,
       with: (_bedIds && _bedIds[0]) || (reason === "barfine" ? G.lastBfId : null) || null, upstairs: (!_bedIds && reason !== "barfine" && G.lastBfId && G.soc.bfBar && Object.keys(G.soc.bfBar).length) ? G.lastBfId : null,   // a short time is not "you leave with her" (Eoin, round 101)
-      dry: Object.fromEntries(Object.keys(_bars).filter(r => !((G.soc.selfDrinks || {})[r]) && !Object.keys((G.soc.drinkCount || {})).some(id => (G.soc.drinkCount[id] || 0) > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room) === r)).map(r => [r, true])),   // a night you bought nothing is not a drinking night (Eoin)
+      dry: Object.fromEntries(Object.keys(_bars).filter(r => !((G.soc.selfDrinks || {})[r]) && !((G.soc.bells || {})[r]) && !Object.keys((G.soc.drinkCount || {})).some(id => (G.soc.drinkCount[id] || 0) > 0 && NPCS[id] && (typeof _npcRoom === "function" ? _npcRoom(id) : NPCS[id].room) === r)).map(r => [r, true])),   // a night you bought nothing is not a drinking night (Eoin)
       endRoom: G.room, turn: G.nightTurn, kicked: G.kickedTonight || null,
       quiet: !!G.lastBfHonest };   // the quiet close or the khao man gai one — she remembers which (Ruairi, round 75)
     G.kickedTonight = null;

@@ -243,6 +243,7 @@ function steadySeed() {
     (G.metDay = G.metDay || {})[id] = 1; (G.seenDay = G.seenDay || {})[id] = G.day - 1;
   }
   G.money = 30000; G.bank = 120000; G.battery = 100; G.room = _hotelRoomId(); G.nightTurn = 0;
+  G.phone.contacts.tan = true; G.known.tan = true;   // the taxi intro hands you his card; a seed that skips it has no Tan to call (Pascal, round 111)
   G.hunger = 10; G.thirst = 10; _setFlag("roomSafeOpened"); G.act1SafeDue = false; quiet(); G.encDone = {}; _nightSnapshot();
   return serializeGame();
 }

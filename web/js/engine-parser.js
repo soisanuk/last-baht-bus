@@ -587,7 +587,7 @@ function _promptedFolk(arg, topic) {
   // about fine" was "not everybody in a room is somebody to talk to" (Malcolm, round 59)
   if (G.room === "police_station" && /\b(sergeant|officer|policeman|police ?man|cop|desk|constable|police)\b/.test(a)) {
     const q = String(topic || "").toLowerCase();
-    _say(/\b(fine|fined|stop|road|drunk|checkpoint|price|how much)\b/.test(q)
+    _say(/\b(fines?|fined|stops?|road|drunk|checkpoints?|prices?|how much|bribes?|tea money|envelope|toll|wai)\b/.test(q)   // "fines" and "bribe" fell through (Tobias, round 111)
         ? _fmt("\"On the road?\" The sergeant does not look up. \"Drunk man, polite, wai — ฿{w}. Drunk man, money first — ฿{p}. Drunk man argue — ฿{a}.\" A page turns. \"Every farang ask like it is a secret. Is the price. Is written nowhere, and everybody know.\"", { w: POLICE_WAI, p: POLICE_PAY, a: _num(POLICE_ARGUE) })
       : /\b(tonic|hair|shop|monk|curse|fortune|palm|cleansing|ritual)\b/.test(q)
         ? "\"The shop. The monk who is not monk.\" He almost smiles. \"This one, we can talk to. Talking cost a little. You get most back.\" (REPORT)"
@@ -7295,11 +7295,11 @@ const _TOWN = {
   police: {
     floor: ["\"Police?\" {n} lowers her voice. \"Station is {p}. They stop you drunk on the road — wai, say sorry, ฿{wai}. You take out money first, ฿{pay}. You argue, ฿{argue}. Don't argue, na.\"",
       "{n} makes a small face. \"Station {p}. If they stop you: wai first, sorry, ฿{wai} finish. Pay fast, ฿{pay}. Argue, ฿{argue}.\"",
-      "\"Tourist police {p}.\" {n} shrugs. \"You walk drunk, polite is ฿{wai}. Everybody know the number. Not polite is more.\""],
-    house: ["\"The station's {p}. A stop on the road is a wai, a sorry and ฿{wai}. Reach for your wallet first and it's ฿{pay}.\" {n} has seen the other version, which is ฿{argue}.",
+      "\"Station is {p}, but they find you anywhere — a pole, a corner, two in the morning.\" {n} shrugs. \"You walk drunk, polite is ฿{wai}. Not polite is more.\""],
+    house: ["\"The station's {p}; the stops are wherever a drunk man walks past a pole. A stop is a wai, a sorry and ฿{wai}. Reach for your wallet first and it's ฿{pay}.\" {n} has seen the other version, which is ฿{argue}.",
       "{n} answers like a man who has paid it. \"{p}. Wai and ฿{wai}, on the spot, no receipt. It isn't a fine, it's a toll — and the toll goes up to ฿{argue} if you debate it.\"",
       "\"Station {p}. If it's a drunk stop, a wai and ฿{wai} ends it.\" {n} goes back to the till. \"Money out before the manners and it's ฿{pay}.\""],
-    punter: ["\"Cop shop's {p}. Get pulled on the road drunk — wai, say sorry, ฿{wai}. Wave cash at him first and it's ฿{pay}.\" {n} has been clever once. \"Clever's ฿{argue}.\"",
+    punter: ["\"Cop shop's {p}. They'll pull you anywhere — Buakhao at three's a favourite. Drunk, you wai, say sorry, ฿{wai}. Wave cash at him first and it's ฿{pay}.\" {n} has been clever once. \"Clever's ฿{argue}.\"",
       "{n} grins. \"{p}. ฿{wai} and a wai is the going rate for walking like you've been drinking. Which you have. Argue and it's ฿{argue}.\"",
       "\"Station's {p}.\" {n} shrugs. \"฿{wai} and a wai. ฿{pay} if you skip the wai. Cheaper than the argument either way.\""],
   },
@@ -10005,7 +10005,8 @@ function _sawUp(id, npc, reg, bar) {
         : `"The arrangements." Tan says it the way Bert's book says it. "${_cap(L)} — ฿${_num(per)} a night between them. You pay it because the other price is a form from an office that shuts at three, and a delivery that comes when it comes."`);
       return true;
     }
-    _say(_fmt(_pickVary(!list.length
+    // the town book, not the shuffle: Cake and Lamai said the same sentence about the same line (Wendell, round 111)
+    _say(_fmt(_pickTownLine(!list.length
       ? (reg === "floor" ? _ARR_NONE_FLOOR : _thaiHouse(npc) ? _ARR_NONE_THAI : _ARR_NONE_HOUSE)
       : (reg === "floor" ? _ARR_LIST_FLOOR : _thaiHouse(npc) ? _ARR_LIST_THAI : _ARR_LIST_HOUSE), "arr:" + reg + ":" + (list.length ? "list" : "none")), { n, L: _cap(L || ""), per }));
     return true;
@@ -11516,6 +11517,11 @@ function _doBuy(arg) {
       _say("(One at a time — they pour the next when this one's gone.)", "dim");
     } }
   if (_room().freeTea && /\b(iced tea|tea|cooler|the tap)\b/.test(String(arg || ""))) { _freeTea(); return; }   // the note says free (2026-10-09)
+  // the Orchid's bottles are the corner tables' — a guest is poured beer or soda, and is told so (Pascal, round 111: "buy blue label" got the daytime-trade line)
+  if (G.room === "orchid_room" && /\b(blue label|black label|johnnie|whisk(?:e)?y|scotch|malt|single malt|cognac|wine|champagne|bottle|spirits?)\b/i.test(arg)) {
+    _say(`${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"} doesn't reach for a glass. "The bottle on the table is the table's — a member buy it by the bottle, on his account. For guest: beer, soda." Not unkind; it is simply how the room is built. (BUY BEER)`);
+    return;
+  }
   const r = _room();
   // BUY LEK A TOASTIE is BUY TOASTIE FOR LEK, and a plate for her is hers before
   // any fullness of yours is consulted (Anil, round 64 — both fed the buyer)
@@ -13929,6 +13935,8 @@ function _doDance(arg) {
         ? " A hostess materialises at your elbow and either leads or follows, both equally convincing."
         : " Somebody near the rail whoops. A freelancer two tables over decides you are worth watching, which is a different thing from being worth joining, and watches."));
     _danceJoy(2);
+  } else if (G.room === "orchid_room") {
+    _say("You dance, briefly, in a room where the dancing is done by other people. The strobe does not care; the corner tables do, a little. You sit back down before anyone has to decide anything about it.");
   } else if (_inBar()) {
     _say(_hostessHere()
       ? "You dance between the stools. A hostess joins you instantly and " +
@@ -13949,6 +13957,11 @@ function _doDance(arg) {
 }
 
 const _SIT_LINES = {
+  orchid: [
+    "You take a low leather chair at a table nobody has claimed. It is softer than anything on the soi, and it puts you exactly where the corner tables can see you.",
+    "A chair by the wall, out of the strobe's main business. Nobody brings a coaster; somebody brings a glass of water, unasked, which in here is a kind of greeting.",
+    "You sit where the mamasan's eyes put you — near enough to be served, far enough from the good table to be no trouble.",
+  ],
   bar: [
     "You take a stool. It receives you the way this town receives everyone — no questions, a coaster down before you've settled.",
     "You sit. The rail is cool, the fan finds you, and somewhere a fresh coaster arrives like a dealt card.",
@@ -16134,6 +16147,8 @@ function _doTaoRai() {
   if ((_inBar() || (_servesDrinks(G.room))) && !G.pendingEnc) {
     const r = _room();
     const bits = [`beer ฿${_num(_beerPrice())}`];
+    // the Orchid's girls belong to the corner tables: no lady drink, no bell, no dice box on its board (Pascal, round 111)
+    if (G.room === "orchid_room") { _say(`“เท่าไหร่?” (tao rai — how much?) ${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())}. "For guest, that is all. The bottles on the tables are the tables' own, and the girls are the tables' also."`, "dim"); return; }
     if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);   // the Vic has no bar-girl economy (Neville, round 53)
     else if (G.party && (G.party.ids || []).length) bits.push(`a drink for the woman with you ฿${_num(_ladyPrice())}`);   // …but the woman you brought in drinks, and it is charged
     bits.push(`water or soda ฿${_num(_waterPrice())} (the seat, not the bottle)`);
@@ -16408,7 +16423,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "deposit", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "decline the job", "tidy up", "make the bed", "lock the door", "make tea", "nap", "read a book", "ask the office", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "decline the job", "cancel the cleaners", "tidy up", "make the bed", "lock the door", "make tea", "nap", "read a book", "ask the office", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -18704,6 +18719,9 @@ function _doCommandInner(input) {
   // THE CONDO (2026-10-20): the lease at the office, notice, the kitchen
   if (/^(?:rent|take|lease|get) (?:a |the )?(?:condo|apartment|flat|room by the month|studio)\b/i.test(raw.trim())) { _doRentCondo(); return; }
   if (/^(?:move out|give notice|leave the condo|end the lease|hand back the (?:key|condo))$/i.test(raw.trim())) { _doMoveOut(); return; }
+  // CANCEL THE CLEANERS — before STOP reaches the joke texter and "cancel" reaches Bert's "Okay." (Wendell, round 111)
+  { const _cm = /^(?:cancel|stop|end|drop|get rid of|terminate|fire)\s+(?:the\s+)?(cleaners?|cleaning|screen(?:'s man)?|tv|telly|till company|till man|till box|pos|card machine|arrangements?|deals?|contracts?|tan'?s (?:arrangements?|deals?))(?:\s+(?:contract|arrangement|deal|service))?$/i.exec(raw.trim());
+    if (_cm && (_barOwned() || /cleaner|screen|till company/i.test(_cm[1]))) { _synCancel(_cm[1]); _tick(); return; } }
   { const _hm1 = raw.trim().toLowerCase(), _hk = /^(?:tidy(?: up)?|clean(?: up| the (?:room|flat|place))?|tidy the (?:room|flat|place))$/.test(_hm1) ? "tidy"
       : /^make (?:the |my )?bed$/.test(_hm1) ? "bed" : /^lock (?:the |my )?door$/.test(_hm1) ? "lock"
       : /^(?:make|brew|have) (?:a |some |a cup of |a pot of )?(?:tea|coffee|cuppa)$/.test(_hm1) ? "tea"
@@ -19864,7 +19882,8 @@ function _doCommandInner(input) {
       // the condo has one chair and it faces the bay
       if (G.room === "condo_room" && /balcony|chair|outside/.test(arg || "")) { _say(_pickVary(["You take the plastic chair on the balcony. The bay does what it does; the air-con ticks behind you through the glass.", "The balcony chair, the bay, Jomtien's lights along the far side. Nothing asks you for anything for as long as you sit.", "You sit out on the balcony with the whole bay in front of you, and for a while that is the entire evening."], "sitcondo")); break; }
       if (G.room === _hotelRoomId() || /^Your Room/.test(_room().name || "")) { _say(_pickVary(["You sit on the edge of the bed. The air-con considers you and carries on.", "You sit. The room is exactly as far from the soi as it was a minute ago, which is the point of a room."], "sitroom")); break; }   // "you perch on the kerb" in room 412 (Vince, round 74)
-      if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
+      if (G.room === "orchid_room") _say(_pickVary(_SIT_LINES.orchid, "sitorchid"));   // a lounge, not a rail (Pascal, round 111)
+      else if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
       else if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
       else if (/beach/i.test(_room().name)) _say(_pickVary(_SIT_LINES.beach, "sitbeach"));
       else _say(_pickVary(_SIT_LINES.street, "sitstreet"));

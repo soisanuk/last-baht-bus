@@ -8873,7 +8873,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // "above my pay grade" about his own group's back room (Declan, round 58)
       { topic: "orchid|orchid room|the orchid|orchid club|back room|the back room|the club|members",
         text: "\"The Orchid Room.\" Gavin smiles the smile of a man who has been asked this at a dinner before. \"Members. A different side " +
-          "of the business — hospitality, not bars. I do bars.\" He turns his glass a few degrees, then thinks better of it. \"If you're asking, you're not a member. That's not a criticism. It's the whole design.\"",
+          "of the business — hospitality, not bars. I do bars.\" He turns his glass a few degrees, then thinks better of it. \"If you're asking, you're not a member. That's not a criticism. It's the whole design.\" A beat. \"The group remembers its friends, though. Be useful to it and the door finds out — ask me about Pattaya Leisure and I'll tell you what useful looks like.\" (ASK GAVIN ABOUT PATTAYA LEISURE)",
         short: "\"Members. A different side of the business. I do bars.\"" },],
   },
 
@@ -8927,6 +8927,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"The pool bar? Sentiment does not compound. He sells or he dies; we are always somebody.\"" },
       { topic: "jail", text: "\"Jail?\" He looks faintly puzzled, then faintly amused, which is worse. \"I am an accountant who happens to own bars. The most dangerous thing I do each month is the VAT return.\" He sets his glass back exactly on its own ring. \"Everything here is looked after. Looking after things is not a crime. It is simply more work than most people are prepared to do.\"",
         short: "\"I am an accountant who owns bars. The most dangerous thing I do is the VAT return.\"" },
+      // the room he owns is not the table he fears: "ask about the orchid room" spent the confession (Pascal, round 111)
+      { topic: "orchid|orchid room|the orchid|this room|the room|club|the club|lounge|the lounge|members|membership",
+        text: "\"The Orchid.\" He looks round it the way a man looks at a suit that came back from the tailor wrong. \"I wanted a club. " +
+          "Leather, a decent malt, men who did not need the rules explained.\" A small gesture at the strobe, the girls, the corner tables. " +
+          "\"I got this. A room decides what it is. I decide who comes in — and even that, mostly, Gavin decides for me.\"",
+        short: "\"I wanted a club. The room decided otherwise. Gavin decides who comes in.\"" },
       { topic: "syndicate|table|the table|good table|the good table|quiet table|that quiet table|the quiet table|president|the president|envelope|the envelope", text: "For the first time his hands go still on the table. \"Don't—\" He recovers, lowers his voice, leans in, and for one honest second is a real person and a frightened one. \"That table is not a topic. That gentleman is the reason everything here is 'looked after.' I write a number every month; he decides if it's the right number. I don't know his name. I don't WANT his name.\" The composure comes back as if it had never left. \"Another drink. Whatever you would like — it is looked after. You are a friend of the house.\"",
         short: "(Hands still, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
     ],
@@ -9753,6 +9759,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"She gave you her number herself. It is coffee, or it is the family. Wear a collar.\"" },
       // the three jobs he brought, asked back (Mick, round 57: "cleaning / screen / till" all
       // missed on the man who arranged them)
+      // the way out of an arrangement, asked of the man who made it (Wendell, round 111: "No idea. Try somebody who was there")
+      { topic: "cancel|cancelling|cancellation|cancel it|stop it|end it|get out|out of it|the contract|contracts|terms",
+        when: (st, G) => !!(G.syn && G.syn.done && Object.keys(G.syn.done).some(k => G.syn.done[k])),
+        text: "\"Cancel?\" No offence in it; he has been asked worse. \"There is no paper, my friend, so there is nothing to tear. You tell me, and tomorrow they don't come. That is all.\" " +
+          "He looks down the soi. \"Only — the uncle notices who stops. Not because anybody tells him. Because he notices.\" (CANCEL THE CLEANERS · CANCEL THE SCREEN · CANCEL THE TILL COMPANY)",
+        short: "\"No paper, nothing to tear. Tell me, and tomorrow they don't come. The uncle notices who stops.\"" },
       { topic: "cleaning|cleaners|the cleaners|the cleaning|burmese|the women", when: (st, G) => !!(G.syn && G.syn.done && G.syn.done.cleaning),
         text: "\"The cleaning is fine.\" He says it the way you say a road is open. \"You have not seen them, yes? Good. That is the cleaning.\" " +
           "A small movement of the hand. \"The bin men also come now. Nobody told them. They just come.\"",
@@ -12787,12 +12799,18 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     // 'visiting a friend' by night, the performance, the morning gift. The job is
     // the pharmacy counter by Naklua market; the mechanics are untouched.)
     selfies: [
-      "white coat on 8am 💊 busy busy 😊", "morning shift 🥱 vitamin C for the farang customer. you come buy one day na",
+      "white coat on 8am 💊 busy busy 😊", "morning shift 🥱 vitamin C for the farang customer. 10 farang today all same sunburn 555",
       "counter life 💊🤍 tired but ok", "boss say i put the labels on wrong 😩 i put them on RIGHT",
       "finish 5pm ☺️ go home sleep. good girl na 555", "boss not here today 😏 i sit in his chair",
       "pharmacy full of farang this morning 😳 all want the blue pill, all shy 555", "new white coat!! 🤍 i look like doctor na",
     ],
     dialogue: [
+      // the slip, asked about: she performs her way out of it once more, and the performance is the answer (Tobias, round 111)
+      { topic: "papa|the papa|the text|your text|wrong person|wrong number|shoes|the shoes|the money|other men|another man|sponsor|who is papa",
+        req: ["chamSlip"],
+        text: "\"Oh — that.\" Cream laughs, a beat too quick, and puts her hand on your arm as if to steady you, not her. \"My uncle, I tell you. He help me with the room, sometime. Old man, very kind.\" " +
+          "She looks at the {{phone}} face-down on the table and does not turn it over. \"Everybody in Pattaya have one uncle, na. You ask the girls.\" Then she is talking about the beer garden's new fan, brightly, and the subject is closed.",
+        short: "\"My uncle, I tell you. Everybody in Pattaya have one uncle, na.\"" },
       { req: ["chamDone"],
         text: "\"Oh — hi.\" The surprised-pharmacy-girl face flickers on for half a second, then she lets it drop, because with you the performance is over and you both know it. \"So. Here you are again.\" Not a question. The {{phone}} goes face-down anyway, old habit. \"Sit. You want I do the whole pharmacy-girl thing again, or we just have a drink like people.\" The smile that follows is the realest thing she owns and she spends it carefully.",
         short: "\"Here you are again. You want the pharmacy-girl thing again, or we just have a drink like people?\"" },
@@ -13333,9 +13351,9 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Candy.\" A nod down the soi. \"Fifty-one on paper, a lawyer's bill you'll have seen, and she's never once " +
           "come in to look at it. That's what buying it properly looks like.\"",
         short: "\"Candy. Fifty-one on paper, a lawyer's bill, never come in. Properly done.\"" },
-      { topic: "cleaning|procurement|contract|contracts|the screen|screen|the till job|suppliers|supplier", when: (st, G) => _flag("barOpen") && !_flag("partnerCandy"),   // the Candy route's twin is the LAST node (index-stable)
-        text: "\"Not my department, and I'll tell you why it isn't.\" He wipes a glass that was dry. \"The man who does the " +
-          "cleaning was found by the man who found you the cleaner. That's Tan's side of the bar. I pour, I count, I " +
+      { topic: "cleaning|procurement|contract|contracts|the screen|screen|the till job|suppliers|supplier|bins|the bins|bin men|rubbish|trash|spirit house", when: (st, G) => _flag("barOpen") && !_flag("partnerCandy"),   // the Candy route's twin is the LAST node (index-stable)
+        text: "\"Not my department, and I'll tell you why it isn't.\" He wipes a glass that was dry. \"Cleaners, the screen, whoever " +
+          "fixes the till — if there's a man for it, Tan found him. That's Tan's side of the bar. I pour, I count, I " +
           "tell you when the pool cushion's gone. Who takes out the trash is above my pay grade and below my interest.\"",
         short: "\"Not my department. Tan's side of the bar. I pour.\"" },
       { topic: "partner|partnership|fifty-one|51 percent|the partner", when: (st, G) => _flag("barLicence") && !_flag("barPartner"),   // both partner nodes need the licence too (prose review)
@@ -13893,7 +13911,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "sell|selling|sell the bar|selling the bar|sell up|buy the bar|buying the bar|buyer|a buyer|the sale|what's it worth|worth|how much is the bar worth", req: ["barPaid"], when: (st, G) => _barOwned() && !_barGone(),
         text: "\"Sell?\" Bert sets the cue across his knees. \"The group'd pay the most — they've wanted this corner two years. Tan knows people who aren't the group; his way you walk clean, and he keeps what's over. And me—\" he looks down the bar to where Candy is not \"—I never had the deposit. You paid it. If it's standing up when you go, I'd carry the old man's note.\" He chalks the tip. \"SELL UP when you mean it, boss. You'll get the numbers in writing.\"",
         short: "\"The group pays most. Tan's way you walk clean. Me — if it's standing up, I'd carry the note. (SELL UP)\"" },
-      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], when: (st, G) => !_barGone(), text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and your name on the paper where his used to be. I still run the rail — Cake keeps the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the rail, Cake keeps the till, you turn up. Better than most.\"" },
+      { topic: "bar|this bar|my bar|the bar|the stinky|stinky pinky", req: ["barPaid"], when: (st, G) => !_barGone(), text: "\"Yours, boss.\" Bert says it like he is still getting used to the sound of it. \"Twelve stools, a fridge that hums, the old man paid off a month at a time, and the old man's name coming off the paper a month at a time. I still run the rail — Cake keeps the till. You still turn up. That's the whole arrangement, and it's a better one than most on this soi.\"", short: "\"Yours, boss. I run the rail, Cake keeps the till, you turn up. Better than most.\"" },
     ],
   },
 
@@ -14826,7 +14844,7 @@ const QUESTS = {
     giver: "doyle",
     trust: 2, // he reads you first — a sightline test — before handing over a job
     desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
-      "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE).",
+      "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE). The rope lifts for the group's friends — and Gavin, at the Golden Dragon, decides who those are.",
     deps: [],
     at: "orchid_room",
     doneFlag: "orchidReported",
@@ -15612,7 +15630,7 @@ const SYNDICATE_JOBS = [
       "so you aren't surprised by it. \"I have three women. Good women, they do the " +
       "Orchid and two of the hotels. They will do your bar — morning, before you are " +
       "awake, you never see them.\" He names a monthly figure — ฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US") + " — that is neither cheap " +
-      "nor a swindle; it is simply the number. \"You pay them direct, not me. I take " +
+      "nor a swindle; it is simply the number. \"It comes off the bar's take each night, not to me. I take " +
       "nothing, my friend, you know this.\"",
     whoLabel: "ask who they are",
     who: "\"They are Burmese.\" He says it as flatly as he said the number. \"Most " +
@@ -20839,7 +20857,11 @@ for (const [id, n] of Object.entries(NPCS)) {
 // staff were written before the inner segments existed; each now has a line on the part of the new soi she
 // would actually know about — the girl who left, the mama the company sent, the bars across the middle.
 const _OLD_SOI_KNOWS = {
-  nee: [{ topic: "jiab|the girl who left|sweet tamarind|tamarind",
+  nee: [{ topic: "orchid|orchid room|the orchid|back room|the back|members|member|membership|the door|the rope|rope|doorman|vip|get in|how to get in|friends|friend of the group|group friend",
+    // the floor at the Orchid's own door points at the man who decides (Pascal, round 111: eight people, one line, no way in)
+    text: "\"The back?\" Nee does not look round at it. \"Not my door. Group friend only. Who is friend — Khun Gavin say, not me. He sit at the Golden Dragon most night, the farang with the good shoes.\" A small shrug. \"Friend is the one who do something for the group. Ask him what.\"",
+    short: "\"Not my door. Khun Gavin decide who is friend — Golden Dragon, most night.\"" },
+  { topic: "jiab|the girl who left|sweet tamarind|tamarind",
     text: "\"Jiab.\" A precise pause. \"Two year on my floor, good numbers, never late. Then she go to the Tamarind for less money and a fan.\" The warmth stays exactly measured. \"She tell people I never say her name right. I say it the way the company write it. Maybe same complaint.\"" }],
   joy: [{ topic: "jiab|sweet tamarind|tamarind|the girl who left",
     text: "\"Jiab go to the Tamarind!\" Joy is scandalised and delighted. \"Less money, no aircon, an old auntie with a wall of business cards — and she is HAPPY.\" Gales of laughter. \"I visit her on my night off. She give me tamarind. Is very sour. She say is the taste of freedom. I say is the taste of tamarind.\"" }],
@@ -21624,6 +21646,15 @@ NPCS.tan.dialogue.push(
   { topic: "condo|a condo|flat|a flat|apartment|an apartment|a place to live|somewhere to live|rent|renting|where to live|a room by the month|cheaper place", when: (st, G) => G.stage === "expat",
     text: "\"A flat.\" Tan nods as if you have passed something. \"Pratumnak Soi 5 — the top of the soi, the tower behind the wall with the intercom. Nine thousand a month and the electric, two months down, the office on the ground floor. Every man who stays asks me this in his second week. The lift is slow and the woman in the office remembers everything, which is the same thing as a good building.\" He turns the key. \"Say Pratumnak to any bike.\"",
     short: "\"Pratumnak Soi 5, the tower behind the wall. Nine thousand and the electric. Say Pratumnak to any bike.\"" });
+// THE UNCLE'S PRICE, from the man who counts the stock (Wendell, round 111: the inside price on every page of BOOKS, and
+// Bert "No idea" about stock): what it is, and why a night will not show it
+NPCS.bert.dialogue.unshift(
+  { topic: "stock|the stock|uncle|the uncle|beer uncle|the beer uncle|inside price|the inside price|beer price|the beer price|wholesale|delivery|deliveries",
+    when: (st, G) => _barOwned() && !_barGone(),
+    text: "\"The uncle?\" Bert counts crates in the air. \"Brings the beer, bills the beer, never late if you're on his good side.\" " +
+      "He taps the stock line in the book. \"Stock runs about a fifth of what we take, bud. Inside price, it's a twentieth off that — " +
+      "a baht or two a bottle. You won't see it in a night; a night's all over the place. You see it in a month, if you look.\"",
+    short: "\"Stock's about a fifth of the take. The inside price is a twentieth off that — you see it in a month, not a night.\"" });
 NPCS.david.dialogue.unshift(
   { topic: "pay|the pay|payday|salary|contract|permit|the permit|thirty-five|hours|mornings|lates|late",
     when: (st, G) => G.stage === "expat" && !!G.jobOffer && G.jobOffer.kind === "school" || (G.stage === "expat" && !!G.job && G.job.kind === "school"),

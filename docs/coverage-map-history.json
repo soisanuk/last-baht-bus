@@ -1158,5 +1158,49 @@
    "design": 172,
    "deferred": 164
   }
+ },
+ {
+  "date": "2026-10-28",
+  "latestRound": 111,
+  "systems": 56,
+  "cells": 857,
+  "lit": 668,
+  "hot": 45,
+  "instrumented": 175,
+  "instrumentCells": 691,
+  "dark": 14,
+  "systemsNeverWalked": 0,
+  "findingsClassified": 3112,
+  "findingsUntagged": 24,
+  "strays": 0,
+  "unknownSystems": 0,
+  "verdicts": {
+   "fixed": 2413,
+   "refuted": 200,
+   "design": 174,
+   "deferred": 130
+  }
+ },
+ {
+  "date": "2026-10-28",
+  "latestRound": 111,
+  "systems": 56,
+  "cells": 857,
+  "lit": 668,
+  "hot": 45,
+  "instrumented": 175,
+  "instrumentCells": 691,
+  "dark": 14,
+  "systemsNeverWalked": 0,
+  "findingsClassified": 3112,
+  "findingsUntagged": 24,
+  "strays": 0,
+  "unknownSystems": 0,
+  "verdicts": {
+   "fixed": 2413,
+   "refuted": 200,
+   "design": 174,
+   "deferred": 130
+  }
  }
 ]

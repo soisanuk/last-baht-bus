@@ -5612,8 +5612,9 @@ function _chamDecline() {
   _tradeMark("no");
   _say("You say not tonight, and mean something you couldn't spell out. She nods quickly, " +
     "relieved or disappointed or neither — the face gives you nothing to price. \"Ok na. " +
-    "Maybe another time.\" She types something into your phone before you've offered it: " +
-    "her LINE. \"You come pharmacy. Daytime. I give you vitamin, good one.\"", "dim");
+    "Maybe another time.\"" + (G.phone.contacts.cream
+      ? " She taps your phone where her name already is, as if to check it is still there. \"Pharmacy is daytime. Farang sleep in the daytime. So — night, na.\""
+      : " She types something into your phone before you've offered it: her LINE. \"Pharmacy is daytime — farang never come. So, night.\""), "dim");   // no daytime to visit, and her LINE once (Tobias, round 111)
   G.phone.contacts.cream = true;
   G.known.cream = true;
   _setFlag("chamAsked");
@@ -5626,7 +5627,7 @@ function _chamGo() {
     "motosai's mirror she is reading something on her {{phone}} with a small private smile. At the " +
     // her LINE is typed in once; the second night it was "unasked" again (Dieter, round 56)
     (G.phone.contacts.cream ? "hotel she checks her own number is still in your phone, and says nothing about it. "
-      : "hotel she types her LINE into your phone unasked: \"so you can find me. Daytime. Pharmacy.\" ") +
+      : "hotel she types her LINE into your phone unasked: \"so you can find me. Not at the pharmacy — the boss watch.\" ") +
     "In the lift she says it once more, to the floor indicator: \"I never " +
     "do this.\"");
   G.phone.contacts.cream = true;
@@ -6486,7 +6487,7 @@ const _TEXT_TALK_PHOTO = [
 ];
 const _TEXT_SUBJECT_FLOOR = [
   (n, q) => `${n} nods. "Yes — I text you: “${q}”. That was the news, when I send."`,   // never "same now": the text's night has moved on   // "boss" from a woman who has never called him that (Bridget, round 76)
-  (n, q) => `"That?" ${n} taps her own {{phone}}. "“${q}”. I write it so you know. Now you know two time."`,
+  (n, q) => `"That?" ${n} taps her own {{phone}}. "“${q}”. I write it, I mean it. Same thing, na."`,
 ];
 const _TEXT_SUBJECT_UNREAD_FLOOR = [
   (n, q) => `"You don't read my text?" ${n} pretends to be hurt. "I write: “${q}”. Now you know."`,
@@ -6987,8 +6988,9 @@ function _wxDesc(code) {
 function _wxLine() {
   const wx = _wxNow();
   if (!wx) return null;
-  return `${wx.temp}°, ${wx.humid}% humidity, ${_wxDesc(wx.code)}` +
-    (wx.rain >= 40 ? `, ${wx.rain}% chance of rain` : "");
+  // a clear sky with a rain chance is "clear for now" — "not a cloud with the nerve, 64% chance of rain" (Wendell, round 111)
+  const d = wx.code < 2 && wx.rain >= 40 ? "clear for now" : _wxDesc(wx.code);
+  return `${wx.temp}°, ${wx.humid}% humidity, ${d}` + (wx.rain >= 40 ? `, ${wx.rain}% chance of rain` : "");
 }
 
 // ── The sports desk, the lottery, and the other pensions ─────────────────────
@@ -9102,8 +9104,9 @@ function _shiftPrompt() {
   // a call that costs more than the till holds says where the rest comes from (Hennie, round 109: ฿500 asked of ฿423)
   const cost = { round: SHIFT_ROUND_COST, merit: MERIT_COST }[G.shiftCall], cash = Math.max(0, (G.bar && G.bar.cash) || 0);
   if (cost && cash < cost) _say(`(The till has ฿${_num(cash)}; a yes takes it ฿${_num(cost - cash)} under, and if the night's takings don't cover that, it comes out of your own pocket at close.)`, "dim");
-  _say(_fmt("(YES \u2014 {label} \u00b7 NO)",
-    { label: call ? call.yesLabel : "your call" }), "dim");
+  // a call that costs the till says its price on the prompt, not only when asked (Wendell, round 111)
+  _say(_fmt("(YES \u2014 {label}{price} \u00b7 NO)",
+    { label: call ? call.yesLabel : "your call", price: cost ? `, \u0e3f${_num(cost)} from the till` : "" }), "dim");
 }
 
 // takings the shift itself moved, added to the night at settle
@@ -9157,9 +9160,9 @@ function _shiftYes() {
       // same sentence at the moment of YES, twice (Mick, round 57)
       _say(_fmt(_pickVary([
         "(The docket goes under the till with the others. Pay-day, he says. The stock he drank on it is gone tonight either way, and the books say so.)",
-        "(He writes his name on the docket like a man signing for a parcel. Whether it comes back out from under the till is his business now; the ฿{amt} of stock is already down his neck.)",
+        "(He writes his name on the docket like a man signing for a parcel. Whether the ฿{amt} at the board comes back out from under the till is his business now; the ฿{cost} of stock it cost you is already down his neck.)",
         "(Under the till it goes. Some dockets come back out on a Friday. Some turn into a man who starts drinking two bars up. Tonight's books count the stock, not the promise.)",
-      ], "tabstiff"), { amt: SHIFT_TAB_TAKE }), "alert");
+      ], "tabstiff"), { amt: _num(SHIFT_TAB_TAKE), cost: _num(-stiffCost) }), "alert");   // board price and stock cost, each named (Wendell, round 111: ฿1,200 said, ฿228 booked)
     } else {
       _shiftTake(SHIFT_TAB_TAKE, "a regular's slate, settled");
       G.bar.tabPaidNight = (G.bar.tabPaidNight || 0) + 1;
@@ -9192,8 +9195,11 @@ function _shiftYes() {
     } else {
       _shiftTake(-SHIFT_ROUND_COST, "a round on the house");
       G.bar.roundLanded = false;
-      _say("It does not land. They drink it, they thank you, and they go anyway \u2014 " +
-        "some nights are just over and no amount of free Chang argues them out of it.", "dim");
+      _say(_pickVary([
+        "It does not land. They drink it, they thank you, and they go anyway \u2014 some nights are just over and no amount of free Chang argues them out of it.",
+        "They drink it, raise the glasses to you, and drift out in twos and threes over the next quarter hour. The round bought goodwill, not an hour.",
+        "It lands on the wrong night. Half the rail was leaving anyway; the other half stays for exactly one more and calls it a night on your Chang.",
+      ], "roundflat"), "dim");   // pooled: three failures, one sentence (Wendell, round 111)
     }
     // the goodwill lands either way, but a round that did not land does not pay like one that did,
     // and the figure says why (Stelian, round 76: "it does not land" and +2)
@@ -11420,6 +11426,8 @@ function _doBooks() {
     const gone = Object.keys(b.gone || {}).filter(id => G.day - b.gone[id].day < BAR_RAIL_DAYS);
     if (gone.length) _say(_fmt("Across the road: {who} — and about {p}% of the rail with {pr}, for a season.", { who: gone.map(id => NPCS[id].name).join(" and "), p: Math.round(gone.length * BAR_RAIL_SHARE * 100), pr: gone.length === 1 ? "her" : "them" }), "alert");
   }
+  // the name Tan asked for is on the list and not on the wages line: BOOKS says why (Wendell, round 111)
+  if (_flag("tanFavourDone")) _say("On the staff list: one name you have never seen work. Her wage is Tan's, paid outside the till — it is not on the wages line, and it is not meant to be.", "dim");
   if (b.loan && b.loan.owed > 0) _say(_fmt("Nont's money: ฿{o} still owed, {p}% of every night's take off the top until it isn't. (REPAY NONT <amount> at his table.)", { o: _num(b.loan.owed), p: Math.round(NONT_LOAN_GARNISH * 100) }), "alert");
   { const o = _oppPhase(G.day); if (o) { const into = (G.day - G.bar.oppStart) % (OPP_CYCLE / 5); _say("The bar opposite: " + _OPP_NAMES[o.phase] + (into >= 2 ? _fmt(" — {d} days into it.", { d: into }) : "."), "dim"); } }
   _sayLease();
@@ -11708,7 +11716,7 @@ function _synWho() {
 const _SYN_TAN_GOES = [
   "Tan finishes what is in front of him standing, squares it on the bar, and is gone before Bert has looked up.",
   "Tan nods once, as if a box has been ticked somewhere, and lets himself out into the soi.",
-  "Tan walks out to the grey sedan where he always leaves it, gets in, and does not look back; he never does.",
+  "Tan steps back out onto the soi and goes on with his walk, the same unhurried pace up the pavement; he does not look back; he never does.",   // he walks the soi till midnight — no car mid-round (Wendell, round 111)
 ];
 function _synTanGoes() { _say(_pickVary(_SYN_TAN_GOES, "syntangoes"), "dim"); }
 function _synYes() {
@@ -11729,6 +11737,25 @@ function _synYesBody(job) {
   }
 }
 
+// CANCELLING ONE: Tan's arrangements end the way they began, by a word to him — and ending one is a no said late:
+// nothing is done to you, and the frictionlessness goes with it (Wendell, round 111: "no clause to get out of any of them")
+const _SYN_CANCEL_RE = { cleaning: /\b(cleaners?|cleaning|bins?|bin men)\b/, screen: /\b(screen|tv|telly|football)\b/, pos: /\b(till company|till man|till box|pos|the box|card machine|till)\b/ };
+function _synCancel(words) {
+  const st = _synState(), w = String(words || "").toLowerCase();
+  const running = Object.keys(st.done).filter(k => st.done[k]);
+  if (!_flag("partnerTan") || !running.length) { _say("There is nothing of Tan's running at the bar to cancel."); return; }
+  const id = Object.keys(_SYN_CANCEL_RE).find(k => _SYN_CANCEL_RE[k].test(w) && running.includes(k));
+  const nm = { cleaning: "the cleaners", screen: "the screen's man on call", pos: "the till company" };
+  if (!id) { _say(`Tan's arrangements running at the bar: ${running.map(k => nm[k] || k).join(", ")}. (CANCEL ${running.map(k => ({ cleaning: "THE CLEANERS", screen: "THE SCREEN", pos: "THE TILL COMPANY" })[k] || k.toUpperCase()).join(" · CANCEL ")})`); return; }
+  if (G.askArmPrev !== "syncancel:" + id) {
+    G.askArm = "syncancel:" + id;
+    _say(`Ending ${nm[id]} is a word to Tan, and he will not argue. Nothing will be done to you — and nothing will be done for you, either: ${id === "cleaning" ? "the bin men go back to coming when they come, and the uncle back to the list price" : "the next time it goes wrong, you are a man with a phone and no number to ring"}. (CANCEL ${({ cleaning: "THE CLEANERS", screen: "THE SCREEN", pos: "THE TILL COMPANY" })[id]} again if you mean it.)`, "dim");
+    return;
+  }
+  st.done[id] = null; st.friction = (st.friction || 0) + 1;
+  _say(`You text Tan. The reply comes quick: "Okay, my friend. Tomorrow they don't come." No question, no why — that is the whole of it, and it is not nothing.`);
+  _say(`(${nm[id].replace(/^./, c => c.toUpperCase())} — off the bar's bill from tonight's count. BOOKS shows it.)`, "dim");
+}
 function _synNo() {
   const job = _synJobById(G.synJob);
   G.pendingChoice = null; G.synJob = null;

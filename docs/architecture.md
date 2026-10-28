@@ -1098,7 +1098,7 @@ How you get from one door to the next and what finds you on the way: the trucks 
 
 **Touches.** `darkness` (the go-go torch kicks you out), `navigation` (bans gate arrival), `encounters` (the stop is an encounter), `cons` (REPORT at the station), the barfine and bond systems via `_maiDeeScene`. A new incident should call `_repHit`, which also feeds the CCIB lay-low counter.
 
-**Tests.** round110.test.js, tests/js/engine.test.js, mgrfloor.test.js, research.test.js (face-loss), round73.test.js (the Thai no), playtest5.test.js, conversation.test.js, rulings1022.test.js; `tools/modal-audit.mjs` arms the police gate and `tools/money-audit.mjs` reconciles the fines.
+**Tests.** round111.test.js, round110.test.js, tests/js/engine.test.js, mgrfloor.test.js, research.test.js (face-loss), round73.test.js (the Thai no), playtest5.test.js, conversation.test.js, rulings1022.test.js; `tools/modal-audit.mjs` arms the police gate and `tools/money-audit.mjs` reconciles the fines.
 
 **Design docs.** docs/factions-thai.md
 
@@ -2029,7 +2029,7 @@ verb, never her price. The trap is that nobody ever names a number.
 **Touches.** `barfine` (the BARFINE verb routes her first), `phone` (her LINE and texts), the happiness treadmill
 (`_conquestHappy`). Both modals must stay wired in the parser intercept, `_renderResume`, the chip set and completion.
 
-**Tests.** chameleon.test.js, round72.test.js, round56.test.js, round63.test.js, round76.test.js, world.test.js,
+**Tests.** round111.test.js, chameleon.test.js, round72.test.js, round56.test.js, round63.test.js, round76.test.js, world.test.js,
 saveload.test.js; tools/modal-audit.mjs (gated by modal-audit.test.js) covers both prompts.
 
 **Design docs.** docs/essay-ledger.md, docs/design-backlog.md.
@@ -2110,7 +2110,7 @@ stand Kesinee, the Kitten Corner mamasan who reads the player's origin, and Gavi
 **Touches.** `quests`, the factions (`_align` moves group standing elsewhere), `soi6-stream` (excludes this room), the
 paper by the till (`_PLG_ROOMS`). A new route into either room must go through `_arriveAt` or it skips the door.
 
-**Tests.** engine.test.js, journal.test.js, reachability.test.js, conversation.test.js, round47.test.js,
+**Tests.** round111.test.js, engine.test.js, journal.test.js, reachability.test.js, conversation.test.js, round47.test.js,
 round58.test.js, playtest5.test.js.
 
 **Design docs.** docs/factions-thai.md, docs/guardrails.md.
@@ -2351,7 +2351,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `weather` (the season curve: `_seasonTakingsOn` grades the night played, not the morning), `procurement` (friction loads nut and stock), `affair` (drag; `_affairNight` runs inside `_barSettle`), `money` (the morning ledger excludes `pocketDrawn`). A test calling `_doWork()` then `_barSettle()` must set `stoodTurns` and advance the day, as the real path does.
 
-**Tests.** round110.test.js, tests/js/barchain.test.js, round54.test.js, research.test.js, quietshift.test.js, round40.test.js, round41.test.js, round70.test.js, round95.test.js, engine.test.js; `tools/money-audit.mjs`.
+**Tests.** round111.test.js, round110.test.js, tests/js/barchain.test.js, round54.test.js, research.test.js, quietshift.test.js, round40.test.js, round41.test.js, round70.test.js, round95.test.js, engine.test.js; `tools/money-audit.mjs`.
 
 **Design docs.** docs/bar-failure-cycle.md, docs/economy-review.md.
 
@@ -2383,7 +2383,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `barchain` (needs `partnerTan` and the favour first), `barbooks` (costs land in `_barNight`); faction standing is this system's own. Copy rule pinned by test: the words bribe and corruption never appear in this system.
 
-**Tests.** tests/js/barchain.test.js, round54.test.js, round57.test.js, round67.test.js, round55.test.js, saveload.test.js, baton.test.js; `tools/modal-audit.mjs`.
+**Tests.** round111.test.js, tests/js/barchain.test.js, round54.test.js, round57.test.js, round67.test.js, round55.test.js, saveload.test.js, baton.test.js; `tools/modal-audit.mjs`.
 
 **Design docs.** docs/factions-thai.md, docs/bar-failure-cycle.md.
 
