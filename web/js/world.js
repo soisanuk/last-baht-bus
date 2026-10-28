@@ -843,8 +843,9 @@ const ROOMS = {
     bar: "Sunset Oil Massage",
     region: "Jomtien",
     massage: "oil",
-    desc: "A pink-lit oil shop halfway down Soi 7, girls on the step, the small sticker on the " +
-      "mirror, and the beach breeze doing its best to keep it wholesome. It fails, pleasantly.",
+    desc: "Halfway down Soi 7, a shopfront with a bead curtain instead of a door and three women on a bench " +
+      "outside it, one of them doing another's nails. Two mats inside, a pink tube over each, and the beach breeze " +
+      "coming in through the beads doing its best to keep it wholesome. It fails, pleasantly.",
     exits: { out: "jomtien_soi_7_w" },
   },
   jomtien_soi_7_thai: {
@@ -1072,9 +1073,9 @@ const ROOMS = {
     bar: "Beach Turn Oil Massage",
     region: "Thappraya",
     massage: "oil",
-    desc: "A pink-lit oil shop right where the beach road turns into the strip, girls on the step " +
-      "catching the punters as they arrive, the small sticker on the mirror, the usual friendly " +
-      "arrangement.",
+    desc: "Right where the beach road turns into the strip, an oil shop that has worked out where the " +
+      "punters arrive and put its step there. Recliners in a row behind the glass, a menu board with " +
+      "photographs, and a girl on the step who has already decided which way you are walking.",
     exits: { out: "thappraya_w" },
   },
   thappraya_massage: {
@@ -1247,7 +1248,7 @@ const ROOMS = {
       "The bay has the only lights left on.",
       "The small hours on the balcony: the hill road's one streetlight, a motorbike going down it too fast, and the fridge humming behind you like a thing that is paid for."],
     reads: {
-      kitchen: "A two-ring hob, a wok somebody left, a rice cooker that is the most reliable appliance in the building. Instant noodles, eggs, a bag of rice — a plate for sixty baht that no stall would charge you less for. (COOK)",
+      kitchen: "A two-ring hob, the one wok the landlord's inventory lists, a rice cooker that is the most reliable appliance in the building. Instant noodles, eggs, a bag of rice — a plate for sixty baht that no stall would charge you less for. (COOK)",
       balcony: "A chair's width of balcony, a plastic chair to fill it, and the bay: Jomtien's lights, Walking Street's pink smear, a ship out where the water goes black. The best thing you own, and you rent it.",
       office: "The juristic office on the ground floor: a desk, a woman who keeps the building's book, and a sign in two languages about overnight guests that everybody in the tower has read once and ignored since.",
       telly: "There is no television. The landlord's inventory lists one; the bracket on the wall is where it was. The balcony is the screen, and it is better.",
@@ -9800,7 +9801,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan", "tanAsked"], when: (st, G) => !_barGone(),
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a name on a paper in a drawer, and the paper has not " +
           "moved.\" The glance down the soi. \"I came once, and I said what I came for, and you answered. That is the arrangement working, " +
-          "my friend — not failing. I will not come again until there is a reason, and then I will say the reason.\"",
+          "my friend — not failing. When I come into the bar, it is because there is a reason, and I say the reason.\"",
         short: "\"I came once and said why. That is the arrangement working.\"" },
       { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"], when: (st, G) => !_barGone(),
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a " +
@@ -15623,10 +15624,10 @@ const SYNDICATE_JOBS = [
       "\"Anyway. They are reliable, they do not steal, and if you keep them then some " +
       "other things become easier for you also. Not from me. Just — easier.\"",
     yes: "\"Good.\" That is the whole of his reaction; he is already texting " +
-      "somebody.\n\nThey start tomorrow. They will be very good, the bar has never been " +
-      "this clean, and Bert — who has opinions about most things — has none about this " +
-      "at all. \"Best cleaners on the soi, bud. Wouldn't ask where they came " +
-      "from.\"",
+      "somebody.\n\nThey start tomorrow. They will be very good — inside a week the bar will be " +
+      "cleaner than it has ever been, and Bert, who has opinions about most things, will have none " +
+      "about this at all beyond the one he will say once: \"Best cleaners on the soi, bud. Wouldn't ask " +
+      "where they came from.\"",
     perk: "The bin men, who used to come when they came, now come. And the uncle who " +
       "brings the beer up from Sattahip in a Hilux with one working door starts quoting " +
       "you the price he quotes everybody inside — not the price on the invoice. He does " +
@@ -15656,10 +15657,10 @@ const SYNDICATE_JOBS = [
       "thousand baht? And every man on this soi knows the farang does his own wiring " +
       "because he will not pay.\"\n\nA shrug, the subject closed. \"You are the " +
       "owner. Owning is your job. Let the men who do the work do the work.\"",
-    yes: "Two men arrive at nine, are finished by one, and take tea rather than beer " +
-      "because they are working. The trunking is straight. The screen is enormous and " +
-      "sits exactly level, which you only notice because the one at the Water Buffalo " +
-      "never has.",
+    yes: "Two men will come tomorrow, before the bar opens, and be gone by the time it does; " +
+      "they will take tea rather than beer because they are working. The trunking will be straight. The " +
+      "screen will be enormous and sit exactly level, which you will only notice because the one at the " +
+      "Water Buffalo never has.",
     perk: "Neither of them will take a tip. A week later a man you have never met " +
       "resets the screen over the phone when it freezes, for nothing, because he owes somebody " +
       "who owes somebody.",
@@ -20160,7 +20161,7 @@ const SOI6_INNER_GIRLS = {
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hold still.\" She is already drawing you on a beer mat — three lines, the nose too big, the sunburn exactly right. \"Okay. Now you can talk.\" She turns it round. \"You like? Is for my box — I have a whole box of men.\" She tucks it away. \"The ones who buy me a drink, I draw a little bit nicer.\"",
-        short: "\"Hold still — I draw you. The ones who buy me a drink, I draw nicer.\"" },
+        short: "\"You again.\" She doesn't look up from the mat. \"Sit. You are in my box already — the nose I don't change.\"" },   // the hold-still is a first meeting; a resident heard it nightly (Desmond, round 106)
       { topic: "drawing|draw|cartoon|beer mat|beer mats|art",
         text: "\"Since small. In Mukdahan I draw the teacher, I get the stick.\" She adds a moustache to the you on the mat. \"Here I draw customer, I get the drink. Better job.\" She fans out a stack of mats from her bag: a hundred faces, every one of them a little too honest. \"One day Walking Street, a little chair, a sign: portrait, five minute. Tourist love it. For now, the stairs pay better than the pen.\"" },
       { topic: "group|new boss|pattaya leisure|company|aircon|sold",

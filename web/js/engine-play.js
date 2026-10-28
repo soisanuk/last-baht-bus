@@ -5870,7 +5870,7 @@ function _nightSnapshot() {
   // on the night" — a publican reading "down ฿290" the morning he handed over
   // ฿40k rent+note called the book a liar (Gordon, 2026-08-26). They belong to
   // the BAR ledger, not the night's personal spending, so track and exclude them.
-  if (G.bar) { G.bar.pocketDrawn = 0; G.bar.pocketNight = 0; }
+  if (G.bar) { G.bar.pocketDrawn = 0; G.bar.pocketNight = 0; G.bar.pocketStock = 0; }
   G.lastNight = {
     vacation: G.vacation,   // a snapshot from a previous vacation reported "-108 สนุก" on the best night of the next (Frank, round 38)
     happy: G.happy,
@@ -5976,7 +5976,8 @@ function _morningLedger() {
   // "down ฿270" on those mornings left ฿1,478 unaccounted for (Kwame, round 60)
   const topUp = (G.bar && G.bar.pocketNight) || 0;   // only the till's shortfall — rent and the note stay on the bar's page
   // the room's folio printed what was left before the till took this, so the line says what the pocket holds after it
-  if (topUp > 0) bits.push("\u0e3f" + _num(topUp) + " of your own money into the till when it went under, on top of that \u2014 \u0e3f" + _num(G.money) + " in the pocket now");
+  const stockN = (G.bar && G.bar.pocketStock) || 0;   // your own drinks' wholesale, paid from the pocket on an empty till
+  if (topUp > 0 || stockN > 0) bits.push([topUp > 0 ? "\u0e3f" + _num(topUp) + " of your own money into the till when it went under" : "", stockN > 0 ? "\u0e3f" + _num(stockN) + " from the pocket for your own drinks' stock" : ""].filter(Boolean).join(" and ") + ", on top of that \u2014 \u0e3f" + _num(G.money) + " in the pocket now");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
   const polN = (G.policePaid || 0) - (b.polB != null ? b.polB : (G.policePaid || 0));
   if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
@@ -6155,6 +6156,8 @@ const _ALLNIGHTER_LINES = [
 // You waited for it on purpose and then went home. The night ends on the sky,
 // not on your legs (Mario, 2026-09-07: "watching the sunrise should end the night").
 const _SUNRISE_END = [
+  "The light comes up grey, then gold, then just light, and the night's last piwin is asleep on his bike at the corner. You wake him. He takes you home without a word, the town going past already rinsed and opening.",
+  "You stay for the whole of it, the colour going out of the sky like a drink going down. Then a bike home through streets the sweepers have had first, the rider yawning at every junction.",
   "You watch it all the way up, which takes longer than anybody expects and is over faster " +
     "than it looks. Then the light is just daylight, the town is just a town, and there is nothing " +
     "left to stay for. You get a bike home with the sun on the back of your neck.",
@@ -6357,10 +6360,11 @@ function _endNight(reason) {
     case "sunrise":
       // You stayed out for it deliberately, which is the difference: the all-nighter
       // is what happens to you, this is what you did. Same body cost, more สนุก.
-      { let _l = _pickVary(_SUNRISE_END, "sunriseEnd");   // "you get a bike home" charged nothing (Marguerite, round 67)
-        // …and no bike to a bed on the same street: a ฿50 ride to the Vic from Soi 6 one night, a walk the next (Sunil, round 86)
-        const _walkHome = _homeNear();
-        if (/\bbike\b/.test(_l) && (G.money < MOTOSAI_TOWN || _walkHome)) _l = _pickVary(_SUNRISE_END.filter(x => !/\bbike\b/.test(x)), "sunriseEnd");
+      { // "you get a bike home" charged nothing (Marguerite, round 67); a bed on the same street is a walk (Sunil, round 86);
+        // and the same distance is the same way home every time — a bike from far, never free one dawn and ฿50 the next (Desmond, round 106)
+        const _walkHome = _homeNear(), _bike = !_walkHome && G.money >= MOTOSAI_TOWN;
+        const _pool = _SUNRISE_END.filter(x => /\bbike\b/.test(x) === _bike);
+        let _l = _pickVary(_pool.length ? _pool : _SUNRISE_END, "sunriseEnd");
         if (/\bbike\b/.test(_l)) { G.money -= MOTOSAI_TOWN; _l += ` (฿${_num(MOTOSAI_TOWN)} for the bike — ฿${_num(G.money)} left.)`; }
         _say(_l, "win"); }
       _addHappy(3);
@@ -7744,6 +7748,8 @@ function _doJuristic(q) {
     line = `"Rent ฿${_num(CONDO_RENT)}, electric and water ฿${_num(CONDO_UTIL)}, same every month." She does not look it up. "From your account, on your day. MONEY on your phone say which day. Short one month, I write it down. Short two month, the lock change and the deposit stay."`;
   else if (/\b(guest|girl|lady|friend|visitor|overnight|sign|after midnight|midnight)/.test(t))
     line = `"Guest is okay." The sign behind her says the same in two languages. "After midnight, she show ID at the gate, I write the name. Morning, I read the book. Nobody get in trouble — the book is for the building, not for you."`;
+  else if (/\b(late|dawn|morning|book|list|come home|coming home|the gate)/.test(t))
+    line = `"You come home late, I see on the book — the gate write every fob after midnight." She does not make a face about it. "Is normal. This building, half the people come home with the sun. The book is for fire, for police, for the owner in Moscow. Not for me to talk."`;
   else if (/\b(notice|leav|mov(?:e|ing) out|deposit|contract|lease|key)/.test(t))
     line = `"You want to leave, you tell me — MOVE OUT. Six month finish, the deposit come back, less any month you are short. Before six month, the deposit stay with the owner." A glance at the fob on your ring. "The key also come back. Everybody forget the key."`;
   else if (/\b(pool|swim|lift|elevator)/.test(t))
@@ -8008,7 +8014,7 @@ function _doMoney() {
   else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is ${_nightsSay(amt + _jobPay())}, at ฿${_num(NIGHT_COST)} a night. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
   if (G.hotel === "condo" && G.condo) _say(`(The condo: ${G.condo.short ? `${G.condo.short} month short — one more and the lock changes` : "paid up"}; the ฿${_num(G.condo.deposit)} deposit is the office's until the lease has run ${CONDO_LEASE} days${G.day - G.condo.since >= CONDO_LEASE ? " — which it has" : ""}.)`, "dim");
   { const d = _debtsLine(); if (d) _say(d); }
-  _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room.)`, "dim");
+  _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room${m.tillIn ? `; and ฿${_num(m.tillIn)} of your own money went into your bar to cover it` : ""}.)`, "dim");
 }
 function _goExpat(opts) {
   const _soi6 = !!(opts && opts.soi6);   // CANCEL THE TICKET at the Soi 6 week's end (Mario, 2026-10-20): the challenge's man stays, and the whole town opens

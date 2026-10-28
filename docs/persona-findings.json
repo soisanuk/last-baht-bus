@@ -37567,8 +37567,8 @@
    "cls": "B",
    "sev": "minor",
    "claim": "Lek 'last night 1 hour' the night after 2.4 hours",
-   "verdict": "deferred",
-   "note": "not reproduced; possibly the same-night ask",
+   "verdict": "refuted",
+   "note": "not reproduced; possibly the same-night ask; not reproduced on 2026-10-28",
    "pin": ""
   },
   {
@@ -37762,9 +37762,9 @@
    "cls": "Q",
    "sev": "minor",
    "claim": "Cartoon's bonded hello 'Hold still — I draw you' every night for a month",
-   "verdict": "deferred",
-   "note": "her written greeting vs the return hello's once-a-trip book; a resident has no trips",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "Cartoon's repeat hello is her own, not the first meeting's hold-still",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37777,9 +37777,9 @@
    "cls": "Q",
    "sev": "minor",
    "claim": "Jiap's LAST TIME is Cartoon's sentence word for word",
-   "verdict": "deferred",
-   "note": "the memory pools' town-wide deal at a resident's length",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "the LAST TIME pools deepened (seen 16, st 4)",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37807,9 +37807,9 @@
    "cls": "N",
    "sev": "minor",
    "claim": "the juristic office never mentions the dawn returns; TALK TO OFFICE has no mouth",
-   "verdict": "deferred",
-   "note": "the office as a mouth (also deferred in round 100)",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "ASK THE OFFICE answers the late-return book",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37837,8 +37837,8 @@
    "cls": "G",
    "sev": "minor",
    "claim": "MOTOSAI TO SOI 6 swallowed as the head-torch's non-answer",
-   "verdict": "deferred",
-   "note": "the soft pitch declines then runs the command; not reproduced",
+   "verdict": "refuted",
+   "note": "the soft pitch declines then runs the command; not reproduced; not reproduced on 2026-10-28",
    "pin": ""
   },
   {
@@ -37852,9 +37852,9 @@
    "cls": "E",
    "sev": "minor",
    "claim": "the sunrise ride home free one day and ฿50 another",
-   "verdict": "deferred",
-   "note": "the walk-home distance vs the bike; not probed",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "the sunrise way home follows the distance: a bike from far every time, three bike lines",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37882,9 +37882,9 @@
    "cls": "F",
    "sev": "noticeable",
    "claim": "a night settled 'you worked it' after he left at 22:30, with the shift tale narrating him present",
-   "verdict": "deferred",
-   "note": "he stood his twenty turns, so it counts by the rule; the tale's events are written as if he were there",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "the bar line says \"you stood it till HH:MM, and Bert closed\"",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37972,9 +37972,9 @@
    "cls": "K",
    "sev": "minor",
    "claim": "Tan's arrangements told as done before they start",
-   "verdict": "deferred",
-   "note": "the yes-text's tense",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "the cleaning and screen yes-texts are in the future tense",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -37987,9 +37987,9 @@
    "cls": "B",
    "sev": "minor",
    "claim": "Oiy: 'too much Chang' to a sober man; the special quoted fresh; Jintana 'you have my number'",
-   "verdict": "deferred",
-   "note": "the masseuse memory reads no sobriety and no special book",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "a dry night is not \"too much Chang\" (the special and the number were already fixed)",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -38002,9 +38002,9 @@
    "cls": "F",
    "sev": "minor",
    "claim": "Manow's 'quiet tonight' text on a football-finish night",
-   "verdict": "deferred",
-   "note": "staff texts vs the night's events",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "his own bar's girls send no \"bar quiet\" text — the night is settled after it",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -38017,9 +38017,9 @@
    "cls": "P",
    "sev": "minor",
    "claim": "'ask wilaiwan do you remember me' no-about form fails at a shop masseuse",
-   "verdict": "deferred",
-   "note": "the shop masseuses are not NPCs; the no-about ask needs a name split",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "ASK <shop masseuse> <question> splits the name from the question",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106",
@@ -38032,9 +38032,9 @@
    "cls": "R",
    "sev": "minor",
    "claim": "rough edges: two pink-lit shops, four mats then reclining chairs, CALL TAN 'My friend.' twice, Tan's quarter-turned glass at his car, 'Back already' after 2.5h, the torch tease to the owner, the round as luck",
-   "verdict": "deferred",
-   "note": "a prose sweep",
-   "pin": ""
+   "verdict": "fixed",
+   "note": "two oil shops rewritten apart; CALL TAN says My friend once; the glass is a phone at the car; \"Back already?\" within the hour",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "106-review",
@@ -41121,11 +41121,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "Tan visits again thirty minutes after 'I will not come again until there is a reason'",
-   "verdict": "deferred",
-   "note": "the favour cadence and Tan's round are separate clocks; not reproduced in triage",
+   "verdict": "fixed",
+   "note": "Tan's line no longer promises an interval his next visit can break",
    "cls": "R",
    "sev": "minor",
-   "system": "tan"
+   "system": "tan",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41171,11 +41172,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "Nuan and Eddy talk about the sale, then 'This one I don't know' about the Stinky",
-   "verdict": "deferred",
-   "note": "a venue-name topic after a sale needs the bar-by-name answerer to know the seller; a class for the town-can't-say lint",
+   "verdict": "fixed",
+   "note": "_saleTalk: the town answers about the Stinky after the sale",
    "cls": "N",
    "sev": "minor",
-   "system": "conversation"
+   "system": "conversation",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41219,11 +41221,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "The ฿16 water from the pocket is missing from the night's line",
-   "verdict": "deferred",
-   "note": "an owner's own-bar purchase from the pocket on an empty till; not yet traced",
+   "verdict": "fixed",
+   "note": "the own-stock water from the pocket is named on the morning line",
    "cls": "E",
    "sev": "minor",
-   "system": "money"
+   "system": "money",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41231,11 +41234,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "'Get them in costs the till ฿500' with ฿423 in the till, no warning",
-   "verdict": "deferred",
-   "note": "the round's prompt should say what the pocket covers",
+   "verdict": "fixed",
+   "note": "a call the till cannot cover says the rest comes from the pocket",
    "cls": "E",
    "sev": "minor",
-   "system": "barbooks"
+   "system": "barbooks",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41255,11 +41259,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "'This month so far' leaves out the ฿2,353 of my own money that went into the till",
-   "verdict": "deferred",
-   "note": "the month's book counts spending, not money moved into your own till; MONEY could say it",
+   "verdict": "fixed",
+   "note": "MONEY's month line names money put into your own bar",
    "cls": "E",
    "sev": "minor",
-   "system": "expat-month"
+   "system": "expat-month",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41291,8 +41296,8 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "WITHDRAW typed at the drunk's prompt answered him and ran the withdrawal with no ATM line",
-   "verdict": "deferred",
-   "note": "a street pitch's passthrough loses the command's output",
+   "verdict": "refuted",
+   "note": "a street pitch's passthrough loses the command's output; not reproduced on 2026-10-28 — the withdrawal prints its machine line through the passthrough",
    "cls": "G",
    "sev": "minor",
    "system": "encounters"
@@ -41329,11 +41334,12 @@
    "model": "opus",
    "lens": "owner-who-sells",
    "claim": "Tan was here a turn ago and now 'isn't around here tonight'",
-   "verdict": "deferred",
-   "note": "a man on his round has moved on, not gone for the night",
+   "verdict": "fixed",
+   "note": "Tan's where-answer: he walks the soi and has moved on",
    "cls": "P",
    "sev": "minor",
-   "system": "tan"
+   "system": "tan",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41467,8 +41473,8 @@
    "model": "fable",
    "lens": "one-relationship-week",
    "claim": "The Rose chip after the seller left; the Wallet chip printed nothing",
-   "verdict": "deferred",
-   "note": "not reproduced in triage",
+   "verdict": "refuted",
+   "note": "not reproduced in triage; not reproduced on 2026-10-28",
    "cls": "H",
    "sev": "minor",
    "system": "chips"
@@ -41529,11 +41535,12 @@
    "model": "fable",
    "lens": "one-relationship-week",
    "claim": "'No motosai stand here — the nearest is on Soi Buakhao' while standing on Soi Buakhao (Soi Diana)",
-   "verdict": "deferred",
-   "note": "two rooms share the street's name",
+   "verdict": "fixed",
+   "note": "the stand further along the same street is named as such",
    "cls": "R",
    "sev": "minor",
-   "system": "motosai"
+   "system": "motosai",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41605,11 +41612,12 @@
    "model": "sonnet",
    "lens": "month-as-budget",
    "claim": "READ DARTBOARD printed the kitchen menu",
-   "verdict": "deferred",
-   "note": "READ with an object the room has no page for falls to the menu",
+   "verdict": "fixed",
+   "note": "READ matches the board as a whole word: DARTBOARD is not the menu",
    "cls": "P",
    "sev": "minor",
-   "system": "parser"
+   "system": "parser",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41667,11 +41675,12 @@
    "model": "sonnet",
    "lens": "month-as-budget",
    "claim": "TRAVEL YOUR CONDO is refused; TRAVEL CONDO works",
-   "verdict": "deferred",
-   "note": "strip the possessive in travel destinations",
+   "verdict": "fixed",
+   "note": "TRAVEL YOUR CONDO reaches the condo",
    "cls": "P",
    "sev": "minor",
-   "system": "navigation"
+   "system": "navigation",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "109",
@@ -41679,11 +41688,12 @@
    "model": "sonnet",
    "lens": "month-as-budget",
    "claim": "TIME said February with the papers dated October",
-   "verdict": "deferred",
-   "note": "the baked news carries the real date; the game's calendar is its own",
+   "verdict": "fixed",
+   "note": "no real-world date on the lottery or the fixtures",
    "cls": "K",
    "sev": "minor",
-   "system": "calendar"
+   "system": "calendar",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",

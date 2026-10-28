@@ -374,8 +374,11 @@ function _masseuseTalk(t) {
   const _ml = G.massageLog && G.massageLog[rm];
   // a night on HER table is her last night too (Benoît, round 104: the special at three, then "Not on my table")
   if (/\b(last night|yesterday)\b/.test(String(t || "")) && _ml && _ml.last === G.day - 1)
+  { // "too much Chang" only to a man who drank: a dry night got it too (Mehmet, round 106)
+    const lw = G.lastNightWas, dry = !!(lw && lw.bars && Object.keys(lw.bars).length && Object.keys(lw.bars).every(r => (lw.dry || {})[r]));
     return _pickVary(["\"Last night? You were here — late, after the bars, the shoulder like a stone.\" She presses it. \"Better now. Still stone.\"",
-      "\"You come in after the bars,\" she says. \"Late. Everybody late is the same man: tired, too much Chang, very polite.\" A small smile. \"You were very polite.\""], "masslastnightme");
+      dry ? "\"You come in late,\" she says. \"Everybody late is tired. You were tired and sober — not so many like that.\" A small smile. \"Easy to work on.\""
+          : "\"You come in after the bars,\" she says. \"Late. Everybody late is the same man: tired, too much Chang, very polite.\" A small smile. \"You were very polite.\""], "masslastnightme"); }
   // the massage itself: what you had, or the board (Benoît, round 104: "ask pensri about massage" was not her story, in her own shop)
   if (/\b(massage|massages|the massage|my massage|your massage|oil|thai massage|foot massage|how was|the oil|technique|my back|my shoulder)\b/.test(String(t || ""))) {
     if (_ml && G.day - _ml.last <= 1) return _pickVary([`"Good?" She already knows. "Your back was a mess. Next time, not after four bars — after one."`, `"You sleep after?" She nods for you. "Body tell me you sleep like a dead man. That is the massage working, not the beer."`], "massdone");
@@ -553,6 +556,9 @@ function _promptedFolk(arg, topic) {
     // to that" in the shop whose prose had just named her (Kwame, round 60)
     const _sw = typeof SHOP_MASSEUSES !== "undefined" && SHOP_MASSEUSES[G.room];
     if (_sw && _pnm(a) === _pnm(_sw.name)) { _say(_masseuseTalk(t)); return true; }
+    // ASK WILAIWAN DO YOU REMEMBER ME — the question with no ABOUT: her name, then the question (Mehmet, round 106)
+    { const _nm = String(_sw && _sw.name || "").toLowerCase(), _al = String(a || "").toLowerCase().trim();
+      if (_sw && !t && _al.startsWith(_nm + " ")) { _say(_masseuseTalk(_al.slice(_nm.length).trim())); return true; } }
     if (/\b(masseuse|massuse|therapist|girl|girls|lady|ladies|woman|women|staff|her|them|manageress|mama|mamasan|owner)\b/.test(a)) {
       const hrs = _hoursSay();
       if (hrs) { _say(hrs); return true; }
@@ -1005,7 +1011,7 @@ function _ownStock(price, what, line) {
   // (Stelian, round 76 — "฿15 of wholesale off the till" with the till at ฿0)
   const fromTill = Math.max(0, Math.min(cogs, G.bar.cash || 0)), fromPocket = Math.min(cogs - fromTill, Math.max(0, G.money));
   G.bar.cash -= fromTill; G.money -= fromPocket;
-  if (fromPocket) G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket;
+  if (fromPocket) { G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket; G.bar.pocketStock = (G.bar.pocketStock || 0) + fromPocket; if (G.month) G.month.tillIn = (G.month.tillIn || 0) + fromPocket; }   // the morning names it with the till's top-up (Hennie, round 109: the ฿16 water vanished)
   G.bar.ownStock = (G.bar.ownStock || 0) + fromTill;   // BOOKS names it, or the itemisation is ฿15 off the till (Lothar, round 67)
   if (fromPocket) { _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — the till is empty, so ฿${_num(fromPocket)} of wholesale comes out of your own pocket.)`, "dim"); return; }
   _say((line ? line + " " : "") + `(${what[0].toUpperCase() + what.slice(1)} off your own stock — ฿${_num(cogs)} of wholesale off the till, nothing off your pocket. The house drinks free; the house pays the wholesaler.)`);
@@ -4655,9 +4661,9 @@ function _doRead(arg) {
   if (/\b(column|owl)\b/.test(arg) && !/\bbrass owl\b/.test(arg)) return _doColumn(); // READ (THE) COLUMN / OWL — whole words: "bowl" is not the Owl (examine audit, 2026-10-09)
   // READ MENU and the bare MENU verb are separate paths and both have to reach
   // the Vic's generated card, or one of the two natural phrasings dead-ends.
-  if (G.room === "queen_vic" && /menu|card|price|board/.test(arg || "")) { _qvCard(); return; }
+  if (G.room === "queen_vic" && /\b(?:menu|card|prices?|board)\b/.test(arg || "")) { _qvCard(); return; }   // whole words: DARTBOARD is not the board
   // a soapy's tiers are its menu — "I tell you the price" over a card that would not read (Margarethe, round 47)
-  if (_room().soapy && /menu|card|price|tiers?|board/.test(arg || "") && typeof _SOAPY_TIERS !== "undefined") {
+  if (_room().soapy && /\b(?:menu|card|prices?|tiers?|board)\b/.test(arg || "") && typeof _SOAPY_TIERS !== "undefined") {
     _say("The laminated card: " + _SOAPY_TIERS.map(t => `${t.label} ฿${_num(t.price)}`).join(" · ") + ". Fishbowl by the number, price by the tier. (SOAPY.)");
     return;
   }
@@ -8565,6 +8571,8 @@ function _wentWithHello(npc) {
   if (book[npc] === G.day + ":" + w.day) return false;     // once a night per night she remembers
   book[npc] = G.day + ":" + w.day;
   let pool = _WENT_HELLO[w.kind];
+  // "Back already?" is within the hour, not two and a half hours on, nor another night (Mehmet, round 106)
+  if (w.kind === "st" && !(w.day === G.day && w.turn != null && G.nightTurn - w.turn <= 10)) pool = pool.filter(f => !/Back already/.test(String(f)));
   if (w.kind === "out") { const pl = G.partyLog && G.partyLog[npc]; const rooms = pl && Array.isArray(pl.rooms) ? new Set(pl.rooms).size : 1;
     // two women on one arm is not a quiet night, whatever the bar count (Ruth, round 94: Kluay's "Quiet" of a night with two companions and a bell)
     const loud = ((G.partyMates && G.partyMates[npc]) || []).length > 0;
@@ -9106,9 +9114,17 @@ function _dawnHere(npc, w) {
 const _LAST_TIME_MEM = {
   out: [n => `"Last time?" ${n} does not have to think. "{ago} — you take me out. Every bar, every song. My feet still know."`, n => `${n} counts back. "{ago}. The night out. You dance like farang, I tell everybody." A grin. "Everybody already know."`],
   lt: [n => `"Last time." ${n} says it with the morning in it. "{ago}. All night. You snore, little bit. I don't mind."`, n => `${n} looks at you a beat too long. "{ago}, you take me home. Long time. In the morning you make me laugh. That is last time."`],
-  st: [n => `"Last time? Upstairs, {ago}." ${n} says it flat and friendly, a fact about the week. "Not long. Long enough."`],
+  st: [n => `"Last time? Upstairs, {ago}." ${n} says it flat and friendly, a fact about the week. "Not long. Long enough."`,
+    n => `${n} tips her chin at the stairs. "{ago}. Up, down, one drink after. You remember the drink, I think."`,
+    n => `"{ago}." ${n} doesn't lower her voice; nobody here would care. "Short time. You say thank you after. Not everybody say."`,
+    n => `${n} counts it on one finger. "{ago}, upstairs. Then you sit with me after, half an hour. That part I like."`],
   home: [n => `"Last time was your place," ${n} says. "{ago}. Ninth floor, the balcony, the fan on two. Not a hotel. I remember the lift."`, n => `${n} tips her head at the hill. "{ago} — your flat. You cook, rice is wrong, I eat all. That is last time, na."`],
-  seen: [n => `"Last time?" ${n} points at the stool you are on. "{ago}. Same stool. You buy drink, we talk, you go home alone. Boring man. Good boring."`, n => `${n} shrugs. "{ago}. You sit here, you drink, you ask me too many question. Then you go. Same like tonight, maybe."`, n => `"{ago}." ${n} taps the bar where your glass goes. "You sit, you drink, you go. I remember the face."`,
+  seen: [n => `${n} squints, pretending to be stern. "{ago}. Long time, for this soi. Here one week is one year."`,
+    n => `"{ago}." ${n} taps the counter where you sat. "The face I remember. The name — one more drink, maybe I remember."`,
+    n => `${n} laughs. "{ago}! You remember better than me. Okay. {ago}."`,
+    n => `"Last time, {ago}." ${n} slides your coaster back under your glass. "Same drink. Same you."`,
+    n => `${n} makes a show of reading a list that is not there. "{ago} — yes. You were good customer. Not famous. Good."`,
+    n => `"Last time?" ${n} points at the stool you are on. "{ago}. Same stool. You buy drink, we talk, you go home alone. Boring man. Good boring."`, n => `${n} shrugs. "{ago}. You sit here, you drink, you ask me too many question. Then you go. Same like tonight, maybe."`, n => `"{ago}." ${n} taps the bar where your glass goes. "You sit, you drink, you go. I remember the face."`,
     n => `${n} thinks, honestly. "{ago}, I think. Not so long, not so short."`,
     n => `"Last time you here?" ${n} looks at the ceiling for the answer. "{ago}. Same as tonight — you sit there, I sit here."`,
     n => `${n} smiles. "{ago}. You come in, I think — oh, that one. Good."`,
@@ -12662,7 +12678,10 @@ function _doMotosai(arg) {
     if (_isHotelRoom(G.room)) { _say("No piwin in here. The stands are on the street — OUT first."); return false; }
     let best = null;   // the nearest stand, and which way (Margit, round 101: "No motosai stand here" two blocks from one)
     for (const id of Object.keys(ROOMS)) if (ROOMS[id].motosai && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id))) { const pth = typeof _path === "function" ? _path(G.room, id) : null; if (pth && pth.length && (!best || pth.length < best.p.length)) best = { id, p: pth }; }
-    if (best) { const dir = Object.keys(r.exits || {}).find(k => r.exits[k] === best.p[0]); _say(`No motosai stand here — the nearest is on ${ROOMS[best.id].name.replace(/\s*\(.*\)$/, "")}, ${best.p.length} ${best.p.length === 1 ? "step" : "steps"}${dir && { n: 1, s: 1, e: 1, w: 1 }[dir] ? " " + { n: "north", s: "south", e: "east", w: "west" }[dir] + " of here" : " away"}${dir ? ` (GO ${dir.toUpperCase()})` : ""}.`); }
+    if (best) { const dir = Object.keys(r.exits || {}).find(k => r.exits[k] === best.p[0]); const _st = n => String(n).replace(/\s*\(.*\)$/, ""), _par = (/\(([^)]*)\)$/.exec(ROOMS[best.id].name) || [])[1];
+      // same street, another stretch: "nearest is on Soi Buakhao" said ON Soi Buakhao (Darren, round 109)
+      const _where = _st(ROOMS[best.id].name) === _st(r.name) ? `further along ${_st(r.name)}${_par ? `, at the ${_par.replace(/ End$/, "")} end` : ""}` : `on ${_st(ROOMS[best.id].name)}`;
+      _say(`No motosai stand here — the nearest is ${_where}, ${best.p.length} ${best.p.length === 1 ? "step" : "steps"}${dir && { n: 1, s: 1, e: 1, w: 1 }[dir] ? " " + { n: "north", s: "south", e: "east", w: "west" }[dir] + " of here" : " away"}${dir ? ` (GO ${dir.toUpperCase()})` : ""}.`); }
     else _say("No motosai stand here.");
     return false;
   }

@@ -2087,8 +2087,11 @@ const _TAN_FOOT = [
   [/He opens the car door for you, courteous as ever\./g, "He steps aside to let you pass, courteous as ever."],
 ];
 function _tanOnFoot(s) {
-  if (_npcRoom("tan") === "soi6_street" || _servesDrinks(_npcRoom("tan"))) return s;
-  for (const [re, to] of _TAN_FOOT) s = s.replace(re, to);
+  const r = _npcRoom("tan");
+  if (_servesDrinks(r)) return s;   // in a bar the glass is real
+  // at the car or on the walk there is no glass (Mehmet, round 106: "turns his glass a quarter" over the car roof);
+  // the car lines hold only at the car
+  for (const [re, to] of _TAN_FOOT) if (r !== "soi6_street" || /glass/.test(String(re))) s = s.replace(re, to);
   return s;
 }
 function _fillSaid(s) {

@@ -2040,7 +2040,7 @@ function _bfResolve(kind) {
   // who you went with, and how — so she remembers the night next time (Martin, round 85: a woman two
   // nights after his bed said "you sit in my bar before — you watch, you don't talk to me")
   if (id && (kind === "st" || kind === "lt" || kind === "party") && !(G.party && G.party.ids && G.party.ids.length && kind !== "party"))
-    (G.wentWith = G.wentWith || {})[id] = { day: G.day, kind: kind === "party" ? "out" : kind };   // the bar you walked her out of answers LAST NIGHT even if you sat longer elsewhere (Pieter, round 73)
+    (G.wentWith = G.wentWith || {})[id] = { day: G.day, turn: G.nightTurn, kind: kind === "party" ? "out" : kind };   // the bar you walked her out of answers LAST NIGHT even if you sat longer elsewhere (Pieter, round 73)
   (G.soc.bfBar = G.soc.bfBar || {})[G.room] = id; // her colleagues saw you leave with her
   G.lastBfId = id; // so the LT ending's _conquestHappy knows who
   // butterflying: a regular of yours in the room watches you leave with another
@@ -4885,7 +4885,7 @@ function _tanCall() {
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
   G.battery = Math.max(0, G.battery - 1);
   // nobody in this town answers a phone — except the man whose job is answering
-  _say("Two rings. \"My friend.\" The one phone in Pattaya that answers.");
+  _say("Two rings, and Tan picks up — the one phone in Pattaya that answers.");   // his "My friend." is the reply's to say, not twice (Mehmet, round 106)
   if (G.mode === "soi6") {
     // he answers, and says where he is: on the soi till midnight, home after
     const _tw = _npcWhere("tan");
@@ -6516,6 +6516,8 @@ function _textFits(id, t) {
   if (!/bar quiet|nobody come|stool free|you come\?|have music|come see|come sit|i keep you seat|kick off/i.test(String(t))) return true;
   const r = typeof _npcRoom === "function" ? _npcRoom(id) : (NPCS[id] || {}).room;
   if (r && _closedNow(r)) return false;
+  // his own bar's girls do not report its trade to him: the night's football finish is settled at dawn, after "bar quiet" went out (Mehmet, round 106)
+  if (r && _barOwned() && G.bar && r === G.bar.room && /bar quiet|nobody come/i.test(String(t))) return false;
   // he is sitting in her bar right now: it is neither quiet nor missing him
   if (r && (G.room === r || ((G.soc.barTurns || {})[r] || 0) >= 2)) return false;
   return true;
@@ -7038,7 +7040,8 @@ function _doScores() {
   // first, then the fixtures — the same bake, read the same way as _footyLine
   const done = f.games.filter(g => g.done).slice(-3), next = f.games.filter(g => !g.done).slice(0, 5);
   for (const g of done) _say("  " + _fmtGame(g), "dim");
-  for (const g of next) _say(`  ${g.d} — ${g.h} v ${g.a}`, "dim");
+  // no date: the bake carries the real calendar, the game keeps its own (Gary, round 109: TIME said February, the paper October)
+  for (const g of next) _say(`  next — ${g.h} v ${g.a}`, "dim");
   const team = _inBar() && _barTeam();
   if (team) {
     _say(`(The regular here supports ${team}. You didn't ask. You never have to.)`, "dim");
@@ -7052,7 +7055,7 @@ function _doLottery() {
       "calendar from memory. No results to hand out here.");
     return;
   }
-  _say(`Last GLO draw (${lt.date}): first prize ${lt.first} · last two ${lt.last2}` +
+  _say(`Last GLO draw: first prize ${lt.first} · last two ${lt.last2}` +
     (lt.back3 && lt.back3.length ? ` · back three ${lt.back3.join(" / ")}` : ""));
   _say("You don't have a ticket. Every girl in every bar can fix that by " +
     "tomorrow lunchtime.", "dim");
@@ -9096,6 +9099,9 @@ function _shiftStakes() {
 }
 function _shiftPrompt() {
   const call = _shiftCallById(G.shiftCall);
+  // a call that costs more than the till holds says where the rest comes from (Hennie, round 109: ฿500 asked of ฿423)
+  const cost = { round: SHIFT_ROUND_COST, merit: MERIT_COST }[G.shiftCall], cash = Math.max(0, (G.bar && G.bar.cash) || 0);
+  if (cost && cash < cost) _say(`(The till has ฿${_num(cash)}; a yes takes it ฿${_num(cost - cash)} under, and if the night's takings don't cover that, it comes out of your own pocket at close.)`, "dim");
   _say(_fmt("(YES \u2014 {label} \u00b7 NO)",
     { label: call ? call.yesLabel : "your call" }), "dim");
 }
@@ -10399,6 +10405,7 @@ function _barNight(settleDay) {
     b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket;   // the bar's own ledger, not the night's spending
     b.pocketNight = (b.pocketNight || 0) + fromPocket;   // …but the till going under is the morning's news (Kwame, round 60)
     b.cash += fromPocket;
+    if (G.month) G.month.tillIn = (G.month.tillIn || 0) + fromPocket;   // MONEY's month names it: moved, not spent
   }
   const underwater = b.cash < 0;
   b.lastOwnDrinks = b.ownDrinks || 0; b.ownDrinks = 0;   // your own girls' drinks, on your chit, into the till — BOOKS names them
@@ -11514,7 +11521,9 @@ function _barSettle(settleDay) {
     : "(The bar: ฿{take} in, ฿{costs} out{low}{who}. Till: ฿{cash}.)",
     { take: n.take, costs: n.costs + (n.evtCost || 0) + (n.short || 0), cash: G.bar.cash, short: -G.bar.cash,
       low: n.low ? _L(" — low season") : "",
-      who: n.worked ? _L(" — you worked it") : _L(" — Bert ran it") }), "dim");
+      // stood, then gone before close: the shift counts by the rule, and the line says who closed (Mehmet, round 106)
+      who: n.worked ? (() => { const rt = (G.bar.lastLines || {}).railTurn || 0, ct = _closeTurn(G.bar.room);
+        return rt && rt < (ct == null ? NIGHT_TURNS : ct) - 10 ? ` — you stood it till ${_clockStr(rt)}, and Bert closed` : _L(" — you worked it"); })() : _L(" — Bert ran it") }), "dim");
   if (n.declaredOnly)
     _say("(You put your name on the shift and then you weren't there for it. Bert stood the night; the takings are his kind.)", "dim");
   if (n.away === WORK_DRIFT) {
@@ -12243,7 +12252,7 @@ function _doTv() {
     if (fb) _say(`Then sport — ${fb}. Kickoff, as ever, at an hour Pattaya ` +
       "calls late and football calls prime time.", "dim");
     const lt = _lotto();
-    if (lt) _say(`And the lottery numbers from the ${lt.date} draw crawl past — ` +
+    if (lt) _say(`And the lottery numbers from the last draw crawl past — ` +
       `first prize ${lt.first}, last two ${lt.last2}. Somewhere a cashier checks her ` +
       "ticket against them without hope, and is proven right.", "dim");
     _say(inRoom ?
@@ -12298,7 +12307,7 @@ function _doPaper() {
   const fb = _footyLine();
   if (fb) _say(`Back page — ${fb}.`, "dim");
   const lt = _lotto();
-  if (lt) _say(`And the lottery results from ${lt.date} in their careful little ` +
+  if (lt) _say(`And the lottery results from the last draw in their careful little ` +
     `box: ${lt.first}, last two ${lt.last2}. Every bar in town knows somebody ` +
     "who was one digit off.", "dim");
   _say("Somewhere in there, the fuel prices explain your bus fare.", "dim");
@@ -13194,7 +13203,7 @@ function _doEat(arg) {
       } }
     _say(_pickVary([`Eggs, rice, a fistful of the dried chilli from the market in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
       `Instant noodles upgraded with an egg and the half papaya, eaten on the balcony with the bay for a television. ฿${_num(CONDO_MEAL)}, and nobody to tip.`,
-      `The rice cooker does its one job; you do the rest with the wok somebody left. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
+      `The rice cooker does its one job; you do the rest with the flat's one wok. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
     return;
   }
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —

@@ -182,7 +182,7 @@ test("Ruud: Tan on the walk turns his phone, not a glass he does not have, and l
   sandbox(); G.nightTurn = 40; assert.notEqual(_npcRoom("tan"), "soi6_street");
   const s = _tanOnFoot("\"Sell?\" Tan turns his glass a quarter. A small smile over the car roof. He settles back against the car.");
   assert.doesNotMatch(s, /glass|car/); assert.match(s, /phone a quarter/);
-  G.nightTurn = 2; if (_npcRoom("tan") === "soi6_street") assert.match(_tanOnFoot("Tan turns his glass a quarter."), /glass/);
+  G.nightTurn = 2; if (_npcRoom("tan") === "soi6_street") { assert.match(_tanOnFoot("Tan turns his glass a quarter."), /phone/); assert.match(_tanOnFoot("He settles back against the car."), /car/); }
 });
 test("Ruud: the manager walking back onto his floor is not pitched the stairs", () => {
   sandbox(); G.stage = "expat"; G.job = { kind: "manager", room: "jade_lounge", corp: true, since: G.day };
@@ -238,4 +238,64 @@ test("the sale says, in plain words, that the till's cash is the seller's and go
     if (via === "tan") assert.doesNotMatch(said(), /on top of the price/);
   }
   owner(); G.bar.cash = 0; G.room = "stinky_bar"; out = []; _barSaleDo("plg"); assert.doesNotMatch(said(), /in the till comes with you/);
+});
+
+// ── the round 106 and 109 deferred lists, closed (2026-10-28) ──
+test("Gary (109): READ DARTBOARD is not the Vic's kitchen board; the papers carry no real-world date", () => {
+  sandbox(); G.room = "queen_vic"; assert.doesNotMatch(t("read dartboard"), /KITCHEN/); assert.match(t("read menu"), /KITCHEN/);
+  if (typeof LOTTO !== "undefined" && LOTTO) assert.doesNotMatch(String(_doLottery), /lt\.date/);
+  assert.doesNotMatch(String(_doScores || ""), /g\.d\}/);
+});
+test("Darren (109): the stand further along the same street is named as that, not 'on Soi Buakhao' on Soi Buakhao", () => {
+  sandbox(); G.stage = "expat"; G.room = "buakhao_n"; const r = t("motosai");
+  assert.doesNotMatch(r, /nearest is on Soi Buakhao/); assert.match(r, /further along Soi Buakhao/);
+});
+test("Hennie (109): a call the till cannot cover says where the rest comes from", () => {
+  owner(); G.bar.cash = 423; G.shiftCall = "round"; out = []; _shiftPrompt();
+  assert.match(said(), /till has ฿423/); assert.match(said(), /your own pocket/);
+  G.bar.cash = 5000; out = []; _shiftPrompt(); assert.doesNotMatch(said(), /own pocket/);
+});
+test("Hennie (109): the owner's own water from an empty till is on the morning's line, and the month names money put into the bar", () => {
+  owner(); G.bar.cash = 0; G.room = "stinky_bar"; _nightSnapshot(); run("buy water");
+  G.room = _hotelRoomId(); out = []; _endNight("sleep");
+  assert.match(said(), /from the pocket for your own drinks' stock/);
+});
+test("Mehmet (106): stood, then gone before close, the bar's line says who closed", () => {
+  owner(); G.bar.cash = 5000; G.room = "stinky_bar"; G.nightTurn = 0; _nightSnapshot(); run("work");
+  while (G.nightTurn < 45) _tick();
+  G.room = _hotelRoomId(); out = []; _endNight("sleep");
+  assert.match(said(), /you stood it till 22:30, and Bert closed/);
+});
+test("Desmond (106): Cartoon's repeat hello is not the first meeting's hold-still; LAST TIME pools are deeper", () => {
+  const c = NPCS.jade_lounge_cartoon.dialogue[0]; assert.doesNotMatch(c.short, /Hold still/);
+  assert.ok(_LAST_TIME_MEM.seen.length >= 15 && _LAST_TIME_MEM.st.length >= 3);
+});
+test("Desmond (106): the sunrise home is the same way from the same distance — a bike from far, every time", () => {
+  assert.ok(_SUNRISE_END.filter(x => /\bbike\b/.test(x)).length >= 3);
+  assert.match(String(_endNight), /_bike = !_walkHome/);
+});
+test("Mehmet (106): Tan's arrangements are told in the future on the night they are agreed", () => {
+  const cl = SYNDICATE_JOBS.find(j => j.id === "cleaning"), sc = SYNDICATE_JOBS.find(j => j.id === "screen");
+  assert.doesNotMatch(cl.yes, /has never been this clean/); assert.doesNotMatch(sc.yes, /arrive at nine, are finished/);
+});
+test("Mehmet (106): his own girls send no 'bar quiet' text about his own bar", () => {
+  owner(); const id = "manow"; assert.equal(_textFits(id, "bar quiet tonight, boss angry"), false);
+});
+test("Mehmet (106): a shop masseuse answers ASK <her> <question>, and a dry night is not 'too much Chang'", () => {
+  sandbox(); G.room = "klang_massage"; G.massageLog = { klang_massage: { last: G.day - 2, n: 1 } };
+  assert.doesNotMatch(t("ask wilaiwan do you remember me"), /Nobody here goes by that/);
+  G.massageLog = { klang_massage: { last: G.day - 1, n: 1 } }; G.lastNightWas = { day: G.day - 1, bars: { stinky_bar: 10 }, dry: { stinky_bar: true } };
+  for (let i = 0; i < 4; i++) assert.doesNotMatch(t("ask wilaiwan about last night"), /too much Chang/);
+});
+test("Mehmet (106): CALL TAN says 'My friend.' once; his glass is a phone at the car too", () => {
+  assert.doesNotMatch(String(_tanCall), /Two rings\. \\"My friend\./);
+  sandbox(); G.nightTurn = 2; if (_npcRoom("tan") === "soi6_street") assert.doesNotMatch(_tanOnFoot("He turns his glass a quarter."), /glass/);
+});
+test("Mehmet (106): 'Back already?' is within the hour of the short time, never two hours on", () => {
+  sandbox(); const id = "jade_lounge_cartoon"; G.room = _npcRoom(id); G.known[id] = true;
+  G.wentWith = { [id]: { day: G.day, turn: G.nightTurn - 25, kind: "st" } };
+  for (let i = 0; i < 6; i++) { G.soc.wentHello = {}; G.wentSaid = {}; out = []; _wentWithHello(id); assert.doesNotMatch(said(), /Back already/); }
+});
+test("Hennie (109): Tan's promise about coming into the bar is one his next visit keeps", () => {
+  assert.ok(!NPCS.tan.dialogue.some(d => /will not come again until/.test(d.text || "")));
 });

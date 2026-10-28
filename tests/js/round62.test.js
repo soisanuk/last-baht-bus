@@ -201,7 +201,7 @@ test("only Tan and the officer turn a glass a quarter", () => {
   assert.deepEqual([...new Set(off)], []);
   for (const f of ["engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"]) {
     const src = readFileSync(W + f + ".js", "utf8");
-    for (const m of src.matchAll(/^function (\w+)[\s\S]*?^}/gm)) if (RX.test(m[0].replace(/"\s*\+\s*"/g, ""))) assert.ok(["_ccibVisit", "_ccibCoffee"].includes(m[1]), f + ": " + m[1]);
+    for (const m of src.matchAll(/^function (\w+)[\s\S]*?^}/gm)) if (RX.test(m[0].replace(/"\s*\+\s*"/g, ""))) assert.ok(["_ccibVisit", "_ccibCoffee", "_tanOnFoot"].includes(m[1]), f + ": " + m[1]);   // _tanOnFoot is Tan's own gesture, carried off the car
   }
 });
 

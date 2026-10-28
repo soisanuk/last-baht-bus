@@ -102,7 +102,7 @@ test("WORK declared and slept on settles as Bert's night (Keith)", () => {
   // …and a stood shift still counts
   ownsBar(); stub(() => run("work")); for (let i = 0; i < WORK_MIN_STOOD + 1; i++) stub(() => { run("wait"); if (G.pendingChoice) run("no"); });
   out = []; stub(() => _endNight("sleep"));
-  assert.match(text(), /you worked it/);
+  assert.match(text(), /you worked it|you stood it till/);
 });
 
 test("BOOKS itemises the night and tallies the shifts; TAKE 300 FROM TILL is DRAW at your own bar (Keith)", () => {
