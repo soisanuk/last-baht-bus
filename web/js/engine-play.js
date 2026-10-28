@@ -4722,7 +4722,32 @@ const _SOLD_RABBIT_COLD = [
   n => `${n} wais you, correctly and no more. "Khun Eddy say you sell to the group." A shrug that is not small. "Okay. Your money."`,
   n => `"Hello, customer." ${n} puts a little weight on the last word, then lets it go. "Soi 6 is all the group now. You help. Never mind."`,
 ];
+// THE SALE, asked of anyone: the town knows who bought it and how it stood, in the asker's register
+// (Bert and Tan have their own nodes about it; the floor, the rail and the columnist answer here)
+const _SALE_TOPIC = /\b(?:the )?(?:stinky(?: pinky)?|sale|selling|sold|sell(?:ing)? (?:the|my|your) bar|my (?:old )?bar|your (?:old )?bar)\b/;
+const _SALE_SAID = {
+  floor: [
+    (n, b, h) => `"You sell the Stinky." ${n} says it the way the soi says everything, as news already old. "${b} have it now. ${h === "profit" ? "People say you make money there. Smart, to sell when it is good." : h === "under" ? "People say it was hard. Okay — finish now." : "Not rich, not broke, people say. Okay."}"`,
+    (n, b, h) => `${n} shrugs. "Everybody know. ${b}." A small look at you. "${h === "profit" ? "You sell high, na? Good for you." : h === "under" ? "Better than nothing, the girls say." : "Same same, the girls say. Okay."}"`,
+  ],
+  house: [
+    (n, b, h) => `"The Stinky went to ${b}." ${n} has heard it three ways already and gives you the plainest. "${h === "profit" ? "Sold making money, which is the only good way to sell." : h === "under" ? "It was going under — that's what everyone says, and they say it kindly." : "Neither up nor down, they say. You got out standing."}"`,
+    (n, b, h) => `${n} nods. "${b} have it now." A beat. "${h === "profit" ? "You sold it at the top. Not many manage that." : h === "under" ? "Nobody blames a man for a bad season. They just remember it." : "Kept it standing and let it go. That's more than most."}"`,
+  ],
+  punter: [
+    (n, b, h) => `"Heard you sold up." ${n} lifts the glass an inch. "${b}, isn't it? ${h === "profit" ? "Got out at the top, by all accounts. Good on you." : h === "under" ? "Rough season to own a bar. Rough town for it." : "Not a fortune either way, they say. Still — out in one piece."}"`,
+    (n, b, h) => `${n} has the story already, the way the rail always does. "${b} have the Stinky now. ${h === "profit" ? "You made money on it, the word is. Rare as hen's teeth." : h === "under" ? "Word is it was underwater. Happens to better men." : "Broke even, near enough, the word is. Plenty don't."}"`,
+  ],
+};
+function _saleTalk(id, topic) {
+  const sale = G.barSale; if (!sale || sale.via === "lost" || !_flag("barSoldOn")) return false;
+  if (!topic || !_SALE_TOPIC.test(String(topic).toLowerCase()) || id === "bert" || id === "tan" || !NPCS[id] || !_met(id)) return false;
+  const reg = _hoursRegister(id), key = reg === "floor" ? "floor" : reg === "punter" ? "punter" : "house";
+  _say(_pickVary(_voiceFit(_SALE_SAID[key]), "saletalk:" + key)(NPCS[id].name, _barBuyerName(), sale.health));
+  return true;
+}
 function _ownBarTalk(id, topic) {
+  if (_saleTalk(id, topic)) return true;
   if (_flag("barToPlg") && !topic && _met(id) && NPC_ROLES[id] && _npcRoom(id) === "white_rabbit" && G.room === "white_rabbit" && !(NPCS[id] && NPCS[id].filler)) {
     _say(_pickVary(_SOLD_RABBIT_COLD, "soldrabbit")(NPCS[id].name)); return true;
   }
@@ -6636,6 +6661,8 @@ function _endNight(reason) {
   // a resident who comes by every few nights must be able to KEEP a local (27-night
   // playtest 2026-08-22: both contacts strangers by day 35) — expat bonds cool a
   // notch every third night, vacation bonds nightly as before
+  // the highest warmth reached is kept before it cools — the black book still knows her name a month on
+  for (const id in G.soc.drinks) { const t = _bondTier(id); if (t > ((G.everBond = G.everBond || {})[id] || 0)) G.everBond[id] = t; }
   if (_dogEgg() !== "loyal" && (G.stage !== "expat" || G.day % 3 === 0)) for (const id in G.soc.drinks) _addBond(id, -1);
   // THE REGULAR, BY PRESENCE: six nights on the same stool, ฿2,400 on one girl,
   // and by Saturday she "knows your face" — the nightly cool-off ate a modest
@@ -7464,6 +7491,20 @@ function _takeJob() {
   G.jobOffer = null;
   _say(`Done. ${_barName(o.room)} has a manager. ${o.corp ? "Six nights a week, through the books; the paper comes after a month of them." : "Four nights a week, cash in an envelope, and nobody's paper."} (WORK there to stand a shift; QUIT JOB to leave it.)`, "win");
 }
+// declining is free (the doctrine): no standing moves, the offer simply comes off the table
+const _JOB_DECLINED = [
+  "{n} shrugs, unoffended. \"Okay. Maybe another time — maybe never. Both fine.\" The offer goes back where it came from; the night goes on.",
+  "\"No problem.\" {n} has already turned back to the floor. \"Drink, then. Customer is also good.\"",
+  "{n} nods once. \"Okay. The job is not going anywhere, and neither am I.\" Nothing in {p} face has moved.",
+  "\"Mm. Okay.\" {n} takes it the way {s} takes a man who does not want a second beer: not personally, and not for long.",
+];
+function _declineJob() {
+  const o = G.jobOffer; G.jobOffer = null;
+  if (o && o.kind === "school") { _say("You tell Jerry thanks, but no. \"Hey, your call,\" he says, and means it; the school will still be short a native next term."); return; }
+  const who = o && _npcsHere().find(id => NPC_ROLES[id] === "mamasan" || (NPCS[id] && NPCS[id].manager));
+  const pr = who ? _pr(who) : { s: "she", p: "her" };
+  _say(_fmt(_pickVary(_JOB_DECLINED, "jobdecline"), { n: who ? NPCS[who].name : "The house", s: pr.s, p: pr.p }));
+}
 function _doTeach() {
   if (G.stage !== "expat") { _say("A holiday has no mornings to sell. (It is a resident's job.)"); return; }
   if (G.job && G.job.kind === "teach") { _say(`You already teach — ฿${_num(TEACH_PAY)} a month at full mornings, less what the mornings cost. (QUIT JOB to stop.)`); return; }
@@ -7652,6 +7693,67 @@ function _jobPay() {   // the month's share, on the payday: what the nights earn
   return Math.round(base * frac / 100) * 100;
 }
 // ── THE CONDO (Mario, 2026-10-20) — see CONDO_RENT in world.js for the doctrine ──
+// THE HOMEBODY'S VERBS: a man who lives somewhere does small things in it. Each is a turn and
+// moves nothing — except the nap, which is an hour and takes the edge off the drink.
+const _HOME_LINES = {
+  tidy: [
+    "You put the shoes by the door, the glasses in the sink and the shirts over the chair, which is as far as tidying goes on the ninth floor. It looks like somebody lives here. Somebody does.",
+    "Ten minutes with a bin bag: two Chang cans, a 7-Eleven receipt, a bar chit you do not remember signing. The room is a size bigger afterwards.",
+    "You wipe the counter, stack the one plate and square the remote to the edge of the table. The air-con hums its approval.",
+  ],
+  bed: [
+    "You pull the sheet straight and square the pillow. Nobody will see it, which has never been the point of a made bed.",
+    "Corners tucked the way your mother taught you, which the maid service never manages. The room looks like it expects you back.",
+    "You make the bed. It takes a minute and leaves the day feeling slightly more owned.",
+  ],
+  lock: [
+    "The bolt goes across with a good solid sound. The building has a guard and a keycard, and you lock it anyway, because that is what a door is for.",
+    "You turn the key twice, try the handle, and feel faintly ridiculous and entirely better.",
+    "Locked. The corridor outside goes on being a corridor; in here is yours.",
+  ],
+  tea: [
+    "The kettle takes its time, the way everything with a plug does in this heat. Tea in a mug with somebody else's company logo on it, drunk on the balcony with the bay laid out below like somebody else's postcard.",
+    "A sachet of the 3-in-1 from the 7-Eleven, which is not tea, and you drink it anyway, standing at the window, watching the lights along the bay.",
+    "You make a pot properly, for once, and let it go cold while you read the news on the phone. The second cup is the good one.",
+  ],
+  read: [
+    "A paperback from the shelf by the door, left by whoever had the room before you: a thriller with a Bangkok cover and a German name in pencil inside. Twenty pages, and an hour gone without a single decision in it.",
+    "You read the same chapter twice and remember neither. Still — an hour with a book is an hour nobody sold you anything.",
+    "The paperback falls open where the last reader broke the spine. You start there. It is as good a place as any.",
+  ],
+  nap: [
+    "You lie down on top of the sheet with the air-con on and the curtains half drawn, meaning to rest your eyes. An hour goes. The town is still there when you get up, and a little less loud in your head.",
+    "An hour on the bed with the fan going. You don't quite sleep and don't quite not, and the night's first drinks drain out of the edges.",
+  ],
+};
+function _doHome(kind) {
+  if (G.room !== _hotelRoomId()) { _say(_inCondo() ? "That is a thing for home — the flat on Pratumnak." : "That is a thing for your room."); return; }
+  if (!_inCondo() && (kind === "tidy" || kind === "bed")) { _say("Housekeeping has been in — the towels are swans again and the bed is made to a hospital corner. There is nothing to do but untidy it."); _tick(); return; }
+  _say(_pickVary(_HOME_LINES[kind], "home:" + kind));
+  if (kind === "nap") { G.soc.drunk = Math.max(0, (G.soc.drunk || 0) - 1); _passTime(10); return; }
+  if (kind === "read") { _passTime(10); return; }   // an hour with a book is an hour (ten turns)
+  _tick();
+}
+// THE JURISTIC OFFICE, asked: the woman who keeps the building's book answers the building's questions, in the
+// Thai house register, from the lease's own figures
+function _doJuristic(q) {
+  if (!_inCondo() || (G.room !== "condo_room" && G.room !== "pratumnak_soi5")) { _say("The juristic office is the condo tower's — on Pratumnak Soi 5, for the people who live there."); return; }
+  const t = String(q || "").toLowerCase();
+  let line;
+  if (/\b(rent|pay|money|month|bill|electric|water|utilit)/.test(t))
+    line = `"Rent ฿${_num(CONDO_RENT)}, electric and water ฿${_num(CONDO_UTIL)}, same every month." She does not look it up. "From your account, on your day. MONEY on your phone say which day. Short one month, I write it down. Short two month, the lock change and the deposit stay."`;
+  else if (/\b(guest|girl|lady|friend|visitor|overnight|sign|after midnight|midnight)/.test(t))
+    line = `"Guest is okay." The sign behind her says the same in two languages. "After midnight, she show ID at the gate, I write the name. Morning, I read the book. Nobody get in trouble — the book is for the building, not for you."`;
+  else if (/\b(notice|leav|mov(?:e|ing) out|deposit|contract|lease|key)/.test(t))
+    line = `"You want to leave, you tell me — MOVE OUT. Six month finish, the deposit come back, less any month you are short. Before six month, the deposit stay with the owner." A glance at the fob on your ring. "The key also come back. Everybody forget the key."`;
+  else if (/\b(pool|swim|lift|elevator)/.test(t))
+    line = `"Pool is for the people who live here — you live here. Towel you bring." She lists it the way she has listed it a thousand times. "Lift work. If it stop, you call me, not the owner. The owner is in Moscow."`;
+  else line = _pickVary([
+    `The woman at the juristic desk looks up from the building's book. "Yes? Rent, guest, or you leave?" Those are, in her experience, the three questions.`,
+    `"Ninth floor, the one with the chair on the balcony." She knows it before you say it. "Everything okay? Aircon okay? Ask me rent, guest, or the key — I answer."`,
+  ], "juristic");
+  _say(line); _tick();
+}
 function _doRentCondo() {
   if (G.stage !== "expat") { _say("Rooms by the month are for residents. A holiday has a hotel, and a flight."); return; }
   if (G.hotel === "condo") { _say(`You rent it already — the ninth floor, ฿${_num(CONDO_RENT)} and the electric out of the account on your month's day. (MOVE OUT to give it back.)`); return; }

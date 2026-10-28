@@ -2073,6 +2073,24 @@ function _convoAsk(id, d, st) {
 // there?"). Only keys actually in G.player.said are filled — anything else is
 // left untouched — and callback nodes gate on the value being known, so a token
 // never shows raw. Title-cased for display.
+// Tan's lines were written at his parked car and over a glass; on his walk down the soi
+// (every hour but the first) the gesture travels with him and the car stays at the mouth
+const _TAN_FOOT = [
+  [/\b(?:Tan )?turns (?:his|the) glass a quarter(?:, the way he does)?/g, m => (/^Tan /.test(m) ? "Tan turns" : "turns") + " his phone a quarter on his palm, the way he does"],
+  [/\bHe turns the glass\./g, "He turns the phone on his palm."],
+  [/ over the car roof/g, ""],
+  [/He settles back against the car\./g, "He settles his shoulder against a shopfront shutter."],
+  [/He lets the name sit on the roof of the car between you/g, "He lets the name sit in the air between you"],
+  [/He counts it on the roof of the car\./g, "He counts it on his fingers."],
+  [/Tan considers the roof of the car\./g, "Tan considers the soi."],
+  [/He does not come off the car\./g, "He does not come off the wall."],
+  [/He opens the car door for you, courteous as ever\./g, "He steps aside to let you pass, courteous as ever."],
+];
+function _tanOnFoot(s) {
+  if (_npcRoom("tan") === "soi6_street" || _servesDrinks(_npcRoom("tan"))) return s;
+  for (const [re, to] of _TAN_FOOT) s = s.replace(re, to);
+  return s;
+}
 function _fillSaid(s) {
   if (typeof s !== "string" || !(G.player && G.player.said)) return s;
   // Title-case only what looks like a PLACE (a few words, no sentence
@@ -2496,6 +2514,9 @@ function _elsewhereLine(word) {
     // Point the player to her only when she's at one of HER OWN bars (a
     // multi-bar owner alternating nights). If she's somewhere else — an invited
     // visit elsewhere, once that exists — don't reveal it; just say she's out.
+    // Tan walks the soi by the hour: say the stretch he is on and that he moves
+    if (nid === "tan" && _TAN_ROUNDS.includes(cur))
+      return `Tan ${notHere} — he walks the soi until midnight, a stretch an hour. About now he is along ${ROOMS[cur].name}; he will have moved on by the next hour, and he looks in on the bars as he passes.`;
     const own = NPCS[nid].bars ? NPCS[nid].bars.includes(cur) : true;
     if (own && _barName(cur)) {
       // her bar has shut for the night: don't send the player to a padlock
@@ -3042,9 +3063,10 @@ function _deliver(npcId, d, full, asNew) {
   // …a node you have HEARD, reached by another word in it, is still a retelling: it answers with
   // its gist — the first sentence she said — and never the whole speech again (Siobhan, round 77:
   // "surin", "norway" and "wales" each replayed the whole node). Unheard, asNew tells it in full.
-  _say(_fillSaid(terse
+  const _line = _fillSaid(terse
     ? (_sh || (asNew ? _gistOf(_txt) : (n.patron ? _patronAgain(npcId) : _askAgain(npcId))))
-    : _txt));
+    : _txt);
+  _say(npcId === "tan" ? _tanOnFoot(_line) : _line);
   // Courted before you ever talked (drinks first, introductions after — a
   // legitimate Pattaya order of operations): the authored greeting reads
   // tone-deaf if it pretends the ledger is blank, so acknowledge it under the
@@ -3130,6 +3152,14 @@ const _OWNER_REVISIT = [
   "Your bar. Bert lifts the chalk an inch in greeting and goes back to the cue. Somebody has swept; somebody always has, before you arrive.",
   "The Stinky, from the owner's side of the door: you check the fridge light, the float, the fan, before you've decided to check anything.",
   "In off the soi into your own room. The regulars nod the way men nod at the landlord of a pub, which you now are, near enough.",
+];
+// the bar you manage: the floor's pitch is for the customers, not the man who keeps its book
+const _MANAGER_REVISIT = [
+  "Back on your floor. The girls look up the way a floor looks up at the manager — a glance to see what kind of night you have brought in — and go back to the customers.",
+  "In through the door you are paid to stand behind. The cashier tips the float book an inch toward you; the music does not change for you, and should not.",
+  "Your shift's room again. The mamasan reads your face before she reads the door, and a girl who was halfway off her stool sits back down: you are not a customer.",
+  "Back at the bar you manage, from the staff side of the room. The stools, the ice, the board — you check them before you have decided to check anything.",
+  "The floor you run for somebody else's name. Nobody pitches you; a girl asks if the ice is coming, which is the kind of thing they ask the manager.",
 ];
 const _BAR_REGULAR = [
   "Down the far end, a knot of regulars are welded to the bar, deep in an argument only they follow — part of the furniture, not the cast.",
@@ -3336,7 +3366,7 @@ function _describeRoom(full, forceFull) {
   const sold = G.room === "stinky_bar" && G.barSale && G.barSale.via !== "tan" ? G.barSale.via : null;
   const lateP = sold === "plg" && Array.isArray(r.lateDesc) ? r.lateDesc.filter(l => !/\bBert\b/.test(l)) : r.lateDesc;
   if (full) _say(_dropCompanionLines(late && lateP && lateP.length ? (Array.isArray(lateP) ? _pickVary(lateP, "late:" + G.room + (sold || "")) : lateP)
-    : (!firstTime && !forceFull && r.revisit ? _revisitPick(_atOwnBar() ? _OWNER_REVISIT : sold === "plg" ? _STINKY_PLG_REVISIT : r.revisit, G.room)
+    : (!firstTime && !forceFull && r.revisit ? _revisitPick(_atOwnBar() ? _OWNER_REVISIT : _atJobBar() ? _MANAGER_REVISIT : sold === "plg" ? _STINKY_PLG_REVISIT : r.revisit, G.room)
       : (_atOwnBar() ? String(r.desc).replace(/^An American-run beer bar/, "Your beer bar — the old man's name still over the door —") : sold ? _stinkySoldDesc(sold, r.desc) : r.desc))));   // owned, it is not "American-run" (Marta, round 63)
   const items = Object.keys(G.itemLoc).filter(id => _here(id));
   if (items.length) {

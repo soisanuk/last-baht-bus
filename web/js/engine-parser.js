@@ -203,10 +203,10 @@ const _ORCHID_CLUB_UNKNOWN = [
     "enough would know whose wall this is.",
 ];
 const _ORCHID_BOUNCER = [
-  "A man the size of a doorway fills the doorway. He doesn't ask a question; he just looks at you until you understand the answer. \"Members,\" he says, once. You are not, yet, a member.",
-  "The velvet rope stays hooked. The doorman glances at a phone, glances at you, and finds no match. \"Not tonight, boss.\" The 'boss' is doing a lot of work, and none of it is for you.",
-  "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's Pattaya Leisure's room. You Pattaya Leisure?\" You are not, and he already knew it, and that was the whole conversation.",
-  "The doorman doesn't move and doesn't blink. \"Friends of the group only.\" A beat. \"You want in, be a friend of the group. Everybody knows how that works.\" The rope does not lift.",
+  "A man the size of a doorway fills the doorway. \"Lounge is for Pattaya Leisure friends, boss. Friends and their guests.\" He looks at you until you understand you are neither.",
+  "The velvet rope stays hooked. The doorman glances at a phone, glances at you, and finds no match. \"Group friends and guests only, boss. Not tonight.\" The 'boss' is doing a lot of work, and none of it is for you.",
+  "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's Pattaya Leisure's lounge. Their friends, their guests. You one of those?\" You are not, and he already knew it, and that was the whole conversation.",
+  "The doorman doesn't move and doesn't blink. \"Friends of the group and their guests only.\" A beat. \"You want in, be a friend of the group.\" The rope does not lift.",
 ];
 const _NOT_CARRYING = [
   "You're not carrying that.",
@@ -822,7 +822,8 @@ function _naturalHelp(lower) {
     _say(hp ? `(${_HOTELS[G.hotel].name} has one — SWIM in your own room takes you down to it.)` : `(Not at ${G.hotel && _HOTELS[G.hotel] ? _HOTELS[G.hotel].name : "your place"}. The Areca Lodge, the Metropole and the condo towers on Pratumnak have pools; the beach is free.)`, "dim"); return true;
   }
   if (/^(?:what'?s|whats|what is) (?:there )?to eat\b|^(?:anything|something) to eat\b|^what (?:can|could) i eat\b/.test(l)) { if (typeof _foodWhereTalk === "function") { _foodWhereTalk(_convoActive() || null); return true; } }
-  if (/^(?:ok(?:ay)?,? |yes,? |right,? |fine,? |alright,? )?(?:i(?:'ll| will)? take (?:the|that|it|your) job|i take it|i'?ll do it|i'?m in|deal|you'?re on|i accept)\b/.test(l) && (G.jobOffer || G.lastOffer)) { doCommand("take the job"); return true; }   // "ok i take the job" repeated the offer (Willem)
+  if (/^(?:ok(?:ay)?,? |yes,? |right,? |fine,? |alright,? )?(?:i(?:'ll| will)? take (?:the|that|it|your) job|i take it|i'?ll do it|i'?m in|deal|you'?re on|i accept)\b/.test(l) && (G.jobOffer || G.lastOffer)) { doCommand("take the job"); return true; }
+  if (/\b(?:i(?:'ll| will)? (?:pass|decline)|not (?:for|the) (?:me|job)|i don'?t want (?:the|that|your) job|no(?: thanks?)?,? (?:to )?(?:the )?job)\b/.test(l) && G.jobOffer && G.jobOffer.day === G.day) { _declineJob(); return true; }   // "ok i take the job" repeated the offer (Willem)
   if (/^(?:your )?number(?:,? now| please)?\??$|^(?:can i (?:have|get) )?your (?:phone )?number\b/.test(l)) { const p = _convoActive(); if (p && NPCS[p] && _npcsHere().includes(p)) { doCommand("contact " + NPCS[p].name.toLowerCase()); return true; } }
   if (_jobQuestion(l)) return true;
 
@@ -3304,6 +3305,10 @@ const _SCENERY = [
         "the list because it does not need to be.",
       `A price list in two languages that agree with each other, which is rarer here than ` +
         `it sounds. An hour is an hour, and an hour is ฿${_num(MASSAGE_LEGIT)}. The extras have no line and no name.`,
+      `A whiteboard by the door, the prices in marker over the ghosts of older ones: ฿${_num(MASSAGE_LEGIT)} the hour, two hours ` +
+        "for not quite twice that, and a foot drawn in the corner by somebody who cannot draw feet.",
+      `A menu in a plastic sleeve with photographs of each kind, every model in it smiling with her eyes shut. ฿${_num(MASSAGE_LEGIT)} ` +
+        "against each one, as if the photographs were there to make the choice harder rather than easier.",
     ],
     eatery: [
       "Numbered dishes down one side, prices down the other, and a chalked line at the " +
@@ -16031,6 +16036,8 @@ function _mortColumnTalk(topic) {
                    typeof _OWL_ARRIVED !== "undefined" ? _OWL_ARRIVED : []]) {
     if (Array.isArray(p)) pools.push(...p.filter(x => typeof x === "string"));
   }
+  // the Stinky's listing is "the American's shop": not while it is yours, nor after the group or Tan's buyer has it
+  if (_barOwned() || (G.barSale && G.barSale.via !== "bert")) for (let i = pools.length - 1; i >= 0; i--) if (/^STINKY BAR/.test(pools[i])) pools.splice(i, 1);
   const re = new RegExp("\\b" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
   const hit = pools.find(s => re.test(stripMarkup(s)));
   if (!hit) return null;
@@ -16382,7 +16389,7 @@ const _COMPLETE_VERBS = [
   "sleep", "tv", "column", "owl", "watch", "watch soi", "balcony", "weather", "scores", "lottery", "map", "time", "tip", "wave", "phone",
   "photo", "gallery", "photos", "info", "call", "share", "follow", "see", "cash", "shower", "withdraw", "deposit", "cheers", "tao rai", "borrow", "repay", "hire", "pet", "feed", "rename", "dance", "sing", "swim",
   "smell", "listen", "diagnose", "get tested", "clinic", "apologize", "quests", "journal", "accept", "abandon", "contact",
-  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
+  "contacts", "who", "who am i", "identity", "blackbook", "message", "check messages", "send", "score", "standing", "money", "teach online", "take the job", "decline the job", "tidy up", "make the bed", "lock the door", "make tea", "nap", "read a book", "ask the office", "quit job", "rent a condo", "move out", "cook", "last night", "wait", "again",
   "request", "hint", "books", "draw", "work", "help", "verbs", "save", "load", "undo", "restart", "quit", "reset", "end", "logout", "exits",
 ];
 
@@ -18635,6 +18642,10 @@ function _doCommandInner(input) {
     try { G.lastGate = { cmds: _chipSet().map(c => String(c.cmd).trim().toLowerCase()), turn: G.turns }; } catch (e) { /* a chip set that cannot render must not block the command */ }
   }
   let raw = _norm(input);
+  // FIND TAN / LOOK FOR NINA is WHERE IS, not a topic put to whoever you are talking to
+  { const _fm = !(G.pendingChoice || G.game || G.pendingEnc || G.pendingBf || G.pendingSoapy || G.pendingFare) && /^(?:find|locate|look for|search for)\s+(.+)$/.exec(raw.toLowerCase());
+    const _fid = _fm ? _npcByName(_fm[1]) : null;
+    if (_fid && NPCS[_fid] && _met(_fid) && !_npcsHere().includes(_fid)) raw = "where is " + _fm[1]; }
   // The chip bar's `info…` fanout prefills a SENTINEL ("__info ") so engineComplete
   // can answer with a menu of the readout verbs instead of a prefix completion —
   // one chip slot for eleven verbs. term.js then submits "__info score", and until
@@ -18674,11 +18685,25 @@ function _doCommandInner(input) {
   // THE CONDO (2026-10-20): the lease at the office, notice, the kitchen
   if (/^(?:rent|take|lease|get) (?:a |the )?(?:condo|apartment|flat|room by the month|studio)\b/i.test(raw.trim())) { _doRentCondo(); return; }
   if (/^(?:move out|give notice|leave the condo|end the lease|hand back the (?:key|condo))$/i.test(raw.trim())) { _doMoveOut(); return; }
+  { const _hm1 = raw.trim().toLowerCase(), _hk = /^(?:tidy(?: up)?|clean(?: up| the (?:room|flat|place))?|tidy the (?:room|flat|place))$/.test(_hm1) ? "tidy"
+      : /^make (?:the |my )?bed$/.test(_hm1) ? "bed" : /^lock (?:the |my )?door$/.test(_hm1) ? "lock"
+      : /^(?:make|brew|have) (?:a |some |a cup of |a pot of )?(?:tea|coffee|cuppa)$/.test(_hm1) ? "tea"
+      : /^read a (?:book|paperback|novel)$/.test(_hm1) || (_hm1 === "read" && G.room === _hotelRoomId()) ? "read"
+      : /^(?:nap|take a nap|have a nap)$/.test(_hm1) ? "nap" : null;
+    if (_hk) { _doHome(_hk); return; } }
+  { const _jm = /^(?:talk to|ask|speak to|speak with|talk with)(?: the)? (?:juristic(?: office)?|(?:building )?office|office (?:lady|woman)|woman (?:in|at) the office)(?: (?:about|re) (.+))?$/i.exec(raw.trim());
+    if (_jm) { _doJuristic(_jm[1] || ""); return; } }
   if (/^cook(?: .*)?$|^make (?:some )?(?:food|dinner|noodles|eggs|breakfast)$/i.test(raw.trim())) {
     if (G.room === "condo_room") { _doEat("cook"); _tick(); return; }
     _say(G.hotel === "condo" ? "Your hob is on the ninth floor of a tower on Pratumnak. Here there is a stall, and a stall is quicker." : "Nothing to cook on and nowhere to cook it — a hotel room has a kettle at best. The stalls are the kitchen here. (A condo has a hob.)"); return;
   }
   // THE JOBS (2026-10-20): a verb each, lean — the offer lapses at dawn, no gate
+  // DECLINE THE JOB: an offer on the table is turned down for free, and the floor that made it says so once
+  if (/^(?:decline|turn down|refuse|pass on|say no to|no thanks? to) (?:the |that |this |your )?(?:job|offer)(?: offer)?$|^(?:no thanks?|thanks,? but no)(?:,? (?:to )?the job)$/i.test(raw.trim())) {
+    if (G.jobOffer && G.jobOffer.day === G.day) _declineJob();
+    else _say("Nobody has offered you a job tonight, so there is nothing to turn down. (Asking costs nothing either — and neither does saying no.)");
+    return;
+  }
   if (/^(?:take|accept) (?:the |that |this )?job$|^i'?ll take it$|^take it$/i.test(raw.trim()) && G.jobOffer) { _takeJob(); return; }
   if (/^(?:take|accept) (?:the |that |this )?job$/i.test(raw.trim()) && !G.jobOffer && G.stringer && _npcsHere().includes("mort")) { _say("\"You've taken it.\" Mort doesn't look up from the notebook. \"Read something I haven't, and tell me about it. That's the whole job.\""); return; }   // Ingrid, round 103
   if (/^(?:take|accept) (?:the |that |this )?job$/i.test(raw.trim()) && !G.jobOffer) { _say(G.job ? "You have a job already. (MONEY says which; QUIT JOB first if you want another.)" : "Nobody has offered you one tonight. (ASK the mamasan or the manager ABOUT A JOB.)"); return; }
@@ -18815,6 +18840,9 @@ function _doCommandInner(input) {
       _say("(A question isn't a reaction. The moment is still waiting on one.)", "dim"); _renderEncounter(); return;
     }
   }
+  // WORK typed while the bar's own question is up: the gate keeps it, and says the shift was not started
+  if (G.pendingChoice && G.pendingChoice !== "intro" && /^(?:work|stand (?:the |a |my )?shift|start (?:the |my )?shift)$/.test(lower) && (_atOwnBar() || _atJobBar()))
+    _say("(Not yet — the shift is not started. Answer this first, then WORK.)", "dim");
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
 
@@ -20600,6 +20628,8 @@ function _doCommandInner(input) {
       }
       const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
     }
+    case "black": case "little":   // BLACK BOOK / LITTLE BLACK BOOK as two words; anything else falls through
+      if (/^(black )?book$/.test(arg)) { _doBlackbook(); break; }
     default:
       if (/^(?:how do i|how to|how much\b|which way|directions?|what'?s the way|ok(?:ay)?\b|yes\b|right\b|fine\b|alright\b|number\b|your number|let'?s\b|lets\b|come\b|back to mine|is my\b|when\b|how many\b|what'?s to\b|anything to\b|something to\b|is there\b|i(?:'ll| will)? take\b|i accept|deal\b|i take it)/.test(lower) && _naturalHelp(lower)) break;   // "how do i get to soi buakhao" (Owain, round 99); "ok i take the job", "number now", "is my shift done" (Willem, round 100)
       // the piwin just asked "where to?" and the player answered with a place, not a verb

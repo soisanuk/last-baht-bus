@@ -136,7 +136,7 @@ const CLASS = {
   "engine-encounters.js:_SALENG_VIGNETTES|everyone knows": [G_], "engine-encounters.js:_salengBuy|the whole bar saw": [G_, "a moment, not a story"],
   "engine-parser.js:_BUS_SMALL_HOURS|everyone knows": [G_], "engine-parser.js:_FOLK_DJ|the room notices": [G_],
   "engine-parser.js:_FOLK_GENERIC|spoken for": [G_, "her night is, not you"], "engine-parser.js:_LOOP_RIDE|everybody watching": [G_],
-  "engine-parser.js:_ORCHID_BOUNCER|everybody knows": [G_], "engine-parser.js:_SCENERY|the town sees": [G_],
+  "engine-parser.js:_SCENERY|the town sees": [G_],
   "engine-parser.js:_doBuy|the floor notices": [G_, "a moment"], "engine-parser.js:_doExamine|the floor knows": [G_],
   "engine-parser.js:_doGive|everybody here knew": [G_], "engine-parser.js:_doGive|the whole rail can see": [G_, "a moment"],
   "engine-parser.js:_politePhrase|the soi has heard": [G_], "engine-parser.js:_doCommandInner|the mamasan hears": [G_],

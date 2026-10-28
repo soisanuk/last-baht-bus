@@ -2898,13 +2898,17 @@ function _doMassage(arg) {
     // the price list names four and all four printed the Thai one (Owen, round 46)
     const kind = /foot|feet|reflex/.test(arg) ? "foot" : /herbal|compress|ball|steam/.test(arg) ? "herbal" : /oil|aroma|swedish/.test(arg) ? "oil" : "thai";
     const MASSAGE_KIND = {
-      thai: [`฿${_num(MASSAGE_LEGIT)}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
+      thai: [`฿${_num(MASSAGE_LEGIT)}, and an hour on the mat with ${name} pulling each arm until the shoulder remembers where it lives. She talks to the woman on the next mat the whole time and never once loses the knot.`,
+             `฿${_num(MASSAGE_LEGIT)}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
              `฿${_num(MASSAGE_LEGIT)}. ${name} folds you like a deckchair, walks on you, and at one point uses a knee in a way you will describe to nobody. An hour later every joint has been reintroduced to its neighbour.`],
-      foot: [`฿${_num(MASSAGE_LEGIT)}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
+      foot: [`฿${_num(MASSAGE_LEGIT)}. Warm water, a towel over the knees, and ${name} working the arch with her knuckles as if she is reading something written there. The walk home takes half the time and none of the effort.`,
+             `฿${_num(MASSAGE_LEGIT)}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
              `฿${_num(MASSAGE_LEGIT)}. ${name} takes your feet as if they have been handed in lost. Thumbs, knuckles, the stick, the one spot near the heel that makes you grip the chair — and then the thing where the calves stop belonging to a man who has walked Beach Road twice.`],
-      herbal: [`฿${_num(MASSAGE_LEGIT)}. The compress comes out of the steamer smelling of lemongrass and something medicinal, wrapped in muslin, too hot for the first minute and exactly right for the next fifty; ${name} presses it down the spine in a line and the day comes out of you like steam.`,
+      herbal: [`฿${_num(MASSAGE_LEGIT)}. ${name} lays the herb balls out on a tray like a cook, tests the first on her wrist, and works down your back one hot press at a time until the whole room smells of temple and kitchen.`,
+               `฿${_num(MASSAGE_LEGIT)}. The compress comes out of the steamer smelling of lemongrass and something medicinal, wrapped in muslin, too hot for the first minute and exactly right for the next fifty; ${name} presses it down the spine in a line and the day comes out of you like steam.`,
                `฿${_num(MASSAGE_LEGIT)}, and the room fills with the smell of the herb ball — turmeric, kaffir, camphor — before ${name} has laid a hand on you. The compress does most of the work. She does the rest, unhurried, and you leave smelling like a temple kitchen.`],
-      oil: [`฿${_num(MASSAGE_LEGIT)}. Warm oil, dim light, a towel, and ${name} working long strokes down the back with the radio on low. Nothing alarming happens to your spine. An hour later you are loose, slightly shiny, and asleep on your feet.`,
+      oil: [`฿${_num(MASSAGE_LEGIT)}. A clean sheet, a kettle of oil on a hotplate, and ${name} counting the vertebrae under her breath in Thai as she goes down them. Nothing is skipped and nothing is hurried.`,
+            `฿${_num(MASSAGE_LEGIT)}. Warm oil, dim light, a towel, and ${name} working long strokes down the back with the radio on low. Nothing alarming happens to your spine. An hour later you are loose, slightly shiny, and asleep on your feet.`,
             `฿${_num(MASSAGE_LEGIT)}, and the oil is warm from a bottle on the water heater. ${name} does the shoulders until they drop, the legs until they give, and says nothing at all for an hour, which is the luxury.`],
     };
     _say(_pickVary(MASSAGE_KIND[kind], "massage:" + kind) + ` (฿${_num(G.money)} left.)`, "win");
@@ -3801,7 +3805,8 @@ function _frontier(max) {
   if (G.phone && G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
     const id = G.phone.invite.id, rm = _npcWhere(id);
     if (rm && rm !== here && _barName(rm)) out.push({ kind: "invite", dist: dist(rm), rank: 0,
-      text: `${NPCS[id].name} asked you to come by tonight — ${_barName(rm)}.`, cmd: `TRAVEL ${cap(_barName(rm))}` });
+      text: `${NPCS[id].name} asked you to come by tonight — ${_barName(rm)}.`, cmd: `TRAVEL ${cap(_barName(rm))}`,
+      tan: `${NPCS[id].name} want you at ${_barName(rm)} tonight. go, na. don't make ${_pr(id).o} wait` });
   }
   // 1b. Sao's car: the invitation the phone made, which JOURNAL never listed (Sol, round 55)
   if (G.bkk && G.bkk.stage === 3 && !_flag("bkkArcDone") && G.hotel && _HOTELS[G.hotel] && here !== _hotelRoomId())
@@ -3818,6 +3823,7 @@ function _frontier(max) {
     const t = topics[_hh(id + ":front:" + G.day, 5) % topics.length];
     const label = typeof _topicLabel === "function" ? _topicLabel(t) : t;
     out.push({ kind: "topic", dist: 0, rank: 1, text: `You have never asked ${NPCS[id].name} about ${label}.`,
+      tan: `${NPCS[id].name} is right there and you never ask about ${label}. ask`,
       cmd: `ASK ${cap(NPCS[id].name.split(" ").pop())} ABOUT ${cap(label)}` });
     break;
   }
@@ -3835,23 +3841,26 @@ function _frontier(max) {
     const who = by && by.by && NPCS[by.by] && by.by !== id ? NPCS[by.by].name : null;
     const rm = _npcWhere(id);
     const asked = !!(G.tanAsked && G.tanAsked[id]);
-    let text, cmd = null;
+    let text, tan, cmd = null;
     if (by && by.seen) {
       // a face you saw across a room and never spoke to: your own observation, so the place is yours to name
       text = `You saw ${NPCS[id].name}${at ? ` at ${at}` : ""} and never spoke.`;
+      tan = `you see ${NPCS[id].name}${at ? ` at ${at}` : ""} and you never say hello. why? say hello`;
       if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
       else if (rm && ROOMS[rm].bar && (G.visited || {})[rm]) cmd = `TRAVEL ${cap(ROOMS[rm].bar)}`;
     } else {
       if (asked) continue;   // Tan gave you the habit; the note has done its job
-      text = who ? `${who} mentioned ${NPCS[id].name}${at ? `, at ${at}` : ""}. You have not met ${_pr(id).o}.`
-                 : `Somebody mentioned ${NPCS[id].name}${at ? ` — at ${at}` : ""}. You have not met ${_pr(id).o}.`;
+      // where you HEARD the name, never where she is — "Candy — at Your Room" read as an address
+      const heard = at ? (by.room === _hotelRoomId() ? " while you were home" : ` while you were at ${at}`) : "";
+      text = `${who || "Somebody"} mentioned ${NPCS[id].name}${heard}. You have not met ${_pr(id).o}.`;
+      tan = `people talk about ${NPCS[id].name} and you never meet. ask me where`;
       // no door, even one on this street: ENTER NOTTY'S PLACE under "you have not met
       // her" told Ruth exactly where Rose was (round 47) — meeting her is the edge
       if (rm === here) cmd = `TALK TO ${cap(NPCS[id].name.split(" ").pop())}`;
       else if (tanHere) cmd = `ASK TAN ABOUT ${cap(NPCS[id].name.split(" ").pop())}`;
     }
     people++;
-    out.push({ kind: "person", dist: rm ? dist(rm) : 50, rank: 2, text, cmd });
+    out.push({ kind: "person", dist: rm ? dist(rm) : 50, rank: 2, text, tan, cmd });
   }
   // 4. a way out of a room you stood in, never taken and not refused tonight (the room named; the far side never)
   const vis = Object.keys(G.visited || {}).filter(r => ROOMS[r] && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(r)));
@@ -3870,6 +3879,7 @@ function _frontier(max) {
     const way = named ? `marked "${e.dir}"` : _dirWord(e.dir);
     out.push({ kind: "exit", dist: e.d, rank: 3,
       text: e.r === here ? `There is a way ${way} from here you never took.` : `${ROOMS[e.r].name} has a way ${way} you never took.`,
+      tan: `${e.r === here ? "where you stand" : ROOMS[e.r].name} — there is a way ${way} you never go. go look`,
       cmd: e.r === here ? (named ? null : cap(e.dir)) : (ROOMS[e.r].bar && (G.visited || {})[e.r] ? `TRAVEL ${cap(ROOMS[e.r].bar)}` : null) });
   }
   // 5. a venue whose name you heard and whose DOOR you have never stood at — a
@@ -3881,6 +3891,7 @@ function _frontier(max) {
     if (!_venueUnfound(rm)) continue;
     venues++;
     out.push({ kind: "venue", dist: 40, rank: 5, text: `${ROOMS[rm].bar} — you have heard the name and never found the door. Over in ${ROOMS[rm].region}.`,
+      tan: `${ROOMS[rm].bar} — you hear the name, you never find it. it is over in ${ROOMS[rm].region}. ask me`,
       cmd: tanHere ? `ASK TAN ABOUT ${cap(ROOMS[rm].bar)}` : null });
   }
   out.sort((a, b) => (a.rank - b.rank) || (a.dist - b.dist));
@@ -4540,7 +4551,7 @@ function _doBlackbook() {
   // thesis is depth-over-breadth can't show you your own depth.
   const ids = Object.keys(G.phone.contacts).filter(id => G.phone.contacts[id] && NPC_ROLES[id]);
   for (const id of Object.keys(G.soc.drinks || {})) {
-    if (NPC_ROLES[id] && NPCS[id] && _bondTier(id) >= 1 && !ids.includes(id)) ids.push(id);
+    if (NPC_ROLES[id] && NPCS[id] && (_bondTier(id) >= 1 || ((G.everBond || {})[id] || 0) >= 1) && !ids.includes(id)) ids.push(id);
   }
   if (!ids.length) {
     const others = Object.keys(G.phone.contacts || {}).filter(k => G.phone.contacts[k] && NPCS[k]).length;
@@ -4556,7 +4567,8 @@ function _doBlackbook() {
   const label = ["a name and a number", "knows your face", "a regular", "★ your girl"];
   // your mamasan and your cashier are not "your girl", and neither is a hostess on your
   // payroll who isn't — the floor's bonds went to her-farang on sixty stood nights (Rolf, round 55)
-  const _lbl = (id, t) => t < 3 ? label[t]
+  const _lbl = (id, t) => t === 0 && ((G.everBond || {})[id] || 0) >= 1 ? "gone cold — it's been a while"
+    : t < 3 ? label[t]
     : (NPC_ROLES[id] === "mamasan" || NPC_ROLES[id] === "cashier") ? "★ close as family"
     : (G.bar && _npcRoom(id) === G.bar.room && !(G.affair && G.affair.id === id)) ? "★ close — and on the payroll"
     : label[3];
@@ -5050,9 +5062,10 @@ function _tanUnstick() {
   }
   // the frontier: the nearest thing the transcript has printed that you have not
   // done — Tan texts THAT, not a shrug (design note, 2026-09-15)
-  const fr = typeof _frontier === "function" ? _frontier(1) : [];
+  // his own words for it, never the journal's narration pasted into his voice
+  const fr = _frontier(8).filter(f => f.tan);
   if (fr.length) {
-    _pushMsg("tan", "my friend. you are going round and round. try this — " + fr[0].text.replace(/\s+\(.*\)$/, "") + " 🙂");
+    _pushMsg("tan", "my friend. you are going round and round. try this — " + fr[0].tan + " 🙂");
     _say(`(📱 CHECK MESSAGES${fr[0].cmd ? " — " + fr[0].cmd : ""}. JOURNAL has the rest of what's open.)`, "dim");
     return;
   }
@@ -6472,7 +6485,7 @@ const _TEXT_TALK_PHOTO = [
   n => `${n} pretends not to know which photo, then gives up. "Okay, okay. My friend take it. Good angle, na?"`,
 ];
 const _TEXT_SUBJECT_FLOOR = [
-  (n, q) => `${n} nods. "Yes — I text you: “${q}”. Same now. Nothing change."`,   // "boss" from a woman who has never called him that (Bridget, round 76)
+  (n, q) => `${n} nods. "Yes — I text you: “${q}”. That was the news, when I send."`,   // never "same now": the text's night has moved on   // "boss" from a woman who has never called him that (Bridget, round 76)
   (n, q) => `"That?" ${n} taps her own {{phone}}. "“${q}”. I write it so you know. Now you know two time."`,
 ];
 const _TEXT_SUBJECT_UNREAD_FLOOR = [
@@ -6488,7 +6501,7 @@ const _TEXT_SUBJECT_HOUSE = [
   (n, q) => `${n} doesn't check the {{phone}}. "I sent you that: “${q}”. Nothing since."`,
 ];
 const _TEXT_SUBJECT_THAI = [
-  (n, q) => `${n} says it again to your face, flatter than the text: “${q}” "Same now. Nothing change."`,
+  (n, q) => `${n} says it again to your face, flatter than the text: “${q}” "That is what I send."`,
   (n, q) => `${n} doesn't check the {{phone}}. "I send you already: “${q}”. After that, nothing new."`,
 ];
 const _TEXT_STOP = new Set(["last", "time", "trip", "week", "morning", "yesterday", "that", "this", "with", "from", "have", "what", "when", "they", "them", "then", "again", "boss", "tonight", "today", "tomorrow", "night", "come", "say", "tell", "telling", "about", "your", "you", "will", "only", "very", "more", "some", "here", "there", "bar", "bars", "other", "goodbye", "bye", "night", "goodnight", "quiet", "music"]);   // a text is not the answer to "goodbye pukky" or "the other bars" (Kevin, round 84)

@@ -146,3 +146,86 @@ test("Kieran: a soon retest at the clinic is called soon, and the test is what c
   assert.doesNotMatch(said(), /Again\? Good — sensible man/); assert.match(said(), /4 day ago/);
   assert.ok(_CLINIC_CLEAN.every(l => !/— it costs nothing at all/.test(l)));
 });
+
+// ── the deferred list, closed (2026-10-28, Mario: "fix the deferred lines") ──
+test("Ollie: the Orchid doorman says the lounge is for the group's friends and guests", () => {
+  sandbox(); for (const l of _ORCHID_BOUNCER) assert.match(l, /friends?\b/i);
+  assert.ok(_ORCHID_BOUNCER.every(l => /guests/.test(l)));
+  assert.ok(!_ORCHID_BOUNCER.some(l => /everybody knows how that works/i.test(l)));
+});
+test("Kieran: Tan's frontier text is in his own words, never the journal's narration", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife");
+  for (const f of _frontier(8)) if (f.tan) assert.doesNotMatch(f.tan, /^You |You have never|You saw/);
+  const fr = _frontier(8).filter(f => f.tan);
+  if (fr.length) { const before = (G.phone.inbox || []).length; G.phone.stuckTan = null;
+    for (const m of (G.phone.inbox || []).slice(before)) if (m.from === "tan") assert.doesNotMatch(m.text, /try this — You/); }
+});
+test("Kieran: a woman he was warm with stays in the black book after a month away, marked gone cold", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife"); G.soc.drinks.nina = 4;
+  for (let i = 0; i < 20; i++) { G.room = _hotelRoomId(); out = []; _endNight("sleep"); }
+  assert.equal(_bondTier("nina"), 0);
+  const r = t("who"); assert.match(r, /Nina/); assert.match(r, /gone cold/);
+  assert.match(t("black book"), /Nina/);
+});
+test("Ollie: QUESTS names where the name was HEARD, never 'Candy — at Your Room'", () => {
+  sandbox(); G.stage = "expat"; G.known.candy = true; (G.namedBy = G.namedBy || {}).candy = { room: _hotelRoomId(), by: null };
+  (G.visited = G.visited || {})[_hotelRoomId()] = true;
+  const f = _frontier(8).find(x => x.kind === "person" && /Candy/.test(x.text));
+  if (f) { assert.doesNotMatch(f.text, /— at /); assert.match(f.text, /while you were home/); }
+});
+test("Ruud: FIND TAN mid-conversation is where he is, not the woman's Tan lore", () => {
+  sandbox(); G.known.tan = true; (G.talked = G.talked || {}).tan = [0]; G.nightTurn = 40; G.room = _npcRoom("cake");
+  run("talk to cake"); const r = t("find tan");
+  assert.doesNotMatch(r, /You asked Cake about/); assert.match(r, /walks the soi/);
+});
+test("Ruud: Tan on the walk turns his phone, not a glass he does not have, and leans on no car", () => {
+  sandbox(); G.nightTurn = 40; assert.notEqual(_npcRoom("tan"), "soi6_street");
+  const s = _tanOnFoot("\"Sell?\" Tan turns his glass a quarter. A small smile over the car roof. He settles back against the car.");
+  assert.doesNotMatch(s, /glass|car/); assert.match(s, /phone a quarter/);
+  G.nightTurn = 2; if (_npcRoom("tan") === "soi6_street") assert.match(_tanOnFoot("Tan turns his glass a quarter."), /glass/);
+});
+test("Ruud: the manager walking back onto his floor is not pitched the stairs", () => {
+  sandbox(); G.stage = "expat"; G.job = { kind: "manager", room: "jade_lounge", corp: true, since: G.day };
+  G.room = "jade_lounge"; (G.visited = G.visited || {}).jade_lounge = true;
+  for (let i = 0; i < 6; i++) { out = []; _describeRoom(); assert.doesNotMatch(said(), /nod at the stairs|then upstairs|talk about upstairs/); }
+});
+test("Ollie: an offered job can be declined, for free", () => {
+  sandbox(); G.stage = "expat"; G.room = "stinky_bar"; G.jobOffer = { room: "stinky_bar", corp: false, day: G.day };
+  const st0 = JSON.stringify(G.standing || {});
+  const r = t("decline the job"); assert.equal(G.jobOffer, null); assert.doesNotMatch(r, /asked .* about/i);
+  assert.equal(JSON.stringify(G.standing || {}), st0);
+  assert.doesNotMatch(r, /\bher face\b/);   // Bert is a he
+  G.jobOffer = { kind: "school", day: G.day }; t("no thanks to the job"); assert.equal(G.jobOffer, null);
+});
+test("Ruud: WORK typed at Tan's question says the shift was not started", () => {
+  owner(); _setFlag("partnerTan"); G.nightTurn = 35; G.room = "stinky_bar"; out = []; _tanFavour();
+  const r = t("work"); assert.match(r, /shift is not started/); assert.equal(G.pendingChoice, "tanfavour");
+});
+test("Ollie: a floor woman's text, said to his face, asserts nothing about now", () => {
+  for (const f of _TEXT_SUBJECT_FLOOR.concat(_TEXT_SUBJECT_THAI)) assert.doesNotMatch(f("Lamai", "birthday tonight"), /Same now|Nothing change/);
+});
+test("Ollie: the massage board and the legit hour are pooled deep enough to walk four shops", () => {
+  sandbox(); G.room = "klang_massage"; const seen = new Set();
+  for (let i = 0; i < 4; i++) { out = []; G.money = 5000; G.nightTurn = 20; run("massage thai"); seen.add(said().slice(0, 40)); }
+  assert.ok(seen.size >= 2, [...seen].join(" | "));
+  assert.ok((String(_doMassage).match(/MASSAGE_LEGIT\)\}/g) || []).length >= 12);   // three lines a kind, four kinds
+});
+test("Ruud: the rail, the floor and the columnist answer for the sale — and Mort's notebook drops 'the American's shop'", () => {
+  soldTo("plg"); G.room = "queen_vic";
+  for (const id of ["terry", "mort", "doyle"]) { G.known[id] = true; (G.talked = G.talked || {})[id] = [0];
+    const r = t(`ask ${id} about the stinky`); assert.doesNotMatch(r, /the American's shop/); assert.match(r, /Pattaya Leisure/); }
+  owner(); G.room = "queen_vic"; G.known.mort = true; assert.doesNotMatch(t("ask mort about the stinky"), /the American's shop/);
+});
+test("Kieran: the homebody's verbs at the condo — each one answered, the nap an hour", () => {
+  sandbox(); G.stage = "expat"; G.hotel = "condo"; G.condo = { since: G.day, deposit: 18000, short: 0 }; G.room = "condo_room";
+  for (const c of ["tidy up", "make the bed", "lock the door", "make tea", "read a book"]) assert.doesNotMatch(t(c), /soi blinks|don't know|Not here/i, c);
+  const n0 = G.nightTurn; t("nap"); assert.ok(G.nightTurn - n0 >= 10);
+  for (const k of Object.keys(_HOME_LINES)) for (const l of _HOME_LINES[k]) assert.doesNotMatch(l, /goes dark|come on along|light outside has changed/);
+});
+test("Kieran: the juristic office answers rent, guests and the key from the lease's own figures", () => {
+  sandbox(); G.stage = "expat"; G.hotel = "condo"; G.condo = { since: G.day, deposit: 18000, short: 0 }; G.room = "condo_room";
+  assert.match(t("ask the office about rent"), new RegExp(_num(CONDO_RENT)));
+  assert.match(t("ask juristic about guests"), /ID/);
+  assert.match(t("ask the office about moving out"), /MOVE OUT/);
+  assert.doesNotMatch(t("ask the office about the pool"), /Pool, no/);   // the condo has a pool (_HOTELS.condo.pool)
+});

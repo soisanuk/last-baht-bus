@@ -41807,11 +41807,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "Mort and Terry, asked about the Stinky, only give the company's name",
-   "verdict": "deferred",
-   "note": "the town's word on a seller is STANDING and the rail; the column's slice is a content add",
+   "verdict": "fixed",
+   "note": "the rail and the floor answer the sale in their register (_saleTalk); Mort's notebook drops the Stinky listing once it is not Bert's",
    "cls": "B",
    "sev": "minor",
-   "system": "barchain"
+   "system": "barchain",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -41935,11 +41936,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "Tan on the open soi 'turns his glass a quarter' and talks of his car",
-   "verdict": "deferred",
-   "note": "Tan's nodes were written for the car and the bar; a pass over his lines for the walk is a prose class",
+   "verdict": "fixed",
+   "note": "_tanOnFoot: off the car hour his glass is a phone turned a quarter and the car lines lean on the soi",
    "cls": "F",
    "sev": "minor",
-   "system": "conversation"
+   "system": "conversation",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -41960,11 +41962,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "The staff have nothing to say about me selling",
-   "verdict": "deferred",
-   "note": "breadth of the floor's topics; Bert and Tan carry it",
+   "verdict": "fixed",
+   "note": "_saleTalk: any met woman or regular answers who bought it and how it stood",
    "cls": "N",
    "sev": "minor",
-   "system": "barchain"
+   "system": "barchain",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42033,11 +42036,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "WORK on night 94 swallowed by Tan's prompt; the books say Bert ran it",
-   "verdict": "deferred",
-   "note": "a gate armed on the WORK turn; needs the gate order reviewed",
+   "verdict": "fixed",
+   "note": "WORK typed into a bar gate says the shift is not started; the gate holds",
    "cls": "G",
    "sev": "minor",
-   "system": "barbooks"
+   "system": "barbooks",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42045,11 +42049,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "Manager at the Jade still gets the punter's 'a hand, a drink, a nod at the stairs'",
-   "verdict": "deferred",
-   "note": "revisit lines are not job-aware",
+   "verdict": "fixed",
+   "note": "_MANAGER_REVISIT at the bar he manages",
    "cls": "F",
    "sev": "minor",
-   "system": "expat-jobs"
+   "system": "expat-jobs",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42057,11 +42062,12 @@
    "model": "opus",
    "lens": "sale-and-after",
    "claim": "'find tan' answered with Cake's Tan lore instead of where he is",
-   "verdict": "deferred",
-   "note": "the live conversation's where-question routing",
+   "verdict": "fixed",
+   "note": "FIND/LOOK FOR a met person is WHERE IS; Tan's where-answer names his stretch and that he moves",
    "cls": "P",
    "sev": "minor",
-   "system": "conversation"
+   "system": "conversation",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42108,11 +42114,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "The Orchid Room cannot be reached; four doormen, no price, 'everybody knows how that works'",
-   "verdict": "design",
-   "note": "the rope is PLG standing ≥2 (errands for the group, or selling them the bar); whether the doorman should name the route is Mario's call",
+   "verdict": "fixed",
+   "note": "Mario 2026-10-28: the doorman says the lounge is for PLG friends and guests (all four lines)",
    "cls": "C",
    "sev": "major",
-   "system": "orchid"
+   "system": "orchid",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42146,11 +42153,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "Tan's pointer said Middle; he was at my rail two turns later",
-   "verdict": "deferred",
-   "note": "the hourly round and the pitch's placement disagree inside an hour",
+   "verdict": "fixed",
+   "note": "Tan's where-answer says he looks in on the bars as he passes",
    "cls": "L",
    "sev": "minor",
-   "system": "conversation"
+   "system": "conversation",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42170,11 +42178,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "QUESTS: 'Somebody mentioned Candy — at Your Room'",
-   "verdict": "deferred",
-   "note": "the pointer names where the mention was heard, which reads as where she is",
+   "verdict": "fixed",
+   "note": "the pointer names where you heard the name (\"while you were home\")",
    "cls": "R",
    "sev": "minor",
-   "system": "quests"
+   "system": "quests",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42182,11 +42191,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "DECLINE <job> read as ASK ABOUT; an offered job can't be turned down",
-   "verdict": "deferred",
-   "note": "declining is free by doctrine but has no verb for an offered job; needs a quest state",
+   "verdict": "fixed",
+   "note": "DECLINE THE JOB / no thanks to the job: free, the offer comes off the table",
    "cls": "C",
    "sev": "minor",
-   "system": "quests"
+   "system": "quests",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42194,11 +42204,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "Massage shops share the price-list paragraph and 'eighteen years'; the ฿300 paragraph is fixed",
-   "verdict": "deferred",
-   "note": "massage prose pooling",
+   "verdict": "fixed",
+   "note": "price-list and legit-hour pools deepened; the eighteen years are Wilaiwan's alone (each masseuse has her own)",
    "cls": "Q",
    "sev": "minor",
-   "system": "massage"
+   "system": "massage",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42206,11 +42217,12 @@
    "model": "fable",
    "lens": "orchid-room-composition",
    "claim": "Lamai's birthday text vs 'Same now. Nothing change' at 03:00",
-   "verdict": "deferred",
-   "note": "a staff text's claim is not carried into her mouth",
+   "verdict": "fixed",
+   "note": "the text echo asserts nothing about now",
    "cls": "J",
    "sev": "minor",
-   "system": "barchain"
+   "system": "barchain",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42385,11 +42397,12 @@
    "model": "sonnet",
    "lens": "condo-homebody",
    "claim": "Home verbs unparsed: tidy, make the bed, lock the door, make tea, nap, read",
-   "verdict": "deferred",
-   "note": "a homebody's verbs are a content add",
+   "verdict": "fixed",
+   "note": "TIDY / MAKE THE BED / LOCK THE DOOR / MAKE TEA / READ / NAP at home",
    "cls": "P",
    "sev": "minor",
-   "system": "expat-condo"
+   "system": "expat-condo",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42397,11 +42410,12 @@
    "model": "sonnet",
    "lens": "condo-homebody",
    "claim": "The juristic office can be examined but not asked",
-   "verdict": "deferred",
-   "note": "",
+   "verdict": "fixed",
+   "note": "ASK THE OFFICE about rent, guests, the key, the pool",
    "cls": "N",
    "sev": "minor",
-   "system": "expat-condo"
+   "system": "expat-condo",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42409,8 +42423,8 @@
    "model": "sonnet",
    "lens": "condo-homebody",
    "claim": "Dark road bite on a plain exit with no warning; ฿30 unexplained on night 1",
-   "verdict": "deferred",
-   "note": "the dark warning fires on TRAVEL, not a bare exit",
+   "verdict": "refuted",
+   "note": "the dark warning fired twice before the bite (the pitch-dark room line and \"You are likely to be bitten\")",
    "cls": "D",
    "sev": "minor",
    "system": "dog"
@@ -42433,11 +42447,12 @@
    "model": "sonnet",
    "lens": "condo-homebody",
    "claim": "Tan's hint text: 'try this — You saw Nuch…' — narration pasted in his voice",
-   "verdict": "deferred",
-   "note": "the frontier line is second-person narration",
+   "verdict": "fixed",
+   "note": "each frontier entry carries Tan's own wording",
    "cls": "M",
    "sev": "minor",
-   "system": "phone"
+   "system": "phone",
+   "pin": "tests/js/round110.test.js"
   },
   {
    "round": "110",
@@ -42445,11 +42460,12 @@
    "model": "sonnet",
    "lens": "condo-homebody",
    "claim": "Nina gone from the black book by day 40",
-   "verdict": "deferred",
-   "note": "contact lifetime over a month of absence",
+   "verdict": "fixed",
+   "note": "everBond is kept before the nightly cool; the book lists her as gone cold",
    "cls": "J",
    "sev": "minor",
-   "system": "phone"
+   "system": "phone",
+   "pin": "tests/js/round110.test.js"
   }
  ]
 }

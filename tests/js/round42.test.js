@@ -40,7 +40,7 @@ test("no player-facing string is a piece of source code (Jacko)", () => {
 
 test("a massage shop's price list is not a drinks list (Hugo)", () => {
   G.room = "thai_massage"; out = []; run("examine price list");
-  assert.doesNotMatch(text(), /lady drink|Beer, spirits/); assert.match(text(), /Foot, Thai, oil|two languages/);
+  assert.doesNotMatch(text(), /lady drink|Beer, spirits/); assert.match(text(), /Foot, Thai, oil|two languages|whiteboard|plastic sleeve/);
   G.room = "poseidon_soapy"; out = []; run("examine price list"); assert.doesNotMatch(text(), /lady drink/);
   G.room = "stinky_bar"; out = []; run("examine price list"); assert.match(text(), /two columns|Beer, spirits/);
 });
