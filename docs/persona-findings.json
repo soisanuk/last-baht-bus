@@ -42573,11 +42573,12 @@
    "model": "fable",
    "lens": "orchid-rope",
    "claim": "Flattering or insulting Vasseur changes nothing observable; 'word travels' promises",
-   "verdict": "deferred",
-   "note": "standing moves; the rope reads standing; a visible consequence is content",
+   "verdict": "fixed",
+   "note": "the read of him is once a life; he greets you by it, the doorman's admit line has heard, Gavin says so once",
    "cls": "M",
    "sev": "minor",
-   "system": "orchid"
+   "system": "orchid",
+   "pin": "round111: what you said to Vasseur travels"
   },
   {
    "round": "111",
@@ -42622,8 +42623,8 @@
    "model": "fable",
    "lens": "orchid-rope",
    "claim": "ride bus to naklua drops at Beach Road north; sleep there silently fails",
-   "verdict": "deferred",
-   "note": "the bus's Naklua stop vs the road",
+   "verdict": "refuted",
+   "note": "reproduced from every stop: the ride arrives at Naklua Road; the persona's grep hid the line where the street (or rain) found him before the bus, and 'n' then walked him north",
    "cls": "D",
    "sev": "minor",
    "system": "navigation"
@@ -42634,8 +42635,8 @@
    "model": "fable",
    "lens": "orchid-rope",
    "claim": "tell him you're in after ACCEPT had consumed the moment, chips still printed",
-   "verdict": "deferred",
-   "note": "stale chips after a quest accept",
+   "verdict": "refuted",
+   "note": "no chips were on screen; the label was typed from an earlier one after the errand was done, and 'that moment's passed' is the right answer",
    "cls": "G",
    "sev": "minor",
    "system": "chips"
@@ -42710,11 +42711,12 @@
    "model": "opus",
    "lens": "procurement-ledger",
    "claim": "MONEY runway erratic and leaves out the bar's bills",
-   "verdict": "deferred",
-   "note": "an owner's runway reads the personal money only",
+   "verdict": "fixed",
+   "note": "the bar's bills paid from the pocket left the living rate; the bar's next month is set against the runway and said",
    "cls": "B",
    "sev": "minor",
-   "system": "expat-month"
+   "system": "expat-month",
+   "pin": "round111: an owner's runway counts the bar's next month"
   },
   {
    "round": "111",
@@ -42939,11 +42941,12 @@
    "model": "sonnet",
    "lens": "cream-and-the-police",
    "claim": "ask her about police answered by a grill cook",
-   "verdict": "deferred",
-   "note": "the pronoun with two women and a cook in the room",
+   "verdict": "fixed",
+   "note": "'ask her' under a soft women's encounter is talking to her, not a no; britles off the gate (no go-go there)",
    "cls": "P",
    "sev": "minor",
-   "system": "conversation"
+   "system": "conversation",
+   "pin": "round111: 'ask her' with the British woman"
   },
   {
    "round": "111",
@@ -42976,11 +42979,12 @@
    "model": "sonnet",
    "lens": "cream-and-the-police",
    "claim": "Cream's thread stops growing after night 2",
-   "verdict": "deferred",
-   "note": "the chameleon arc's depth is content",
+   "verdict": "fixed",
+   "note": "G.chamNights: the lift line thins, last night is pooled, four answers a layer down after two and three nights",
    "cls": "N",
    "sev": "minor",
-   "system": "cream"
+   "system": "cream",
+   "pin": "round111: Cream's act thins with the nights"
   },
   {
    "round": "111",

@@ -351,6 +351,7 @@ function newGame() {
     lifeStats: null,    // the long game's figures, kept at SELL UP for the ending's card
     visitUntil: 0,      // a week down from Prachuap after the good ending: the day the bus goes home     // the night Tan asked his favour — no job is put to you the same night         // …and where (JOURNAL RECORD said Candy Bar 2 of a woman met at Candy Bar)          // id → the day you first spoke (a greeting that says "since you left" needs you to have LEFT)   // …and whether the NEXT ledger has netted it in yet (see _morningLedger)
     chamDays: [],        // the distinct nights you sat with Cream — after a few, CONTACT nudges toward the question
+    chamNights: 0,       // the nights you went with Cream: the act thins with each, and her answers go a layer down
     turns: 0,
     wingmanUntil: 0,     // G.turns before which a wing-woman is vouching for you
     darkStreak: 0,
@@ -699,7 +700,7 @@ const STATE_SCHEMA = {
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
     "bankNotes bar barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
-    "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast cherryDay cliLockedDay cliSat " +
+    "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast chamNights cherryDay cliLockedDay cliSat " +
     "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
     "convoIdx convoLapsed convoPage convoQ coversNights dailyId dailySeed darkDoorDay day destitute destituteDay dog " +
     "dogNudgeDay dogPhakhama dogRegion dogRoomSeen dogTagged dragDay drizzleTurn dropped drunk eddyBackDay encDone " +
@@ -3585,7 +3586,7 @@ function _describeRoom(full, forceFull) {
   // were a tease to a man pricing the cheapest way home (Liam, round 93)
   if (r.motosai) _say(G.mode === "soi6" ? "A motosai stand is here, the piwins in their vests waiting on fares out of the soi — not yours this week. Soi 6 is the whole map." : "A motosai stand is here. (MOTOSAI TO <place>)", "dim");
   if (r.atm) _say("An ATM stands against the wall. (WITHDRAW <amount> · CHECK BALANCE)", "dim");
-  if (r.barType === "beer" || r.barType === "soi6") {
+  if (_barGamesHere()) {   // the one test PLAY reads, so a room never lists a frame it will not deal
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
   if (r.barType === "gents") {

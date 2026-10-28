@@ -3737,8 +3737,8 @@ const ROOMS = {
       "is structural — walls, barstools, the girls' outfits, arguably the air itself. Joy is " +
       "already talking before you sit down. Over the bar a little camera on a bracket watches the pink and sends it to the internet all night — the group streams its rooms on this soi, every one but the one behind the rope. A staircase at the back climbs to the short-time " +
       "rooms; beside it, a velvet-roped, unmarked door leads to the ORCHID ROOM — the group's " +
-      "members-only back room, and very much not for tonight's walk-up trade. (GO BACK, if you " +
-      "think you're on the list.)",
+      "back room for the group's friends and their guests, and very much not for tonight's walk-up trade. (GO BACK, " +
+      "if you are one of them.)",
     revisit: [
       "Back into the Pink Lotus and three hands find you at once — a lap claimed, a thigh against yours, Joy's mouth already at your ear: \"Lady drink first, then upstairs, na? I show you why they call it Pink.\"",
       "The pink swallows you again. No warm-up here — a girl is in your lap doing the math on your shirt before you have sat. \"You buy me drink, handsome? Then up. I make you forget the flight home.\"",
@@ -8806,6 +8806,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "at a bar like a spreadsheet. He calls himself an 'area consultant.' Everyone else calls him the " +
       "Pattaya Leisure man. He is unfailingly pleasant, which is the unsettling part.",
     dialogue: [
+      // what was said to Laurent travels to Gavin with the envelopes — the insult's own promise
+      { req: ["vasseurInsulted"], notFlags: ["gavinHeardInsult"], sets: ["gavinHeardInsult"],
+        text: "Gavin's handshake is exactly as warm as ever, which is how you know. \"Laurent tells me you had a word " +
+          "with him about his rooms.\" The smile does not move. \"He'll have forgotten it by Friday. I'm the one " +
+          "who remembers things, that's all — it's in the job description.\" He lets go of your hand.",
+        short: "\"Laurent tells me you had a word about his rooms. He'll forget it. I remember things.\"" },
+      { req: ["vasseurFlattered"], notFlags: ["gavinHeardFlatter", "vasseurInsulted"], sets: ["gavinHeardFlatter"],
+        text: "\"Laurent says you've got eyes.\" Gavin's tone suggests this is rarer than it ought to be. \"Don't let it " +
+          "go to your head — he says it about the wallpaper. But he said it.\" The handshake runs a half-beat longer.",
+        short: "\"Laurent says you've got eyes. He said it, anyway.\"" },
       // The other half of it. He is not scheming and there is nothing to expose —
       // he is a man who assesses bars for a living, being asked about a bar.
       { topic: "wayne",
@@ -8887,6 +8897,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "listens who has already decided, and he is unfailingly, uselessly polite. Up close, the " +
       "empire is just a man who has never once been told no by anyone he pays.",
     dialogue: [
+      // he has read you once, and a man like this reads a man once: the flattery or the
+      // insult is the whole of what he keeps on you, and he greets you by it after
+      { req: ["vasseurInsulted"],
+        text: "Vasseur's smile arrives a second after he sees you, which from him is a speech. \"Our critic.\" " +
+          "He does not turn the chair this time. \"Sit, by all means. The criminals are buying.\" He says it to " +
+          "the room, and two men at the rail laugh on cue; Gavin, you can be sure, has heard it from him by now.",
+        short: "\"Our critic.\" The chair stays where it is. \"The criminals are buying.\"",
+        choices: [{ label: "Ask about that quiet table", topic: "syndicate" }] },
+      { req: ["vasseurFlattered"],
+        text: "\"Ah — the man with eyes.\" The chair turns its few degrees before you have sat, which is the most " +
+          "Laurent Vasseur gives anybody. \"You'll stay for one. Everyone who sees the room stays for one.\" A " +
+          "glance at the doorman that means you are to be looked after, and the doorman looks after you.",
+        short: "\"Ah — the man with eyes.\" The chair turns before you sit.",
+        choices: [{ label: "Ask about that quiet table", topic: "syndicate" }] },
       { text: "\"You made it in.\" He doesn't get up; he does turn the chair a few degrees, which " +
           "from him is hospitality. \"That means somebody vouched, which means you are useful, which " +
           "is the only kind of friend I keep.\" A smile that has been to better rooms than this one. " +
@@ -8900,6 +8924,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         choices: [
           { label: "Flatter the great man",
             when: (st, G) => _faction("plg") < 5,
+            sets: ["vasseurFlattered"],
             fx: (st, G) => { _align("plg", 1); },
             text: "You tell him the Orchid's the best room on the soi and that he saw it before anyone. " +
               "Vasseur inclines his head a precise centimetre. \"Finally. Somebody with eyes.\" The chair " +
@@ -8907,6 +8932,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
               "files you friendly." },
           { label: "Call it a room full of criminals",
             when: (st, G) => _faction("plg") > -5,
+            sets: ["vasseurInsulted"],
             fx: (st, G) => { _align("plg", -1); },
             text: "You say the quiet part out loud — six rooms of laundered fun. The grin freezes half a " +
               "second before the recovery. \"Bit RICH, coming from a man drinking in one.\" Still a smile. Not a " +
@@ -12816,6 +12842,23 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         short: "\"Here you are again. You want the pharmacy-girl thing again, or we just have a drink like people?\"" },
       { text: "\"Oh — hi.\" She puts the {{phone}} face-down and gives you a small, surprised smile, as if being spoken to was not on tonight's list. \"I not work here na! I just visit my friend — she work here, she busy.\" A shrug at the bar. \"Cream. I work pharmacy, Naklua — you know the one by the market? Big one, air-con.\" She nods at the empty chair without quite offering it.",
         short: "\"I not work here na — just visit my friend. Cream. I work pharmacy, Naklua.\"" },
+      // a layer down, after the nights you went with her: the alibi does not crack, it gets its arithmetic
+      { topic: "job|pharmacy|counter|white coat|chemist|market|work", when: (st, G) => (G.chamNights || 0) >= 2,
+        text: "\"Pharmacy, pharmacy.\" She smiles at being asked again. \"Eleven thousand. The room, the bus, and five for my mama — you are clever man, you know what is left.\" " +
+          "She does not do the sum out loud, and does not need to. \"The white coat is real. I want you to know the white coat is real.\"",
+        short: "\"Eleven thousand, and the room, and my mama. The white coat is real — I want you to know.\"" },
+      { topic: "friend|your friend|near|the friend", when: (st, G) => (G.chamNights || 0) >= 2,
+        text: "\"My friend say I come here too much now.\" Cream laughs. \"She say, Cream, you sit at my bar more than me, and I am the one who work here.\" " +
+          "The laugh stops a little early. \"She don't say the other thing. She is a good friend.\"",
+        short: "\"My friend says I sit at her bar more than she does. She doesn't say the other thing.\"" },
+      { topic: "home|sisaket|mama|mother|family", when: (st, G) => (G.chamNights || 0) >= 3,
+        text: "\"Sisaket.\" The shrug is slower this time. \"Mama's house have a new roof. Tin — when it rain now, you can sleep.\" She turns the glass by the stem. " +
+          "\"She tell the neighbour the pharmacy buy it. Is half true. The pharmacy buy the bus to the pharmacy.\"",
+        short: "\"Mama's house has a new roof. She tells the neighbour the pharmacy bought it. Half true.\"" },
+      { topic: "you and me|us|what is this|what are we|relationship|together", when: (st, G) => (G.chamNights || 0) >= 3,
+        text: "\"Us?\" She thinks about it properly, which is the surprise. \"You are nice man who sit at my table. I am girl who work pharmacy.\" A beat. " +
+          "\"Both true na. Don't make it a story. Every farang make it a story, and then he is sad in the story, not here with me.\"",
+        short: "\"You are a nice man at my table; I am a girl who works in a pharmacy. Both true. Don't make it a story.\"" },
       { topic: "job|pharmacy|counter|white coat|chemist|market|work",
         text: "\"Pharmacy.\" She says the word carefully, pleased with it. \"Eight in the morning to five. White coat, hair up — you not recognise me in the daytime, I think.\" A small laugh. \"Eleven thousand baht a month. Is ok. Honest job. Tired.\" She twirls the cocktail glass by the stem. \"Farang come every morning for the stomach, for the sunburn, for the other thing. Some of them nice. Some of them talk talk talk.\"",
         short: "\"Pharmacy — eight to five, white coat, eleven thousand a month. Honest job. Tired.\"" },
@@ -14448,7 +14491,7 @@ const ENCOUNTERS = {
     hint: "(She isn't working, and she isn't shy. KONBANWA · CHEERS · or NO — money is the wrong move.)",
   },
   britles: { solo: true,
-    rooms: ["ws_gate", "ws_north", "ws_south", "beach_rd_c"],
+    rooms: ["ws_north", "ws_south", "beach_rd_c"],   // her intro leans on a go-go's rail, and the gate has none (as jptourist)
     interactive: true, nightly: true,
     intro: "Outside a go-go, pint in hand and entirely at home, a British woman is " +
       "leaning on the rail by the open door, watching the stage through it with more " +

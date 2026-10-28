@@ -1126,7 +1126,7 @@ How you get from one door to the next and what finds you on the way: the trucks 
 
 **Touches.** `police` and `cons` share the machinery, `darkness` (no encounters in the dark), `navigation`, `hotels` (`_joinerFee` when a woman comes up), the companion system (`solo`). Any new prompt that leaves `G.pendingEnc` set must go through `_encPrompt`, and a soft pitch needs an `_ENC_SOFT` entry or it will eat unrelated commands.
 
-**Tests.** tests/js/engine.test.js, playtest5.test.js, conversation.test.js, round35.test.js, round47.test.js, round37.test.js; `tools/modal-audit.mjs` (modal-audit.test.js) arms every interactive encounter and types non-answers at it, and `tools/composition-audit.mjs` checks them against other live states.
+**Tests.** round111.test.js, tests/js/engine.test.js, playtest5.test.js, conversation.test.js, round35.test.js, round47.test.js, round37.test.js; `tools/modal-audit.mjs` (modal-audit.test.js) arms every interactive encounter and types non-answers at it, and `tools/composition-audit.mjs` checks them against other live states.
 
 **Design docs.** docs/economy-review.md
 
@@ -2221,7 +2221,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `money` (`G.thaiAccount`), `expat-jobs` and `expat-condo` (both paid or billed inside `_incomeTick`), `hotels` (`_chargeRent`, the downgrade ladder), `barbooks` (an owner is never destitute). `_monthRoom` inside `_chargeRent` feeds the month's rent; a new roof that bills elsewhere must feed `G.month` itself.
 
-**Tests.** round110.test.js, tests/js/income.test.js, destitute.test.js, paper.test.js, round97.test.js, round98.test.js, round100.test.js, round101.test.js, round104.test.js, round109.test.js; `tools/modal-audit.mjs` (the `keptby` and `embassy` recipes).
+**Tests.** round111.test.js, round110.test.js, tests/js/income.test.js, destitute.test.js, paper.test.js, round97.test.js, round98.test.js, round100.test.js, round101.test.js, round104.test.js, round109.test.js; `tools/modal-audit.mjs` (the `keptby` and `embassy` recipes).
 
 **Design docs.** none.
 

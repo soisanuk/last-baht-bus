@@ -6008,7 +6008,7 @@ function _morningLedger() {
   // on a payday morning last night belongs to the month that just CLOSED — "to last night's close" was a line written
   // before the ledger had added last night (Ingrid's ฿320 and Tomás's ฿180, rounds 103: the payday night fell in the new month)
   const _mb = G.monthClosing || G.month;
-  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0) - (G.monthClosing ? condoN : 0)) + pdN; G.monthAdj = 0; _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0) - (G.monthClosing ? condoN : 0)) + pdN; G.monthAdj = 0; _mb.barDraw = (_mb.barDraw || 0) + Math.max(0, pdN); _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
@@ -7370,11 +7370,22 @@ function _weeksLeft() {   // a pot's countdown, at last month's rate (or the gau
   // a fortnight of evidence before the month speaks alone: the days short of it are read at last month's rate, so one
   // dear night in the first week does not halve the countdown and a new month does not reset it to a guess
   const m = G.month || {}, days = m.days || 0, prior = G.monthRate != null ? G.monthRate : NIGHT_COST, pad = Math.max(0, 14 - days);
-  const living = (Math.max(0, (m.spent || 0) - (m.rent || 0)) + prior * pad) / Math.max(1, days + pad);
+  // the bar's rent and the old man's note paid from the pocket are the bar's bills, not the man's living: counted in the
+  // living, a bill month read three weeks and the month after read thirteen
+  const living = (Math.max(0, (m.spent || 0) - (m.rent || 0) - (m.barDraw || 0)) + prior * pad) / Math.max(1, days + pad);
   const perDay = living + _roofMonth() / INCOME_DAYS;
-  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0) + _tillMine() + (G.envelopeDue ? G.envelopeDue.amt : 0) - _debtsOwed());   // the envelope waiting at the bar is yours (Tomás, round 103)   // the till is yours and a debt is not (Kaspar, round 101: a ฿10,000 loan read as nine weeks of runway)
+  // the till is yours, and so is the bar's next month: the runway owes the landlord and the note before it is spent
+  const wealth = Math.max(0, (G.money || 0) + (G.bank || 0) + _tillMine() + (G.envelopeDue ? G.envelopeDue.amt : 0) - _debtsOwed() - _barBillsDue());   // the envelope waiting at the bar is yours (Tomás, round 103)   // the till is yours and a debt is not (Kaspar, round 101: a ฿10,000 loan read as nine weeks of runway)
   return perDay > 0 ? Math.floor(wealth / perDay / 7) : 99;
 }
+function _weeksSay() { const w = _weeksLeft(); return w < 1 ? "under a week" : `about ${w} week${_plural(w)}`; }
+function _barBillsDue() {   // the bar's next month, as _barMonthly will bill it: the landlord, then the note
+  if (!_barOwned()) return 0;
+  const b = G.bar, rent = (b.rentFree || 0) > 0 ? 0 : _barRent();
+  const note = (b.owed || 0) > 0 || (b.arrears || 0) > 0 ? BAR_MONTHLY + (b.arrears || 0) : 0;
+  return rent + (b.rentOwed || 0) + note;
+}
+function _barBillsIn() { return _barOwned() ? Math.max(0, 30 - (G.day - (G.bar.lastMonthDay || 0))) : 0; }
 function _tillMine() { return (_barOwned() && G.bar) ? Math.max(0, G.bar.cash || 0) : 0; }
 function _debtsOwed() {   // what you owe, as MONEY names it: Nira, Nont's loan to the bar, the hotel's book, a loan flown home with
   const nira = G.loan && G.loan.owed > 0 ? G.loan.owed : 0, skipped = G.loanSkippedOwed || 0, hotel = G.hotelDebt || 0;
@@ -7985,7 +7996,7 @@ function _incomeTick() {
   const condoLine = _condoMonth();
   const lines = [];
   if (om.kind === "pot" && G.job && _jobPay() > 0) lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. No pension — the job is the payday now, and ${om.what} is the cushion under it. After the roof that is ${_nightsSay(_jobPay())}, at ฿${_num(NIGHT_COST)} a night.`);   // "No payday" under "the school paid ฿35,000" (Dmitri, round 102)
-  else if (om.kind === "pot") lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, about ${_weeksLeft()} weeks at this rate.`);
+  else if (om.kind === "pot") lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. No payday — ${om.what} is what there is: ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account, ${_weeksSay()} at this rate.`);
   else if (amt <= 0) lines.push(`The month, to last night's close: ฿{MSPENT} spent, ฿{MRENT} of it the room. ${om.what.replace(/^./, c => c.toUpperCase())} did not land this time${om.kind === "salary" ? " — somebody at home noticed" : ""}. ฿${_num((G.money || 0) + (G.bank || 0))} between the pocket and the account.`);
   else {
     const short = om.kind === "retainer" && amt < om.income ? ` (short — the client counted ${m.rough} rough morning${m.rough === 1 ? "" : "s"})` : "";
@@ -7993,7 +8004,7 @@ function _incomeTick() {
   }
   if (jobLine || paperLine || condoLine) lines[0] += jobLine + paperLine + condoLine;
   G.monthLine = lines;
-  if (m.days > 0) G.monthRate = Math.max(0, (m.spent || 0) - (m.rent || 0)) / m.days;
+  if (m.days > 0) G.monthRate = Math.max(0, (m.spent || 0) - (m.rent || 0) - (m.barDraw || 0)) / m.days;
   G.monthClosing = m;   // last night's ledger is still to come, and it is this month's (see _morningLedger)
   G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
   if (G.hotel === "condo" && G.condo && condoLine && !/not there/.test(condoLine)) { const _d = (G.condo && G.condo.lastDue) || (CONDO_RENT + CONDO_UTIL); G.month.rent = _d; G.month.spent = _d; }   // the rent is the coming month's room AND its first spend (Victor: "฿0 of it the room"; Renata: "฿0 spent, ฿11,000 of it the room")
@@ -8014,11 +8025,12 @@ function _doMoney() {
   const roof = G.hotel === "condo" ? `the condo is ฿${_num(CONDO_RENT + CONDO_UTIL)} a month with the electric` : `the room is ฿${_num(_hotelRate(G.hotel))} a night`;
   const _till = _tillMine() > 0 ? `, ฿${_num(_tillMine())} in your own till` : "";
   if (om.kind === "pot" && G.job) _say(`No pension — the job is the payday: ${_jobName()}, ${G.job.kind === "school" ? "฿" + _num(SCHOOL_PAY) + " a month through the books" : G.job.kind === "teach" ? "the platform's money at the end of the month" : G.job.corp ? "the company's money through the books" : "the envelope at the bar"}${next != null ? `, next in ${next} day${_plural(next)}` : ""}. ${om.what.replace(/^./, c => c.toUpperCase())} is the cushion: ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}.`);
-  else if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. At this rate, about ${_weeksLeft()} week${_plural(_weeksLeft())}.`);
-  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. About ${_weeksLeft()} week${_plural(_weeksLeft())} at this rate.`);
+  else if (om.kind === "pot") _say(`No payday — ${om.what} is what there is. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. At this rate, ${_weeksSay()}.`);
+  else if (amt <= 0) _say(`${om.what.replace(/^./, c => c.toUpperCase())} has stopped. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account${_till}; ${roof}. ${_weeksSay().replace(/^./, c => c.toUpperCase())} at this rate.`);
   else _say(`${om.what.replace(/^./, c => c.toUpperCase())}: ฿${_num(amt)} a month${om.kind === "retainer" && amt < om.income ? ` this month (the client counts rough mornings — ${m.rough || 0} so far)` : ""}, next in ${next} day${next === 1 ? "" : "s"}. ${roof.replace(/^./, c => c.toUpperCase())}; after the roof that is ${_nightsSay(amt + _jobPay())}, at ฿${_num(NIGHT_COST)} a night. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
   if (G.hotel === "condo" && G.condo) _say(`(The condo: ${G.condo.short ? `${G.condo.short} month short — one more and the lock changes` : "paid up"}; the ฿${_num(G.condo.deposit)} deposit is the office's until the lease has run ${CONDO_LEASE} days${G.day - G.condo.since >= CONDO_LEASE ? " — which it has" : ""}.)`, "dim");
   { const d = _debtsLine(); if (d) _say(d); }
+  if (_barOwned() && _barBillsDue() > 0 && (om.kind === "pot" || amt <= 0)) _say(`The bar's next month — ฿${_num(_barBillsDue())} to the landlord and the old man — falls in ${_barBillsIn()} day${_plural(_barBillsIn())}. The till pays it first and your pocket the rest, so the weeks above are counted after it.`, "dim");
   _say(`(This month so far: ฿${_num(m.spent || 0)} spent, ฿${_num(m.rent || 0)} of it the room${m.tillIn ? `; and ฿${_num(m.tillIn)} of your own money went into your bar to cover it` : ""}.)`, "dim");
 }
 function _goExpat(opts) {

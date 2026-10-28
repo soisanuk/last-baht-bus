@@ -94,7 +94,7 @@ test("the room's fixtures read: the shrine and ledgers in Oy's office, the presi
 });
 
 test("the doorman can be spoken to; the open safe is open", () => {
-  G.room = "pink_lotus"; assert.match(run("talk to doorman"), /Members|Good evening/);
+  G.room = "pink_lotus"; assert.match(run("talk to doorman"), /friends and their guests|Good evening/);
   _setFlag("hasWallet"); G.room = "oy_office"; assert.match(run("examine safe"), /open and empty/);
 });
 

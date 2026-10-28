@@ -2901,7 +2901,7 @@ function _doMassage(arg) {
       thai: [`฿${_num(MASSAGE_LEGIT)}, and an hour on the mat with ${name} pulling each arm until the shoulder remembers where it lives. She talks to the woman on the next mat the whole time and never once loses the knot.`,
              `฿${_num(MASSAGE_LEGIT)}, and ${name} goes to work like she has a personal grudge against the knot under your shoulder blade — elbows, thumbs, one alarming manoeuvre involving her heel and your spine. An hour later you unpeel off the mat rinsed, loosened, and walking two inches taller.`,
              `฿${_num(MASSAGE_LEGIT)}. ${name} folds you like a deckchair, walks on you, and at one point uses a knee in a way you will describe to nobody. An hour later every joint has been reintroduced to its neighbour.`],
-      foot: [`฿${_num(MASSAGE_LEGIT)}. Warm water, a towel over the knees, and ${name} working the arch with her knuckles as if she is reading something written there. The walk home takes half the time and none of the effort.`,
+      foot: [`฿${_num(MASSAGE_LEGIT)}. Warm water, a towel over the knees, and ${name} working the arches of your feet with her knuckles as if she is reading something written there. The walk home takes half the time and none of the effort.`,
              `฿${_num(MASSAGE_LEGIT)}, a recliner, a bowl of warm water, and ${name} with a wooden stick and a chart of the sole that maps every organ you have to a place she can hurt. Forty minutes of that and the walk home is a different walk.`,
              `฿${_num(MASSAGE_LEGIT)}. ${name} takes your feet as if they have been handed in lost. Thumbs, knuckles, the stick, the one spot near the heel that makes you grip the chair — and then the thing where the calves stop belonging to a man who has walked Beach Road twice.`],
       herbal: [`฿${_num(MASSAGE_LEGIT)}. ${name} lays the herb balls out on a tray like a cook, tests the first on her wrist, and works down your back one hot press at a time until the whole room smells of temple and kitchen.`,
@@ -5619,6 +5619,20 @@ function _chamDecline() {
   G.known.cream = true;
   _setFlag("chamAsked");
 }
+// the line in the lift is the act, and the act wears thin: said in full the first night, half said the
+// second, and after that the silence in the lift is the thing she says
+const _CHAM_LIFT_LATER = [
+  "In the lift she says nothing at all. She sets an alarm on her {{phone}} for seven-fifteen and shows you the screen, which is a sentence of its own.",
+  "In the lift she leans on your shoulder and watches the numbers go up. Whatever she used to say here, neither of you misses it.",
+  "In the lift she says, to the floor indicator, \"Same room?\" — and you realise she knows the number better than you do.",
+  "In the lift she fixes her hair in the steel of the doors, already half the pharmacy girl, and says only \"Quick sleep na. Bus early.\"",
+];
+function _chamLift() {
+  const n = G.chamNights || 0;
+  if (n === 0) return "In the lift she says it once more, to the floor indicator: \"I never do this.\"";
+  if (n === 1) return "In the lift she starts to say it — \"I never…\" — and stops, and laughs at herself into your shoulder, and does not finish.";
+  return _pickVary(_CHAM_LIFT_LATER, "chamlift");
+}
 function _chamGo() {
   G.pendingChoice = null;
   G.soc.leftFrom = G.room;   // the bar you left her friend's stool from: Near watched it (Pieter, round 73)
@@ -5628,8 +5642,8 @@ function _chamGo() {
     // her LINE is typed in once; the second night it was "unasked" again (Dieter, round 56)
     (G.phone.contacts.cream ? "hotel she checks her own number is still in your phone, and says nothing about it. "
       : "hotel she types her LINE into your phone unasked: \"so you can find me. Not at the pharmacy — the boss watch.\" ") +
-    "In the lift she says it once more, to the floor indicator: \"I never " +
-    "do this.\"");
+    _chamLift());
+  G.chamNights = (G.chamNights || 0) + 1;
   G.phone.contacts.cream = true;
   G.known.cream = true;
   _setFlag("chamAsked");

@@ -94,3 +94,57 @@ test("Tobias: the desk sergeant answers 'fines' and 'bribe'", () => {
   sandbox(); G.room = "police_station";
   assert.match(t("ask sergeant about fines"), /Drunk man/); assert.match(t("ask sergeant about bribe"), /Drunk man/);
 });
+
+// ── the deferred list ──
+test("Pascal: what you said to Vasseur travels — he greets you by it, the doorman has heard, Gavin says so once", () => {
+  sandbox(); _align("plg", 4); G.room = "pink_lotus"; G.nightTurn = 30;
+  assert.match(t("go back"), /Evening, sir|says nothing|velvet rope swings/);
+  run("talk to vasseur"); run("call it a room full of criminals");
+  assert.ok(_flag("vasseurInsulted"));
+  run("goodbye"); run("out"); run("enter pink lotus lounge");
+  assert.match(t("go back"), /Word/);
+  const v = t("talk to vasseur"); assert.match(v, /Our critic/); assert.doesNotMatch(v, /FLATTER THE GREAT MAN|ROOM FULL OF CRIMINALS/);
+  G.room = _npcRoom("gavin"); assert.match(t("talk to gavin"), /Laurent tells me/);
+  run("goodbye"); assert.doesNotMatch(t("talk to gavin"), /Laurent tells me/);
+});
+test("Pascal: the flattery is once — Vasseur cannot be farmed for standing", () => {
+  sandbox(); _align("plg", 2); G.room = "orchid_room"; G.nightTurn = 40;
+  run("talk to vasseur"); run("flatter the great man"); const p = _faction("plg");
+  run("goodbye"); const v = t("talk to vasseur");
+  assert.match(v, /man with eyes/); assert.doesNotMatch(v, /FLATTER THE GREAT MAN/);
+  run("flatter the great man"); assert.equal(_faction("plg"), p);
+});
+test("Pascal: the Orchid lists no Connect 4 frame it will not deal", () => {
+  orchid(); assert.doesNotMatch(t("look"), /Connect 4/);
+  sandbox(); G.room = "pink_lotus"; assert.match(t("look"), /Connect 4/);
+});
+test("Wendell: an owner's runway counts the bar's next month against it, and the bar's bills are not his living", () => {
+  owner(); G.player.origin = "redundancy"; G.money = 20000; G.bank = 13000; G.bar.cash = 1800; G.bar.owed = 1680000; G.bar.arrears = 0;
+  G.bar.lastMonthDay = G.day - 14; G.bar.rentOwed = 0; G.bar.rentFree = 0;
+  assert.equal(_barBillsDue(), _barRent() + BAR_MONTHLY); assert.equal(_barBillsIn(), 16);
+  G.monthRate = 600; G.month = { spent: 600 * 10, rent: 0, rough: 0, days: 10 }; const plain = _weeksLeft();
+  G.month = { spent: 600 * 10 + 38000, rent: 0, rough: 0, days: 10, barDraw: 38000 };
+  assert.equal(_weeksLeft(), plain, "the note paid from the pocket is not ten days of living");
+  const r = t("money"); assert.match(r, /The bar's next month/); assert.match(r, /under a week|about \d+ week/);
+  G.bar.cash = 200000; assert.ok(_weeksLeft() > plain, "a till that covers the month leaves weeks over");
+});
+test("Tobias: 'ask her' with the British woman on the rail speaks to her, and she is never at the gate with no go-go", () => {
+  sandbox(); G.room = "ws_north"; G.pendingEnc = "britles"; const r = t("ask her about police");
+  assert.match(r, /wingman/); assert.doesNotMatch(r, /counts as a no/);
+  assert.ok(!ENCOUNTERS.britles.rooms.includes("ws_gate"));
+  for (const id of ["bkktourist", "jptourist", "punterwife"]) assert.match("ask her about the soi", _ENC_SOFT[id], id);
+});
+test("Tobias: Cream's act thins with the nights — the lift line, last night, and four answers a layer down", () => {
+  sandbox(); G.chamNights = 0; assert.match(_chamLift(), /I never do this/);
+  G.chamNights = 1; assert.match(_chamLift(), /does not finish/);
+  for (let n = 2; n < 6; n++) { G.chamNights = n; assert.doesNotMatch(_chamLift(), /I never do this/); }
+  G.stage = "expat"; G.known.cream = true; G.chamNights = 3; G.nightTurn = 60; G.room = _npcRoom("cream");
+  if (_npcsHere().includes("cream")) {
+    run("talk to cream");
+    assert.match(t("ask cream about job"), /white coat is real/);
+    assert.match(t("ask cream about friend"), /other thing/);
+    assert.match(t("ask cream about home"), /new roof/);
+    assert.match(t("ask cream about you and me"), /Don't make it a story/);
+    G.chamLast = { day: G.day - 1, gift: 0 }; assert.doesNotMatch(t("ask cream about last night"), /I never do this/);
+  }
+});

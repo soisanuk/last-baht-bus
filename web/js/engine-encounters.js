@@ -1110,7 +1110,7 @@ const _ENC = {
       _addHappy(-1);
       return;
     }
-    if (/hi|hello|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee/.test(input)) {
+    if (/hi|hello|sawat|wai|chat|talk|ask her|nice|friend|wait|who|from|smile|drink|coffee/.test(input)) {
       _say("You keep it light — a wai, a where-you-from, no agenda. She thaws: Bangkok, " +
         "down for a few days with a girlfriend who is, as ever, late. You trade the " +
         "small nothings of two people not trying to sell each other anything. Then a " +
@@ -1170,7 +1170,7 @@ const _ENC = {
       _addHappy(-1);
       return;
     }
-    if (/flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice/.test(input)) {
+    if (/flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice|talk|chat|ask her/.test(input)) {
       G.pendingEnc = "jptourist";
       _setFlag("jpDeal");
       _encPrompt(
@@ -1204,7 +1204,7 @@ const _ENC = {
       _addHappy(-1);
       return;
     }
-    if (/hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|talk|chat|alright|evening/.test(input)) {
+    if (/hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|talk|chat|ask her|alright|evening/.test(input)) {
       G.wingmanUntil = G.turns + WINGMAN_TURNS;
       _say("“Tell you what — you seem alright.” She clinks her glass to nothing. “See " +
         "one you fancy? I'll put a word in. These girls trust me a damn sight more than " +
@@ -1239,7 +1239,7 @@ const _ENC = {
       _addHappy(-1);
       return;
     }
-    if (/hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|cool|lovely|good/.test(input)) {
+    if (/hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|ask her|cool|lovely|good/.test(input)) {
       G.wingmanUntil = G.turns + WINGMAN_TURNS;
       _say("“Aw, you're sweet.” She looks you over, decides you're harmless, and leans " +
         "in conspiratorially. “Come — let me find you a good one. I know which of these " +

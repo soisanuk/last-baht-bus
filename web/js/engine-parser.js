@@ -208,6 +208,27 @@ const _ORCHID_BOUNCER = [
   "You reach for the rope and a hand the weight of a Chang crate settles on your shoulder. \"This one's Pattaya Leisure's lounge. Their friends, their guests. You one of those?\" You are not, and he already knew it, and that was the whole conversation.",
   "The doorman doesn't move and doesn't blink. \"Friends of the group and their guests only.\" A beat. \"You want in, be a friend of the group.\" The rope does not lift.",
 ];
+// the rope lifting is a moment, and it is said: by the doorman, who has heard what was said inside
+const _ORCHID_ADMIT = [
+  "The doorman checks his {{phone}}, finds you on it, and unhooks the rope. \"Evening, sir.\" It is the first full sentence he has given you, and the last you will need.",
+  "The rope comes off its brass post before you reach it. The doorman says nothing, which at this door is a welcome.",
+  "A nod from the doorman — the small one, kept for faces on the {{phone}} — and the velvet rope swings back against the wall.",
+];
+const _ORCHID_ADMIT_COLD = [
+  "The doorman unhooks the rope a second later than he needs to and says your name to his {{phone}}, not to you. Word of what you told Mr Vasseur has been round the soi with the envelopes.",
+  "The rope lifts, but the doorman's eyes stay on you all the way through, the way they stay on a man somebody has mentioned. Word travels on this soi; it got here first.",
+];
+const _ORCHID_ADMIT_WARM = [
+  "\"Mr Vasseur's friend.\" The doorman has the rope off before you ask. It is said the way a waiter says a table number: you are on a list that matters to him.",
+  "The doorman lifts the rope and, for once, smiles. \"Evening, sir. Mr Vasseur says you like the room.\"",
+];
+// "last night" once the joke has been told: she does not check the door any more
+const _CHAM_LAST_NIGHT = [
+  `"Last night?" Cream does not check the door this time. "You know already." She steals the lime off your glass. "Next question."`,
+  `"Last night I sleep four hours and sell sunburn cream to a German who want to show me his back." She yawns, theatrically. "Your fault."`,
+  `"Shh." A finger on your wrist, not your lips — your lips would be the bar's business. "Last night is last night. Here I am visiting my friend."`,
+  `"Last night?" A small smile into the cocktail. "The boss say I look happy this morning. I say I find a good noodle shop."`,
+];
 const _NOT_CARRYING = [
   "You're not carrying that.",
   "You pat your pockets. Not there.",
@@ -580,7 +601,7 @@ function _promptedFolk(arg, topic) {
     // the man who read your face off a phone could not be spoken to (Declan, round 58)
     _say(_orchidOpen()   // the same test the rope itself uses
       ? "The doorman unhooks the rope without looking at his phone this time. \"Good evening.\" That is the whole conversation, and it is a warm one, for him."
-      : "The doorman looks at you, then at his phone, then back. \"Members, sir.\" Nothing else. There is no second sentence in his job.", "dim");
+      : "The doorman looks at you, then at his phone, then back. \"Group's friends and their guests, sir.\" Nothing else. There is no second sentence in his job.", "dim");
     return true;
   }
   // the desk sergeant speaks on REPORT and could not be asked anything: "ask sergeant
@@ -1503,6 +1524,10 @@ function _arriveAt(to) {
       G.soc.patronBusy[to] = (hos.length && _rand() < 0.4 && _railAt)
         ? _busyPool[Math.floor(_rand() * _busyPool.length)] : false;
     }
+  }
+  if (to === "orchid_room" && G.room === "pink_lotus") {
+    const k = _flag("vasseurInsulted") ? "cold" : _flag("vasseurFlattered") ? "warm" : "";
+    _say(_pickVary(k === "cold" ? _ORCHID_ADMIT_COLD : k === "warm" ? _ORCHID_ADMIT_WARM : _ORCHID_ADMIT, "orchidadmit" + k), "dim");
   }
   G.prevRoom = G.room;   // where you came from — an encounter that says "coming out of the club" reads it
   G.room = to;
@@ -4935,7 +4960,9 @@ function _doTalkCore(arg, topic) {
       ? `"Bus ten to eight. I make it, just." She touches the bun, which is back. "My boss say I look tired. I say I study late."`
       : G.day - G.chamLast.day > 1 && /last night/.test(t)
       ? `"Last night?" Cream looks blank, then not. "Last night I am home, I study." A small, private smile. "You mean the other night. That one I don't talk about in here."`   // it was three nights ago (Bridget, round 76)
-      : `"Last night?" Cream laughs, embarrassed, and checks the door as if somebody might hear. "I tell you, I never do this." A beat. "And then I do. Don't tell my boss."`);
+      : (G.chamNights || 0) <= 1
+      ? `"Last night?" Cream laughs, embarrassed, and checks the door as if somebody might hear. "I tell you, I never do this." A beat. "And then I do. Don't tell my boss."`
+      : _pickVary(_CHAM_LAST_NIGHT, "chamlastnight"));
     return;
   }
   if (npc === "cream" && topic && (["price", "late"].includes(topic) || ["price", "late"].includes(_convoTopic(topic))) &&   // the INVITE hint names LATE (Dieter, round 56)
@@ -18449,10 +18476,10 @@ const _ENC_SOFT = {
   // different woman's number) must not be silently eaten as a "no" to this
   // one (NPC-completionist playtest, 2026-08-23 — MEET the masseuse misfired
   // onto a bkktourist encounter that had appeared in the meantime).
-  bkktourist: /^(?:hi|hello|hey|sawat|wai|chat|talk|nice|friend|wait|who|from|smile|drink|coffee|money|baht|barfine|how much|price|pay|upstairs|hotel|short time|long time|come with|yes|no|nah|pass|wave|walk(?: on)?)\b/,
-  jptourist:  /^(?:flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice|money|baht|barfine|how much|price|pay|deal|please|hai|why not|her|let|no|nah|pass)\b/,
-  britles:    /^(?:talk(?: to)?(?: her)?|chat|alright|evening|grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|money|baht|barfine|how much|price|pay|short time|long time|come with|shag|hotel|hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|no|nah|pass|wave)\b/,
-  punterwife: /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank|money|baht|barfine|how much|price|pay|short time|long time|come with|hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|cool|lovely|good|no|nah|pass|wave)\b/,
+  bkktourist: /^(?:hi|hello|hey|sawat|wai|chat|talk|ask her|nice|friend|wait|who|from|smile|drink|coffee|money|baht|barfine|how much|price|pay|upstairs|hotel|short time|long time|come with|yes|no|nah|pass|wave|walk(?: on)?)\b/,
+  jptourist:  /^(?:talk(?: to)?(?: her)?|chat|ask her|flirt|drink|buy|hi|hello|konnichiwa|konbanwa|cheers|join|both|girl|dancer|open|game|cool|yes|sure|nice|money|baht|barfine|how much|price|pay|deal|please|hai|why not|her|let|no|nah|pass)\b/,
+  britles:    /^(?:talk(?: to)?(?: her)?|chat|ask her|alright|evening|grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|money|baht|barfine|how much|price|pay|short time|long time|come with|shag|hotel|hi|hello|cheers|drink|buy|nice|respect|cool|wingman|help|which|recommend|good|game|sound|no|nah|pass|wave)\b/,
+  punterwife: /^(?:grope|grab|touch|fondle|kiss|snog|cop a feel|hand on|spank|money|baht|barfine|how much|price|pay|short time|long time|come with|hi|hello|nice|respect|cheers|congrat|married|wife|husband|talk|chat|ask her|cool|lovely|good|no|nah|pass|wave)\b/,
 };
 // A real top-level command word (not a bare answer): used only to decide whether
 // a soft encounter should let the line through.
