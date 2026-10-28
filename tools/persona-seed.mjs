@@ -280,6 +280,9 @@ const seeds = {
   remote: remoteSeed(),
   steady: steadySeed(),
   month: monthSeed(),
+  // seller (round 110): an owner a few nights short of the three months a buyer wants — the countdown in BOOKS,
+  // then SELL UP, then the town that knows how it went (the job offers, STANDING, the sold bar)
+  seller: expatOwner({ season0: 10, day: 94, money: 15000, bank: 90000, bonds: { manow: 10, cake: 5, tan: 3 } }),
 };
 
 // ── prove each reaches its drive, from a fresh reload ──
@@ -395,6 +398,13 @@ try {
   const be = { gate: G.pendingChoice }; doCommand("stay"); be.street = !!G.street; be.end = G.endKind || null;
   console.log("bench:", JSON.stringify(be));
   if (be.gate !== "embassy" || !be.street || be.end) throw new Error("bench seed cannot reach its drive");
+  // Seller: short of the minimum, SELL UP names the nights left; a few nights later the offers are up
+  reload(seeds.seller); G.room = "stinky_bar"; G.nightTurn = 20; out = []; doCommand("sell up");
+  const se = { nights: G.bar.nights, refused: /more nights/.test(out.join(" ")) };
+  while (G.bar.nights < BAR_SALE_MIN) { G.room = _hotelRoomId(); _endNight("sleep"); }
+  G.room = "stinky_bar"; G.nightTurn = 20; out = []; doCommand("sell up"); se.offer = G.pendingChoice; doCommand("no");
+  console.log("seller:", JSON.stringify(se), "health", _barHealth && JSON.stringify(_barHealth()));
+  if (se.nights >= BAR_SALE_MIN || BAR_SALE_MIN - se.nights > 8 || !se.refused || se.offer !== "barsale") throw new Error("seller seed cannot reach its drive");
   // Remote: the phone shows a stream bar and rings its bell
   reload(seeds.remote); G.nightTurn = 30; out = []; doCommand("watch stream jade"); const rw = out.join(" "); out = []; const b0 = G.bank; doCommand("stream bell jade");
   const re = { watch: /Jade Lounge/.test(rw), bell: G.bank < b0, tenant: G.hotel === "condo" };

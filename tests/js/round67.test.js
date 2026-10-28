@@ -81,7 +81,7 @@ test("the morning ledger names a walk-out", () => {
 test("a shift tale never moves money the books did not see; a reveal is habitual, not a claim about tonight", () => {
   assert.ok(!_WORK_SEEN.some(l => /buys a round for the rail/.test(l)));
   assert.ok(_FLOOR_CASHIER.some(l => /whatever the figure says/.test(l)) && !_FLOOR_CASHIER.some(l => /the night you were down|on a night you are down/.test(l)));   // habitual, and money-blind (Ossie, round 70)
-  assert.match(SYNDICATE_JOBS.find(j => j.id === "screen").ask, /every month, like the cleaners/);
+  assert.match(SYNDICATE_JOBS.find(j => j.id === "screen").ask, /and then every month/);   // monthly, and (round 110) without assuming the cleaners were taken
 });
 test("BORROW from the pavement after asking her points inside, not back at the question", () => {
   G.room = "neon_paradise"; run("talk to nira"); run("ask nira about loan");

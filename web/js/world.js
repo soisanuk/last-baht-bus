@@ -1250,6 +1250,14 @@ const ROOMS = {
       kitchen: "A two-ring hob, a wok somebody left, a rice cooker that is the most reliable appliance in the building. Instant noodles, eggs, a bag of rice — a plate for sixty baht that no stall would charge you less for. (COOK)",
       balcony: "A chair's width of balcony, a plastic chair to fill it, and the bay: Jomtien's lights, Walking Street's pink smear, a ship out where the water goes black. The best thing you own, and you rent it.",
       office: "The juristic office on the ground floor: a desk, a woman who keeps the building's book, and a sign in two languages about overnight guests that everybody in the tower has read once and ignored since.",
+      telly: "There is no television. The landlord's inventory lists one; the bracket on the wall is where it was. The balcony is the screen, and it is better.",
+      aircon: "An air-con unit that actually works, which on Pratumnak is a sentence you say with feeling. It ticks when it cycles. You know its tick now.",
+      chair: "The plastic chair on the balcony — the only chair in the flat, and the one that faces the bay. (SIT on the balcony.)",
+      window: "The window is the balcony door: the bay in it all day, the lights in it all night. Nobody else's air-conditioning in the view, for once.",
+      bay: "The whole bay from the ninth floor: Jomtien's lights strung along the far side, Walking Street's pink smear to the north, a ship out where the water goes black.",
+      bed: "A double bed with a mattress somebody chose for a rental — firm, white, and yours for the month.",
+      keycard: "The condo's key fob on a ring with the mailbox key: it opens the gate, the lift and your door, and the juristic office's book knows every time it does.",
+      lights: "One switch by the door for the room, one for the balcony. The light is the landlord's, the bill is yours — it comes with the rent.",
       fridge: "Water, beer, half a papaya, the eggs. The hum of a fridge in your own kitchen at any hour is a sound no hotel sells.",
       lift: "One lift for nine floors, a mirror in it that has seen you come home in every state there is, and a notice from the juristic office taped under the buttons about guests after midnight. It is the slowest thing in the building and the building knows it.",
       tower: "Nine floors on a hill above a bay, half the balconies dark — owners in Moscow and Shanghai who bought a view and visit it twice a year — and a juristic office on the ground floor that keeps the book on the rest.",
@@ -7154,6 +7162,11 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         "Small psychology, twenty year old, work every night.\" Fact, not confession. \"I tell you because " +
         "knowing does not stop it. You will still stay.\"",
         short: "\"Free is the most expensive word in this bar. Free drink, you stay; you stay, you buy.\"" },
+      // a resident (or an owner up the soi) is not a tourist: the same answer, its last line his
+      { topic: "pattaya leisure", when: (st, G) => st.trust >= 2 && G.stage === "expat", text: "\"They own the paper. I run the room.\" " +
+        "Careful now. \"The app tell me the numbers — how many girl, how late, which one move where. I make the " +
+        "numbers happen. Is a job. Good pay, and I do not ask what I do not need to know.\" The tablet glows. " +
+        "\"You ask a great many questions, for a man who lives here.\"" },
       { topic: "pattaya leisure", when: (st) => st.trust >= 2, text: "\"They own the paper. I run the room.\" " +
         "Careful now. \"The app tell me the numbers — how many girl, how late, which one move where. I make the " +
         "numbers happen. Is a job. Good pay, and I do not ask what I do not need to know.\" The tablet glows. " +
@@ -9700,15 +9713,20 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "He lets that be what it is. \"And after, you do not need me for a bar, and we are both a little poorer. When you mean it, say it — SELL UP.\"",
         short: "\"The group pays the most. Or I find a man from Chonburi: the debts go, what it fetches over them is my fee. (SELL UP)\"" },
       // to the group: his fifty-one went across with it, and what that cost is his business
-      { topic: "the sale|sale|the bar|stinky|the stinky|the group|pattaya leisure|plg|fifty-one|fifty one|the fifty-one", when: (st, G) => _flag("barToPlg"),
-        text: "\"The group.\" Tan says it without weight. \"It was your bar to sell, and they pay the most. This is true.\" " +
+      { topic: "the sale|sale|the bar|stinky|the stinky|the group|pattaya leisure|plg|fifty-one|fifty one|the fifty-one|sell|selling|sell the bar|selling the bar|sell up|buyer|a buyer|partner|my partner", when: (st, G) => _flag("barToPlg"),
+        text: "\"The group.\" Tan says it without weight. \"It was your bar to sell, and they pay the most. This is true. The fifty-one was a name in my drawer; now it is a name in theirs, and they did not ask me what it cost.\" " +
           "He turns his glass a quarter. \"You sold to the people I would not have. Next time you call me first — or you don't. Both are allowed.\"",
         short: "\"It was your bar to sell, and they pay the most. Next time you call me first — or you don't.\"" },
       // the bar he found a buyer for: the fee was fair, and so is the distance
-      { topic: "the sale|sale|the bar|stinky|the stinky|the fee|fee|chonburi|the buyer", when: (st, G) => _flag("barSoldOn") && !!G.barSale && G.barSale.via === "tan",
+      { topic: "the sale|sale|the bar|stinky|the stinky|the fee|fee|chonburi|the buyer|sell|selling|sell the bar|selling the bar|sell up|buyer|partner|my partner|fifty-one|fifty one", when: (st, G) => _flag("barSoldOn") && !!G.barSale && G.barSale.via === "tan",
         text: "\"The bar.\" Tan turns his glass a quarter, the way he does. \"The man from Chonburi pays the old man, pays the landlord on the day, and his nephew learns. Bert pours. Nothing moved.\" " +
           "He looks at you, pleasant and exact. \"The fee was fair, my friend. You asked me to make a thing go away, and it went. Now you are a man who does not need me for a bar.\"",
         short: "\"Nothing moved. The fee was fair. Now you are a man who does not need me for a bar.\"" },
+      // to Bert, with Candy as the fifty-one: his name came out of the drawer and hers went in, and he minds it least
+      { topic: "the sale|sale|the bar|stinky|the stinky|bert|candy|the buyer|sell|selling|sell the bar|selling the bar|sell up|buyer|partner|my partner|fifty-one|fifty one|the fifty-one", when: (st, G) => _flag("barToBert"),
+        text: "\"Bert.\" Tan nods, once, as if a sum has come out right. \"And Khun Candy's name on the fifty-one, where mine was. That is a bar that stays on the soi.\" " +
+          "He looks down the street, not at you. \"Least money, my friend. Also the one nobody will be sorry about.\"",
+        short: "\"Bert, and Candy on the fifty-one where my name was. Least money — and nobody sorry.\"" },
       // his home life is not yours to ask about (Mario, 2026-10-07) — but a miss line read as
       // though he had none; he closes it, politely, in his own voice
       { topic: "wife|your wife|married|are you married|girlfriend|your girlfriend|love life|kids|children|your family|your home|home|where do you live",
@@ -9779,12 +9797,12 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // does — he was pitching the pre-purchase coffee to his own partner and
       // "not yet, maybe later" to "partner" (Rolf, round 54)
       // the night after he came and asked, "I do not come" is a rule stated to a man who watched it bend (Lothar, round 67)
-      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan", "tanAsked"],
+      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan", "tanAsked"], when: (st, G) => !_barGone(),
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a name on a paper in a drawer, and the paper has not " +
           "moved.\" The glance down the soi. \"I came once, and I said what I came for, and you answered. That is the arrangement working, " +
           "my friend — not failing. I will not come again until there is a reason, and then I will say the reason.\"",
         short: "\"I came once and said why. That is the arrangement working.\"" },
-      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"],
+      { topic: "bar|my bar|the bar|buying a bar|buy a bar|own bar|owns|the trade|bar trade|partner|partnership|fifty-one|51 percent|the partner|stinky pinky|stinky|the stinky", req: ["partnerTan"], when: (st, G) => !_barGone(),
         text: "\"Our bar.\" He says it flat — a fact, no weight on it. \"Fifty-one is a " +
           "name on a paper in a drawer at the land office where my wife's cousin works, and the paper has never " +
           "been out of the drawer.\" The glance down the soi. \"You run it. I do not come. If I come, it is because " +
@@ -13297,7 +13315,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "\"Nothing wrong with any of it, bud. That's the thing. Nothing you could point at. " +
           "It's just that the bar's a bit more his every time he's in, and he's never once raised his voice.\"",
         short: "\"He came in, and he asked. Nothing you could point at — the bar's just a bit more his each time.\"" },
-      { topic: "candy", when: (st, G) => _flag("partnerTan"),
+      { topic: "candy", when: (st, G) => _flag("partnerTan") && !_barGone(),
         text: "\"Candy?\" Bert snorts, fond. \"You went with Tan, bud. She won't hold it against you. She'll just remember it, " +
           "which with Candy is worse, and she'll still send you a girl when you're short.\"",
         short: "\"You went with Tan. She won't hold it against you — she'll remember it.\"" },
@@ -15623,9 +15641,9 @@ const SYNDICATE_JOBS = [
     ask: "Tan has evidently already discussed this with Bert, and possibly with the " +
       "regulars. \"Big one, behind the bar, on the bracket — and the wiring done " +
       "properly, in the trunking, not taped along the beam like the Water Buffalo.\" " +
-      "A number, again without any theatre about it — ฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US") + " a month, the same terms as the " +
-      "cleaners. \"My wife brother-in-law does the " +
-      "hotels. Two men, one morning — and then every month, like the cleaners, because a screen in a bar " +
+      "A number, again without any theatre about it — ฿" + (SYN_JOB_NIGHT * 30).toLocaleString("en-US") + " a month, the same terms as " +
+      "everything he arranges. \"My wife brother-in-law does the " +
+      "hotels. Two men, one morning — and then every month, because a screen in a bar " +
       "dies, and a man who comes when it dies is the thing you are paying for.\"",
     whoLabel: "ask why not do it yourself",
     // the rule stated by a character, not explained by the narrator

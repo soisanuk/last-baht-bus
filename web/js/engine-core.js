@@ -330,7 +330,7 @@ function newGame() {
     weekStart: null,   // pocket + account when the Soi 6 week began: the card's "spent" is start less end
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
-    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, barSat: {},   // the resident's integration pass (round 100)
+    homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, monthRate: null, barSat: {},   // the resident's integration pass (round 100)
     loanPrin: 0, nontPrin: 0, nontCut: 0, nontOut: 0, offTill: 0, offIn: 0, skipRepaid: 0, quizWon: 0, giftIn: 0, lastNightBye: null,   // quiz prizes and a note pressed on you (round 93); principal repaid (not a cost), Nont's five percent, his notes (Clifford, round 68)
     motoHomeDoor: null,
     tanFavourDay: null, // the day Tan's name went on your staff list — her story is dated from it // a MOTOSAI TO HOTEL ride ends at the hotel door, set and spent inside _doMotosai
@@ -712,7 +712,7 @@ const STATE_SCHEMA = {
     "lastNightWith lastOffer lastPeddler lastPolice lastRain lastRide lastSaleng launderBack launderRisk leaveLine " +
     "leaveOn leaveSaid ledgerNotes levelsSeen licNominees licencesRead lifeStats lightWarn loanBorrowed loanPrin " +
     "loanRepaid lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
-    "miffed missTarget mode month monthAdj monthLine mortDeclined mortDeclinedDay motBoots motoAsked motoBalkTurn " +
+    "miffed missTarget mode month monthAdj monthLine monthRate mortDeclined mortDeclinedDay motBoots motoAsked motoBalkTurn " +
     "motoHomeDoor motoRides motoRiding namedBy nokLeftDay nontBorrowed nontCashCount nontCashed nontCut nontOut " +
     "nontPayNow nontPrin nontRepaid npc offIn offShift offTill officeTries over overheardSaid owed owlRead " +
     "ownRescueDay paper paperFlag paperPaid paperShort paperUntil partnerWho partyLed partyMates partyRescued " +
@@ -2937,14 +2937,14 @@ function _townStory(npc, d) {
 const _TOPIC_MISS_HOUSE = [
   n => `${n} considers it and sets it aside. “Not a thing I know. Ask me about this bar.”`,
   n => `“That one, I cannot help you with.” ${n} is perfectly pleasant about it. “Ask me something on my side of the counter.”`,
-  n => `${n} gives a small, practised shrug. “You ask the wrong woman. This bar, I know everything about.”`,
+  n => `${n} gives a small, practised shrug. “Wrong woman for that one. The girls, the drinks, the price — those I know.”`,
   n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not mine to know.”`,
 ];
 // the same miss in the Thai house voice (Mario, 2026-10-18): confident, short, and back to her side of the counter
 const _TOPIC_MISS_THAI = [
   n => `${n} thinks about it, then puts it away. “This one I don't know. Ask me about this bar.”`,
   n => `“That one, I cannot help.” ${n} is perfectly pleasant about it. “Ask me something my side of the counter, na.”`,
-  n => `${n} gives a small, practised shrug. “You ask wrong woman. This bar — everything, I know.”`,
+  n => `${n} gives a small, practised shrug. “That one, wrong woman. The girls, the drink, the price — this, I know.”`,
   n => `“No.” ${n} says it the way she says a price: flat, final, not unfriendly. “Not my business to know.”`,
   n => `${n} shakes her head once. “Not this one. Ask me the bar, the girls, the price — those I know.”`,
   n => `“Hm.” ${n} goes back to what she was doing. “Somebody else know that. Not me.”`,

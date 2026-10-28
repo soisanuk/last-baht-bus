@@ -2355,6 +2355,14 @@ function _doInventory() {
 // English, so no printed-Thai here — the Thai-script directional signs stay on the
 // separate `sign`/SIGNS path (a room with a real Thai sign won't set reads.sign).
 const _READ_NOUNS = {
+  // the condo's own things, so a homebody's look round is not answered by the street or a hotel
+  aircon: ["air-con", "air con", "air conditioner", "air conditioning", "the ac", "ac unit"],
+  chair: ["the chair", "plastic chair"],
+  window: ["the window", "windows", "the view", "view"],
+  bay: ["the bay", "the sea", "sea", "jomtien"],
+  bed: ["the bed", "mattress", "pillow"],
+  keycard: ["key card", "keycard", "the key", "key fob", "fob"],
+  lights: ["the light", "light switch", "the lights", "lamp"],
   camera: ["the camera", "tablet", "the tablet", "webcam", "ring light", "tripod", "the lens", "lens", "the stream", "livestream", "live stream", "the phone on the stand"],   // the group's cameras (the digital barstool, 2026-10-22)
   // Soi 6's close looks (the examine audit, 2026-10-09)
   // the inner segments' close looks (Soi 6 expansion, 2026-10-09)
@@ -11299,6 +11307,12 @@ function _buyManDrink(id) {
       `man whose name is over the door, on your side, is the best friend a farang has out here. (฿${_num(G.money)} left.)`, "win");
     return;
   }
+  // a manager the world moved off his own rail drinks on the customer's side of the wood: nobody's manager tonight
+  if (_npcRoom(id) !== NPCS[id].room) {
+    _say(`${name} lifts the glass an inch — “cheers, bud” — and drinks it on the same side of the bar as you. ` +
+      `฿${_num(_beerPrice())}, and two men who used to stand behind tills have one between them. (฿${_num(G.money)} left.)`, "win");
+    return;
+  }
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
     `chinks it against yours. ฿${_num(_beerPrice())} well spent — a manager who likes you is the ` +
     `best friend a farang has out here. (฿${_num(G.money)} left.)`, "win");
@@ -12738,6 +12752,13 @@ function _doMotosai(arg) {
   // You cannot buy a ride to the kerb you are standing on. MOTOSAI TO KHAO TALO
   // from Khao Talo took ฿170 and re-described the room — "the fastest ฿170 of
   // your life" (Stan, round 35). TRAVEL already refuses this; so does the bike.
+  // home is the door you are standing at: no ride, no fare
+  if (G.motoHomeDoor && G.motoHomeDoor === G.room) {
+    G.motoHomeDoor = null;
+    const _in = Object.keys(_room().exits || {}).find(k => _isHotelRoom(_room().exits[k]) || _room().exits[k] === "condo_room");
+    _say("The piwin looks at you, then at the door behind you. \"Boss. Is your home. Right there.\" He does not charge you for it." + (_in ? ` (${_in.toUpperCase()})` : ""), "dim");
+    return;
+  }
   if (d.room === G.room) {
     _say("The piwin looks at you, looks at the road you are both standing on, and " +
       "declines to charge you for it — the one free thing a piwin has ever done. " +
@@ -13311,7 +13332,7 @@ const _CLINIC_POS = [
 ];
 const _CLINIC_CLEAN = [
   "The clinic runs the tests, the wait does its slow torture, and the nurse hands back the boring, " +
-    "beautiful word: negative. Clean. Cheaper than a single lady drink, this peace of mind — it costs nothing at all.",
+    "beautiful word: negative. Clean. Cheaper than a single lady drink, this peace of mind — the test itself costs nothing at all.",
   "Bloods drawn, cup filled, twenty minutes of imagining the worst, and then a clean bill and a " +
     "slightly pitying smile. Nothing's wrong. Whatever you had planned for tonight, you can plan it lighter, and for " +
     "now the relief tastes like winning.",
@@ -13350,7 +13371,9 @@ function _doClinic() {
     _say("The nurse looks at you over the counter, and then at the clock. \"You test tonight already. Same blood, same answer.\" She is not unkind. \"Go home, sleep. Come back in three month.\"", "dim");
     return;
   }
-  if (!G.std && tl.length) _say("The nurse knows the face. \"Again? Good — sensible man.\" A number, a chair, the same twenty minutes that are never the same.", "dim");
+  // the nurse who said three months counts the days since: a soon retest is allowed, and said to be soon
+  if (!G.std && tl.length) { const _ago = G.day - tl[tl.length - 1];
+    _say(_ago < 30 ? `The nurse knows the face. "Again? ${_ago <= 1 ? "Yesterday" : _ago + " day"} ago you test." She shrugs — your blood, your money. "Okay. Number, chair."` : "The nurse knows the face. \"Again? Good — sensible man.\" A number, a chair, the same twenty minutes that are never the same.", "dim"); }
   tl.push(G.day);
   if (G.std) {
     _say(_pickVary(_CLINIC_POS, "clinicpos"), "alert");
@@ -15260,7 +15283,7 @@ const _GONE_THAI = [
 function _goneTalk(npc, gone) {
   const plan = _exited(gone);
   const house = _hoursRegister(npc) !== "floor";
-  if (plan === "kept") return _fmt(_pickVary(house ? _GONE_HOUSE_KEPT : _GONE_FLOOR_KEPT, "gonetalkkept"), { n: NPCS[gone].name });
+  if (plan === "kept") return _fmt(_pickVary(house ? (_thaiHouse(npc) ? _GONE_HOUSE_KEPT : _GONE_FARANG_KEPT) : _GONE_FLOOR_KEPT, "gonetalkkept"), { n: NPCS[gone].name });
   return _fmt(_pickVary(house ? (_thaiHouse(npc) ? _GONE_THAI : _GONE_HOUSE) : _GONE_FLOOR, "gonetalk"), { n: NPCS[gone].name, p: plan });
 }
 // the kept exit, answered by the floor she left (the quiet shift change, 2026-10-19): the floor's register is envy
@@ -15273,6 +15296,11 @@ const _GONE_FLOOR_KEPT = [
 const _GONE_HOUSE_KEPT = [
   "“{n}? Her man stop paying the fee and she stop coming. That is how it go — no notice, no goodbye. The board say ‘out with customer’ one week, then I take her name off.” A level look. “There is no list, whatever anybody shout in the group. Every bar on this soi hire her tomorrow and ask nothing.”",
   "“{n}. Gone with her sponsor.” No looking up from the till. “He pay us a long time, then he want her only for him. Fine. The girls think I am angry.” A pause on the chit. “I am not angry. I am the one who know there is no list.”",
+];
+// the same fact in a farang manager's mouth: the house that is not Thai says it in his own English
+const _GONE_FARANG_KEPT = [
+  "“{n}?” A wipe of the bar that does not need it. “Her fellow stopped paying the fee and she stopped coming. No notice, no goodbye — the board said ‘out with customer’ for a week and then I rubbed her off it.” A level look. “And there's no list, whatever gets shouted in the group. Any bar on the soi would have her tomorrow and ask nothing.”",
+  "“{n}. Gone with her sponsor.” He doesn't look up from the chits. “Paid us for her a good while, then decided he wanted her to himself. Fair enough. The girls reckon I'm sore about it.” A pause. “I'm not. I'm the one who knows there's no list.”",
 ];
 // A place NAMED in a closing question is the place asked about: "what time does the Vic close",
 // put to a Soi 6 girl, got her own bar's two o'clock (Declan, round 83). The Vic answers to "vic".
@@ -18943,7 +18971,8 @@ function _doCommandInner(input) {
 
   // selling the bar on: three buyers or none; a question about them is not an answer
   if (G.pendingChoice === "barsale") {
-    if (/^(what|how|why|who|which|is|does|do|can|will|would|should|explain|tell)\b|\?\s*$/.test(lower)) { _barSalePrompt(); return; }
+    // a seller's question gets one plain sentence, not the arithmetic: the morning's ledger has that
+    if (/^(what|how|why|who|which|is|does|do|can|will|would|should|explain|tell)\b|\?\s*$/.test(lower)) { _say("(Whichever you choose, what the bar owes comes out of the price, the till is yours, and the morning's ledger names every baht. Tan's buyer pays the debts and keeps what is over as Tan's fee — which is why nothing is in your hand.)", "dim"); _barSalePrompt(); return; }
     if (_isRefusal(lower) || /^(no|not|nope|keep|stay|neither|none)\b/.test(lower)) { _barSaleNo(); return; }
     if (/^(?:sell (?:it )?(?:to )?)?(plg|pattaya leisure|the group|group|gavin)\b/.test(lower)) { _barSaleDo("plg"); return; }
     if (_barSaleTanOk() && /^(?:sell (?:it )?(?:through |via |to )?)?(?:through |via )?(tan|tan's buyer)\b/.test(lower)) { _barSaleDo("tan"); return; }
@@ -19785,6 +19814,8 @@ function _doCommandInner(input) {
           : "You sit on the third stool. It is exactly like the others, and you feel faintly as if you have taken somebody's coat.");
         break;
       }
+      // the condo has one chair and it faces the bay
+      if (G.room === "condo_room" && /balcony|chair|outside/.test(arg || "")) { _say(_pickVary(["You take the plastic chair on the balcony. The bay does what it does; the air-con ticks behind you through the glass.", "The balcony chair, the bay, Jomtien's lights along the far side. Nothing asks you for anything for as long as you sit.", "You sit out on the balcony with the whole bay in front of you, and for a while that is the entire evening."], "sitcondo")); break; }
       if (G.room === _hotelRoomId() || /^Your Room/.test(_room().name || "")) { _say(_pickVary(["You sit on the edge of the bed. The air-con considers you and carries on.", "You sit. The room is exactly as far from the soi as it was a minute ago, which is the point of a room."], "sitroom")); break; }   // "you perch on the kerb" in room 412 (Vince, round 74)
       if (_isGogo()) _say(_pickVary(_SIT_LINES.gogo, "sitgogo"));
       else if (_inBar()) _say(_pickVary(_SIT_LINES.bar, "sitbar"));
@@ -20206,6 +20237,14 @@ function _doCommandInner(input) {
       if (_naturalHelp(lower)) break;   // "where can i live cheaper" is a resident's question, not a place lookup (Willem, round 100)
       if (_naturalHelp("where is " + String(arg || "").replace(/^(?:is|are|s)\s+/, ""))) break;   // the ATM and the 7-Eleven (Ron, round 82)
       const q = (arg || "").replace(/^(?:is|are)\s+(?:the\s+)?/, "").trim();
+      // "my bar" is a fact about the man, not a word to match against bar names (it found the Golden Dragon)
+      if (/^where(?:'s| is| are)? (?:my|our) (?:own )?bar\??$/.test(String(lower || "").trim())) {
+        if (_barOwned() && G.bar && G.bar.room) _say(`${_barName(G.bar.room)} — yours. (TRAVEL ${String(_barName(G.bar.room) || "").toUpperCase()})`);
+        else if (_flag("barSoldOn")) _say(`You sold it — the Stinky is ${_barBuyerName()}'s now.${G.job && G.job.kind === "manager" ? ` The bar you manage is ${_barName(G.job.room)}. (TRAVEL ${String(_barName(G.job.room) || "").toUpperCase()})` : ""}`);
+        else if (G.job && G.job.kind === "manager") _say(`You manage ${_barName(G.job.room)}; the bar is not yours. (TRAVEL ${String(_barName(G.job.room) || "").toUpperCase()})`);
+        else _say("You don't have a bar. The town has plenty of other people's. (MAP)");
+        break;
+      }
       if (!q) { _say("Wherever you are, that's where you are. (MAP for the town, TRAVEL for the places you know.)"); break; }
       const known = _travelDests().find(id => {
         const r2 = ROOMS[id];

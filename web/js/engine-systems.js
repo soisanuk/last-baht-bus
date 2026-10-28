@@ -4691,7 +4691,7 @@ function _doMessage(arg) {
         "your imagination."
       : _pickVary([
         "\"hiii 😊 brother hand ok now, he show everybody the bandage. lunch some day na, lunch only 🙏\"",
-        "\"i at work, cannot talk 😩 busy busy. you sleep already? good boy 555\"",
+        G.nightTurn >= 50 ? "\"i at work, cannot talk 😩 busy busy. you sleep already? good boy 555\"" : "\"i at work soon, cannot talk 😩 busy busy. you eat already? 555\"",
         "\"you still in pattaya? i see farang with your walk today. not you. same walk 555\"",
       ], "priewreply"));
     return;
@@ -6858,7 +6858,7 @@ function _maiDeeFloor(to) {
 // the kept exit's one text (the quiet shift change): she is not sorry, and she is not coming back
 const _EXIT_TEXT_KEPT = [
   "i not work bar now na 🙏 he take care me. condo, sukhumvit side 555 dont tell mama where. you good man — take care na",
-  "finish bar!! 😊 my man say no more. i stay home now, cook, sleep late 555. boss very angry in group, i see. i dont care na. bye bye, be good",
+  "finish bar!! 😊 my man say no more. i stay home now, cook, sleep late 555. mama will be angry, i know. i dont care na. bye bye, be good",
   "this number i keep for you only 🙏 i not come bar again. he pay condo, i stop. if you see the girls, say i am okay. dont say more",
 ];
 const _EXIT_TEXT = [
@@ -8056,7 +8056,7 @@ function _tanFavourYes() {
   _say("You take the slip. Tan does not thank you extravagantly — a nod, the " +
     "way you would nod at a man who held a door — and that restraint is the " +
     "most eloquent thing about him.", "win");
-  _say("\"Good. Bert will put her on the book tomorrow.\" He is already half " +
+  _say("\"Good. Bert will put her on the book tonight.\" He is already half " +
     "turned toward the door and whatever is next. Then, without any change in " +
     "tone: \"And if anyone from the land office comes to the bar, or anyone " +
     "asking who owns what — you do not answer, you call me. Any hour. This is " +
@@ -8307,6 +8307,11 @@ function _doWork() {
     _say("The shift was the rail till midnight, and midnight has gone — tonight is Bert's on the books whatever you do now. Say it at the door tomorrow, early.");
     return;
   }
+  // a shift is WORK_MIN_STOOD turns on the rail before midnight; declared later than that it cannot be stood, so it is not taken
+  if (G.bar.workedDay !== G.day && G.nightTurn > 60 - WORK_MIN_STOOD) {
+    _say("Too late to put your name on tonight — a shift is two hours on the rail before midnight, and there isn't two hours left. Bert has it on the books; drink in your own bar like a customer, or say it at the door tomorrow, earlier.");
+    return;
+  }
   if (G.bar.workedDay === G.day) {
     _say("You're already on. Bert has stopped offering you a stool.");
     return;
@@ -8531,7 +8536,7 @@ function _keptPrompt() {
 }
 function _keptAsk() {
   const b = G.bar, k = b.kept, n = NPCS[k.id].name, d = G.day - k.lapsed;
-  G.keptAskText = _fmt("Bert comes down the rail with the bar phone already unlocked and the owners' group open on it. \"{n}. {d} nights, no money, no word — not to me, not to the girls. Her sponsor's stopped paying and she's stopped coming, and she hasn't had the manners to say so.\" His thumb is over the keyboard. \"I'm going to put her photo in here. Every owner on the soi. See how far she gets.\"",
+  G.keptAskText = _fmt("Bert comes down the rail with the bar phone already unlocked and the owners' group open on it. \"{n}. {d}, no money, no word — not to me, not to the girls. Her sponsor's stopped paying and she's stopped coming, and she hasn't had the manners to say so.\" His thumb is over the keyboard. \"I'm going to put her photo in here. Every owner on the soi. See how far she gets.\"",
     { n, d: d === 1 ? "One night" : d === 2 ? "Two nights" : d === 3 ? "Three nights" : d + " nights" });
   _say(""); _say(G.keptAskText, "alert");
   _keptPrompt();
@@ -9908,7 +9913,7 @@ function _barSaleDo(via) {
   _setFlag("barSoldOn"); if (via === "plg") _setFlag("barToPlg"); if (via === "bert") _setFlag("barToBert");
   G.flags.barOpen = false;
   G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
-    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0, gone: b.gone || {} };   // a girl who left before the sale is still gone after it
   const trust = (id, n) => { const st = _npcState(id); st.trust = Math.max(0, Math.min(5, (st.trust || 0) + n)); };
   if (via === "plg") {
     _align("plg", 2); _align("indie", -3); _align("samson", -1);
@@ -11316,7 +11321,7 @@ function _doBooks() {
         "note cleared. The only ledger you keep these days fits on the back of a " +
         "noodle-shop receipt, and it balances."
       : _flag("barSoldOn")
-      ? `The books are ${_barBuyerName()}'s now. Yours fit on a beer mat: what it went for, and what it was when it went — ${({ profit: "making money", even: "about even", under: "under water" })[(G.barSale && G.barSale.health) || "even"]}.`
+      ? `The books are ${_barBuyerName()}'s now. Yours fit on a beer mat: what it went for — ${G.barSale && G.barSale.paid > 0 ? "฿" + _num(G.barSale.paid) : "nothing in the hand"} — and what it was when it went — ${({ profit: "making money", even: "about even", under: "under water" })[(G.barSale && G.barSale.health) || "even"]}.`
       : _flag("barLost")
       // The ending says it reopens as the Stinky Pinky with a menu, a card
       // machine and a girl on the door — and BOOKS said a phone shop stood
@@ -11740,7 +11745,7 @@ const _SYN_FRICTION = [
 
 function _synFrictionTick() {
   const st = _synState();
-  if (!st.friction || G.room !== "stinky_bar") return;
+  if (!st.friction || G.room !== "stinky_bar" || !_barOwned()) return;   // the bar's frictions are the owner's; a seller has none
   if (st.frictionDay === G.day) return;
   // scales with how far outside you've stayed, and never becomes a drumbeat
   if (_rand() > Math.min(0.25 + st.friction * 0.12, 0.6)) return;
@@ -12200,6 +12205,7 @@ function _doWatchShow() {
 function _doTv() {
   const inRoom = _isHotelRoom(G.room);
   if (!_inBar() && !inRoom) { _say("No TV out here. The street is the channel."); return; }
+  if (G.room === "condo_room") { _say("There is no TV in the flat — the bracket on the wall is where the inventory says one was. The balcony is the channel: the bay, Jomtien's lights, a ship. (SIT on the balcony.)"); return; }
   if (_room().barType === "gogo") { _say("No telly in a go-go — the stage is the only channel, and it is always on. (WATCH SHOW)"); return; }
   _say(inRoom ?
     "You thumb the room's TV on. A wall-mounted flatscreen, the hotel's welcome " +
@@ -13155,6 +13161,8 @@ function _dishOrder(lower) {
 function _doEat(arg) {
   // THE CONDO'S KITCHEN (2026-10-20): a plate for CONDO_MEAL that no stall would charge you less for
   if (G.room === "condo_room" && (!arg || /\b(cook|noodles?|eggs?|rice|something|dinner|breakfast|food|a plate)\b/.test(arg))) {   // being in the room is being the tenant
+    // a man who has just eaten does not cook again: no plate, no sixty baht (a guest at the table still eats — that is her plate)
+    if ((G.hunger || 0) < 15 && !_npcsHere().some(id => _outWithMe(id))) { _say(_pickVary(["You open the fridge, look at the eggs, and close it again. You ate not long ago; the rice can wait for tomorrow.", "Not hungry. The kitchen will still be there — it is the one thing in this town that is.", "You have eaten. The wok stays on the hob and the sixty baht stays in your pocket."], "condofull")); return; }
     if (G.money < CONDO_MEAL && (G.bank || 0) < CONDO_MEAL) { _say("The fridge has the eggs and the rice has the rice, but the gas is out and the shop downstairs wants sixty baht for a refill you cannot find."); return; }
     if (G.money >= CONDO_MEAL) G.money -= CONDO_MEAL; else G.bank -= CONDO_MEAL;
     G.hunger = Math.max(0, G.hunger - 55); G.thirst = Math.max(0, G.thirst - 20);
@@ -13169,7 +13177,7 @@ function _doEat(arg) {
       } }
     _say(_pickVary([`Eggs, rice, a fistful of the dried chilli from the market in the cupboard. Twenty minutes, two rings, and a plate that cost ฿${_num(CONDO_MEAL)} and would have been ฿${_num(CONDO_MEAL * 2)} on the street with a stool thrown in.`,
       `Instant noodles upgraded with an egg and the half papaya, eaten on the balcony with the bay for a television. ฿${_num(CONDO_MEAL)}, and nobody to tip.`,
-      `The rice cooker does its one job; you do the rest with the wok you bought on Third Road. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
+      `The rice cooker does its one job; you do the rest with the wok somebody left. It is not a stall's plate. It is yours, which is a different flavour. (฿${_num(CONDO_MEAL)}.)`], "condomeal"));
     return;
   }
   // "EAT WITH TAN" is the other natural phrasing of his standing food invite —
@@ -13396,6 +13404,11 @@ function _payCreditor(arg) {
     if (!l) { _say("No lease in your name to pay key money on."); return; }
     if (l.paid) { _say(l.how === "billed" ? "It went on the first rent at the full figure. That ship has sailed, at list." : "Paid, and he has the envelope to prove it — or would, if he kept receipts."); return; }
     if (/transfer|app|bank|wire/i.test(arg || "")) _leaseTransfer(); else _leaseCash();
+    return;
+  }
+  // a tenant has a landlord: the rent is taken, not handed over
+  if (G.hotel === "condo" && G.condo && /rent|electric|condo|landlord|office|lease|^$/.test(arg || "")) {
+    _say(G.condo.short ? `The office has a month on its book in your name — it comes out of the account with the next one, on your month's day. (MONEY says when.)` : `Nothing to hand over: the office takes the rent and the electric out of the account on your month's day, and it is paid up to then. (MONEY says when.)`);
     return;
   }
   if (!_barOwned() || !G.bar) {
