@@ -28175,11 +28175,11 @@
    "between": "",
    "system": "thai",
    "claim": "no Thai food ordering anywhere (หิว, ไก่ย่าง, ข้าว)",
-   "verdict": "deferred",
-   "note": "needs the food path to take Thai dish names per stall; next Thai pass",
+   "verdict": "fixed",
+   "note": "the eat path took Anan's rows since; added หิวข้าว and the stalls' own dishes by Thai name (squid, mango, fish, kaprao, khao man gai, fried chicken); ไก่ alone stays Kai — fixed in the deferred sweep, 2026-10-29",
    "cls": "N",
    "sev": "major",
-   "pin": ""
+   "pin": "deferred1029.test.js"
   },
   {
    "round": "thai-1",
@@ -29165,10 +29165,10 @@
    "between": "",
    "system": "dialogue",
    "sev": "major",
-   "pin": "tests/js/round95.test.js",
+   "pin": "deferred1029.test.js",
    "claim": "Priew is unreachable at Slutty; Tukta's 'after the round I tell her' never fires",
-   "verdict": "deferred",
-   "note": "the mirage keeps her on the clock by design; the promise in Tukta's mouth needs a door or a different line — next pass",
+   "verdict": "fixed",
+   "note": "the promise is kept: three turns after the reveal, in the same room, Priew sits one minute between rounds, no drink, no money, no สนุก (_priewSits); the floor's answer after says she had her minute — fixed in the deferred sweep, 2026-10-29",
    "cls": "D"
   },
   {
@@ -31985,10 +31985,10 @@
    "between": "",
    "system": "dialogue",
    "sev": "severe",
-   "pin": "",
+   "pin": "deferred1029.test.js",
    "claim": "Sasi said 'Today is day one' on night 7, my girl, a minute after greeting me as the man from Galway",
-   "verdict": "deferred",
-   "note": "her first-trip LAST TIME line fires whenever the previous night was not with her; a resident has no vacations to gate it — needs an engine LAST TIME from her memory (partyLog, the bed, seenDay); next pass",
+   "verdict": "fixed",
+   "note": "the floor's LAST TIME from memory shipped in round 101 (_lastTimeTalk); the house still said 'no last time' to a man met on an earlier night — mamasans and cashiers now answer from the night he sat, else the night he met — fixed in the deferred sweep, 2026-10-29",
    "cls": "C"
   },
   {
@@ -34490,10 +34490,10 @@
    "between": "",
    "system": "quests",
    "sev": "major",
-   "pin": "",
+   "pin": "deferred1029.test.js",
    "claim": "The President's Table cannot be started: the Orchid door refuses and nobody says how to get in",
-   "verdict": "deferred",
-   "note": "the Orchid is invitation-only by design; Doyle's recon names no one who takes you",
+   "verdict": "fixed",
+   "note": "Doyle answers the rope (orchid/rope/door/get in/gavin): the group's friends, Gavin at the Golden Dragon decides, ASK GAVIN ABOUT PATTAYA LEISURE — fixed in the deferred sweep, 2026-10-29",
    "cls": "B"
   },
   {

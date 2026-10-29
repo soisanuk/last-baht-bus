@@ -2515,7 +2515,8 @@ function _elsewhereLine(word) {
     if (_away === "harvest") return `${NPCS[nid].name} ${notHere} — home for the rice harvest. Ten days, the girls say, and nobody argues with the rice.`;
     if (_away === "bangkok") return `${NPCS[nid].name} ${notHere} — gone to Bangkok till the rain stops, the way the smart ones do in the trough. Back when the money is.`;
     if (nid === "priew" && G.priewSeen && G.priewSeen.day === G.day && G.priewSeen.room === G.room)
-      return "Priew is working the far table, on the clock — the tray, the laugh, the Russians. After the round, maybe; not before.";   // "isn't around" a line after the scene sat her down (Jens, round 67)
+      return G.priewSeen.sat ? "Priew is back on the round — she had her minute at your table, and a minute is what the floor allows."
+        : "Priew is working the far table, on the clock — the tray, the laugh, the Russians. After the round, maybe; not before.";   // "isn't around" a line after the scene sat her down (Jens, round 67)
     if (!_npcActive(nid)) return `${NPCS[nid].name} isn't around right now.`; // not in at this hour / not here at all
     const cur = _npcRoom(nid);
     // Point the player to her only when she's at one of HER OWN bars (a
@@ -3984,6 +3985,8 @@ function _tick() {
   // any time before it moves on. All of that lives in _salengTick (encounters).
   if (!_onRide()) _salengTick();
   if (!_onRide()) _thaiOverheard();
+  // the reveal's hostess said she would tell Priew to sit with you after the round: she does, once
+  if (!G.game && !G.pendingEnc) _priewSits();
   // her bike is not your stool: six minutes at the Mooring and a night ride read as
   // "three hours on the same stool" (Dieter, round 56)
   if ((_inBar() || (G.room === "mikes_mall" && NPCS.wilf && NPCS.wilf.room === G.room)) && !(_onRide())) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // Wilf's food court is his local: an evening at his table is a night he saw you (Ruth, round 105)   // presence, for the regular's bond (Trevor, round 39)

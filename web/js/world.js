@@ -9167,6 +9167,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"The good table? That's the whole job — I need it seen, not guessed. The back room off the Pink " +
           "Lotus, the velvet-rope one. Have your look, then come tell me who's really holding it.\"",
         short: "\"Get inside the Orchid's back room, have a look at the good table, then come tell me who holds it.\"" },
+      // the giver answers the obvious question about his own job: how a tourist gets past that rope
+      { topic: "orchid|orchid room|the orchid|back room|the back room|rope|the rope|velvet rope|door|the door|doorman|the doorman|get in|how to get in|members|friends|friend of the group|gavin|pattaya leisure|the group",
+        text: "\"The rope.\" Doyle almost smiles. \"I sat across the road from that rope four nights running before I " +
+          "called anybody. It lifts for the group's friends and their guests — nobody else, not for money, I watched a " +
+          "man try with a thousand folded small.\" He sets the soda down. \"Who counts as a friend gets decided " +
+          "at the Golden Dragon. Fellow in good shoes, Gavin, looks after the group's rooms. He'll talk to anyone; " +
+          "talking's his job. Find out what useful looks like to him.\" (ASK GAVIN ABOUT PATTAYA LEISURE)",
+        short: "\"It lifts for the group's friends. Gavin at the Golden Dragon decides who those are — find out what useful looks like to him.\"" },
 
       // TAN BREADCRUMB — his 'contact here', the local who arranged his ride and put
       // a card in his hand. The exact card from the intro's pi-origin Tan beat. Never

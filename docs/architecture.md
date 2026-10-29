@@ -1037,7 +1037,7 @@ How you get from one door to the next and what finds you on the way: the trucks 
 
 **Touches.** `hotels` (room water warnings), `dog` (fed at Tan's cart), the condo and bench in the expat stage. A stall's prose that names a dish must be buyable — routing and availability are separate questions.
 
-**Tests.** tests/js/queenvic.test.js, round23.test.js, playtest5.test.js, engine.test.js, sweep.test.js, round53.test.js, round37.test.js, round78.test.js; `tools/afford-audit.mjs` (gated in promises.test.js) buys what room prose offers.
+**Tests.** tests/js/queenvic.test.js, round23.test.js, playtest5.test.js, engine.test.js, sweep.test.js, round53.test.js, round37.test.js, round78.test.js, deferred1029.test.js; `tools/afford-audit.mjs` (gated in promises.test.js) buys what room prose offers.
 
 **Design docs.** docs/economy-review.md
 
@@ -1723,7 +1723,7 @@ and that anything the game prints as a topic is answerable this turn.
 it — `_topicExact` exists for that.
 
 **Tests.** conversation.test.js, round47.test.js (every printed label asked), round62.test.js (dead nodes),
-patronfold.test.js, reader.test.js, steve.test.js, question-audit.test.js, remarks.test.js; tools/asktopic-audit.mjs,
+patronfold.test.js, reader.test.js, steve.test.js, question-audit.test.js, remarks.test.js, deferred1029.test.js (the house's LAST TIME); tools/asktopic-audit.mjs,
 tools/askable-audit.mjs and tools/dialogue-lifecycle.mjs (gated in promises.test.js); tools/dialogue-walk.mjs is run by hand.
 
 **Design docs.** none.
@@ -1767,7 +1767,7 @@ anything — a dialogue node, a GIVE, a room visit, a game won — so any mechan
 `act1` (`_checkAct1`, HINT's opening branch). An engine-set flag must join world.test's settable list.
 
 **Tests.** world.test.js (well-formed quests), journal.test.js, reachability.test.js, engine.test.js,
-playtest5.test.js, hillchain.test.js, barchain.test.js, laundering.test.js; tools/quest-audit.mjs and
+playtest5.test.js, hillchain.test.js, barchain.test.js, laundering.test.js, deferred1029.test.js (the Orchid recon's way in); tools/quest-audit.mjs and
 tools/errand-audit.mjs (run by hand).
 
 **Design docs.** docs/known-subgraph.md.
@@ -1900,7 +1900,7 @@ trainer), `G.taughtBy`, `G.taught`, `G.clozeFree`, `G.thaiSpyDone`, `G.halfThaiC
 in the trainer's vendored vocabulary or term.test's coverage test fails.
 
 **Tests.** round42.test.js, thai.test.js, halfthai.test.js, thaionly.test.js, thaihouse.test.js, round92.test.js,
-reader.test.js, term.test.js (Thai coverage).
+reader.test.js, term.test.js (Thai coverage), deferred1029.test.js (food in Thai).
 
 **Design docs.** docs/trainer-notes.md, docs/thai-quest-design.md.
 

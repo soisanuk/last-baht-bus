@@ -7407,10 +7407,15 @@ const _TOWN = {
       "{n} nods. \"Every man over fifty here has the same back. ฿{p} at the Thai shops. Go before it's a clinic job.\""],
   },
   priew: {
-    floor: ["\"Priew? She is on the round.\" {n} nods at the far table. \"Drink-girl only, that one — she sit with you after, one drink. Not before. The tray first.\"",
+    floor: ["\"Priew? She is on the round.\" {n} nods at the far table. \"Drink-girl only, that one — she sit with you after, one minute. Not before. The tray first.\"",
       "{n} glances at the Russians' table. \"Busy. After the round I tell her you here. She come, or she don't — her choice, na.\""],
     house: ["\"Priew's working,\" {n} says. \"She'll sit after the round, if she wants to. Drinks only, that one.\""],
     punter: ["\"The girl with the tray? Working,\" {n} says. \"After the round, mate, if she fancies it.\""],
+  },
+  priewSat: {
+    floor: ["\"Priew? She sit with you already, na.\" {n} shrugs. \"One minute is a lot, for her. Now the tray again.\""],
+    house: ["\"She sat with you,\" {n} says. \"That was the minute. She's working.\""],
+    punter: ["\"Had your minute with her, mate. She's back on the tray.\""],
   },
   chit: {
     floor: ["\"The chit.\" {n} taps the cup. \"฿{c} for me from every ฿{p} you spend on me. I show you already — you remember. The rest is the bar.\"",
@@ -9138,6 +9143,19 @@ function _dawnHere(npc, w) {
 // node and a first-trip line, and a resident has no trips — so to a man she has met before today, the first-trip line
 // ("Today is day one") was a lie. When her own open node is the ungated one, the engine answers from HER memory of him:
 // the latest of a night out, a long time, a short time, a night in his flat, or simply the last night he sat with her.
+// the house remembers the night it met you, when no night on its book says more
+const _LAST_TIME_HOUSE = {
+  floor: [
+    "\"You come {ago}, na.\" {n} doesn't have to think. \"I remember. Not every face — yours, yes.\"",
+    "{n} taps the side of her head. \"{ago}. You say hello, I say hello. Is enough for remember.\"",
+    "\"Last time is {ago},\" {n} says. \"Short time. But I see you, I keep.\"",
+  ],
+  house: [
+    "\"{ago},\" {n} says, without looking anything up. \"Briefly. I remember who came through that door; it is half the job.\"",
+    "{n} doesn't need the book for it. \"You were in {ago}. Not for long. It was enough to put a name to.\"",
+    "\"{ago} — not a long visit,\" {n} says. \"Long enough. I don't lose a face that's been in twice.\"",
+  ],
+};
 const _LAST_TIME_MEM = {
   out: [n => `"Last time?" ${n} does not have to think. "{ago} — you take me out. Every bar, every song. My feet still know."`, n => `${n} counts back. "{ago}. The night out. You dance like farang, I tell everybody." A grin. "Everybody already know."`],
   lt: [n => `"Last time." ${n} says it with the morning in it. "{ago}. All night. You snore, little bit. I don't mind."`, n => `${n} looks at you a beat too long. "{ago}, you take me home. Long time. In the morning you make me laugh. That is last time."`],
@@ -9202,7 +9220,9 @@ function _awayTalk(npc, topic) {
   const missed = /what (?:did|have) i miss|what happened|anything happen/.test(t);
   let L;
   if (d == null) L = reg === "floor" ? [`"I don't know you before, na." ${nm} smiles anyway. "Now I know. Sit."`] : TH ? [`"First time I see you here, I think," ${nm} says. "Now I remember."`] : [`"Can't say I've seen you in here before," ${nm} says. "You're here now. That's the main thing."`];
-  else if (d === 1) L = reg === "floor" ? [`"You here last night, silly." ${nm} laughs. "Not so long."`] : TH ? [`"Last night you were here," ${nm} says. "Not long gone."`] : [`"You were in last night," ${nm} says. "That's not away, that's popping out."`];
+  else if (d === 1) L = reg === "floor" ? [`"You here last night, silly." ${nm} laughs. "Not so long."`, `"Last night!" ${nm} points at where you sat. "Same place. You forget already?"`, `${nm} laughs at you. "Last night, na. One sleep only."`]
+    : TH ? [`"Last night you were here," ${nm} says. "Not long gone."`, `"Last night," ${nm} says, and does not need to think about it. "Same seat."`, `${nm} gives you a look. "Last night. I am not so old I forget yesterday."`]
+    : [`"You were in last night," ${nm} says. "That's not away, that's popping out."`, `"Last night," ${nm} says. "I'd hardly call that a last time."`, `${nm} doesn't look up. "Last night. Same as tonight, give or take the drink."`];
   else if (missed) L = reg === "floor" ? [`"${span[0].toUpperCase() + span.slice(1)} you not come." ${nm} thinks. "You miss nothing. Same bar, same girl, same price."`, `"What you miss?" ${nm} shrugs. "${span[0].toUpperCase() + span.slice(1)}. Nothing — the bar don't change for one farang, na."`]
     : TH ? [`"${span[0].toUpperCase() + span.slice(1)}," ${nm} says. "You missed nothing. The bar is the same bar."`] : [`"${span[0].toUpperCase() + span.slice(1)}," ${nm} says. "You missed nothing that'll keep you up at night. Same rail, same ice, the same arguments about the football."`, `${nm} considers it. "${span[0].toUpperCase() + span.slice(1)}. Nothing happened. That's what happens here, mostly."`];
   else L = reg === "floor" ? [`"${span[0].toUpperCase() + span.slice(1)}!" ${nm} counts it on her fingers, pleased to have it right. "Little bit I miss you. Little bit."`, `"You go ${span}, na." ${nm} wags a finger. "I see your stool empty. I don't say nothing."`]
@@ -9215,8 +9235,15 @@ function _lastTimeTalk(npc, topic) {
   const t = String(topic || "").toLowerCase().trim();
   if (!/^(?:the )?(?:last time|last trip|last visit|before|the other night)$/.test(t)) return false;
   // the house keeps a count too: Jinda's written "this week — you sit here already" a week after you last sat (Desmond, round 106)
-  if (NPCS[npc] && ["mamasan", "cashier"].includes(NPC_ROLES[npc]) && (G.metDay || {})[npc] != null && G.metDay[npc] < G.day && (G.barSat || {})[NPCS[npc].room] != null && G.day - G.barSat[NPCS[npc].room] >= 2)
-    return _awayTalk(npc, "last time");
+  // a house that met you on an earlier night never says "no last time": the night you last sat, or else the night you met
+  if (NPCS[npc] && ["mamasan", "cashier"].includes(NPC_ROLES[npc]) && (G.metDay || {})[npc] != null && G.metDay[npc] < G.day) {
+    const bs = (G.barSat || {})[NPCS[npc].room];
+    if (bs != null && bs < G.day && _awayTalk(npc, "last time")) return true;
+    const d = G.day - G.metDay[npc], reg = _hoursRegister(npc), nm = NPCS[npc].name;
+    const ago = d === 1 ? "last night" : d <= 6 ? ["", "", "two", "three", "four", "five", "six"][d] + " nights ago" : d <= 13 ? "a week or so ago" : "a while ago";
+    _say(_pickTownLine(reg === "floor" ? _LAST_TIME_HOUSE.floor : _LAST_TIME_HOUSE.house, "lasttimehouse:" + reg).replace(/\{n\}/g, nm).replace(/(^|")\{ago\}/g, (m, q) => q + ago[0].toUpperCase() + ago.slice(1)).replace(/\{ago\}/g, ago));
+    return true;
+  }
   if (!NPCS[npc] || NPC_ROLES[npc] !== "hostess" || (G.metDay || {})[npc] == null || G.metDay[npc] >= G.day) return false;
   const own = _pickDialogue(npc, "last time"); if (!own || (own.topic && own.when)) return false;   // her gated returning-trip node is hers to say
   const cands = [];
@@ -9816,7 +9843,7 @@ function _townTalk(npc, topic) {
   }
   if (/^(my |a |bad )?back$|\b(back pain|bad back|my back|backache|sore back)\b/.test(t)) return pick("back", { p: MASSAGE_LEGIT });   // not from a woman in her own shop (Orapin warned you off oil shops in hers — Ossie, round 70)
   // L925 — Priew on her round, asked of the room she is working
-  if (/\bpriew\b/.test(t) && G.priewSeen && G.priewSeen.day === G.day && G.priewSeen.room === G.room) return pick("priew", {});
+  if (/\bpriew\b/.test(t) && G.priewSeen && G.priewSeen.day === G.day && G.priewSeen.room === G.room) return pick(G.priewSeen.sat ? "priewSat" : "priew", {});
   // L912 — the chit she showed you is a thing she can be asked about
   if (NPC_ROLES[npc] === "hostess" && (G.soc.ledger || {})[npc] && G.soc.ledger[npc].includes(1) &&
       /\b(chit|chits|cut|stamp|share|commission|her money|your money|60|sixty)\b/.test(t))
@@ -13491,7 +13518,7 @@ function _priewReveal() {
     "the tray one centimetre, which is a greeting, and an answer, and the whole of " +
     "the joke.", "alert");
   const her = _npcsHere().find(n => NPC_ROLES[n] === "hostess");
-  G.priewSeen = { room: G.room, day: G.day, by: her || null };   // she is in the room tonight, on the clock (Jens, round 67)
+  G.priewSeen = { room: G.room, day: G.day, by: her || null, t: G.nightTurn };   // she is in the room tonight, on the clock (Jens, round 67)
   if (her) {
     _say(`${NPCS[her].name} follows your frozen stare with professional interest. ` +
       "\"You know her? She drinks-girl only, no barfine — but I can tell her sit " +
@@ -13502,6 +13529,26 @@ function _priewReveal() {
     "sat. Nothing she told you was untrue. Hospitality. The lie was yours, and it " +
     "was one word long: normal.", "alert");
   _addHappy(-2);
+}
+
+// between rounds, for one minute, at your table: the drink girl sits without a drink, because you know already
+const _PRIEW_SITS = [
+  "Between rounds, the tray comes back empty and Priew sits on the edge of the chair across from you without putting it down. " +
+    "\"Mama count if I sit with no drink. One minute.\" The laugh, smaller. \"You look at me like the pen is dead again.\" " +
+    "She doesn't explain and you don't ask; the clinic is in the air between you and both of you leave it there. " +
+    "\"Lunch is still true,\" she says, standing. \"Nights is also true.\" The tray goes back up to shoulder height.",
+  "Priew comes back past your table from the Russians' and stops, which on this floor costs her something. She sits, half on the chair, " +
+    "the tray across her knees. \"{n} tell me you here.\" A look at the Russians, a look at the mamasan, a look at you. \"One minute, " +
+    "no drink — I don't want you buy me drink. Different.\" Her brother's stitches are out, she says, and he shows the scar to " +
+    "everybody like a medal. Then the round starts again, and she goes with it.",
+];
+function _priewSits() {
+  const s = G.priewSeen;
+  if (!s || s.sat || s.day !== G.day || s.room !== G.room || G.nightTurn < (s.t || 0) + 3) return;
+  s.sat = true;
+  // the second line credits the hostess who carried the message, so it needs one
+  const line = s.by && NPCS[s.by] ? _pickVary(_PRIEW_SITS, "priewsits").replace("{n}", NPCS[s.by].name) : _PRIEW_SITS[0];
+  _say(line, "alert");
 }
 
 function _doViolence(arg) {
@@ -17185,6 +17232,9 @@ const _THAI_CMD = [
   ["อังกฤษ", "england"], ["ออสเตรเลีย", "australia"], ["โคราช", "korat"], ["มาจาก", "from"],
   // …and the food words a hungry man types (Anan): I'm hungry, grilled chicken, and the dishes the stalls make
   ["หิว", "hungry"], ["ไก่ย่าง", "grilled chicken"], ["ข้าวเหนียว", "sticky rice"],
+  // …and the stalls' own dishes by their Thai names, plus หิวข้าว, the everyday "I'm hungry" (ไก่ alone is Kai's name)
+  ["หิวข้าว", "hungry"], ["ปลาหมึก", "squid"], ["มะม่วง", "mango"], ["ปลา", "fish"], ["กะเพรา", "pad kaprao"],
+  ["ข้าวมันไก่", "khao man gai"], ["ไก่ทอด", "fried chicken"],
 ];
 // A word that is also a woman's name is the word after ABOUT: เรื่องฝน is the rain, not Fon (Thomas, round 92 —
 // it rained every night and nobody could be asked about it in Thai). Before ABOUT the name keeps it: ถามฝน is Fon.
