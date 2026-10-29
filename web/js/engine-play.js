@@ -705,8 +705,9 @@ function _nokTakeAmulet() {
 // Hired help, not the owner: keeps regulars company, pours free shots, and is
 // stood a "man drink" back when you monopolise his time (_buyManDrink). Bert is
 // the exemplar. Reading-customers / interrupt / burnout are deferred.
+// behind HIS bar, not drinking at somebody else's: Bert walked out of the Stinky poured the Queen Vic's house shot (Graham, round 112)
 function _managerHere() {
-  return _npcsHere().find(id => NPCS[id] && NPCS[id].manager) || null;
+  return _npcsHere().find(id => NPCS[id] && NPCS[id].manager && (NPCS[id].room === G.room || (NPCS[id].bars || []).includes(G.room))) || null;
 }
 // The house welcome: a free shot, once per bar per night (sandbox only — the
 // tutorial stays dry). You're expected to reciprocate with a man drink.
@@ -1420,7 +1421,10 @@ const _TOLD_RX = [
   ["status", /^i (was|got) divorced\b/, () => "divorced"],
   ["job", /^(?:i'?m|i am) an? ([a-z ]{3,30}?)(?: by trade)?$/, m => m[1]],
   ["job", /^i (?:work as an?|work in) ([a-z ]{3,30})$/, m => m[1]],
-  ["home", /^(?:i'?m|i am|i come) from ([a-z' ]{3,30})$/, m => m[1]],
+  ["job", /^i (?:was|used to be) an? ([a-z ]{3,30}?)(?: by trade| before| back home| for (?:years|[a-z\d]+ years))?$/, m => m[1]],
+  // "i come from galway, in ireland": the town is the answer, the country after it is the gloss
+  ["home", /^(?:i'?m|i am|i come|i'?m originally|i am originally|i come originally) from ([a-z' ,]{3,40})$/, m => m[1].split(/,| in /)[0]],
+  ["age", /^(?:i'?m|i am|i turned|i'?ll be) (\d{2})(?: years old| years| this year| now)?$/, m => +m[1] >= 18 ? m[1] : ""],
   ["name", /^(?:my name is|my name'?s|call me|i'?m called) ([a-z' ]{2,20})$/, m => m[1]],
   // the dog at home: named or not (the fallback choices, 2026-10-18 — "she remembers your news")
   ["dog", /^(?:i (?:have|'ve got|got) a dog|i have got a dog|my dog)(?:,? (?:called|named|is called|'s called|is named|is))? ?([a-z']{2,15})?$/, m => m[1] && !/^(at|back|home|in|old|young|big|small|cute|sick|dead|lovely)$/.test(m[1]) ? m[1] : "yes"],
@@ -1436,6 +1440,9 @@ const _TOLD_REACT = {
   job: ["\"{X}?\" She tries the word. \"Is good job? Sit all day, I think. Then you come here and sit more, hahaha.\"", "\"Ohh, {x}. Very smart man.\" She means it, more or less. \"You count my chits for me, na?\""],
   home: ["\"{X}? I don't know it.\" She doesn't pretend. \"Is far? Is cold? Everybody's home is cold.\"", "\"{X}.\" She files it away. \"Next time you tell me about it. Tonight you tell me about you.\""],
   name: ["\"{X}.\" She says it back, twice. \"Okay. Now I know.\""],
+  age: ["\"{X}?\" She counts it on the bar with one finger and gives up. \"Is good number. Nobody too old for Pattaya.\"",
+    "\"Really {X}?\" She doesn't believe it, or pretends well. \"I think you lie. I think less.\"",
+    "\"{X}.\" She looks at you a long second. \"You look younger. Okay — little bit younger.\" She is being kind and you both know it."],
   dog: ["\"You have dog? What kind? Big one, small one?\" She approves of dogs. \"Who give him food when you here?\"",
     "\"Dog man.\" She nods, as if it explains something. \"Dog man is kind man, mostly.\""],
   dogNamed: ["\"{X}? Is good name for dog.\" She tries it out. \"{X}. I remember.\"",
@@ -1464,7 +1471,7 @@ function _doTell(lower, to) {
   for (const [key, rx, val] of _TOLD_RX) {
     const m = l.match(rx); if (!m) continue;
     const v = val(m).trim(); if (!v) continue;
-    if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|very|woman|man|lady|girl|boy|female|male|bloke|guy|person|customer|tourist)\b/.test(v)) return false;   // "i am a woman" → "Woman? Is good job?" (Lorraine, round 95)
+    if (key === "job" && /^(here|in pattaya|on holiday|from|tired|okay|ok|fine|drunk|sorry|happy|not|just|a bit|bit|little|lot|mess|wreck|fool|idiot|very|woman|man|lady|girl|boy|female|male|bloke|guy|person|customer|tourist)\b/.test(v)) return false;   // "i am a woman" → "Woman? Is good job?" (Lorraine, round 95)
     ((G.player.told = G.player.told || {}))[key] = v;
     _toldNote(pid, key, v);
     // …and when SHE has just asked it, it is her answer: "where you from?" then "i'm from korat" was a remark, and
@@ -4725,25 +4732,32 @@ const _SOLD_RABBIT_COLD = [
   n => `"Hello, customer." ${n} puts a little weight on the last word, then lets it go. "Soi 6 is all the group now. You help. Never mind."`,
 ];
 // THE SALE, asked of anyone: the town knows who bought it and how it stood, in the asker's register
-// (Bert and Tan have their own nodes about it; the floor, the rail and the columnist answer here)
+// (Bert, Tan and Gavin have their own nodes about it; the floor, the rail and the columnist answer here)
 const _SALE_TOPIC = /\b(?:the )?(?:stinky(?: pinky)?|sale|selling|sold|sell(?:ing)? (?:the|my|your) bar|my (?:old )?bar|your (?:old )?bar)\b/;
 const _SALE_SAID = {
   floor: [
-    (n, b, h) => `"You sell the Stinky." ${n} says it the way the soi says everything, as news already old. "${b} have it now. ${h === "profit" ? "People say you make money there. Smart, to sell when it is good." : h === "under" ? "People say it was hard. Okay — finish now." : "Not rich, not broke, people say. Okay."}"`,
-    (n, b, h) => `${n} shrugs. "Everybody know. ${b}." A small look at you. "${h === "profit" ? "You sell high, na? Good for you." : h === "under" ? "Better than nothing, the girls say." : "Same same, the girls say. Okay."}"`,
+    (n, b, h) => `"You sell the Stinky." ${n} says it the way the soi says everything, as news already old. "${_ucfirst(b)} have it now. ${h === "profit" ? "People say you make money there. Smart, to sell when it is good." : h === "under" ? "People say it was hard. Okay — finish now." : "Not rich, not broke, people say. Okay."}"`,
+    (n, b, h) => `${n} shrugs. "Everybody know. ${_ucfirst(b)}." A small look at you. "${h === "profit" ? "You sell high, na? Good for you." : h === "under" ? "Better than nothing, the girls say." : "Same same, the girls say. Okay."}"`,
+    (n, b, h) => `${n} points her chin up the soi, toward the Stinky. "Now is ${b}, na. ${h === "profit" ? "You make good money, then you sell. Clever." : h === "under" ? "Is okay. Bar is hard. Everybody know." : "Not lose, not win. Okay, finish."}"`,
+    (n, b, h) => `"You not boss any more?" ${n} laughs, not unkindly. "${h === "profit" ? "You sell when is good — I tell my friend, she say smart man." : h === "under" ? "Better sell than close, na." : "Same same. Now you drink, no work."}"`,
   ],
   house: [
     (n, b, h) => `"The Stinky went to ${b}." ${n} has heard it three ways already and gives you the plainest. "${h === "profit" ? "Sold making money, which is the only good way to sell." : h === "under" ? "It was going under — that's what everyone says, and they say it kindly." : "Neither up nor down, they say. You got out standing."}"`,
-    (n, b, h) => `${n} nods. "${b} have it now." A beat. "${h === "profit" ? "You sold it at the top. Not many manage that." : h === "under" ? "Nobody blames a man for a bad season. They just remember it." : "Kept it standing and let it go. That's more than most."}"`,
+    (n, b, h) => `${n} nods. "${_ucfirst(b)} have it now." A beat. "${h === "profit" ? "You sold it at the top. Not many manage that." : h === "under" ? "Nobody blames a man for a bad season. They just remember it." : "Kept it standing and let it go. That's more than most."}"`,
+    (n, b, h) => `"So ${b} has it now." ${n} wipes the counter while she says it. "${h === "profit" ? "Sold while it was earning. That's the good way to sell." : h === "under" ? "A hard season, they say. Nobody holds it against you." : "Not a loss, not a fortune. Most owners would take that."}"`,
+    (n, b, h) => `${n} has your drink poured before the question. "${_ucfirst(b)} took it over, I hear. ${h === "profit" ? "You went out on a good month — that's the one they remember." : h === "under" ? "Bars go under every season here. You got out." : "You handed it on standing up. That counts."}"`,
   ],
   punter: [
-    (n, b, h) => `"Heard you sold up." ${n} lifts the glass an inch. "${b}, isn't it? ${h === "profit" ? "Got out at the top, by all accounts. Good on you." : h === "under" ? "Rough season to own a bar. Rough town for it." : "Not a fortune either way, they say. Still — out in one piece."}"`,
-    (n, b, h) => `${n} has the story already, the way the rail always does. "${b} have the Stinky now. ${h === "profit" ? "You made money on it, the word is. Rare as hen's teeth." : h === "under" ? "Word is it was underwater. Happens to better men." : "Broke even, near enough, the word is. Plenty don't."}"`,
+    (n, b, h) => `"Heard you sold up." ${n} lifts the glass an inch. "${_ucfirst(b)}, isn't it? ${h === "profit" ? "Got out at the top, by all accounts. Good on you." : h === "under" ? "Rough season to own a bar. Rough town for it." : "Not a fortune either way, they say. Still — out in one piece."}"`,
+    (n, b, h) => `${n} has the story already, the way the rail always does. "${_ucfirst(b)} have the Stinky now. ${h === "profit" ? "You made money on it, the word is. Rare as hen's teeth." : h === "under" ? "Word is it was underwater. Happens to better men." : "Broke even, near enough, the word is. Plenty don't."}"`,
+    (n, b, h) => `${n} nods at your glass rather than at you. "So ${b} has it. ${h === "profit" ? "Sold it while it was earning — most blokes here sell when it's already gone." : h === "under" ? "Better shot of it than chasing it. I've watched men chase." : "Even money out of a bar on this road is a win, whatever they tell you."}"`,
+    (n, b, h) => `"Done with it, then?" ${n} doesn't need the answer. "${_ucfirst(b)}. ${h === "profit" ? "And you left with more than you came with. Write that down somewhere." : h === "under" ? "No shame in it. The rent's beaten better men than both of us." : "In and out with your shirt on. That's a result."}"`,
+    (n, b, h) => `${n} touches a glass to yours without asking. "To the former owner. ${_ucfirst(b)} can worry about the ice machine now. ${h === "profit" ? "You went out on a good season — they'll talk about that." : h === "under" ? "They'll forget the season. They always do." : "Nobody'll remember the numbers. They'll remember you sold it standing."}"`,
   ],
 };
 function _saleTalk(id, topic) {
   const sale = G.barSale; if (!sale || sale.via === "lost" || !_flag("barSoldOn")) return false;
-  if (!topic || !_SALE_TOPIC.test(String(topic).toLowerCase()) || id === "bert" || id === "tan" || !NPCS[id] || !_met(id)) return false;
+  if (!topic || !_SALE_TOPIC.test(String(topic).toLowerCase()) || id === "bert" || id === "tan" || id === "gavin" || (id === "candy" && sale.via === "bert") || !NPCS[id] || !_met(id)) return false;
   const reg = _hoursRegister(id), key = reg === "floor" ? "floor" : reg === "punter" ? "punter" : "house";
   _say(_pickVary(_voiceFit(_SALE_SAID[key]), "saletalk:" + key)(NPCS[id].name, _barBuyerName(), sale.health));
   return true;
@@ -7518,8 +7532,8 @@ const _JOB_DECLINED = [
 function _declineJob() {
   const o = G.jobOffer; G.jobOffer = null;
   if (o && o.kind === "school") { _say("You tell Jerry thanks, but no. \"Hey, your call,\" he says, and means it; the school will still be short a native next term."); return; }
-  const who = o && _npcsHere().find(id => NPC_ROLES[id] === "mamasan" || (NPCS[id] && NPCS[id].manager));
-  const pr = who ? _pr(who) : { s: "she", p: "her" };
+  const who = o && (o.corp && _npcsHere().includes("gavin") ? "gavin" : _npcsHere().find(id => NPC_ROLES[id] === "mamasan" || (NPCS[id] && NPCS[id].manager)));
+  const pr = who ? _pr(who) : { s: "it", p: "its" };   // "The house takes it the way she takes a man" (Graham, round 112)
   _say(_fmt(_pickVary(_JOB_DECLINED, "jobdecline"), { n: who ? NPCS[who].name : "The house", s: pr.s, p: pr.p }));
 }
 function _doTeach() {

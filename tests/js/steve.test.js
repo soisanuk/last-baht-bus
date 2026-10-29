@@ -75,6 +75,9 @@ const CASES = [
   ["sweet_tamarind_ple", () => onArm("pukky"), "this is pukky", /Now I know\."$|says it back, twice/, /Pukky/],
   ["sweet_tamarind_ple", () => onArm("pukky"), "you two know each other?", /Google Translate|Too fast/],
   ["somo", () => { G.day = 7; G.soc.drinks.somo = 4; G.talked.somo = [0]; }, "hiya somo, last night tonight", /Same as last time/],
+  // the recorded misses replayed against the build (2026-10-29): what a passenger and a thirsty man say
+  ["pukky", () => { G.convo = null; }, "can i have a water", /Not for sale/, /฿/],
+  ["pukky", () => { G.convo = null; G.room = "soi6_street"; }, "how much is the bus", /Not for sale/, /baht bus|฿15/],
 
 ];
 for (const [who, setup, line, bad, good] of CASES) {

@@ -487,7 +487,7 @@ nightly `G.soc.drunk`, `G.soc.soberNext`.
 `clinic`, `act1`. Raising a meter outside the tick's limit check, or bumping `G.hurt` directly, leaves the player
 pinned at the limit with no ending.
 
-**Tests.** `tests/js/engine.test.js`, `tests/js/round53.test.js`, `tests/js/accident.test.js`,
+**Tests.** round112.test.js, `tests/js/engine.test.js`, `tests/js/round53.test.js`, `tests/js/accident.test.js`,
 `tests/js/hospital.test.js`, `tests/js/std.test.js`, `tests/js/reachability.test.js`.
 
 **Design docs.** none.
@@ -1126,7 +1126,7 @@ How you get from one door to the next and what finds you on the way: the trucks 
 
 **Touches.** `police` and `cons` share the machinery, `darkness` (no encounters in the dark), `navigation`, `hotels` (`_joinerFee` when a woman comes up), the companion system (`solo`). Any new prompt that leaves `G.pendingEnc` set must go through `_encPrompt`, and a soft pitch needs an `_ENC_SOFT` entry or it will eat unrelated commands.
 
-**Tests.** round111.test.js, tests/js/engine.test.js, playtest5.test.js, conversation.test.js, round35.test.js, round47.test.js, round37.test.js; `tools/modal-audit.mjs` (modal-audit.test.js) arms every interactive encounter and types non-answers at it, and `tools/composition-audit.mjs` checks them against other live states.
+**Tests.** round112.test.js, round111.test.js, tests/js/engine.test.js, playtest5.test.js, conversation.test.js, round35.test.js, round47.test.js, round37.test.js; `tools/modal-audit.mjs` (modal-audit.test.js) arms every interactive encounter and types non-answers at it, and `tools/composition-audit.mjs` checks them against other live states.
 
 **Design docs.** docs/economy-review.md
 
@@ -1591,7 +1591,7 @@ it. The clinic's waiting room is also where you meet Priew, the start of the hos
 **Touches.** `barfine` and `massage` (the paid nights that roll), `party` (the companion in the waiting room), the
 7-Eleven's shelf (condoms). Act One gating: Priew does not appear before `act1Done`.
 
-**Tests.** round110.test.js, `std.test.js`, `engine.test.js`, `round53.test.js`, `round57.test.js`, `round70.test.js`, `saveload.test.js`.
+**Tests.** round112.test.js, round110.test.js, `std.test.js`, `engine.test.js`, `round53.test.js`, `round57.test.js`, `round70.test.js`, `saveload.test.js`.
 
 **Design docs.** `docs/design-backlog.md`.
 
@@ -2110,7 +2110,7 @@ stand Kesinee, the Kitten Corner mamasan who reads the player's origin, and Gavi
 **Touches.** `quests`, the factions (`_align` moves group standing elsewhere), `soi6-stream` (excludes this room), the
 paper by the till (`_PLG_ROOMS`). A new route into either room must go through `_arriveAt` or it skips the door.
 
-**Tests.** round111.test.js, engine.test.js, journal.test.js, reachability.test.js, conversation.test.js, round47.test.js,
+**Tests.** round112.test.js, round111.test.js, engine.test.js, journal.test.js, reachability.test.js, conversation.test.js, round47.test.js,
 round58.test.js, playtest5.test.js.
 
 **Design docs.** docs/factions-thai.md, docs/guardrails.md.
@@ -2318,7 +2318,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `barbooks` (everything after opening), `procurement` (Tan's route unlocks the jobs), `affair` (its door is the sale that ends the game), `expat-jobs` (`G.barSale` decides whether a floor hires the seller), `money` (the deposit is a transfer, never an ATM pull; a sale's money lands through `_bankIn`). Tests that call `_barDeposit()` directly must settle the lease or expect key money on the first rent.
 
-**Tests.** round110.test.js, tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), barsale.test.js, round109.test.js, round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
+**Tests.** round112.test.js, round110.test.js, tests/js/barchain.test.js (a scripted playthrough — the soak cannot climb a quest chain), barsale.test.js, round109.test.js, round40.test.js, round41.test.js, round22.test.js, round55.test.js, world.test.js; `tools/modal-audit.mjs`.
 
 **Design docs.** docs/bar-ownership-structures.md, docs/factions-thai.md, docs/bar-failure-cycle.md.
 
@@ -2351,7 +2351,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `weather` (the season curve: `_seasonTakingsOn` grades the night played, not the morning), `procurement` (friction loads nut and stock), `affair` (drag; `_affairNight` runs inside `_barSettle`), `money` (the morning ledger excludes `pocketDrawn`). A test calling `_doWork()` then `_barSettle()` must set `stoodTurns` and advance the day, as the real path does.
 
-**Tests.** round111.test.js, round110.test.js, tests/js/barchain.test.js, round54.test.js, research.test.js, quietshift.test.js, round40.test.js, round41.test.js, round70.test.js, round95.test.js, engine.test.js; `tools/money-audit.mjs`.
+**Tests.** round112.test.js, round111.test.js, round110.test.js, tests/js/barchain.test.js, round54.test.js, research.test.js, quietshift.test.js, round40.test.js, round41.test.js, round70.test.js, round95.test.js, engine.test.js; `tools/money-audit.mjs`.
 
 **Design docs.** docs/bar-failure-cycle.md, docs/economy-review.md.
 

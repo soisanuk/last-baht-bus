@@ -80,7 +80,7 @@ test("Ruud: a farang manager tells a kept girl's going in his own English", () =
 });
 test("Ruud: a question at the sale prompt gets one plain sentence and holds the gate", () => {
   owner(); G.room = "stinky_bar"; G.pendingChoice = "barsale"; const m0 = G.money, b0 = G.bank;
-  const r = t("what does tan's mean?"); assert.match(r, /what the bar owes comes out of the price/);
+  const r = t("what does tan's mean?"); assert.match(r, /the bar goes with what it owes/);
   assert.equal(G.pendingChoice, "barsale"); assert.equal(G.money, m0); assert.equal(G.bank, b0);
 });
 test("Ruud: BOOKS after the sale says what it went for", () => {

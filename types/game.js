@@ -85,6 +85,7 @@
  * @property {string} [th]                        Thai greeting rendered above the line (351)
  * @property {function(any, GameState): boolean} [when]  arbitrary gate on conversation state + G (279)
  * @property {{key: string, q: string}} [asks]    a question put to the PLAYER (175)
+ * @property {boolean} [stays]                  a hello that IS the mood: once heard it does not give way to a later, warmer hello
  * @property {string[]} [req]                     requires ALL of these flags (78)
  * @property {string[]} [sets]                    flags this node sets when delivered (71)
  * @property {boolean} [chip]                     false hides it from the chip bar (quest-driven nodes) (37)
@@ -151,6 +152,7 @@
  * @property {number} reward                      baht
  * @property {string} [at]                        npcId OR roomId — resolved to a LIVE location by _questWhere (32)
  * @property {string[]} [reqFlags]                world-state gates the dep chain can't express (11)
+ * @property {string[]} [notFlags]                withdrawn once ANY of these is set — the world overtook the job
  * @property {number} [trust]                     minimum conversation trust before the giver offers (9)
  * @property {boolean} [vignette]                 a quiet origin scene: hidden from the journal and HINT (8)
  * @property {string} [item]                      itemId the quest hands over (4)

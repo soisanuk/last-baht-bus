@@ -800,6 +800,11 @@ function _naturalHelp(lower) {
   { const gm = l.match(/^(?:what(?:'s| is| are| does)|whats|what do you mean by|define|explain|meaning of)\s+(.+?)(?:\s+mean)?\??$/);
     const ans = gm && _glossary(gm[1]);
     if (ans) { _say(ans, "dim"); return true; } }
+  // the price of the ride asked the way a passenger asks it, not the glossary's "what is a baht bus"
+  if (/^how much (?:is|does|for) (?:a |the |one )?(?:baht |blue )?(?:bus|songthaew|truck)(?: ride| fare)?(?: cost)?\??$|^(?:how much|what) is (?:the |a )?(?:bus )?fare\??$/.test(l)) {
+    _say(_glossary("baht bus"), "dim"); return true; }
+  // "can I have a water" — "water please" and "can I have a beer" already took
+  if (/^(?:can|could|may) i (?:get|have) (?:a |some |a glass of |a bottle of )?water(?: please)?\??$/.test(l)) { doCommand("buy water"); return true; }
   if (/^(where am i|where is this|where are we|look around|look about|have a look)\b/.test(l)) { _describeRoom(true); return true; }
   // WHERE IS THE ATM / THE 7-ELEVEN: the nearest one, and which way — "where is the atm" got the
   // generic "ask around" while WITHDRAW already knew the machine was at the West End (Ron, round 82)
@@ -1892,6 +1897,8 @@ function _doTravel(arg) {
         const outside = _room().exits && _room().exits.out;
         if (outside && (ROOMS[outside].venues || []).includes(named))
           _say(`${_barName(named)} fronts the same soi as this bar — OUT, then ENTER ${_barName(named).toUpperCase()}.`);
+        else if (named === "orchid_room" && _orchidOpen())   // the rope is down for him: say where the door is, once he can use it
+          _say(`${_barName(named)} is the unmarked door at the back of ${_barName("pink_lotus")}, behind the rope — ${_streetPhrase(_streetOf("pink_lotus"))}. ENTER ${_barName("pink_lotus").toUpperCase()}, then BACK.`);
         else if (ROOMS[named].invite)
           _say(`${_barName(named)} is not a door you walk through. Somebody takes you in there, or you are not in there — and nobody on this road drives you to it.`);
         else if (((G.visited || {})[named] || (G.heardOf || {})[named]) && ROOMS[named].region === _room().region)
@@ -6085,7 +6092,8 @@ function _doTalkCore(arg, topic) {
   // gates hold — Pancake's bond-two hello, Bill's "ask me a proper question" — could never
   // be picked behind an ungated first greeting, so four characters' second hellos and two
   // women's warmest were written and never said (the dialogue walk, 2026-10-02).
-  if (!topic && !d.topic && !_retell && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
+  // …except a hello that IS the mood (`stays`): Bert's freeze gave way to his warmest the next night (Luc, round 112)
+  if (!topic && !d.topic && !d.stays && !_retell && (G.talked[npc] || []).includes(NPCS[npc].dialogue.indexOf(d))) {
     const _all = NPCS[npc].dialogue, _st = _npcState(npc);
     // …at least as warm, and never a plain fallback behind a gated greeting: Lek's list runs
     // warmest-first down to "Hello handsome!", which a her-farang man must not get on his third talk
@@ -6322,7 +6330,8 @@ const _CONVO_TOPIC_RULES = [
   [/\brabbit\b/,                                                                 "rabbit"],
   [/\bmom\b|\bmum\b|mother|\bschool\b|dropped? out/,                             "family"],
   [/\bhustle\b|computers?|\btech\b|hacking|unlock/,                              "job"],
-  [/\bnont\b|\balex\b|two names|half thai|luk ?khrueng|mixed|farang or thai/,    "name"],
+  // not "nont" itself: the table is every speaker's, and asking Pukky about Nont got Pukky's own nickname (Owain, round 99)
+  [/\balex\b|two names|half thai|luk ?khrueng|mixed|farang or thai/,    "name"],
   // a girl's own child → her family node (the common case). Duangjai (Nont's
   // mother) keeps her son-story: it is keyed on his NAME, so "ask her about
   // nont" reaches it, and she has a family node too (civilian playtest F6).
@@ -6833,7 +6842,7 @@ const _FIXTURE_FLOOR = [
   "\"That old thing?\" {n} nods at it without looking. \"Go look, na — it not going anywhere.\"",
   "{n} tips her chin at it. \"Every customer ask. Look yourself, tilac, I working.\"",
   "\"Mm, the {k}.\" {n} shrugs. \"Been here longer than me. You look, you tell me.\"",
-  "{n} laughs. \"You want story about {k}? Look first. Then maybe I tell.\"",
+  "{n} laughs. \"You want story about {k}? Go look. The story is in the looking — I only work here.\"",   // "then maybe I tell" was a promise nothing kept (Luc, round 112)
   "\"Same {k} every night,\" {n} says. \"You want, you go see. I not going with you, I have stool.\"",
 ];
 const _FIXTURE_HOUSE = [
@@ -7220,7 +7229,15 @@ function _pickTownLine(pool, key) {
 function _streetOf(room) { return Object.keys(ROOMS).find(s => (ROOMS[s].venues || []).includes(room)) || null; }
 // "Soi 6 (Inner West)" → "Soi 6's inner west" — a room label is not something anybody says (Dirk)
 // …but "Beach Road (foot of Soi 6)" is a note, not a stretch: "Beach Road, foot of Soi 6" (Lek, the same day)
-function _streetPhrase(st) { const nm = ROOMS[st] ? ROOMS[st].name : ""; const m = nm.match(/^(.*?)\s*\((.*)\)$/); return !m ? nm : /^[a-z]/.test(m[2]) ? m[1] + ", " + m[2] : m[1] + "'s " + m[2].toLowerCase(); }
+// …and a proper name in the brackets is a landmark, never lower-cased: "Soi Buakhao by Soi Diana", not "Soi Buakhao's soi diana"
+function _streetPhrase(st) {
+  const nm = ROOMS[st] ? ROOMS[st].name : ""; const m = nm.match(/^(.*?)\s*\((.*)\)$/); if (!m) return nm;
+  const base = m[1], part = m[2].replace(/^.*\/\s*/, "");
+  if (/^[a-z]/.test(part)) return base + ", " + part;
+  if (/^(?:north|south|east|west|middle|inner west|inner east|west end|east end|corner|main alley|inner lane|cross lane|far lane|deep corner|bar corner|spa row)$/i.test(part)) return base + "'s " + part.toLowerCase();
+  if (/ end$/i.test(part)) return base + ", the " + part.replace(/ End$/, " end");
+  return base + " by " + (/^(?:soi|made in)\b/i.test(part) ? part : "the " + (/^baht bus/i.test(part) ? part.toLowerCase() : part));
+}
 const _stop = x => String(x).replace(/\.$/, "");   // "Co., Ltd." ends a sentence once, not twice
 function _venueAnswer(npc, v, reg) {
   const n = NPCS[npc].name, bn = _barName(v), st = _streetOf(v);
@@ -9131,6 +9148,9 @@ function _situationTopics(id) {
     last.push("closing time");
     if ((_room().region || "") === "Soi 6" && _closeTurn(G.room) != null) last.push("open after two");
   }
+  // after a gap there was no chip for the house's memory at all — "last night" needs yesterday (Darren, round 112)
+  if (!first.includes("last night") && _room().barType && (NPC_ROLES[id] === "hostess" || NPC_ROLES[id] === "mamasan" || NPC_ROLES[id] === "cashier") &&
+      (G.metDay || {})[id] != null && G.metDay[id] < G.day - 1 && !(w && w.day === G.day - 1 && (w.with === id || w.bar === home))) first.push("last time");
   return { first, last };
 }
 // the night ended at dawn in THIS bar, with you in it: a sunrise or an all-nighter whose last room was hers
@@ -9866,6 +9886,9 @@ function _townTalk(npc, topic) {
     const _cust = id => NPCS[id].patron || (!NPC_ROLES[id] && !NPCS[id].manager && !NPCS[id].house && !NPCS[id].offmap && !NPCS[id].filler && NPCS[id].room === G.room);   // Terry and Doyle sit the rail without the flag
     const p = Object.keys(NPCS).find(id => id !== npc && _cust(id) && (id === t || NPCS[id].name.toLowerCase() === t || NPCS[id].name.toLowerCase().split(" ").pop() === t) &&
       (NPCS[id].room === G.room || _npcRoom(id) === G.room || _drifts(id)));
+    // the man whose room it is is not its regular: Vasseur "every night" at a room he is rarely down for (Luc, round 112)
+    if (p && p === "powers" && G.room === NPCS.powers.room) { _say(`"${NPCS[p].name}?" ${NPCS[npc].name} glances at the good table and away again. ` +
+      (NPC_ROLES[npc] === "hostess" ? `"Owner. He come when he come — not often. When he here, everybody work little bit harder."` : `"The owner. He's down when he's down, which isn't often — and when he is, everybody stands a little straighter."`)); return true; }
     if (p) { const g = _pr(p); return pick("regular", { r: NPCS[p].name, he: g.s, He: g.s[0].toUpperCase() + g.s.slice(1), his: g.p, him: g.o, man: g.s === "she" ? "woman" : "man" }); }
   }
   // L620 — "do you remember me?" is a question the floor can answer
@@ -16046,6 +16069,8 @@ function _priceTalk(npc) {
       ? " A nod at the board, which says the same in two languages. “Real massage only, na.”"
       : " The two on the board, said flatly and without a flicker. The third one is not on the board and is not asked in the doorway.");
   if (!(typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar())) return null;
+  // the Orchid sells a guest beer and soda and nothing else: every mouth in it quotes that, not the floor's list (Luc, round 112: the Orchid's mamasan quoted a bell and a barfine)
+  if (G.room === "orchid_room") return `${n || "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())}. "For guest, that is all. The bottles on the tables are the tables' own, and the girls are the tables' also."`;
   const bits = [`beer ฿${_num(_beerPrice())}`];
   if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);
   // THE MONEY SIDE QUOTES THE FINE. Three cashiers promise "ask Mama anything —
@@ -18022,7 +18047,7 @@ function _remarkBeat(c, t) {
 }
 // WHAT YOU TOLD HER, SHE KEEPS (the same call): your name, where you are from, your job, your dog — kept per woman
 // (G.toldTo, written by TELL and by her own question), and on a LATER night she brings one of them up, once a trip each.
-const _TOLD_KEYS = ["name", "home", "job", "dog"];
+const _TOLD_KEYS = ["name", "home", "job", "dog", "age"];
 function _toldNote(c, key, v) {
   if (!c || !_TOLD_KEYS.includes(key) || !v) return;
   ((G.toldTo = G.toldTo || {})[c] = G.toldTo[c] || {})[key] = { v: String(v), day: G.day, back: null };
@@ -18037,6 +18062,8 @@ const _TOLD_BACK = {
       "\"You the {x} one. I remember. Very smart job.\""],
     dog: ["\"How is your dog?\" A real question. \"Somebody give him food while you here?\"",
       "\"Your dog — {X}, na? He miss you, I think. Dog always miss.\""],
+    age: ["\"{X} years, and still you come out dancing.\" She kept the number, and enjoys having kept it.",
+      "\"You tell me {X}. I tell my friend — she say you lie also.\" She laughs."],
   },
   house: {
     name: ["\"Good evening, {X}.\" She keeps a book of names and you are in it.",
@@ -18047,6 +18074,8 @@ const _TOLD_BACK = {
       "\"Still a {x}? Or retire already, like everybody here?\""],
     dog: ["\"And your dog? Who look after him?\"",
       "\"How is {X}? You tell me about him before.\""],
+    age: ["\"{X}, you said. Here, {X} is young.\" She means the town, not you.",
+      "\"{X} and still out after midnight. Good for you, na.\""],
   },
 };
 function _toldBack(c) {
@@ -19114,7 +19143,7 @@ function _doCommandInner(input) {
   // selling the bar on: three buyers or none; a question about them is not an answer
   if (G.pendingChoice === "barsale") {
     // a seller's question gets one plain sentence, not the arithmetic: the morning's ledger has that
-    if (/^(what|how|why|who|which|is|does|do|can|will|would|should|explain|tell)\b|\?\s*$/.test(lower)) { _say("(Whichever you choose, what the bar owes comes out of the price, the till is yours, and the morning's ledger names every baht. Tan's buyer pays the debts and keeps what is over as Tan's fee — which is why nothing is in your hand.)", "dim"); _barSalePrompt(); return; }
+    if (/^(what|how|why|who|which|is|does|do|can|will|would|should|explain|tell)\b|\?\s*$/.test(lower)) { _say("(Whichever you choose, the bar goes with what it owes — the buyer takes on the note, and the price you are offered is clear of it; the till is yours; and the morning's ledger names every baht. Tan's buyer pays the debts and keeps what is over as Tan's fee — which is why nothing is in your hand.)", "dim"); _barSalePrompt(); return; }
     if (_isRefusal(lower) || /^(no|not|nope|keep|stay|neither|none)\b/.test(lower)) { _barSaleNo(); return; }
     if (/^(?:sell (?:it )?(?:to )?)?(plg|pattaya leisure|the group|group|gavin)\b/.test(lower)) { _barSaleDo("plg"); return; }
     if (_barSaleTanOk() && /^(?:sell (?:it )?(?:through |via |to )?)?(?:through |via )?(tan|tan's buyer)\b/.test(lower)) { _barSaleDo("tan"); return; }
@@ -19802,7 +19831,7 @@ function _doCommandInner(input) {
   // the sentences a verb would take first — "get 5000 baht out" was TAKE, "the pie please" was a parse failure,
   // "what payday" and "where was i last night" never reached the natural-help (Margit and Kaspar, round 101)
   if (!G.pendingChoice && !G.pendingEnc && !G.game && !G.pendingBf && !G.pendingFare &&
-      /^(?:(?:get|take|draw|pull) (?:some |a few |a bit of )?(?:money|cash|baht|\d[\d,]*)\b.*\bout\b|(?:the|a|an|one|another) [a-z ']+ please$|[a-z ']+ please$|what payday|what did (?:i|we) do|where was i|what food|who(?:'s| is) the (?:friendliest|nicest|best|prettiest)|how much (?:is|does) (?:this|the|my) room|where (?:is|are) the (?:condo|tower))/.test(lower) && _naturalHelp(lower)) return;
+      /^(?:(?:get|take|draw|pull) (?:some |a few |a bit of )?(?:money|cash|baht|\d[\d,]*)\b.*\bout\b|(?:the|a|an|one|another) [a-z ']+ please$|[a-z ']+ please$|what payday|(?:can|could|may) i (?:get|have) (?:a |some |a glass of |a bottle of )?water\b|what did (?:i|we) do|where was i|what food|who(?:'s| is) the (?:friendliest|nicest|best|prettiest)|how much (?:is|does) (?:this|the|my) room|where (?:is|are) the (?:condo|tower))/.test(lower) && _naturalHelp(lower)) return;
   switch (v) {
     case "go": case "walk": case "head": {
       // "go in the shady lady" is ENTER: the door was listed, and GO read it as somewhere far (Steve, baseline 8)
@@ -20383,7 +20412,7 @@ function _doCommandInner(input) {
       // "my bar" is a fact about the man, not a word to match against bar names (it found the Golden Dragon)
       if (/^where(?:'s| is| are)? (?:my|our) (?:own )?bar\??$/.test(String(lower || "").trim())) {
         if (_barOwned() && G.bar && G.bar.room) _say(`${_barName(G.bar.room)} — yours. (TRAVEL ${String(_barName(G.bar.room) || "").toUpperCase()})`);
-        else if (_flag("barSoldOn")) _say(`You sold it — the Stinky is ${_barBuyerName()}'s now.${G.job && G.job.kind === "manager" ? ` The bar you manage is ${_barName(G.job.room)}. (TRAVEL ${String(_barName(G.job.room) || "").toUpperCase()})` : ""}`);
+        else if (_flag("barSoldOn")) _say(`You sold it — the Stinky is ${_barBuyerPoss()} now.${G.job && G.job.kind === "manager" ? ` The bar you manage is ${_barName(G.job.room)}. (TRAVEL ${String(_barName(G.job.room) || "").toUpperCase()})` : ""}`);
         else if (G.job && G.job.kind === "manager") _say(`You manage ${_barName(G.job.room)}; the bar is not yours. (TRAVEL ${String(_barName(G.job.room) || "").toUpperCase()})`);
         else _say("You don't have a bar. The town has plenty of other people's. (MAP)");
         break;

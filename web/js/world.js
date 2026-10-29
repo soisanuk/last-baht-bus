@@ -6048,6 +6048,16 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // unrelated recon quest (whose orchidReported also lifts the rope). Two
       // personas failed this quest from opposite sides before anyone noticed the
       // loop. Being SENT is its own flag now; being introduced is still hers.
+      // the fifty-one is hers when Bert bought it: she is not the town's hearsay about it (Graham, round 112)
+      { topic: "sale|the sale|selling|sold|stinky|the stinky|stinky pinky|bert|the paper|fifty-one|fifty one|51", when: (st, G) => _flag("barToBert"),
+        text: "\"My name on the paper, his on the docket.\" Candy says it like a recipe she has made before. \"Fifty-one is mine, forty-nine is Bert's, and the till is all his worry. " +
+          "Twenty-two years he wanted it.\" A small, dry look. \"You sold to the one buyer in this town who will cry about it. Good choice.\"",
+        short: "\"My name on the paper, his on the docket. Fifty-one mine, the worry all his.\"" },
+      // two orchids: the group's room on Soi 6 and the one in Rose's porch — Candy says which is which (Luc, round 112: sent to the wrong one, and nobody said)
+      { topic: "orchid|orchid room|the orchid|the orchid room",
+        text: "\"The Orchid Room?\" Candy's mouth goes flat. \"Soi 6, behind the Pink Lotus — the group's room. Their friends, their door. Not mine.\" " +
+          "She taps the bar once. \"If you want a door nobody finds, that is a different place, and a different woman. Rose, in Naklua.\" (ASK CANDY ABOUT ROSE)",
+        short: "\"Soi 6, behind the Pink Lotus — the group's. Not mine. The quiet one is Rose's.\" (ASK CANDY ABOUT ROSE)" },
       { topic: "rose|notty|nottys place|club|the club|orchid club", notFlags: ["orchidVouched"], sets: ["orchidSent"],
         text: "“You want to know a place most people never find?” Candy weighs you a moment, then " +
           "decides. “Rose. Notty's Place, out in Naklua — behind a wall, no sign, aircon like a " +
@@ -8830,6 +8840,22 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "your face and he has read faces for a living. \"Didn't think he'd bite. Doesn't matter — " +
           "the ask was the job.\" An envelope slides across, flat. \"Two thousand. Pattaya Leisure looks after its friends.\" (+฿2000.)",
         short: "\"The ask was the job. Two thousand.\" (He has already paid you.)" },
+      // the man who sold them the Stinky — or sold it past them — is not pitched it again
+      { when: (st, G) => _flag("barToPlg"),
+        text: "\"The man who sold us the Stinky.\" Gavin says it as a credential, which in this room it is. " +
+          "\"The numbers held up after you, and that's the only review that counts on this soi. Drink?\"" },
+      { topic: "offer|the offer|stinky|stinky pinky|the stinky|the pool bar|bert|the sale", when: (st, G) => _flag("barToPlg"),
+        text: "\"Ours, as of the paper you signed.\" Gavin sets his glass down square on the mat. \"Nobody up the soi thinks we took it. " +
+          "They think you sold it, at a price, and you did — that's the cleanest way a bar changes hands round here.\"",
+        short: "\"Ours, as of the paper you signed. You sold it at a price — the clean way.\"" },
+      { topic: "offer|the offer|stinky|stinky pinky|the stinky|the pool bar|bert|the sale", when: (st, G) => _flag("barSoldOn") && !_flag("barToPlg"),
+        text: "\"The Stinky went the other way.\" Gavin doesn't make a face; he has a face for this. \"We'd have paid more. " +
+          "You knew that, and you sold it anyway — so you wanted something we weren't selling. Fair enough.\"",
+        short: "\"It went the other way. We'd have paid more, and you knew it.\"" },
+      { topic: "offer|the offer|stinky|stinky pinky|the stinky|the pool bar|the sale", when: (st, G) => _flag("barPaid") && !_flag("barSoldOn"),
+        text: "\"Your bar, now.\" Gavin lifts his glass an inch to it. \"When the books say three months, come and see me before you see anybody else. " +
+          "That's not a pitch — just the order you make your calls in.\"",
+        short: "\"Your bar. Three months of books, then see me first.\"" },
       { when: (st, G) => _faction("plg") > 0,
         text: "\"There's my man.\" The handshake runs a half-beat longer this time, warmer — an investment " +
           "acknowledged. \"Bert being Bert about it, I hear. No matter. You did the asking, and Pattaya Leisure " +
@@ -8875,7 +8901,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "hospitality. We're only the ones who read the spreadsheet at the end of the night instead of " +
           "drinking through it.\"",
         short: "\"Pattaya Leisure. A handful of rooms, one more most seasons. Laurent's money. It's just hospitality.\"" },
-      { topic: "laurent vasseur", text: "\"Laurent?\" For the first time the pleasantness has to work a little. " +
+      { topic: "laurent vasseur|vasseur|laurent|mr vasseur|the frenchman|the owner", text: "\"Laurent?\" For the first time the pleasantness has to work a little. " +
         "\"Rarely down these days. He bought the first room with money from somewhere else and has never " +
         "once been curious what the rooms are.\" A diplomatic sip he doesn't need. \"Charming in a " +
         "restaurant, our Laurent. A liability in a room. Between us, that's for the best.\" The smile " +
@@ -8910,6 +8936,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Laurent Vasseur gives anybody. \"You'll stay for one. Everyone who sees the room stays for one.\" A " +
           "glance at the doorman that means you are to be looked after, and the doorman looks after you.",
         short: "\"Ah — the man with eyes.\" The chair turns before you sit.",
+        fx: () => { _say("A Leo arrives at your elbow that nobody chalks — the doorman's idea of looking after. (On the house.)", "dim"); _compDrink(1); },   // a promise kept, once (Luc, round 112)
         choices: [{ label: "Ask about that quiet table", topic: "syndicate" }] },
       { text: "\"You made it in.\" He doesn't get up; he does turn the chair a few degrees, which " +
           "from him is hospitality. \"That means somebody vouched, which means you are useful, which " +
@@ -8959,7 +8986,9 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "Leather, a decent malt, men who did not need the rules explained.\" A small gesture at the strobe, the girls, the corner tables. " +
           "\"I got this. A room decides what it is. I decide who comes in — and even that, mostly, Gavin decides for me.\"",
         short: "\"I wanted a club. The room decided otherwise. Gavin decides who comes in.\"" },
-      { topic: "syndicate|table|the table|good table|the good table|quiet table|that quiet table|the quiet table|president|the president|envelope|the envelope", text: "For the first time his hands go still on the table. \"Don't—\" He recovers, lowers his voice, leans in, and for one honest second is a real person and a frightened one. \"That table is not a topic. That gentleman is the reason everything here is 'looked after.' I write a number every month; he decides if it's the right number. I don't know his name. I don't WANT his name.\" The composure comes back as if it had never left. \"Another drink. Whatever you would like — it is looked after. You are a friend of the house.\"",
+      { topic: "syndicate|table|the table|good table|the good table|quiet table|that quiet table|the quiet table|president|the president|envelope|the envelope",
+        fx: () => { _say(`${_npcsHere().includes(_tillKeeper("orchid_room")) ? NPCS[_tillKeeper("orchid_room")].name : "The till"} sets a glass down in front of you without being asked, and no chit goes into the cup after it. (On the house.)`, "dim"); _compDrink(1); },   // "it is looked after", kept (Luc, round 112)
+        text: "For the first time his hands go still on the table. \"Don't—\" He recovers, lowers his voice, leans in, and for one honest second is a real person and a frightened one. \"That table is not a topic. That gentleman is the reason everything here is 'looked after.' I write a number every month; he decides if it's the right number. I don't know his name. I don't WANT his name.\" The composure comes back as if it had never left. \"Another drink. Whatever you would like — it is looked after. You are a friend of the house.\"",
         short: "(Hands still, voice low.) \"That table's not a topic. He decides if my number's the right number. I don't want his name.\"" },
     ],
   },
@@ -8998,7 +9027,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       { text: "\u201cRoom or a pint?\u201d She says it without looking up, then does look up, and the " +
         "second look is the one that decides things. \u201cWe have both. One is cheaper.\u201d" },
-      { topic: "rooms",
+      { topic: "rooms|room|a room|room key|key|my key|key card|keycard|the key",
         text: "\u201cSix room upstairs. Balcony one is the good one \u2014 everybody want that one, " +
           "so everybody ask me nice.\u201d She taps the ledger. \u201cQuiet house. The bar close, " +
           "the guest sleep. Not like some place.\u201d",
@@ -9167,6 +9196,21 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "\"The good table? That's the whole job — I need it seen, not guessed. The back room off the Pink " +
           "Lotus, the velvet-rope one. Have your look, then come tell me who's really holding it.\"",
         short: "\"Get inside the Orchid's back room, have a look at the good table, then come tell me who holds it.\"" },
+      // after the job: the man at the good table is a closed file, and the Frenchman is only the paper
+      { topic: "table|the table|good table|the good table|thai man|the thai man|quiet man|the quiet man|the man|president|the president",
+        when: (st, G) => _flag("orchidReported"),
+        text: "\"Forget his face, I said.\" Doyle doesn't look up from the soda. \"I meant it as advice, not a figure of speech. " +
+          "You did the job. The job's done. That's the whole of what I'll say about him in a pub.\"",
+        short: "\"Forget his face. I meant it as advice.\"" },
+      { topic: "vasseur|laurent|laurent vasseur|mr vasseur|the frenchman|the owner",
+        text: "\"The Frenchman's the name on the lease.\" Doyle looks at the soda, not at you. \"In my old job that's the fella you arrest last — " +
+          "after everybody who matters — and then find he never mattered. Nice suit. Good accountant, they tell me. The room isn't his, whatever the paper says.\"",
+        short: "\"The name on the lease. The room isn't his, whatever the paper says.\"" },
+      { topic: "orchid|orchid room|the orchid|back room|the back room|rope|the rope|velvet rope|door|the door|doorman|the doorman|get in|how to get in|members",
+        when: (st, G) => !!(G.visited && G.visited.orchid_room),
+        text: "\"You've been through it.\" Doyle nods once, as at a witness who turned up. \"Then you know what the rope's for — " +
+          "not keeping people out, keeping the right ones in. Gavin decides who; you found that out the honest way.\"",
+        short: "\"You've been through it. The rope keeps the right ones in.\"" },
       // the giver answers the obvious question about his own job: how a tourist gets past that rope
       { topic: "orchid|orchid room|the orchid|back room|the back room|rope|the rope|velvet rope|door|the door|doorman|the doorman|get in|how to get in|members|friends|friend of the group|gavin|pattaya leisure|the group",
         text: "\"The rope.\" Doyle almost smiles. \"I sat across the road from that rope four nights running before I " +
@@ -9750,7 +9794,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     dialogue: [
       // selling, asked before it is done: he can find the buyer the group is not, and the price of that is said
       { topic: "a buyer|buyer|buyers|sell|selling|sell the bar|selling the bar|sale|the sale|sell up|sell it|find a buyer", when: (st, G) => _barOwned() && !_barGone(),
-        text: "\"Sell?\" Tan turns his glass a quarter. \"Then there are two buyers, my friend, and the street is not one of them. The group pays the most. Or I make one call — a family in Chonburi, a nephew who wants a bar. He pays what the bar owes, all of it, and what it fetches over that is my fee. You walk away clean, with nothing in the hand.\" " +
+        text: "\"Sell?\" Tan turns his glass a quarter. \"Then there are buyers, my friend. The group pays the most. Bert would, if it stands up — with his heart more than his money. Or I make one call — a family in Chonburi, a nephew who wants a bar. He pays what the bar owes, all of it, and what it fetches over that is my fee. You walk away clean, with nothing in the hand.\" " +
           "He lets that be what it is. \"And after, you do not need me for a bar, and we are both a little poorer. When you mean it, say it — SELL UP.\"",
         short: "\"The group pays the most. Or I find a man from Chonburi: the debts go, what it fetches over them is my fee. (SELL UP)\"" },
       // to the group: his fifty-one went across with it, and what that cost is his business
@@ -13248,7 +13292,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "college.” A small, real smile. “I'm not going to be fixing tourists' cracked screens " +
           "on Buakhao forever, though. That much I know.”",
         short: "“Whatever pays and mostly doesn't hurt anybody undeserving. I'm good with anything with a chip in it. This is my college.”" },
-      { topic: "name", text: "“Alex or Nont?” He seems to enjoy the question. “Depends who's " +
+      { topic: "name|nont", text: "“Alex or Nont?” He seems to enjoy the question. “Depends who's " +
           "asking. Farang get Alex — my dad's name for me, back when he was around to use it. " +
           "Thai get Nont. Same kid, different door.” He taps his own chest. “Half and half, right " +
           "down the middle, which means everybody decides I'm the other thing. To the farang I'm " +
@@ -13574,7 +13618,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // reach 2, and `plg_deal` — which `bar_premises` deps on — is silently
       // unreachable forever. That is the whole expat stage, killed by an errand
       // the game explicitly says you may refuse (round 22, Priya).
-      { when: (st, G) => _faction("plg") > 0,
+      { when: (st, G) => _faction("plg") > 0, stays: true,
         text: "Bert clocks you and the welcome doesn't arrive — no beer opened, no stool offered. \"You. " +
           "Gavin's errand boy.\" He doesn't look up from the felt. \"Table's still true, beer's still cold. " +
           "But you drink it standing, and you drink it quiet.\" The silence does the rest.",
@@ -14487,7 +14531,7 @@ const ENCOUNTERS = {
       "noticing and returns a small, neutral nod.",
       "A young woman in plain white sneakers and a Chatuchak tote — the shoes cost nothing or a great deal, and you decide nothing — is arguing gently with a map on her phone, plainly not from here and plainly not working — a weekender down from Bangkok whose friend is late again. She catches you looking and laughs first.",
     ],
-    hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here.)",
+    hint: "(She's a tourist, not a trade. Manners — or a little Thai — go further than a wallet here: WAI · SAWATDEE · HELLO · or WALK ON.)",   // the moves, tappable (Darren, round 112)
   },
   jptourist: { solo: true,
     rooms: ["ws_north", "ws_south", "beach_rd_c"],   // not the gate: her intro stands outside a go-go, and the gate has none (Malcolm, round 59)
@@ -14880,6 +14924,7 @@ const QUESTS = {
       "Pattaya Leisure. \"Friend to friend. Soften him up. Everyone wins, and Pattaya Leisure looks after " +
       "its friends.\" (Take it to Bert — ASK BERT ABOUT SELLING — or don't. No one's forcing you.)",
     reqFlags: ["heardPlgPitch"],
+    notFlags: ["barPaid", "barSoldOn"],   // the Stinky is his, or he has sold it: there is nobody to soften
     deps: [],
     at: "bert",
     doneFlag: "plgFlipTried",
@@ -20882,6 +20927,19 @@ if (NPCS.gavin) NPCS.gavin.dialogue.push(
     text: "\"Ours, yes — the Lotus at the West End, this one, the Kitten at the far end, the Jade two years, and the Peach just lately.\" He nods at the room around you. \"Same paper, same aircon, same girls as before, mostly. We keep the girls. People think we buy the bar; we buy the queue of men who already walk into it.\"",
     short: "\"Ours — same paper, same girls. We buy the queue of men who already walk in.\"" });
 if (NPCS.bert) NPCS.bert.dialogue.push(
+  // the owner's question answered to the owner, and after the sale to the man who sold it (Graham, round 112: Ohio, to the man paying Ohio's note)
+  { topic: "who owns|who owns this bar|owner|the owner|owns it", when: (st, G) => _flag("barToBert"),
+    text: "\"Me.\" Bert lets it sit a second, because he has waited twenty-two years to say it. \"Well — Candy, on the paper, the fifty-one. Same thing in this town, more or less. My name's on the docket.\"",
+    short: "\"Me. Candy on the paper. My name's on the docket.\"" },
+  { topic: "who owns|who owns this bar|owner|the owner|owns it", when: (st, G) => _flag("barToPlg"),
+    text: "\"Pattaya Leisure.\" Bert doesn't look toward the Stinky; he has stopped looking that way. \"Ask Gavin. He'll tell you it's in good hands. They're his.\"",
+    short: "\"Pattaya Leisure. Ask Gavin.\"" },
+  { topic: "who owns|who owns this bar|owner|the owner|owns it", when: (st, G) => _flag("barSoldOn"),
+    text: "\"A fella from Chonburi. Tan found him.\" Bert shrugs with the cue. \"Never met him. That's how you know it was Tan's deal — nobody meets anybody.\"",
+    short: "\"A fella from Chonburi. Tan found him. Nobody meets anybody.\"" },
+  { topic: "who owns|who owns this bar|owner|the owner|owns it", when: (st, G) => _flag("barPaid"),
+    text: "\"You do, bud — on paper, the way anybody owns anything here.\" Bert nods at the till. \"Ohio still holds the note, mind. Every month you pay it, that's him you're paying, bad heart and all.\"",
+    short: "\"You do, on paper. Ohio still holds the note.\"" },
   { topic: "who owns|who owns this bar|owner|the owner|owns it",
     text: "\"The man who owns it is in Ohio with a bad heart and a good memory.\" Bert sets the glass down. \"He bought it a long time ago, he hasn't been out in years, and I run it like he's coming back next week. The paper on the wall says a company — that's the permit, bud, not the man. The man is in Ohio.\"",
     short: "\"Ohio, bad heart. I run it like he's coming back next week.\"" });

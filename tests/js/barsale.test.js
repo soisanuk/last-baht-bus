@@ -136,7 +136,7 @@ test("the sale says, in one sentence, how it was run", () => {
 
 test("the owner's lines stop after a sale: BOOKS, WORK, DRAW, Bert's 'Boss', and SELL UP again", () => {
   owner(); nightsAt(1.0); t("sell up"); t("tan");
-  assert.match(t("books"), /a man from Chonburi/);
+  assert.match(t("books"), /the Chonburi man.s now/);
   assert.match(t("work"), /sold it on/);
   assert.match(t("draw 100"), /no till of yours/);
   assert.match(t("sell up"), /Sold already/);

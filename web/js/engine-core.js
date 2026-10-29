@@ -1063,7 +1063,8 @@ function _roomFit(pool) {
   if (!roles.has("mamasan")) bad.push(_FIT_MAMA);
   if (!roles.has("cashier") && staff.length <= 1) bad.push(_FIT_TILL);
   if (ROOMS[G.room].barType === "gents" || ROOMS[G.room].indoors) bad.push(/open[- ]front/i);
-  if (_isGogo()) bad.push(_FIT_GOGO);   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
+  if (_isGogo()) bad.push(_FIT_GOGO);
+  if (_isGogo() || ROOMS[G.room].vip) bad.push(/\bquiet bar\b|\bSmall, not fancy\b/);   // "Here is quiet bar" under the Orchid's strobe (Luc, round 112)   // "the whole open front a few degrees warmer" in an aircon villa (Marguerite, round 67)
   // a BARMAN is a man behind the bar, and most bars have none: the women pour (Ray, round 78 — "the
   // barman builds her drink" at the Sweet Tamarind, run by View, Tukta and three nieces). A line naming
   // one needs a manager on the floor or a room whose own prose has him.
@@ -2585,6 +2586,8 @@ function _topicHits(key, asked) {
   // the topics list printed "the name" for Tan, and asking him about it missed (Mick, round 57)
   key = String(key).replace(/^(the|a|an) (?=\S)/, "");
   if (key === asked) return true;
+  // a company is not its town: Nigel's 1998 answered ASK NIGEL ABOUT PATTAYA LEISURE (Luc, round 112)
+  if (/\bpattaya leisure\b/i.test(String(asked)) && !/leisure|plg/i.test(key)) return false;
   const esc = String(key).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   // a key of two letters takes no slack: "wa" + three letters is water, watch and wai,
   // Preeda's "ex" was answering EXPAT and her "no" NONT and NOTE (Silk Rose floor, 2026-10-08)
@@ -3587,6 +3590,7 @@ function _describeRoom(full, forceFull) {
   // were a tease to a man pricing the cheapest way home (Liam, round 93)
   if (r.motosai) _say(G.mode === "soi6" ? "A motosai stand is here, the piwins in their vests waiting on fares out of the soi — not yours this week. Soi 6 is the whole map." : "A motosai stand is here. (MOTOSAI TO <place>)", "dim");
   if (r.atm) _say("An ATM stands against the wall. (WITHDRAW <amount> · CHECK BALANCE)", "dim");
+  if (G.room === "second_rd_c") _say("The clinic's door is lit, walk-in, no appointment. (GET TESTED)", "dim");   // the prose named the door and nothing tapped it (Darren, round 112)
   if (_barGamesHere()) {   // the one test PLAY reads, so a room never lists a frame it will not deal
     _say("A Connect 4 frame and a Jackpot dice box sit within reach (PLAY …).", "dim");
   }
@@ -3923,10 +3927,10 @@ function _tick() {
   _warn("t70", G.thirst >= 70 && G.thirst < 90, _inOwnRoom
     ? "(Your throat is sandpaper — and the two complimentary bottles are right there by the kettle. DRINK WATER.)"
     : "(Your throat is sandpaper. Drink something — ideally water.)");
-  _warn("h90", G.hunger >= 90, "(You are running on fumes. Food. Now.)");
+  _warn("h90", G.hunger >= 90, "(You are running on fumes. Food, now — or you go down where you stand, and the night goes with you.)");
   _warn("t90", G.thirst >= 90, _inOwnRoom
-    ? "(Dizzy. The neon is doing things it shouldn't. The house bottles are on the tray — DRINK WATER.)"
-    : "(Dizzy. The neon is doing things it shouldn't. WATER.)");
+    ? "(Dizzy. The neon is doing things it shouldn't. The house bottles are on the tray — DRINK WATER, or you go down where you stand and the night goes with you.)"
+    : "(Dizzy. The neon is doing things it shouldn't. BUY WATER — or you go down where you stand, and the night goes with you.)");   // the consequence said, not only the cure (Darren, round 112)
   if ((G.hunger >= 80 || G.thirst >= 80) && G.nightTurn % 10 === 0) {
     _addHappy(-1, G.thirst >= G.hunger ? "you're parched" : "you're starving");
   }

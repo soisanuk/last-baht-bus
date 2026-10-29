@@ -3448,7 +3448,7 @@ function _doHint() {
       const q = QUESTS[offered[0]];
       const giver = NPCS[_qGiver(q)] ? NPCS[_qGiver(q)].name : "Someone";
       _say(_fmt("{giver} has a job going — “{name}”. Take it on with ACCEPT {id}.",
-      { giver, name: _L(q.name), id: offered[0].toUpperCase() }), "win");
+      { giver, name: _L(q.name), id: _qWord(offered[0]) }), "win");
       return;
     }
     _say(G.mode === "soi6"   // there is no wallet on the Soi 6 week (Margaret, round 78)
@@ -3523,6 +3523,8 @@ function _qDesc(q) {
   if (q.descBy) for (const r of _questRoutes()) if (q.descBy[r]) return q.descBy[r];
   return (q.descIfSelf && _qGiver(q) !== q.giver) ? q.descIfSelf : q.desc;
 }
+// a quest id said aloud: ORCHID INTRO, not the internal ORCHID_INTRO (Darren, round 112) — ACCEPT reads the spaced form
+function _qWord(qid) { return String(qid).replace(/_/g, " ").toUpperCase(); }
 function _questAvailable(qid) {
   const q = QUESTS[qid];
   const st = G.quests[qid];
@@ -3530,6 +3532,7 @@ function _questAvailable(qid) {
   // reqFlags: world-state gates (e.g. "hasDog") — deps chain quests, reqFlags
   // gate on anything a flag can express
   if (q.reqFlags && !q.reqFlags.every(f => _flag(f))) return false;
+  if (q.notFlags && q.notFlags.some(f => _flag(f))) return false;   // a job the world has already overtaken (Gavin's errand after the bar was sold)
   // trust: a giver won't hand you a personal/serious job until they know you
   // (see _npcState). Gates the offer AND accept, so you can't shortcut it.
   if (q.trust && _qGiver(q) && _npcState(_qGiver(q)).trust < q.trust) return false;
@@ -3679,8 +3682,8 @@ function _questOffer(npcId) {
     _say(_fmt(_lived ? "✦ {who} owes you for one already done: “{name}”"
                      : "✦ {who} has a job for you: “{name}” — {desc}",
       { who: NPCS[npcId].name, name: _L(q.name), desc: _questPitch(_L(_qDesc(q))) }), "win");
-    _say(_lived ? `(ACCEPT ${qid.toUpperCase()} — you have already done the thing; this is ${_pr(_qGiver(QUESTS[qid])).o} settling up.)`
-                : `(ACCEPT ${qid.toUpperCase()} to take it on.)`, "dim");
+    _say(_lived ? `(ACCEPT ${_qWord(qid)} — you have already done the thing; this is ${_pr(_qGiver(QUESTS[qid])).o} settling up.)`
+                : `(ACCEPT ${_qWord(qid)} to take it on.)`, "dim");
     // a league night is every third night, and a week is seven: say when the
     // next one is after your flight (Arturo, round 47 — offered on the last
     // reachable one, three games lost, and no way to close it)
@@ -4063,7 +4066,7 @@ function _doQuests() {
       }
       shown++; }
     else if (st === "offered") { _say(_fmt("✦ On offer: {name} (ACCEPT {id})",
-      { name: _L(q.name), id: qid.toUpperCase() }), "dim"); shown++; }
+      { name: _L(q.name), id: _qWord(qid) }), "dim"); shown++; }
     else if (st === "done") { _say(`✓ ${q.name}`, "dim"); shown++; }
   }
   // Dropped quest/clue items are tied back to the journal so a set-down never
@@ -6131,7 +6134,7 @@ function _maybeIncomingText() {
       "coin tray empty. tomorrow i go bank for 10s",
       "a farang pay with 1000 for one beer. i give change in 20s. he not happy, i very happy",
       "the stock man count wrong again. i count again. he say sorry. i write sorry in the book 555",
-      "today slow. book small. tomorrow is friday, book big",
+      "today slow. book small. next busy night, book big",
       "i stay late, count again. same number. good number",
     ] : [
       `${(NPCS[_tillKeeper(_npcRoom(id) || G.room)] || { name: "the till" }).name.toLowerCase()} count the float 3 time tonight. it is right. she still count 🙄`,   // her own bar's till keeper, not the Stinky's Cake (Brendan, round 102)
@@ -8320,7 +8323,7 @@ function _doWork() {
       ? "You're retired, in the specific and enviable sense. If your hands miss the " +
         "rail, there's a noodle counter in Prachuap that could use them mornings."
       : _flag("barSoldOn")
-      ? `Not any more — you sold it on, and the rail is ${_barBuyerName()}'s. Behind somebody else's bar is a manager's job, and they ask what your own bar was when it went.`
+      ? `Not any more — you sold it on, and the rail is ${_barBuyerPoss()}. Behind somebody else's bar is a manager's job, and they ask what your own bar was when it went.`
       : _flag("barLost")
       ? "Not any more. You can stand at that rail as long as you like; you " +
         "just have to buy the drinks like everybody else."
@@ -9910,6 +9913,11 @@ function _barBuyerName() {
   const v = G.barSale && G.barSale.via;
   return v === "plg" ? "Pattaya Leisure" : v === "bert" ? "Bert" : v === "tan" ? "a man from Chonburi Tan found" : "somebody else";
 }
+// …and its possessive, which "a man from Chonburi Tan found" cannot take an 's on (Graham, round 112: "a man from Chonburi Tan found's now")
+function _barBuyerPoss() {
+  const v = G.barSale && G.barSale.via;
+  return v === "plg" ? "Pattaya Leisure's" : v === "bert" ? "Bert's" : v === "tan" ? "the Chonburi man's" : "somebody else's";
+}
 // the rail that is Bert's: the Stinky's people who are not its staff
 function _bertRail() { return Object.keys(NPCS).filter(id => NPCS[id].room === "stinky_bar" && !NPC_ROLES[id] && !NPCS[id].filler); }
 // who takes a sale to the group personally: Bert's rail, and the White Rabbit, whose owner sold the group his Soi 6 bar
@@ -9937,6 +9945,8 @@ function _barSaleDo(via) {
   const paid = via === "plg" ? BAR_SALE_PLG[h] : via === "bert" ? _barSaleBertPays() : 0;
   const fee = via === "tan" ? BAR_SALE_PLG[h] : 0;
   _say("");
+  // said from a hotel room, the scenes below are at the bar: say how he got there (Graham, round 112)
+  if (G.room !== b.room) _say(`(You make the call from here. The signing is at ${_barName(b.room)}, across its own bar, the next afternoon.)`, "dim");
   if (via === "plg") {
     _say(`Gavin brings the paper himself, already typed, and ฿${_num(paid)} is in your account before he has finished a lager he does not drink. "Laurent always said you were the only one who made him wait." The sign stays; a card machine goes on the counter, and Bert carries the cue out under his arm and does not look at you.`, "alert");
   } else if (via === "tan") {
@@ -9944,12 +9954,16 @@ function _barSaleDo(via) {
   } else {
     _say(`Bert hears you out with the cue across his knees. "Twenty-two years I wanted my name on one of these, bud. Never had the deposit." Candy does the paper the next day, her name on the fifty-one, and ฿${_num(paid)} comes out of a bank book Bert has kept since before the flood. "Her name over my door after all," he says. "But it's my till."`, "win");
   }
+  // what the bar owed goes with it, named to the baht: the note was the biggest number in the deal and the ledger never said it (Graham, round 112)
+  const d = _barDebts(), owedBits = [d.note && `the note to Ohio, ฿${_num(d.note)}`, d.arrears && `฿${_num(d.arrears)} of the note in arrears`,
+    d.rent && `฿${_num(d.rent)} of rent owed`, d.nont && `Nont's ฿${_num(d.nont)}`].filter(Boolean);
+  if (owedBits.length) _say(`(On the paper, the bar went with what it owed — ${owedBits.join(", ")}.${via === "bert" && (d.arrears || d.nont) ? " The arrears and Nont's book came off Bert's price; he carries the rest." : ""}${paid ? ` The ฿${_num(paid)} is clear of all of it.` : " Tan's buyer pays it; what the bar fetched over it is Tan's fee."})`, "dim");
   if (till) {
-    _bankIn(till); (G.bankNotes = G.bankNotes || []).push("the Stinky's till");
+    _bankIn(till); (G.bankNotes = G.bankNotes || []).push(`the Stinky's till, ฿${_num(till)}`);
     // said plainly, for a player who has never sold a business (Mario, 2026-10-28): the buyer pays for the bar, not its cash
     _say(`(The ฿${_num(till)} in the till comes with you, into your account${paid ? " on top of the price" : ""}. A buyer pays for the bar itself — the lease, the fittings, the name and the regulars — not for the money it has already made. That money was always yours.)`, "dim");
   }
-  if (paid) { _bankIn(paid); (G.bankNotes = G.bankNotes || []).push(via === "plg" ? "Pattaya Leisure, for the Stinky" : "Bert, for the Stinky"); }
+  if (paid) { _bankIn(paid); (G.bankNotes = G.bankNotes || []).push(`${via === "plg" ? "Pattaya Leisure" : "Bert"} for the Stinky, ฿${_num(paid)}${d.note ? ` (clear of the ฿${_num(d.note)} note it took on)` : ""}`); }
   if (_affairLive()) _affairEnd("bleed");
   G.lifeStats = { day: G.day, nights: b.nights || 0, stood: b.worked || 0, happy: G.happy };
   G.barSale = { day: G.day, via, health: h, paid, fee, till };
@@ -9965,7 +9979,7 @@ function _barSaleDo(via) {
     _addHappy(-4, "the Stinky is the group's now, and you sold it them");
     _say("(The soi has heard who had it from you. STANDING says where that leaves you.)", "dim");
     if (h === "profit") {
-      _say("\"And the Orchid,\" Gavin says at the door, the paper signed. \"Laurent likes a man who built something and knew when to sell it. The rope is down for you now — come for a drink.\" (The Orchid Room, on Soi 6, is open to you.)", "dim");
+      _say(`"And the Orchid," Gavin says at the door, the paper signed. "Laurent likes a man who built something and knew when to sell it. The rope is down for you now — come for a drink." (The Orchid Room is open to you: the door at the back of ${_barName("pink_lotus")}, ${_streetPhrase(_streetOf("pink_lotus"))} — ENTER ${_barName("pink_lotus").toUpperCase()}, then BACK.)`, "dim");
       // a bar that made money keeps the man who made it: the group's books, the premium, the permit after a month (Mario, 2026-10-28)
       const pay = _mgrPay({ corp: true, prem: true, room: "stinky_bar" });
       if (!G.job) {
@@ -11375,7 +11389,7 @@ function _doBooks() {
         "note cleared. The only ledger you keep these days fits on the back of a " +
         "noodle-shop receipt, and it balances."
       : _flag("barSoldOn")
-      ? `The books are ${_barBuyerName()}'s now. Yours fit on a beer mat: what it went for — ${G.barSale && G.barSale.paid > 0 ? "฿" + _num(G.barSale.paid) : "nothing in the hand"} — and what it was when it went — ${({ profit: "making money", even: "about even", under: "under water" })[(G.barSale && G.barSale.health) || "even"]}.`
+      ? `The books are ${_barBuyerPoss()} now. Yours fit on a beer mat: what it went for — ${G.barSale && G.barSale.paid > 0 ? "฿" + _num(G.barSale.paid) : "nothing in the hand"} — and what it was when it went — ${({ profit: "making money", even: "about even", under: "under water" })[(G.barSale && G.barSale.health) || "even"]}.`
       : _flag("barLost")
       // The ending says it reopens as the Stinky Pinky with a menu, a card
       // machine and a girl on the door — and BOOKS said a phone shop stood
@@ -11437,7 +11451,8 @@ function _doBooks() {
   if (b.keptLast && G.day - b.keptLast.doneDay < 14) _say(_fmt("{n}: off the board. There is no list.{q}", { n: NPCS[b.keptLast.id].name, q: b.floorQuietUntil && G.day < b.floorQuietUntil ? " The floor read Bert's message, and is quiet with you." : "" }), "dim");
   if (b.notice && !b.gone[b.notice.id]) _say(_fmt("{n} has given notice — {d} day{s} left to change her mind. (PRICES · TERMS)", { n: NPCS[b.notice.id].name, d: Math.max(0, BAR_NOTICE_DAYS - (G.day - b.notice.day)), s: BAR_NOTICE_DAYS - (G.day - b.notice.day) === 1 ? "" : "s" }), "alert");
   {
-    const gone = Object.keys(b.gone || {}).filter(id => G.day - b.gone[id].day < BAR_RAIL_DAYS);
+    // a kept exit took no rail and went to no bar across the road — she is in a condo (Graham, round 112: one woman in two places)
+    const gone = Object.keys(b.gone || {}).filter(id => !b.gone[id].kept && G.day - b.gone[id].day < BAR_RAIL_DAYS);
     if (gone.length) _say(_fmt("Across the road: {who} — and about {p}% of the rail with {pr}, for a season.", { who: gone.map(id => NPCS[id].name).join(" and "), p: Math.round(gone.length * BAR_RAIL_SHARE * 100), pr: gone.length === 1 ? "her" : "them" }), "alert");
   }
   // the name Tan asked for is on the list and not on the wages line: BOOKS says why (Wendell, round 111)
@@ -11488,7 +11503,7 @@ function _doBooks() {
   const friction = (G.syn && G.syn.friction) || 0;
   if (friction) {
     _say(_fmt("Supply is costing you about {pct}% over the going rate — the jobs " +
-      "you didn't give out are on this line, every night, forever." +
+      "you didn't give out, or took back, are on this line, every night, forever." +
       (_insidePrice() ? " The beer still comes at the uncle's inside price; it is everything else that comes late and at list." : ""),
       { pct: Math.round(friction * BAR_FRICTION * 100) }), "dim");
   }
