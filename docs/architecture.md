@@ -25,7 +25,7 @@ Plain classic `<script>` tags sharing globals: no modules, no bundler, no build 
 | File | Lines | Owns |
 |---|---:|---|
 | `thai.js` | ~130 | Thai numbers and numerals, `parseThaiWords`, the phrase table. Pure. |
-| `news-data.js` | generated | The baked headlines, FX, weather, football, lottery and gold (`scripts/fetch-news.mjs`, every six hours). Optional at runtime. |
+| `news-data.js` | generated | The baked headlines, FX, weather, football, lottery and gold (`scripts/fetch-news.mjs`, once a day). Optional at runtime. |
 | `world.js` | ~21,500 | **All content, as data**: `ROOMS`, `NPCS` (folded from `_REGULARS` and `FLOOR_STAFF`), `QUESTS`, `ENCOUNTERS`, the tuning constants. Pure declarative data plus a few builders. |
 | `games.js` | ~400 | The bar games' rules — Connect 4 and its negamax, Jackpot, pool. Pure, takes an injected `rnd()`. |
 | `cli-sim.js` | ~300 | The portable terminal simulator for the heist. Pure, data-driven by `CLI_SCENARIOS`. |

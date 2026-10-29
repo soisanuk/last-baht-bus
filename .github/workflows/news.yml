@@ -1,11 +1,11 @@
-# Re-bake real headlines into web/js/news-data.js every six hours. The commit
+# Re-bake real headlines into web/js/news-data.js once a day. The commit
 # lands on main, which runs the normal test-gated Pages deploy — so a bad bake
 # can never ship a broken site, and file:// players just get the last bake.
 name: Bake news
 
 on:
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 0 * * *"   # 00:17 UTC, 07:17 in Pattaya
   workflow_dispatch:
 
 permissions:
