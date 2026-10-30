@@ -3,44 +3,44 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Pattaya team rescues stray dog with infected paw for treatment",
+    "s": "Pattaya Mail",
+    "d": "29 Oct 2026"
+  },
+  {
+    "t": "Kenny G surprises Thai fans with video ahead of November 7 Pattaya jazz show",
+    "s": "Pattaya Mail",
+    "d": "29 Oct 2026"
+  },
+  {
+    "t": "Sudden heavy rain floods Pattaya roads, shuts junction and disrupts traffic",
+    "s": "Pattaya Mail",
+    "d": "29 Oct 2026"
+  },
+  {
+    "t": "‘I am not that evil monster’: Accused suitcase killer says he was target of Thai street hustle",
+    "s": "SMH.com.au",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Bangkok to host first Global Anti-Scam Summit Asia in November",
+    "s": "Pattaya Mail",
+    "d": "29 Oct 2026"
+  },
+  {
+    "t": "Pickup crash ruptures Trat water main, cutting supply to five subdistricts",
+    "s": "Pattaya Mail",
+    "d": "29 Oct 2026"
+  },
+  {
     "t": "Foreigner falls to death from Pattaya condo",
     "s": "Bangkok Post",
     "d": "28 Oct 2026"
   },
   {
-    "t": "Pattaya tourism leaders unite to fill the city’s event calendar and drive business",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Foreign man dies in Pattaya condo fall, cause unknown",
+    "t": "Thailand video news | Pattaya streets submerged as heavy rain causes flooding, Thailand's proposed 450-baht tourist fee gains industry suppo",
     "s": "Thaiger",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Crane cable snaps in East Pattaya, dropping power pole onto worker",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Reach Pattaya’s festive crowds with our November ‘What’s On’ from 5,000 baht NET",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Bangkok rail terminal closes entrances ahead of October 29 opening ceremony",
-    "s": "Pattaya Mail",
-    "d": "28 Oct 2026"
-  },
-  {
-    "t": "Bangkok marathon expects 71,000 runners on November 28–29",
-    "s": "Pattaya Mail",
-    "d": "28 Oct 2026"
-  },
-  {
-    "t": "Pattaya prepares for Diwali Festival at Central Beach from November 13–15",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
+    "d": "30 Oct 2026"
   },
   {
     "t": "Scot arrested in Thailand over alleged phone theft faces six-week verdict wait",
@@ -48,24 +48,24 @@ var NEWS_FEED = [
     "d": "29 Oct 2026"
   },
   {
-    "t": "Thai hotel sector faces rising closures after widespread losses",
-    "s": "Nation Thailand",
-    "d": "26 Oct 2026"
-  },
-  {
-    "t": "Thailand Strips Chief Rabbi of Citizenship in Foreigner Crackdown",
-    "s": "Bloomberg",
+    "t": "Thai PM revokes chief rabbi’s citizenship over use of US passport – report",
+    "s": "The Times of Israel",
     "d": "29 Oct 2026"
   },
   {
-    "t": "Thailand revokes citizenship of chief rabbi over use of US passport",
-    "s": "Ynetnews",
+    "t": "Thailand, Vietnam meat busts highlight growing risk of unsafe food on the table",
+    "s": "South China Morning Post",
     "d": "29 Oct 2026"
   },
   {
-    "t": "Thai government revokes citizenship of chief Chabad emissary",
-    "s": "Israel National News",
+    "t": "2 Singaporean men among 4 arrested in Thailand for alleged involvement in prostitution ring",
+    "s": "Yahoo News Singapore",
     "d": "29 Oct 2026"
+  },
+  {
+    "t": "Chinese EV Imports Surge in Thailand Ahead of Planned Excise Tax",
+    "s": "Bloomberg.com",
+    "d": "28 Oct 2026"
   },
   {
     "t": "Lisa’s Flared Nails Are a Tribute to Thailand",
@@ -74,14 +74,14 @@ var NEWS_FEED = [
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-28","USD":33.78,"AUD":23.75,"GBP":44.88,"EUR":37.6};
+var FX_RATES = {"date":"2026-10-29","USD":33.76,"AUD":23.71,"GBP":44.95,"EUR":37.57};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-29","temp":26,"humid":96,"code":3,"hi":32,"rain":98};
+var WX_NOW = {"date":"2026-10-30","temp":31,"humid":70,"code":95,"hi":32,"rain":88};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4021,"date":"2026-10-29","baht":64250};
+var GOLD = {"usd":4000,"date":"2026-10-30","baht":63850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":79953,"thb":2698573};
+var BTC = {"usd":78582,"thb":2648219};
