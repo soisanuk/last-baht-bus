@@ -3,48 +3,53 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya team rescues stray dog with infected paw for treatment",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Kenny G surprises Thai fans with video ahead of November 7 Pattaya jazz show",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Sudden heavy rain floods Pattaya roads, shuts junction and disrupts traffic",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "‘I am not that evil monster’: Accused suitcase killer says he was target of Thai street hustle",
-    "s": "SMH.com.au",
-    "d": "30 Oct 2026"
-  },
-  {
-    "t": "Bangkok to host first Global Anti-Scam Summit Asia in November",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Pickup crash ruptures Trat water main, cutting supply to five subdistricts",
-    "s": "Pattaya Mail",
-    "d": "29 Oct 2026"
-  },
-  {
     "t": "Foreigner falls to death from Pattaya condo",
     "s": "Bangkok Post",
     "d": "28 Oct 2026"
   },
   {
-    "t": "Thailand video news | Pattaya streets submerged as heavy rain causes flooding, Thailand's proposed 450-baht tourist fee gains industry suppo",
+    "t": "Pattaya man allegedly attacked after reporting neighbour’s loud music",
     "s": "Thaiger",
     "d": "30 Oct 2026"
   },
   {
-    "t": "Scot arrested in Thailand over alleged phone theft faces six-week verdict wait",
+    "t": "Pattaya businesses want visitors who fill rooms, restaurants and bars",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Loud bikes face police checks to protect Pattaya and Jomtien residents",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Thailand’s November festivals bring music, culture and spectacular events",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Bangkok traffic restrictions planned for Royal Funeral Procession rehearsals",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Thailand monitors unrest in Europe, assures citizens of embassy assistance",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Pattaya beachgoers make most of sunny breaks as businesses await drier November",
+    "s": "Pattaya Mail",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "He questioned Thailand's monarchy dressed as Harry Potter. Now he's in jail for 34 years",
     "s": "BBC",
+    "d": "30 Oct 2026"
+  },
+  {
+    "t": "Thai prime minister revokes Chabad leader's citizenship",
+    "s": "The Jerusalem Post",
     "d": "29 Oct 2026"
   },
   {
@@ -53,35 +58,30 @@ var NEWS_FEED = [
     "d": "29 Oct 2026"
   },
   {
-    "t": "Thailand, Vietnam meat busts highlight growing risk of unsafe food on the table",
-    "s": "South China Morning Post",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "2 Singaporean men among 4 arrested in Thailand for alleged involvement in prostitution ring",
-    "s": "Yahoo News Singapore",
-    "d": "29 Oct 2026"
-  },
-  {
-    "t": "Chinese EV Imports Surge in Thailand Ahead of Planned Excise Tax",
+    "t": "Thailand Strips Chief Rabbi of Citizenship in Foreigner Crackdown",
     "s": "Bloomberg.com",
-    "d": "28 Oct 2026"
+    "d": "29 Oct 2026"
   },
   {
-    "t": "Lisa’s Flared Nails Are a Tribute to Thailand",
-    "s": "Vogue",
-    "d": "27 Oct 2026"
+    "t": "Thailand braces for US-Iran fallout",
+    "s": "Bangkok Post",
+    "d": "31 Oct 2026"
+  },
+  {
+    "t": "Thailand's favourite darling and Blackpink's Lisa sparks controversy over RM101 underwear merchandise",
+    "s": "The Star",
+    "d": "30 Oct 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-10-29","USD":33.76,"AUD":23.71,"GBP":44.95,"EUR":37.57};
+var FX_RATES = {"date":"2026-10-30","USD":33.73,"AUD":23.69,"GBP":45.19,"EUR":37.68};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-10-30","temp":31,"humid":70,"code":95,"hi":32,"rain":88};
+var WX_NOW = {"date":"2026-10-31","temp":30,"humid":82,"code":95,"hi":31,"rain":93};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-10-16","first":"011781","last2":"48","front3":["392","402"],"back3":["171","255"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4000,"date":"2026-10-30","baht":63850};
+var GOLD = {"usd":3876,"date":"2026-10-31","baht":61850};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":78582,"thb":2648219};
+var BTC = {"usd":77154,"thb":2601854};
