@@ -876,8 +876,8 @@ function _doBarfine(arg) {
   // bar — you'd be paying yourself. The verb quoted a fine for the owner's own
   // employee, flatly contradicting his mamasan's "cannot barfine your own bar"
   // (Ronnie, 2026-08-26). It's not a transaction here; it's the relationship layer.
-  // the Orchid Room's women are the power players' — you're here for a meeting, not to shop
-  if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
+  // the Orchid Room's women are the power players' — you're here for a meeting, not to shop; a bottle buys company, never the night
+  if (G.room === "orchid_room") { _say(_orchidTable() ? _ORCHID_TABLE_NO : _pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   if (rm.hostBar) { _doHire(arg); return; }
   if (rm.massage === "oil") {
     _say("No barfine here — she's a masseuse, not a bar girl, and there's no mamasan to " +
@@ -1753,7 +1753,7 @@ function _partyHome(id) {
   const _near = _homeNear();
   const _hp = G.rain > 0 ? [_near ? "{n} holds her bag over both your heads and you run it, the few doors to your bed, laughing, soaked to the knees by the second front."
       : "{n} flags a taxi in the downpour like a woman who has done it a thousand times, pulls you in after her, and wrings out her hair on the back seat all the way home."]
-    : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => (G.nightTurn >= ((_room().region || "") === "Soi 6" ? SOI6_CLOSE : 100) || !/shutters/.test(l)) &&
+    : (_near ? _PARTY_HOME_WALK : _PARTY_HOME).filter(l => (G.nightTurn >= ((_room().region || "") === "Soi 6" ? _soiShut() : 100) || !/shutters/.test(l)) &&
         !(G.hotel === "condo" && /songthaew/.test(l)));   // no truck goes up the hill (Tomás, round 103; Mario's ruling 2026-10-22)
   _say(_fmt(_pickVary(_hp.length ? _hp : (_near ? _PARTY_HOME_WALK : _PARTY_HOME), "partyhome"), { n: NPCS[id].name, home: _homeSaid() }), "win");
   // the ride costs what a ride costs — two rides home charged nothing (Renata, round 100); the walk is free
@@ -4708,6 +4708,7 @@ function _doMessage(arg) {
         "\"hiii 😊 brother hand ok now, he show everybody the bandage. lunch some day na, lunch only 🙏\"",
         G.nightTurn >= 50 ? "\"i at work, cannot talk 😩 busy busy. you sleep already? good boy 555\"" : "\"i at work soon, cannot talk 😩 busy busy. you eat already? 555\"",
         "\"you still in pattaya? i see farang with your walk today. not you. same walk 555\"",
+        "\"lunch? 😅 i finish 5, sleep until 2, work 8 again. one day i free i tell you first na. promise 🙏\"",
       ], "priewreply"));
     return;
   }

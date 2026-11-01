@@ -539,6 +539,17 @@ const SAFE_PIN = 719;    // ๗๑๙ — stage number 71 + lucky 9
 // exits: direction → roomId. "in"/"out" for bars. dark: needs phone light.
 // busStop: name of the bus line serving it. motosai: stand present.
 
+// THE ORCHID ROOM KEEPS ITS OWN HOURS AND ITS OWN LIST (Mario, 2026-11-01). A members' room behind a rope shuts at
+// four, not at two with the pavement trade (`closesAt` on the room; _closeTurn reads it), and a guest may buy a bottle
+// — a table is the bottle, mixers with it, and the room's women come to a table. Declared above ROOMS because the
+// room literal reads ORCHID_CLOSE at load.
+const ORCHID_CLOSE = 100;   // 04:00
+const ORCHID_BOTTLES = [
+  { id: "black label", name: "Johnnie Walker Black", price: 6000, aliases: ["black label", "johnnie black", "jw black", "johnnie walker black", "black"] },
+  { id: "chivas", name: "Chivas 18", price: 8000, aliases: ["chivas", "chivas 18", "chivas regal", "regal"] },
+  { id: "hennessy", name: "Hennessy VSOP", price: 10000, aliases: ["hennessy", "cognac", "vsop"] },
+  { id: "blue label", name: "Johnnie Walker Blue", price: 15000, aliases: ["blue label", "johnnie blue", "jw blue", "johnnie walker blue", "blue"] },
+];
 const ROOMS = {
 
   // ─── Jomtien ───
@@ -3763,6 +3774,7 @@ const ROOMS = {
     name: "The Orchid Room",
     region: "Soi 6",
     bar: "The Orchid Room", barType: "soi6", owner: "plg", vip: true,
+    closesAt: ORCHID_CLOSE,   // the members' room runs to four; the soi outside shut at two
     desc: "The name is the last classy thing about it. Laurent Vasseur wanted a members' club — " +
       "leather, low light, single malt, discretion — and got a bacchanal, because the room " +
       "curdled to match its owner. The 'hostesses' start the night topless and end it well " +
@@ -12828,6 +12840,14 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "The girl from the clinic waiting room — the one who laughed at the dead pen, which " +
       "turns out to be the whole story.",
     dialogue: [
+      // WHY LUNCH NEVER COMES (Mario, 2026-11-01): the invitation is the thing that cannot be kept — the hospital
+      // mirage's tell — and she says why once, in her own words, so the day that never comes reads as hers.
+      { topic: "lunch|when|which day|what day|tomorrow|day off|free day|daytime|time|meet|meet up|see you",
+        text: "\"Lunch?\" The laugh, and then the arithmetic, counted on her fingers. \"I finish four, five. Sleep " +
+          "until two. Work again eight. Every night, same same.\" She shrugs, not sorry, not sad. \"So lunch is " +
+          "one day I don't work. One day I free, I tell you first, na. Promise.\" Every word of it true, and the " +
+          "free day is the one thing the job does not give.",
+        short: "\"Finish four, five. Sleep until two. Work eight. One day I free, I tell you first, na.\" Every word of it true." },
       { text: "\"Your test ok na?\" The laugh is already there. \"Lunch sometime. Lunch only — " +
         "I work nights, hospitality, every night until late.\" Every word of it true.",
         short: "\"Lunch only — I work nights, hospitality, every night until late.\" Every word of it true." },
@@ -14394,7 +14414,8 @@ const CLUB_TAXI = 2000;      // the morning-after "taxi money" — the back-load
 const GIFT_DEBT = 500;       // the bun-khun a "free" gift calls in on the spot
 const GIFT_TIP = 100;        // paying tao-rai up front closes the account clean
 const TOASTIE_PRICE = 35;  // the 7-Eleven cheese toastie
-const SOI6_CLOSE = 80;    // everything on Soi 6 shuts at two (Mario, 2026-10-11) — the Vic's pub earlier, at eleven
+const SEVEN_WATER = 10;   // the 7-Eleven's bottle: the cheapest water in town, the wake's measure of an empty pocket
+const SOI6_CLOSE = 80;    // everything on Soi 6 shuts at two (Mario, 2026-10-11) — the Vic's pub earlier, at eleven, the Orchid Room later, at four (ORCHID_CLOSE)
 const SEVEN_BEER = 60;     // a big Chang from the 7-Eleven fridge — sold until midnight, then the fridges are chained (the law)
 const POLICE_WAI = 300;     // the drunk stop: a wai and a sorry
 const POLICE_PAY = 500;     // …money out before the manners

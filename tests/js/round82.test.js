@@ -27,9 +27,10 @@ beforeEach(() => {
 });
 
 test("the hours: Soi 6 at two, the Vic's pub at eleven, the clubs and the Darkside at midnight, the town at dawn", () => {
-  for (const r of Object.keys(ROOMS).filter(r => ROOMS[r].barType && ROOMS[r].region === "Soi 6" && r !== "queen_vic"))
+  for (const r of Object.keys(ROOMS).filter(r => ROOMS[r].barType && ROOMS[r].region === "Soi 6" && r !== "queen_vic" && r !== "orchid_room"))
     assert.equal(_closeTurn(r), SOI6_CLOSE, r + " shuts at two");
   assert.equal(SOI6_CLOSE, 80);
+  assert.equal(_closeTurn("orchid_room"), ORCHID_CLOSE, "the members' room keeps its own hours (Mario, 2026-11-01)");
   assert.equal(_closeTurn("queen_vic"), 50);
   assert.equal(_closeTurn("nottys_place"), 60);
   assert.equal(_closeTurn("night_heron"), 60);

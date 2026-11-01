@@ -472,7 +472,8 @@ hunger and thirst. DIAGNOSE reads it back in prose.
   `_hospitalMorning`.
 - `_endNight` takes the night's drink count as the hangover (two more after an all-nighter, one less at the quiet
   Sabai), keeps it in `G.hangover` for the evening, and sets the new evening's meters from it, capped so a rough wake can
-  still reach water.
+  still reach water. A wake with less than a 7-Eleven water in the pocket (`SEVEN_WATER`) and a thirst on names the
+  room's two bottles (TAKE WATER) and Nont's CASH — a pointer, not a rescue (Mario, 2026-11-01).
 - Food is refused below `FULL_AT` (`_tooFull`, checked before money moves); eating itself is `food`. DRINK is
   `_doDrink`; SHOWER (`_doShower`) is flavour.
 - `_doDiagnose` prints the meters, the drink, `G.hurt`, the piwins' limit and an STD symptom (`_stdSymptomatic`). It
@@ -1582,7 +1583,8 @@ it. The clinic's waiting room is also where you meet Priew, the start of the hos
   companion with you, refuses a second test the same day (`G.testedDays`), clears `G.std` with `_CLINIC_POS` (+3) or
   reports clean with `_CLINIC_CLEAN` (+1), and names the window period if you paid tonight.
 - `_priewMeet` runs once after Act One with no companion: `metPriew`, her number in your phone, `G.priewDay`.
-  `_priewReveal` later fires in a go-go.
+  `_priewReveal` later fires in a go-go. Lunch is never deliverable (Mario, 2026-11-01): the invitation is the mirage's
+  tell, and her lunch node and one MESSAGE reply say why (she finishes at five, sleeps till two, works at eight).
 
 **State.** `G.std`, `G.condoms`, `G.testedDays`, `G.lastBfChaste`, `G.priewDay`.
 
@@ -2101,11 +2103,18 @@ stand Kesinee, the Kitten Corner mamasan who reads the player's origin, and Gavi
   `tanRevealed`. TALK to the corner-table men is `_ORCHID_DEFLECT`; social verbs and BARFINE are refused
   (`_ORCHID_NOTOUCH`).
 - The room is on `_PLG_ROOMS` (the group's paper) and never carries a stream camera.
+- **Its own hours and its own list** (Mario, 2026-11-01). The Orchid shuts at four (`ORCHID_CLOSE`, the room's
+  `closesAt`), not at two with the soi; `_soiShut(room)` is the street-outside measure the after-two prose reads. OUT
+  after two walks you through the dark Lotus to the side door (`_doGo`). A guest may buy a bottle off `ORCHID_BOTTLES`
+  (`_orchidList`, `_orchidBottle`, `_orchidListLine`): it charges, sets `G.soc.orchidBottle` for the night and pays
+  สนุก; with a table (`_orchidTable`) the social verbs, DANCE, TIP and a lady drink work (she drinks your bottle, nothing
+  chalked), BARFINE stays refused with `_ORCHID_TABLE_NO`. The list is on all three surfaces (parser, `_completePool`,
+  term's BUY fan-out).
 
 **State.** `G.faction` (read), flags `orchidSent`, `orchidVouched`, `orchidReported`, `tanSuspected`, `tanRevealed`,
-`G.quests`.
+`G.quests`, `G.soc.orchidBottle` (night).
 
-**Constants.** `_PLG_ROOMS` (engine-core.js).
+**Constants.** `_PLG_ROOMS` (engine-core.js), `ORCHID_CLOSE`, `ORCHID_BOTTLES` (world.js).
 
 **Touches.** `quests`, the factions (`_align` moves group standing elsewhere), `soi6-stream` (excludes this room), the
 paper by the till (`_PLG_ROOMS`). A new route into either room must go through `_arriveAt` or it skips the door.
@@ -2120,7 +2129,7 @@ round58.test.js, playtest5.test.js.
 > **Soak counters:** `orchid.entered`
 > **People:** `kesinee` · `gavin` · `powers`
 > **Rooms:** `orchid_room` · `nottys_place`
-> **Code named above, by file:** engine-core.js — `_PLG_ROOMS`, `_align`, `_describeRoom`, `_faction`, `_nottysOpen` · engine-play.js — `_ORCHID_NOTOUCH` · engine-systems.js — `_tanOrchidReveal` · engine-parser.js — `_ORCHID_BOUNCER`, `_ORCHID_CLUB_UNKNOWN`, `_ORCHID_DEFLECT`, `_arriveAt`
+> **Code named above, by file:** engine-core.js — `_PLG_ROOMS`, `_align`, `_describeRoom`, `_faction`, `_nottysOpen` · engine-play.js — `_ORCHID_NOTOUCH`, `_ORCHID_TABLE_NO`, `_orchidBottle`, `_orchidList`, `_orchidTable`, `_soiShut` · engine-systems.js — `_tanOrchidReveal` · engine-parser.js — `_ORCHID_BOUNCER`, `_ORCHID_CLUB_UNKNOWN`, `_ORCHID_DEFLECT`, `_arriveAt`, `_completePool`, `_doGo`, `_orchidListLine`
 <!-- /facts -->
 
 ### The digital barstool (`soi6-stream`)

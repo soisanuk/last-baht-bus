@@ -31205,10 +31205,10 @@
    "between": "",
    "system": "survival",
    "sev": "moderate",
-   "pin": "",
+   "pin": "tests/js/round112.test.js",
    "claim": "Day 9 nearly soft-locked: ฿0, thirst 76, every lifeline off-soi; the Vic's two free waters never pointed at",
-   "verdict": "deferred",
-   "note": "the lifelines are the people (Nont's CASH now works); a resident at ฿0 and 76 thirst is the design's edge — the wake could name the room's water; Mario's call",
+   "verdict": "fixed",
+   "note": "the lifelines are the people (Nont's CASH now works); a resident at ฿0 and 76 thirst is the design's edge — the wake could name the room's water; Mario's call — 2026-11-01 Mario: the wake names the room's two bottles and Nont's CASH when the pocket is under a 7-Eleven water and the thirst is on; a pointer, the edge stays",
    "cls": "J"
   },
   {
@@ -42383,10 +42383,11 @@
    "lens": "condo-homebody",
    "claim": "Lunch with Priew can never happen — the day starts at 18:00",
    "verdict": "design",
-   "note": "her 'lunch only' is the hospital-mirage tell; whether it should ever be deliverable is Mario's call",
+   "note": "her 'lunch only' is the hospital-mirage tell; whether it should ever be deliverable is Mario's call — 2026-11-01 Mario: never deliverable — the line is the tell; she says why once (finish five, sleep till two, work eight), in person and by text",
    "cls": "D",
    "sev": "minor",
-   "system": "phone"
+   "system": "phone",
+   "pin": "tests/js/round112.test.js"
   },
   {
    "round": "110",
@@ -42586,11 +42587,12 @@
    "model": "fable",
    "lens": "orchid-rope",
    "claim": "Members-only room at street prices",
-   "verdict": "design",
-   "note": "the Orchid's price tier is Mario's call",
+   "verdict": "fixed",
+   "note": "the Orchid's price tier is Mario's call — 2026-11-01 Mario: a full members' list, ฿6k–฿15k by the bottle (ORCHID_BOTTLES); a table is the bottle, the women come to it, the night is not on it",
    "cls": "A",
    "sev": "minor",
-   "system": "orchid"
+   "system": "orchid",
+   "pin": "tests/js/round112.test.js"
   },
   {
    "round": "111",
@@ -43562,10 +43564,10 @@
    "between": "",
    "system": "hours",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/round112.test.js",
    "claim": "The Orchid shuts at two with the pavement trade",
-   "verdict": "design",
-   "note": "SOI6_CLOSE is everything on Soi 6; a members' room past two is a canon call",
+   "verdict": "fixed",
+   "note": "SOI6_CLOSE is everything on Soi 6; a members' room past two is a canon call — 2026-11-01 Mario: the Orchid runs to four (ORCHID_CLOSE); OUT after two is the dark Lotus and the side door",
    "cls": "C"
   },
   {
@@ -43592,10 +43594,10 @@
    "between": "",
    "system": "orchid",
    "sev": "minor",
-   "pin": "",
+   "pin": "tests/js/round112.test.js",
    "claim": "The room charges Pink Lotus prices for Pink Lotus beer and sells nothing dearer",
-   "verdict": "design",
-   "note": "Orchid prices vs the street — already with Mario",
+   "verdict": "fixed",
+   "note": "Orchid prices vs the street — already with Mario — 2026-11-01 Mario: the members' list (see Pascal, round 111)",
    "cls": "C"
   },
   {

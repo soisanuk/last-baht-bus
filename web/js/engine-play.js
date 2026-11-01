@@ -187,7 +187,8 @@ function _barSpendTonight(room) {
 
 // THE HOUR A VENUE SHUTS (Mario, 2026-10-11). Gentleman's clubs and the Darkside
 // keep the law's hours and shut at MIDNIGHT (nightTurn 60); everything on Soi 6
-// shuts at TWO (SOI6_CLOSE, 80); the Queen Vic's pub shuts at eleven (its own
+// shuts at TWO (SOI6_CLOSE, 80) except the Orchid Room, a members' room that keeps
+// its own hours to four (ORCHID_CLOSE, its `closesAt`); the Queen Vic's pub shuts at eleven (its own
 // `closesAt`, 50) though its rooms upstairs never do; the town's other beer bars
 // and go-gos run to dawn. `_closeTurn` is the one place that knows which, and
 // null means dawn. A Darkside lock-in still bolts the door instead of shutting it.
@@ -208,8 +209,12 @@ function _closesMidnight(id) {
 // The closing hour said the way the room says it.
 function _closeClock(id) {
   const t = _closeTurn(id);
-  return t == null ? _L("dawn") : t === 60 ? _L("midnight") : t === 50 ? _L("eleven") : t === 80 ? _L("two") : _clockStr(t);
+  return t == null ? _L("dawn") : t === 60 ? _L("midnight") : t === 50 ? _L("eleven") : t === 80 ? _L("two") : t === 100 ? _L("four") : _clockStr(t);
 }
+// When the soi outside THIS room's door has shut: two for Soi 6 and everything on it, later only
+// for a room that keeps its own later hours (the Orchid). A room that shuts earlier (the Vic) still
+// stands on a soi that runs to two.
+function _soiShut(id) { return Math.max(SOI6_CLOSE, _closeTurn(id || G.room) || 0); }
 // When a room's small-hours paint (`lateDesc`) takes over: a pub at its own
 // closing, a Soi 6 room when Soi 6 shuts, everywhere else at midnight.
 function _lateTurn(id) {
@@ -3497,6 +3502,18 @@ const _ORCHID_NOTOUCH = [
     "to — and a walk-up putting a hand out in HERE is a category error the whole room notes " +
     "at once. You came for a meeting. Act like it.",
 ];
+// THE MEMBERS' LIST (Mario, 2026-11-01): a guest may buy a bottle off ORCHID_BOTTLES, and a table is the bottle —
+// for the rest of the night the room's women come to it, so the no-touch freeze lifts for the social verbs. What a
+// bottle does NOT buy: the night. She is the room's; BARFINE stays refused (_ORCHID_TABLE_NO). These three are the one
+// place the list is read — the parser, the chips and the autocomplete all consume them (the three-surfaces rule).
+function _orchidList() { return G.room === "orchid_room" ? ORCHID_BOTTLES : []; }
+function _orchidBottle(arg) {
+  const a = String(arg || "").toLowerCase();
+  return ORCHID_BOTTLES.find(b => b.aliases.some(x => new RegExp("\\b" + x + "\\b").test(a))) || null;
+}
+function _orchidTable() { return G.room === "orchid_room" && !!G.soc.orchidBottle; }
+const _ORCHID_TABLE_NO = "The table is yours till four, and she is at it because the bottle is. She is still the room's. " +
+  "A bottle in here buys company; the night is not on the list, and the quiet man at the good table would notice you asking.";
 // BARFINE at the bar you OWN: a fine paid to the bar is a fine paid to yourself.
 // The girls are staff, not stock; if there's a courtship it goes through the
 // relationship layer, not the till.
@@ -3512,8 +3529,8 @@ const _OWN_STAFF_FLIRT = [
   "{n} looks at the rail, where two customers are watching. \"Not in front of the stools, boss. Very bad for business.\" She is smiling.",
 ];
 function _doSocial(kind, targetWord) {
-  // not a pickup room — the girls are the power players', and you're here on business
-  if (G.room === "orchid_room") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
+  // not a pickup room — the girls are the power players', and you're here on business (unless a bottle made it your table)
+  if (G.room === "orchid_room" && !_orchidTable()) { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   const w = (targetWord || "").replace(/^with /, "").trim();
   // A social verb aimed at an animal gets shut down flat, not a location miss —
   // "they're not here" read like it would work if he WERE (playtest, 2026-08-15).
@@ -6838,6 +6855,14 @@ function _endNight(reason) {
     "surface mid-afternoon, and by the time you're human again the sun is " +
     "sliding into the gulf and the neon is waking up ──",
     { d: G.day, home: G.stage === "expat" ? _L(crash ? " · PATTAYA" : " · PATTAYA, HOME") : _L(" of 7") }), "win");   // not HOME on a bench (Renata, round 100)
+  // THE WAKE NAMES THE WATER (Mario, 2026-11-01): a man who wakes with nothing in his pocket and a thirst on is told
+  // where the free water is — the room's two bottles, or Nont — rather than left to find it. A pointer, not a rescue:
+  // the edge stays where it was (Owain, round 99: ฿0, thirst 76, every lifeline off the soi, and nobody said).
+  if (G.money < SEVEN_WATER && G.thirst >= 30) {
+    const _nont = G.phone && G.phone.contacts && G.phone.contacts.nont && (G.bank || 0) > 0;
+    if (!crash && _isHotelRoom(G.room)) _say(`(Dry-mouthed and ฿${_num(G.money)} in your pocket. The mini-fridge has housekeeping's two bottles, on the house — TAKE WATER.${_nont ? " And Nont turns the account into cash: CASH <amount>." : ""})`, "dim");
+    else if (_nont) _say(`(Dry-mouthed and ฿${_num(G.money)} in your pocket. Nont turns the account into cash for his five percent: CASH <amount>.)`, "dim");
+  }
   if (hangover >= 4) _say("(The hangover is a physical presence with opinions. Water. Food. Mercy.)", "alert");
   if (wouldRough && !rough && _dogEgg() === "rescue") {
     // NOT "the last baht bus" — this fires only on nights you failed to get home,

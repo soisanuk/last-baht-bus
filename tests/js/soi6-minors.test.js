@@ -39,8 +39,11 @@ test("bell ring count resets once the glow lapses (no stale level-3 restore)", (
   assert.equal(_bellLevel(), 1, "…and buys level 1, not a stale level 4");
 });
 
-test("midnight inside the Orchid Room ejects past closed Pink Lotus to the street", () => {
+test("four inside the Orchid Room ejects past closed Pink Lotus to the street", () => {
   S().room = "orchid_room"; S().nightTurn = SOI6_CLOSE;
+  _closingTick();
+  assert.equal(S().room, "orchid_room", "two is the soi's hour, not the Orchid's (Mario, 2026-11-01)");
+  S().nightTurn = ORCHID_CLOSE;
   _closingTick();
   assert.equal(S().room, "soi6_street", "the eject chain lands somewhere actually open");
 });

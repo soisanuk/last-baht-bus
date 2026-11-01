@@ -32,11 +32,12 @@ test("Pascal: Vasseur asked about his room answers about the room — the table'
   orchid(); G.known.powers = true; const r = t("ask vasseur about the orchid room");
   assert.doesNotMatch(r, /not a topic/); assert.match(r, /I wanted a club/);
 });
-test("Pascal: the Orchid's till quotes beer and soda only; no bell, no dice box, no lady drink, no bottle for a guest", () => {
-  orchid(); const p = t("tao rai"); assert.doesNotMatch(p, /lady drink|the bell|Connect 4/); assert.match(p, /beer ฿/);
+test("Pascal: the Orchid's till quotes beer, soda and the members' list; no bell, no dice box, no lady drink", () => {
+  orchid(); const p = t("tao rai"); assert.doesNotMatch(p, /lady drink|the bell|Connect 4/); assert.match(p, /beer ฿/); assert.match(p, /by the bottle/);
   const m0 = G.money; assert.match(t("ring bell"), /no bell/); assert.equal(G.money, m0);
   assert.ok(!_barGamesHere());
-  assert.match(t("buy blue label"), /member buy it by the bottle/); assert.equal(G.money, m0);
+  // a bottle for a guest is a table (Mario, 2026-11-01) — the price is the list's, never the daytime-trade line
+  G.money = 20000; assert.match(t("buy blue label"), /now you have a table/); assert.equal(G.money, 20000 - ORCHID_BOTTLES.find(b => b.id === "blue label").price);
 });
 test("Pascal: the Orchid's chairs, its dancing and its last call are its own — no stool, no luk thung, no BARFINE", () => {
   orchid(); for (let i = 0; i < 3; i++) assert.doesNotMatch(t("sit"), /stool/);

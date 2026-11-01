@@ -487,6 +487,10 @@ const _term = (() => {
             return moves.map(m => ({ t: "flip " + m, c: "flip " + m, go: true }));
           }
         }
+        // at the Orchid, BUY fans out into the members' list (the three-surfaces rule)
+        if (cmd === "buy" && typeof _orchidList === "function" && _orchidList().length) {
+          return _orchidList().map(b => ({ t: "buy " + b.id, c: "buy " + b.id, go: true }));
+        }
         // at a saleng cart, the open "BUY <item> FOR <lady>" hint fans out into
         // the cart's items so you don't have to type SOM TAM / FRUIT yourself
         if (cmd === "buy" && typeof _salengItems === "function") {

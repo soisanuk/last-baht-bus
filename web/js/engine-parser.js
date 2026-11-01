@@ -1259,6 +1259,14 @@ function _doGo(dirWord) {
     _arriveAt("soi6_deep");
     return true;
   }
+  // The Orchid runs to four and the Lotus in front of it shuts at two: OUT after two is the dark
+  // Lotus — chairs up, grilles half down — and the doorman's side door onto the soi (Mario, 2026-11-01)
+  if (G.room === "orchid_room" && to === "pink_lotus" && _closedNow("pink_lotus")) {
+    _say("The Lotus in front is dark — chairs up on the tables, the grille half down, the pink switched off. " +
+      "The doorman walks you through it to the side door and lets you out onto the shut soi.", "dim");
+    _arriveAt(ROOMS.pink_lotus.exits.out);
+    return true;
+  }
   // The corridor past Kitten Corner's till is not a public exit: you go BACK
   // there only on Rabbit's job, and only once the girl on the till has her eyes
   // on a drink instead of the corridor (docs/rabbit-arc.md, the mule path).
@@ -11594,9 +11602,16 @@ function _doBuy(arg) {
       _say("(One at a time — they pour the next when this one's gone.)", "dim");
     } }
   if (_room().freeTea && /\b(iced tea|tea|cooler|the tap)\b/.test(String(arg || ""))) { _freeTea(); return; }   // the note says free (2026-10-09)
-  // the Orchid's bottles are the corner tables' — a guest is poured beer or soda, and is told so (Pascal, round 111: "buy blue label" got the daytime-trade line)
-  if (G.room === "orchid_room" && /\b(blue label|black label|johnnie|whisk(?:e)?y|scotch|malt|single malt|cognac|wine|champagne|bottle|spirits?)\b/i.test(arg)) {
-    _say(`${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"} doesn't reach for a glass. "The bottle on the table is the table's — a member buy it by the bottle, on his account. For guest: beer, soda." Not unkind; it is simply how the room is built. (BUY BEER)`);
+  // THE MEMBERS' LIST: a bottle off ORCHID_BOTTLES is a table for the night (Mario, 2026-11-01); anything else by the
+  // bottle gets the list, not the daytime-trade line (Pascal, round 111)
+  if (G.room === "orchid_room" && (_orchidBottle(arg) || /\b(whisk(?:e)?y|scotch|malt|single malt|wine|champagne|bottle|spirits?|the list)\b/i.test(arg))) {
+    const b = _orchidBottle(arg), till = _tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till";
+    if (!b) { _say(`${till} slides the list across: ${_orchidListLine()}. "By the bottle. Mixers come with it, and so does a table." (${ORCHID_BOTTLES.map(x => "BUY " + x.id.toUpperCase()).join(" · ")})`); return; }
+    if (G.soc.orchidBottle) { const have = ORCHID_BOTTLES.find(x => x.id === G.soc.orchidBottle); _say(`There is a bottle on your table already — the ${have ? have.name : "one you bought"}, and most of it. The room pours from it until four.`); return; }
+    if (G.money < b.price) { _say(`${till}: "${b.name}, ฿${_num(b.price)}." Nobody in here runs a tab for a guest; you have ฿${_num(G.money)}.`); return; }
+    G.money -= b.price; G.soc.orchidBottle = b.id;
+    _say(`฿${_num(b.price)} across the counter and the room re-reads you. The ${b.name} arrives on a tray with an ice bucket, four mixers and six glasses, and a waiter walks you to a table you did not know was free. Two of the room's women drift over before the seal is broken — the girls are the tables' here, and now you have a table. (-฿${_num(b.price)}, ฿${_num(G.money)} left. The bottle is yours until four; she is still the room's.)`);
+    _addHappy(3, "a table at the Orchid");
     return;
   }
   const r = _room();
@@ -12115,6 +12130,7 @@ function _doBuy(arg) {
       _say(`${NPCS[id].name} lifts a hand before the cashier can reach for the chit. "Not a lady drink. I'm not on the book." A soda, at the price of a beer, and she thanks you for it properly. (-฿${_num(p)}, ฿${_num(G.money)} left.)`);
       return;
     }
+    if (G.room === "orchid_room" && _orchidTable()) { _say(`${NPCS[id].name} lifts her glass — your bottle, your ice, the room's mixers. "Already drinking yours, na." Nothing to chalk; the table is the drink.`); return; }   // a lady drink at your table is the bottle (Mario, 2026-11-01)
     if (G.room === "orchid_room" && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }   // the room says nobody is working it (review 2026-10-25)
     if (G.money < _ladyPrice() && !(_atJobBar() && _jobBarStaff(id))) { _say(_fmt("Lady drinks are ฿{p}. You have ฿{m}. The math is not on your side.", { p: _ladyPrice(), m: G.money })); return; }   // the manager's own girls' drinks are the house's (review 2026-10-25)
     // At the bar you OWN, the drink rings through your OWN till instead of
@@ -13958,7 +13974,7 @@ function _withHerTalk(npc, topic) {
   return false;
 }
 function _doDance(arg) {
-  if (G.room === "orchid_room" && arg && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
+  if (G.room === "orchid_room" && arg && !_orchidTable() && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   if (G.party && G.party.ids && G.party.ids.length) _withHerNote("dance");
   // DANCE WITH <her>: the named woman, not "a hostess materialises at your elbow"
   // with your own girl standing there (Rolf, round 55)
@@ -14220,7 +14236,7 @@ function _doTime() {
     // the pricing follows the room you're in: a Soi 6 bar's room upstairs is the same all night, a beer bar's fine is not
     t < 30 ? (_room().barType === "soi6" ? "(Early doors: the room upstairs costs what it always costs, but taking her out for the night is dearest before 21:00 — she leaves the floor for the whole evening. Ask her the price.)" : "(Early doors: barfines carry a premium until 21:00 — about half again, because she leaves the floor for the whole evening. Ask her the price.)") :
     (_closeTurn(G.room) != null && t >= _closeTurn(G.room) - 5 && t < _closeTurn(G.room)) ? `(This place shuts at ${_closeClock(G.room)} — last orders now.)` :   // the hour, said at the hour it matters (Declan, round 83)
-    (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && t >= SOI6_CLOSE) ? "(The bars on Soi 6 shut at two. Whatever is still pouring is off the soi.)" :
+    (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && t >= _soiShut()) ? "(The bars on Soi 6 shut at two. Whatever is still pouring is off the soi.)" :
     t >= 60 ? (_room().barType === "soi6" ? "(Past midnight: the room upstairs costs what it did, and the fine to take her out drops but does not go — a Soi 6 bar keeps its book till it shuts at two. Her own money never drops.)" : !_room().barType && _room().region === "Soi 6" ? "(Past midnight: the beer bars on this soi have dropped their fine; the Soi 6 bars keep theirs, smaller, till two. Her own money is hers either way.)" : _room().barType === "beer" || !_room().barType ? "(Past midnight: most beer bars have quietly dropped the barfine" + (_room().region === "Soi 6" ? " — the beer bars on this soi too; the Soi 6 bars keep theirs till two" : "") + ". Her own money is still hers.)" : "(Past midnight: the fine drops a little. Her own money is still hers.)") :
     "(Prime time. Standard rates apply.)", "dim");
   // Soi 6 mode never leaves the street (the bus is refused), so the last-bus
@@ -14404,7 +14420,7 @@ function _doWait(arg) {
   // land us on target — show THAT clock, not the pre-tick one (WAIT UNTIL 20:00
   // printed "19:00"; two personas, 2026-08-17).
   // a shut room and a dark street have no songs turning over (Declan, round 83, in the shut Vic)
-  const _quiet = (_shutHere()) || (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) || (_isHotelRoom(G.room) && G.nightTurn >= 60) ||   // 18:06 in your room is not "after the shutters" (Ruth, round 94)
+  const _quiet = (_shutHere()) || (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= _soiShut()) || (_isHotelRoom(G.room) && G.nightTurn >= 60) ||   // 18:06 in your room is not "after the shutters" (Ruth, round 94)
     (!_room().barType && G.nightTurn >= _lateTurn(G.room) + 6);   // any street, half an hour past its own late turn (Callum, round 89)
   _say(_fmt(_quiet ? (_isHotelRoom(G.room) ? "You let the night idle past — the fan, a motorbike somewhere, the long quiet after the shutters. {t}."
       : "You let the night idle past — a shutter ticking, a motorbike somewhere, the long quiet after the shutters. {t}.")   // no fan on the pavement (Callum, round 89)
@@ -14421,7 +14437,7 @@ function _doWait(arg) {
 const _CABARET_PERFORMERS = ["mala", "petch"];
 
 function _doTip(arg) {
-  if (G.room === "orchid_room" && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
+  if (G.room === "orchid_room" && !_orchidTable() && typeof _ORCHID_NOTOUCH !== "undefined") { _say(_pickVary(_ORCHID_NOTOUCH, "orchidno"), "alert"); return; }
   const amtM = arg.match(/(\d+)/);
   // A bare TIP <name> used to spend ฿20 silently — a figure the player never
   // chose and was never shown, the same class as the Connect 4 stake that was
@@ -16056,6 +16072,8 @@ function _barfineTalk(npc) {
     ? `“Mamasan first, then me.” ${n ? n + " holds up two fingers." : ""} “Short time ฿${_num(p.st)} — bar take ฿${_num(bS)}, ฿${_num(hS)} for me. Long time ฿${_num(p.lt)}. The rest, we talk after.” (BARFINE <name>)`
     : `“The bar wants ฿${_num(bS)} short time, ฿${_num(bL)} long. ${two}” (BARFINE <name>)`;
 }
+// The members' list as the till says it: "Johnnie Walker Black ฿6,000 · …" (ORCHID_BOTTLES, the one source).
+function _orchidListLine() { return ORCHID_BOTTLES.map(b => `${b.name} ฿${_num(b.price)}`).join(" · "); }
 function _priceTalk(npc) {
   const r = _room();
   const n = npc ? NPCS[npc].name : "";
@@ -16070,7 +16088,7 @@ function _priceTalk(npc) {
       : " The two on the board, said flatly and without a flicker. The third one is not on the board and is not asked in the doorway.");
   if (!(typeof _servesDrinks === "function" ? _servesDrinks(G.room) : _inBar())) return null;
   // the Orchid sells a guest beer and soda and nothing else: every mouth in it quotes that, not the floor's list (Luc, round 112: the Orchid's mamasan quoted a bell and a barfine)
-  if (G.room === "orchid_room") return `${n || "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())}. "For guest, that is all. The bottles on the tables are the tables' own, and the girls are the tables' also."`;
+  if (G.room === "orchid_room") return `${n || "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())} · by the bottle, ${_orchidListLine()}. "A bottle is a table, and the girls are the tables'. For a guest without one: beer, soda, and that is all."`;
   const bits = [`beer ฿${_num(_beerPrice())}`];
   if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);
   // THE MONEY SIDE QUOTES THE FINE. Three cashiers promise "ask Mama anything —
@@ -16211,7 +16229,7 @@ function _doCheckBin() {
 // door line read "(BUY TOASTIE · BUY WATER · BUY CHARGER · BUY CONDOM)" and a man counting baht found the ฿60
 // Chang only by guessing, and TAO RAI on that street quoted the piwins (Liam, round 93)
 function _sevenMenu() {
-  const items = [`BUY TOASTIE ฿${_num(TOASTIE_PRICE)}`, `BUY WATER ฿10`];
+  const items = [`BUY TOASTIE ฿${_num(TOASTIE_PRICE)}`, `BUY WATER ฿${_num(SEVEN_WATER)}`];
   if (G.nightTurn < 60) items.push(`BUY BEER ฿${_num(SEVEN_BEER)}, a big Chang, till midnight`);
   items.push(`BUY CHARGER ฿${_num(CHARGER_PRICE)}`, `BUY CONDOM ฿${_num(CONDOM_PRICE)}`);
   return "(" + items.join(" · ") + ")";
@@ -16247,7 +16265,7 @@ function _doTaoRai() {
     const r = _room();
     const bits = [`beer ฿${_num(_beerPrice())}`];
     // the Orchid's girls belong to the corner tables: no lady drink, no bell, no dice box on its board (Pascal, round 111)
-    if (G.room === "orchid_room") { _say(`“เท่าไหร่?” (tao rai — how much?) ${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())}. "For guest, that is all. The bottles on the tables are the tables' own, and the girls are the tables' also."`, "dim"); return; }
+    if (G.room === "orchid_room") { _say(`“เท่าไหร่?” (tao rai — how much?) ${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())} · by the bottle, ${_orchidListLine()}. "A bottle is a table, and the girls are the tables'. For a guest without one: beer, soda, and that is all."`, "dim"); return; }
     if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);   // the Vic has no bar-girl economy (Neville, round 53)
     else if (G.party && (G.party.ids || []).length) bits.push(`a drink for the woman with you ฿${_num(_ladyPrice())}`);   // …but the woman you brought in drinks, and it is charged
     bits.push(`water or soda ฿${_num(_waterPrice())} (the seat, not the bottle)`);
@@ -16980,6 +16998,7 @@ function _completePool(verb, ctx) {
         const card = _qvMenu().map(d => d.aliases[0]);
         return [...card, ...barItems.filter(i => !/food|toastie/.test(i))];
       }
+      if (_orchidList().length) return [..._orchidList().map(b => b.id), ...barItems];   // the members' list leads at the Orchid
       const sItems = _salengItems();
       if (sItems.length) {
         // a parked cart leads with its items; once one's named, offer a lady to
@@ -20323,7 +20342,7 @@ function _doCommandInner(input) {
           ? `It's ${_clockStr()} on the last night of the trip. Sleep now and the week ends here${G.nightTurn >= 60 ? "." : ", with its final night unspent."}`   // at 02:18 the night is spent (Sam, round 90)
           : G.nightTurn < 10 ? `It's ${_clockStr()} — the neon's barely warm. Sleep now and the whole night goes with it.`
           : _who ? `It's ${_clockStr()}. Sleep now and the night ends here — ${_who} ${G.room === _hotelRoomId() ? (G.party.ids.length > 1 ? "are" : "is") + " already in the room" : (G.party.ids.length > 1 ? "come" : "comes") + " up with you"}, and that is the long-time close.`   // she is already here (Sam, round 90)
-          : (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= SOI6_CLOSE) ? `It's ${_clockStr()}. Sleep now and the night ends here — the soi has already shut; it is only the night that's left.`   // nothing was open to stay open (Declan, round 83)
+          : (ROOMS[G.room] && ROOMS[G.room].region === "Soi 6" && G.nightTurn >= _soiShut()) ? `It's ${_clockStr()}. Sleep now and the night ends here — the soi has already shut; it is only the night that's left.`   // nothing was open to stay open (Declan, round 83)
           : `It's ${_clockStr()}. Sleep now and the night ends here; whatever is still open on the soi stays open without you.`;
         if (!_endConfirm("sleep", _warn + " (SLEEP again if you mean it, or head back out.)")) return;
         // one flight below your own bed (the pub under the Queen Vic, a lobby):

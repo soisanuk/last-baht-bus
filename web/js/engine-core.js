@@ -460,6 +460,7 @@ function newGame() {
       mamaTreat: {},     //   roomId → true (the mamasan drank on you here)
       bellAt: {},        //   roomId → turn of the last bell ring (the glow)
       bells: {},         //   roomId → rings tonight; while the glow holds, 2 softens the rules, 3 = the room is yours
+      orchidBottle: null,   //   the bottle on your table in the Orchid Room tonight (an ORCHID_BOTTLES id) — a table is the bottle
       heat: {},          //   roomId → how close you are to meeting security
       banned: {},        //   roomId → turn you were thrown out
       roundFor: {},      //   npcId → you stood them one, so the next story comes in full
@@ -742,7 +743,7 @@ const STATE_SCHEMA = {
     "huhHint apologized backDoorTonight banned barTurns bellAt bells bfBar bfNight bfRefused bondCapSaid bondNight bought " +
     "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
     "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
-    "leftLockIn lockIn mgrChat mgrShot patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
+    "leftLockIn lockIn mgrChat mgrShot orchidBottle patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
     "steered streamJoy streamLast streamMine streamSeenBy tanWas tipBond tries ").trim().split(/\s+/),
   socTrip: (
     "arriveBook arriveMoney askedHere awaySaid beats bondHeard bondSaid byeSaid chamDrinks clinicCompany coconutDone " +

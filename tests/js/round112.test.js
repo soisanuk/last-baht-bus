@@ -85,7 +85,7 @@ test("Graham: Candy on a sale to Bert is the fifty-one, not hearsay", () => {
 const orchid = () => { sandbox(); _align("plg", 2); G.room = "orchid_room"; G.nightTurn = 50; };
 test("Luc: every mouth in the Orchid quotes the guest's list, not the floor's", () => {
   orchid(); talk("sudjai"); G.room = "orchid_room";
-  const r = t("ask sudjai about prices"); assert.match(r, /For guest, that is all/); assert.doesNotMatch(r, /lady drink|short time|the bell/);
+  const r = t("ask sudjai about prices"); assert.match(r, /For a guest without one/); assert.doesNotMatch(r, /lady drink|short time|the bell/);
 });
 test("Luc: 'it is looked after' pours a drink that costs nothing", () => {
   orchid(); talk("powers"); G.room = "orchid_room"; const m = G.money;
@@ -161,4 +161,40 @@ test("Owain: a street's landmark is said as a landmark", () => {
 test("Owain: Nont's name is not everybody's 'name' topic", () => {
   sandbox(); talk("pukky"); assert.doesNotMatch(t("ask pukky about nont"), /nickname/);
   talk("nont"); assert.match(t("ask nont about nont"), /Alex or Nont/);
+});
+
+// ── Mario's rulings on the round's design rows (2026-11-01) ──
+test("Mario: the Orchid keeps a members' list — a table is the bottle", () => {
+  orchid(); G.money = 20000;
+  const list = t("buy bottle");
+  assert.match(list, /Johnnie Walker Black ฿6,000/); assert.match(list, /BUY BLUE LABEL/);
+  assert.match(t("buy black label"), /now you have a table/); assert.equal(G.money, 14000); assert.equal(G.soc.orchidBottle, "black label");
+  assert.match(t("buy chivas"), /already/);
+  assert.doesNotMatch(t("flirt with sudjai"), /category error|sufferance/);   // the freeze lifts for the social verbs
+  assert.match(t("barfine sudjai"), /still the room's/);                     // never the night
+  const m = G.money; assert.match(t("buy drink for sudjai"), /Already drinking yours/); assert.equal(G.money, m);
+  assert.match(t("ask sudjai about prices"), /by the bottle/);
+  assert.ok(_completePool("buy", ["buy"]).includes("black label"));            // the third surface
+  assert.ok(STATE_SCHEMA.socNight.includes("orchidBottle"));
+  orchid(); G.money = 100; assert.match(t("buy blue label"), /you have ฿100/); assert.equal(G.money, 100);
+});
+test("Mario: the Orchid runs to four, and OUT after two is the dark Lotus", () => {
+  assert.equal(_closeTurn("orchid_room"), ORCHID_CLOSE); assert.equal(_closeClock("orchid_room"), "four");
+  assert.equal(_soiShut("orchid_room"), 100); assert.equal(_soiShut("queen_vic"), SOI6_CLOSE); assert.equal(_soiShut("soi6_street"), SOI6_CLOSE);
+  orchid(); G.nightTurn = 85; assert.equal(_closedNow("orchid_room"), false); assert.equal(_closedNow("pink_lotus"), true);
+  assert.match(t("out"), /doorman walks you through/); assert.equal(G.room, "soi6_street");
+  G.nightTurn = 101; assert.equal(_closedNow("orchid_room"), true);
+});
+test("Owain: the wake names the water when the pocket is empty", () => {
+  sandbox(); G.money = 0; G.thirst = 70; G.bank = 5000; G.phone.contacts.nont = 1; G.room = _hotelRoomId();
+  out = []; _endNight("sleep"); assert.match(said(), /TAKE WATER/); assert.match(said(), /CASH <amount>/);
+  sandbox(); G.money = 500; G.thirst = 70; G.room = _hotelRoomId();
+  out = []; _endNight("sleep"); assert.doesNotMatch(said(), /Dry-mouthed/);
+});
+test("Kieran: Priew says why lunch never comes, in person and by text", () => {
+  const node = NPCS.priew.dialogue.find(d => d.topic && /lunch/.test(d.topic));
+  assert.ok(node); assert.match(node.text, /one day I don't work/);
+  sandbox(); G.phone.contacts.priew = 1; const seen = [];
+  for (let i = 0; i < 12; i++) seen.push(t("message priew"));
+  assert.ok(seen.some(s => /finish 5, sleep until 2/.test(s)));
 });
