@@ -223,7 +223,7 @@ test("signing in the wet: a rent-free month and a steep cash discount, and PAY K
 
 test("signing at peak: no discount, and LATER means the full figure rides on the first rent (Mario)", () => {
   buyer(); G.season0 = 11; G.day = 9;   // December
-  _barDeposit(); const l = G.bar.lease; assert.equal(l.off, 0); assert.equal(l.cash, l.key); assert.match(text(), /queue for the room/);
+  _barDeposit(); const l = G.bar.lease; assert.equal(l.off, 0); assert.equal(l.cash, l.key); assert.match(text(), /line for the room/);
   assert.ok(!G.bar.rentFree);
   G.bar.cash = 100000; G.bar.lastMonthDay = G.day - 30; const m = _barMonthly();
   assert.equal(m.keyBilled, l.key); assert.equal(l.how, "billed"); assert.equal(m.rentPaid, _barRent() + l.key);

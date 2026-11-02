@@ -443,7 +443,7 @@ function _salengBuy(input) {
         "moo ping": `${name} takes the skewers with both hands and wais before she's even ` +
           `bitten in. "Aroy mak! So sweet!" She eats standing up and immediately tries to feed you one.`,
         "noodles": `${name} cradles the bowl like it solved something. ` +
-          `"Same same my mum cook." She means it. That lands.`,
+          `"Same same my mama cook." She means it. That lands.`,
         "sandals": `${name} sits on the nearest stool and swaps shoes without ceremony — ` +
           `old pair straight into her bag, new ones on. She walks a circle. The bar votes: better.`,
         "heels": `${name} holds the heels against her outfit, against the neon, against ` +
@@ -1988,7 +1988,7 @@ function _taxiAsk(input) {
   // flat refusal — a scene, and the soi remembers
   _say("“For a TAXI?” Wrong word. The mask comes off completely — a hiss of fast Thai, a bag swung onto " +
     "the shoulder like a weapon, a door that doesn't so much slam as detonate, and the whole floor of the " +
-    "guesthouse learning about the farang who won't pay. You keep your ฿2,000 and lose a great deal more " +
+    "guesthouse learning about the farang who won't pay. You keep your ฿" + _num(CLUB_TAXI) + " and lose a great deal more " +
     "than that.", "alert");
   _addHappy(-2);
 }

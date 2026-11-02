@@ -283,6 +283,14 @@ const _SHUT_EARLY = [
   "Shut for the night. The escalators are stopped mid-stride behind the glass and the air coming off the doors is no longer cold.",
 ]
 ;
+// Soi 6 after two, from the street: a man who keeps a room at the Vic walks past this nightly, so it is dealt
+const _SOI6_SHUT = [
+  "Soi 6's shutters are down, the frontages black, the sound systems finally and mercifully off. The bars on the soi shut at two.",
+  "Soi 6 is a corridor of steel shutters and dead neon tubes, a cat on every third step. The bars on the soi shut at two.",
+  "Nothing on Soi 6 but shutters, a sweeper, and the smell of a hundred bars' worth of ice melting into the gutter. They shut at two.",
+  "The soi is dark end to end, a stool chained to a post here and there, one bulb left on over a door for the girls who live upstairs. Two o'clock was the law and the law held.",
+  "Soi 6 with the sound off: shutters, a motorbike ticking as it cools, somebody's radio behind a wall. The bars shut at two.",
+];
 function _closedMsg(to) {
   const r = ROOMS[to];
   if (r && r.closesAt != null && !r.barType)
@@ -318,11 +326,9 @@ function _closedMsg(to) {
   const _open = typeof _stillOpen === "function" ? _stillOpen(1) : [];
   const _still = _open.length ? ` ${_barName(_open[0].id)} is still pouring, ${_open[0].n <= 3 ? "just along" : "a walk away"}.` : "";
   if (G.mode === "soi6")
-    return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-      "and mercifully off. The bars on the soi shut at two." + (_still || " What's left of the night " +
+    return _pickVary(_SOI6_SHUT, "soi6shut") + (_still || " What's left of the night " +
       "is your bed upstairs at the Vic.");
-  return "Soi 6's shutters are down, the frontages black, the sound systems finally " +
-    "and mercifully off. The bars on the soi shut at two." + (_still || " It's Walking Street or nowhere now.");
+  return _pickVary(_SOI6_SHUT, "soi6shut") + (_still || " It's Walking Street or nowhere now.");
 }
 // 30-minute last call (nightTurn 55 ≈ 23:30), once per bar per night — a courtesy,
 // and a nudge to BARFINE before the door shuts.
@@ -539,7 +545,7 @@ function _piwinAbout(who) {
   if (/\b(work|job|fares?|the stand|stand|vest|jacket|number|queue|rain|police|helmet|pay|money|tip|night|hours|boss|licen[cs]e|crash|accident|drunk|hotels?|room|sleep|bed|food|eat|eating|hungry|noodles?|som tam|rice|dinner|wallet|pickpocket)\b/.test(w)) {
     const say =
       /\b(work|job|hours|night|boss)\b/.test(w) ? "\"Work? This.\" He pats the seat. \"Six in the evening to whenever. No boss — the vest is the boss. Queue is the boss.\" He nods down the line of bikes. \"He go first, then him, then me. Cheating the queue is how you lose the vest.\"" :
-      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. After the sparse hour, more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + _num(MOTOSAI_TOWN), f: "฿" + _num(MOTOSAI_FAR) }) +
+      /\b(fares?|pay|money|tip)\b/.test(w) ? _fmt("\"Fare is fare, boss. In town {t}. The Darkside {f}. Late, late — more.\" He does not apologise for any of it. \"Tip? Up to you. Most farang: no. Some farang: yes. Thai: never, and I still take them.\"", { t: "฿" + _num(MOTOSAI_TOWN), f: "฿" + _num(MOTOSAI_FAR) }) +
         // the mates' rate is the fare he actually charges you (Wiremu, round 59)
         (_flag("helmetDelivered") ? " A grin. \"For you, twenty. Every stand know the helmet man.\"" : "") :
       /\b(vest|jacket|number|queue|licen[cs]e)\b/.test(w) ? "\"The vest is the stand.\" He plucks the orange nylon. \"Number is my number. No vest, no stand — you ride from the side of the road, police take the bike. Vest cost more than the bike, some year.\"" :
@@ -737,7 +743,7 @@ const _MGR_SHOT = [
     "After that we're strangers again.” He's grinning when he says it.",
   "The shot lands before the greeting does. “Chok dee,” says {n}, already turning back to " +
     "the till. “That one's mine. The rest are yours.”",
-  "{n} nods at the stool, then at the shot he has just put on it. “Sit. Drink that. Then " +
+  "{n} nods at the stool, then at the shot he has just put in front of it. “Sit. Drink that. Then " +
     "tell me what you actually want.”",
 ];
 function _managerWelcome() {
@@ -985,7 +991,7 @@ const _SMALL_TALK = {
     "\"Year of the Snake. Clever, the fortune teller say. Also dangerous. I like.\"",
     "\"Star sign? I don't know farang star. Thai way, I am Thursday — orange. Monk colour.\"",
     "\"Scorpio. My friend say, no wonder. I don't know what she mean.\"",
-    "\"I see the fortune teller every New Year. He say this year, big money. Is October. Still waiting.\"",
+    "\"I see the fortune teller every New Year. He say this year, big money. Year nearly finish. Still waiting.\"",
     "\"Monday born, yellow. The King's colour. Very lucky, my mother say.\"",
     "\"Year of the Rabbit. Soft, everybody think. Then the rabbit bite.\"",
     "\"I don't believe the stars. I believe the lottery. Is the same, but with money.\"",
@@ -1195,7 +1201,7 @@ const _SMALL_TALK = {
       "\"You are okay. Okay is good start, na.\"",
       "\"I like everybody who buy me drink.\" She laughs. \"You — maybe a little more.\"",
       "\"Little bit. You talk, not only look. I like that.\"",
-      "\"Ask me at closing time. Now is too early to know.\"",
+      "\"Ask me at closing time. Now I don't know yet.\"",
       "\"You are funny. Funny is half of like.\"",
       "\"Yes. Don't get big head. I like the dog outside also.\"",
       "\"I sit with you, no? That is the answer in Thai.\"",
@@ -1261,7 +1267,7 @@ const _SMALL_TALK = {
     "\"Tired from the stairs. Twelve times tonight already — the toilet is upstairs, hahaha.\"",
     "\"Good now. Before you come, boring. Now not boring.\"",
     "\"Little bit sad today. My dog at home is sick. Is okay, my mother take him to the doctor.\"",
-    "\"I'm fine. Is Friday feeling, even when is Tuesday.\"",
+    "\"I'm fine. Is Friday feeling. Every day can be Friday feeling, if you decide.\"",
   ],
   age: [
     "\"Lady never say!\" She hides behind her glass. \"Guess. No — don't guess.\"",
@@ -1336,7 +1342,7 @@ const _SMALL_TALK = {
     "\"England? Very cold, very rain, the food have no chilli. Why you leave? Oh — you leave for here, I understand.\"",
     "\"Maybe for holiday. To live, no. My heart stay in Thailand.\"",
     "\"I want to see snow one time. Only one time. Then home.\"",
-    "\"Is a big question for a Tuesday. Ask me on Saturday.\"",
+    "\"Is a big question for a work night. Ask me on my day off.\"",
     "\"Come with you? Visa, ticket, my mother, the bar — is four problem. You solve one, I think about the other three.\"",
   ],
   finish: [
@@ -1729,10 +1735,10 @@ const _LOCKIN_ROUND = [
 ];
 const _LOCKIN_WALKOUT = [
   n => `${n} comes round the bar, takes your elbow with real warmth, and walks you to the door ` +
-    `the way she walked the others at midnight. "Goodnight, tilac. Tomorrow, na." The bolt ` +
+    `the way she walked the others at midnight. "Goodnight. Tomorrow, na." The bolt ` +
     `slides, the night air comes in for exactly as long as you take, and goes back across ` +
     `behind you. The party runs while the money does. It has run out of yours.`,
-  n => `"Tilac." ${n}, at your shoulder, not unkind. "Is late for you." It is not late for ` +
+  n => `${n}, at your shoulder, not unkind: "Is late for you." It is not late for ` +
     `anybody else in the room, and both of you know that is the point. She sees you out ` +
     `herself; the bolt goes back with the same flat sound; behind it, the music does not ` +
     `even pause.`,
@@ -2434,7 +2440,7 @@ function _tableHint() {
   const tables = Object.keys(ROOMS).filter(id => ROOMS[id].pool && id !== here && !(G.mode === "soi6" && typeof SOI6_ROOMS !== "undefined" && !SOI6_ROOMS.has(id)));   // the fenced week's tables are inside the fence (Marcus, round 96)
   // the fenced week is one street whose doors are all on it, so every table on it is a table you can be told about
   const known = G.mode === "soi6" ? tables : tables.filter(id => (G.visited && G.visited[id]) || (G.heardOf && G.heardOf[id]) || (!_venueUnfound(id)));   // a door on a street you walked is found (Marcus, round 96: TIME promised killer pool and nobody named a table)
-  const league = _leagueTonight() ? " Tonight is league night: killer pool, ฿100 in the ashtray, at the tables all evening." : "";
+  const league = _leagueTonight() ? " Tonight is league night: killer pool, ฿" + _num(KP_ENTRY) + " in the ashtray, at the tables all evening." : "";
   if (!known.length) return "You would have to ask around for a table — half the beer bars have one, and this is not one of them." + league;
   const near = known.filter(id => ROOMS[id].region === _room().region);
   const pick = (near.length ? near : known).slice(0, 3);
@@ -2649,7 +2655,7 @@ function _poolInput(input) {
         `Clean. The ball drops with a click. (${g.you} left.) Still your shot.`);
       return;
     case "pot2":
-      _say(g.you === 0 ? "Two thunder down off one brutal hit — that's your seven. On the BLACK." :
+      _say(g.you === 0 ? "Two balls thunder down off one brutal hit — that's your seven. On the BLACK." :
         `Two balls thunder down off one hit. The bar notices. (${g.you} left.) Still your shot.`);
       return;
     case "safety":
@@ -3182,7 +3188,7 @@ function _doApologize() {
       s.heat[r] = Math.max(0, (s.heat[r] || 0) - 1);
       _say("You wai the regular and say it straight — out of line, my fault, " +
         "sorry. He studies you for a second, then waves it off with his bottle. " +
-        "“Forget it, mate. Heat of the moment.” Form restored.");
+        "“Forget it. Heat of the moment.” Form restored.");
       return;
     }
     if ((s.heat[r] || 0) > 0) {
@@ -3368,7 +3374,7 @@ const _SOCIAL_TEXT = {
 //   otherwise          → awkward, brushed off good-naturedly
 const _FLIRT_WRONGTEAM = [
   n => _fmt("{n} laughs, not unkindly. \"Aww, tilac — not my type. I like the ladies, same-same you.\" A pat on the cheek, and she's moved on.", { n }),
-  n => _fmt("\"Handsome, but—\" {n} tips her head at a girl across the bar and grins. \"—wrong team, na. I bat the other way.\" No offence in it, plenty of amusement.", { n }),
+  n => _fmt("\"Handsome, but—\" {n} tips her head at a girl across the bar and grins. \"—wrong team, na. I like ladies, same as you.\" No offence in it, plenty of amusement.", { n }),
 ];
 const _FLIRT_AWKWARD = [
   n => _fmt("{n} blinks, then snorts. \"Ha — no. Not that way, mate. Buy me a beer if you like, but keep the eyelashes to yourself.\" More baffled than bothered.", { n }),
@@ -3970,7 +3976,7 @@ function _doThrowCover(targetWord) {
     _addHappy(1);
   } else if (roll < 0.85) {
     _say("…then parachutes down onto the bald spot of the regular at the end of the " +
-      "bar. He does not find it as funny as you do. (Bad form — a beer for him might " +
+      "row. He does not find it as funny as you do. (Bad form — a beer for him might " +
       "cool it off.)", "alert");
     G.soc.patronMiffed[G.room] = true;
     _addHeat(1);
@@ -4588,19 +4594,19 @@ const _BOND_SPENT = [
 // Tinglish and just glad the boss is in.
 const _OWNER_GREET = {
   mamasan: [
-    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet start, but the crowd not come yet. You want I put more ice on, or we see how it go?"`,
+    n => `"Boss." ${n} gives you the nod she keeps for you and nobody else. "Quiet, boss — the crowd come when they come. You want I put more ice on, or we see how it go?"`,
     n => `${n} is at your elbow before you've got your jacket off, low and quick: "One girl, her papers — the office want new photo, I fix, don't worry. Everything else clean. Good you come in tonight, boss."`,
     n => `"Ah, the owner arrives." ${n} says it dry, fond. "Sit, sit — is your bar, but you still sit. I run the floor, you watch the door. Twenty year, I know my half. You learning yours."`,
   ],
   cashier: [
     n => `${n} glances up from the drawer. "Evening, boss. Till start clean. I show you the book at close." Back to the count. With you, she is all business, which is the compliment.`,
-    n => `"You come." ${n} turns the book a quarter so you can see the running figure without asking. "Slow hour now. Later, pick up. Always pick up." She does not look worried, so you decide not to be.`,
+    n => `"You come." ${n} turns the book a quarter so you can see the running figure without asking. "Slow now. It pick up, or it don't — the book is the book." She does not look worried, so you decide not to be.`,
     n => `${n} slides last night's docket across without being asked and taps one line — a comp she wants you to initial. Everything above board, everything witnessed. She runs your money like it's her reputation, because it is.`,
     n => `"Boss." ${n} doesn't look up from the count, but two fingers rise from the notes in greeting — the exact amount of ceremony a till in progress can spare, and from her, warmth.`,
   ],
   hostess: [
     n => `"Boss! You here!" ${n} lights up — not the customer smile, the real one. "I like when you work. More fun. You want I bring you water? Boss cannot be drunk one, haha."`,
-    n => `${n} bumps your arm on her way past with a tray. "Busy soon, na. You stay behind bar tonight? Good. When you here, the mama not shout so much." A wink, and she's gone to her section.`,
+    n => `${n} bumps your arm on her way past with a tray. "Busy or quiet, na — you stay behind bar tonight? Good. When you here, the mama not shout so much." A wink, and she's gone to her section.`,
     n => `"Boss, boss —" ${n} reports the night's gossip in one breath: which regular is in a mood, which girl has new shoes, what the bar next door is charging now. Staff intelligence, delivered like a weather bulletin.`,
     n => `${n} points you at the ice bin with her chin as she passes — running low, her way of saying the boss may as well be useful. You fetch the ice. The floor approves of an owner who fetches the ice.`,
   ],
@@ -4614,7 +4620,7 @@ const _OWNER_PITCH = {
     n => `${n} raises an eyebrow at the drawer. "Barfine? Boss, the fine come to this till — your till. You want to move money from your pocket to your own bar?" A small, dry smile. "Just go talk to her."`,
   ],
   hostess: [
-    n => `${n} giggles. "You want girl? Boss, you the boss! I cannot charge you, mama kill me." She leans in, conspiratorial. "You like someone here, you just be nice. Free for you. Owner privilege, na."`,
+    n => `${n} giggles. "You want girl? Boss, you the boss! I cannot charge you, mama kill me." She leans in, conspiratorial. "You like someone here, you be nice — and you pay her like anybody. Owner is not free, na. Owner is only the long way round."`,
   ],
 };
 function _ownBarStaff(id) {
@@ -4727,7 +4733,7 @@ function _affairTalk(id, tt) {
   if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut != null && G.day - a.lastOut === 2 && !a.soured) return pick("outlast2", [
     `"The other night?" ${n} keeps her voice down. "Is still in my head, boss. Not in here. In here I count the float."`]);
   if (/\b(last night|yesterday|the night out|out|our night|the beach|the club)\b/.test(tt) && a.lastOut === G.day - 1 && !a.soured) return pick("outlast", [
-    `"Last night?" ${n} smiles at the bar top, not at you. "Last night I was not staff. Tonight I am staff. Both are true, boss." A beat. "Ask me again tomorrow, maybe I tell you more."`,
+    `"Last night?" ${n} smiles at ${_ledge()}, not at you. "Last night I was not staff. Tonight I am staff. Both are true, boss." A beat. "Ask me again tomorrow, maybe I tell you more."`,
     `${n} laughs. "You dance very bad. I tell everybody you dance good." She lowers her voice. "The floor know, na. Mama know. Was worth it."`,
   ]);
   if (/\b(mamasan|mama lamai|lamai)\b/.test(tt) && seen.includes("mamasan")) return pick("mama", [
@@ -4779,7 +4785,7 @@ const _SOLD_RABBIT_COLD = [
   n => `${n} sees you and the smile stays exactly where it was, which is how you know it went. "You sell to Pattaya Leisure, na. Everybody know." She goes back to the ice.`,
   n => `"Pattaya Leisure buy your bar?" ${n} does not wait for the answer. "They buy ours too, before. Then one night, three of us, finish." She does not sit down.`,
   n => `${n} wais you, correctly and no more. "Khun Eddy say you sell to the group." A shrug that is not small. "Okay. Your money."`,
-  n => `"Hello, customer." ${n} puts a little weight on the last word, then lets it go. "Soi 6 is all the group now. You help. Never mind."`,
+  n => `"Hello, customer." ${n} puts a little weight on the last word, then lets it go. "The inner west is all the group now. You help. Never mind."`,
 ];
 // THE SALE, asked of anyone: the town knows who bought it and how it stood, in the asker's register
 // (Bert, Tan and Gavin have their own nodes about it; the floor, the rail and the columnist answer here)
@@ -4992,7 +4998,7 @@ const _OTHER_LEDGER = {
       `explaining a system she lives inside, to a man who has only ever ` +
       `seen it from the customer's side. "Is okay. Still better if you buy. Just — is not what you think it is, na."`,
     (n) => (_isGogo() ? `${n} makes you look at her drink when the waitress sets it down, because she tells you to. Ice to the top, ` +
-      `a short pour, tonic over it until the colour went.` : `${n} makes you watch ${!_hasBarman() ? "the cashier" : "the barman"} build her drink, because she tells you to. Ice to the top, ` +   // no barman at the Sweet Tamarind (Bernard, round 88)
+      `a short pour, tonic over it until the colour goes.` : `${n} makes you watch ${!_hasBarman() ? "the cashier" : "the barman"} build her drink, because she tells you to. Ice to the top, ` +   // no barman at the Sweet Tamarind (Bernard, round 88)
       `a short pour, tonic over it until the colour goes.`) + ` "Lady drink," she says, and turns the glass ` +
       `so the ice knocks. "Weak one. Must be." She has eight of these in her if the night goes well, ` +
       `and a girl who cannot take eight is a girl who goes home early. It costs ฿${_num(_ladyPrice())}, ` +
@@ -5496,7 +5502,7 @@ const _CRASH_SPOTS = {
     "Soi 6. Shutters down, sun up, dignity pending.",
   ] },
   darkside: { room: "sukhumvit_crossing", prose: [
-    "You wake at the Sukhumvit crossing, the six-lane highway roaring six inches " +
+    "You wake at the Sukhumvit crossing, the eight-lane highway roaring six inches " +
       "from your dreams, the Darkside behind you and the whole long ride back to " +
       "town in front. However you got out here, the night isn't telling.",
     "The Darkside kept you. You surface on the shoulder of Sukhumvit with truck " +
@@ -5518,7 +5524,7 @@ const _REGION_CRASH = {
 };
 const _OWN_BAR_RESCUE = [
   "You go down behind your own rail, and the last thing you hear is Bert saying \"right\" in the voice he uses for a keg. You wake in your own bed with your shoes off and lined up, your wallet on the nightstand with a Stinky Pinky beer mat on top of it, and a note in a hand you don't recognise: EAT SOMETHING. The floor got you home. The floor always gets the guv'nor home.",
-  "The room tilts and the floor comes up, and then it's the mamasan's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — you own the people who'd have turned them out. There is a bottle of water on the nightstand that wasn't there.",
+  "The room tilts and the floor comes up, and then it's the mamasan's voice, very calm, and a taxi that smells of jasmine, and your own bed. Your pockets are exactly as you left them — the people who'd have turned them out work for you. There is a bottle of water on the nightstand that wasn't there.",
   "You don't remember the taxi. Bert paid it, out of the till, and wrote it on the docket under the date like any other line — which is the only lecture you'll get. Your wallet is where a wallet should be. The girls know before you do that the guv'nor went down last night, and none of them will mention it, which is worse.",
 ];
 function _crashSpotFor(roomId) {
@@ -5846,7 +5852,7 @@ const _DEBRIEF = {
     what: G.thirst >= G.hunger ? "Thirst put you down." : "Hunger put you down.",
     why: "Hunger and thirst climb every turn and end the night at 100. " +
       "You hit " + Math.max(G.hunger, G.thirst) + ".",
-    next: "Water is ฿10 at any 7-Eleven and drops thirst by 45 — the cheapest " +
+    next: "Water is ฿" + _num(SEVEN_WATER) + " at any 7-Eleven and drops thirst by 45 — the cheapest " +
       "insurance in the game. DIAGNOSE shows both meters any time.",
   }),
   blackout: () => ({
@@ -5893,7 +5899,7 @@ const _DEBRIEF = {
       "it anyway. Nothing you could have said would have stopped that one; correctness " +
       "on your side was never the whole of it.",
     next: "That is what the mamasan is FOR. COMPLAIN at her bar: a house that takes " +
-      "the fine owns the problem, and bad girls are bad business.",
+      "the fine owns the problem — that is what the fine is for.",
   }),
   // Dawn in your OWN ROOM is not a bad night — same reason code, opposite
   // outcome (see the `wouldRough` test below: being home exempts you). Saying
@@ -6337,7 +6343,7 @@ function _endNight(reason) {
       ? "The three of you fall through your door somewhere past the point of counting, still laughing at a thing none of you can remember. {who} claim the shower in shifts and the bed by consensus, and the night finishes the way the best ones do — off the clock, off the books, unhurried."
       : (_isHotelRoom(G.room)
         ? _pickVary([_inCondo() ? "{who} kicks off her shoes by the door, finds the balcony before she finds the bed, and stands there a minute with the bay doing nothing. The last of the night is nobody's business and unhurried about being so." : "{who} kicks off her shoes by the door as if she has always kicked them off there. The last of the night is nobody's business and unhurried about being so.",
-            _inCondo() ? "{who} took the lift up like a woman who has decided she likes lifts, and your door like a woman who has decided she likes you. The rest is the night's." : "{who} takes the stairs ahead of you, two at a time, and your door like a woman who has decided she likes you. The rest is the night's.",
+            _inCondo() ? "{who} takes the lift up like a woman who has decided she likes lifts, and your door like a woman who has decided she likes you. The rest is the night's." : "{who} takes the stairs ahead of you, two at a time, and your door like a woman who has decided she likes you. The rest is the night's.",
             "{who} says nothing at the door, which is the loudest thing she has said all night, and the night does the rest."], "partyclosehome")
         : G.nightTurn < 50 ? "You bring {who} home early, while the soi is still filling up behind you. Nobody in it minds."
         : "You bring {who} home the long way, through a town that has watched the two of you all evening and approves. The door closes on the last of the night, and what's left of it is nobody's business and unhurried about being so."),
@@ -6514,7 +6520,7 @@ function _endNight(reason) {
       _joinerFee();   // the clerk cannot tell a pharmacist from a bar girl
       break;
     case "bkkdinner":
-      _say("The van brings you back at one in the morning through a town that has been " +
+      _say("The van brings you back in the small hours through a town that has been " +
         "loud without you. Boy says goodnight in English. You reach for your wallet out of habit, and he is " +
         "already shaking his head, with the exact expression his employer used on the bill.", "dim");
       break;
@@ -6576,7 +6582,7 @@ function _endNight(reason) {
     case "bfscam2": // bfhop/bfparty told their own story; just point at recourse
       if (G.bfIncident) {
         _say(`(COMPLAIN at ${_barName(G.bfIncident.room)} — the mamasan will ` +
-          "want to know. Bad girls are bad business.)", "dim");
+          "want to know. The fine owns the problem — that is what the fine is for.)", "dim");
       }
       break;
     case "sleep":
@@ -6851,7 +6857,7 @@ function _endNight(reason) {
   G.rain = 0;   // a downpour does not follow you through sleep — one pinned a man in his room at 18:00 (Gordon, round 37)
   if (G.nontStuck) {   // the account's moment passes overnight: the money lands in your ACCOUNT, not your hand (Piotr, round 40: cash teleporting into a sleeping man's pocket)
     G.bank = (G.bank || 0) + G.nontStuck;
-    _say(`(A text from Nont at some hour you slept through: “sorted.” ฿${_num(G.nontStuck)} of your own money, back in your account a day late — ฿${_num(G.bank)} there now. Draw it or don't.)`, "dim");
+    _say(`(A text from Nont at some hour you slept through: “done.” ฿${_num(G.nontStuck)} of your own money, back in your account a day late — ฿${_num(G.bank)} there now. Draw it or don't.)`, "dim");
     G.nontStuck = 0;
   }
   _say("");
@@ -6923,7 +6929,7 @@ function _endNight(reason) {
     // saleng is already canon (_DOG_MOTOSAI).
     _say(_dogN("You should have woken rough — face-down where the night dropped you. Instead you're " +
       "in your own bed, shoes off, wallet on the side. Sai Krok nudged you awake, herded you to the " +
-      "piwin stand like a sheep that owed him money — the buses long gone, the way they always are by " +
+      "piwin stand like a sheep that owed him money — the buses gone sparse, the way they always are by " +
       "then — and rode the whole way home in the saleng behind you, upright and vigilant. Lassie " +
       "brought you back."), "win");
   }
@@ -7158,7 +7164,7 @@ function _endVacation() {
     for (const l of _shareCard()) _say(l, "win");
     _lastGoodbye();   // the Soi 6 week ends with a woman in it too (Sam, round 90: "his girl never hears he is leaving")
     _say("So — again?", "room");
-    _say("(CONTINUE — the same people: another week, or never going home · PLAY AGAIN — one more week on Soi 6, fresh ฿100,000, fresh liver · " +
+    _say("(CONTINUE — the same people: another week, or never going home · PLAY AGAIN — one more week on Soi 6, fresh ฿" + _num(SOI6_BANK) + ", fresh liver · " +
       "SHARE copies your week card.)", "dim");   // the stay was a chip and nowhere in the text (Margit, round 101)
     return;
   }
@@ -7169,7 +7175,7 @@ function _endVacation() {
     // never boarded, and was still being garnished nightly — told to his face
     // that he "flew home with her money" (debt playtest 2026-08-24). _newVacation
     // sets it, because that is the branch on which he actually leaves.
-    _say(`(You owe Nira ฿${_num(G.loan.owed)}. The airport is the one place her cousins don't come, and she ` +
+    _say(`(You owe Nira ฿${_num(G.loan.owed)}. The airport settles nothing, and she ` +
       "knows it, and she will remember the face. Pattaya keeps its books.)", "alert");
   }
   _lastGoodbye();

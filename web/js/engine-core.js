@@ -1058,7 +1058,7 @@ const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
 // there), the wall benches with small tables, and a VIP area or gallery; drinks come from the
 // waitresses. The women dance, sit with customers, work the door, or are on a break. So in a go-go a
 // pooled line that puts anybody on a stool, at the rail or along a bar is skipped.
-const _FIT_GOGO = /\b(the fan|near the fan|to the fan|bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|whole rail|down the whole bar|length of the (?:rail|bar)|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
+const _FIT_GOGO = /\b(the counter|the fan|near the fan|to the fan|bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end|edge|length) of the bar|whole rail|down the whole bar|length of the (?:rail|bar)|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
 function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barType === "gogo"); }
 // the room's furniture in one word, for a line that must print in a bar AND a go-go: a beer bar keeps
 // its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)
@@ -1597,7 +1597,7 @@ const _TOO_FULL = [
   "Not a chance. You couldn't manage another mouthful and it would be rude to waste it.",
   "You are, it turns out, entirely full. The thought of another plate is faintly upsetting.",
   "Your body files an objection. There is nowhere to put it.",
-  "You've eaten. Another plate now would be a purchase, not a meal. Save it for when it's hunger.",
+  "You've eaten. Another plate now would be a purchase, not a meal. Save it for when it's hunger, not habit.",
 ];
 function _tooFull() { return G.hunger < FULL_AT; }
 // Returns true if it printed a refusal — every food path checks it before taking
@@ -2762,7 +2762,7 @@ const _ASK_AGAIN = [
   n => `“Tai laew, I tell you this already,” ${n} says, half a laugh. “Same answer, na. Farang memory.”`,
   n => `${n} waves you off, fond. “You forget so fast? Buy a drink — maybe it come back.”`,
   n => `“Same-same,” ${n} says. “I tell you this one already. We talk something new, or you talk to the wall.”`,
-  n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, tilac.”`,
+  n => `${n} gives you the look reserved for farang who repeat themselves. “Told you already, na.”`,
 ];
 // The English-register twin: a farang regular (Lake Gary, Bert, Eddy, the
 // origin archetypes) saying "you asked me that" in Tinglish read as a bug in
@@ -2917,8 +2917,8 @@ function _quizTalk(npc) {
     if (_quizDay())
       return `“Quiz? Tonight — eight till ten. ${bars.join(", ")}. Five questions, prize on the board, teachers from Rayong marking it. No appeal.”`;
     return G.mode === "soi6"
-      ? "“Thursdays, eight o'clock, here at the Vic. Prize money, teachers from Rayong, no appeal. It's on the TIME.”"
-      : "“Thursdays, eight o'clock, prize money. Which bars — you ask on the day, or check the TIME.”";
+      ? "“Thursdays, eight o'clock, here at the Vic. Prize money, teachers from Rayong, no appeal.” (TIME lists it.)"
+      : "“Thursdays, eight o'clock, prize money. Which bars — you ask on the day.” (TIME lists it.)";
   }
   if (_quizDay()) {
     return `“Quiz? Tonight, na — eight till ten.” A thumb over the shoulder at the soi. “${bars.join(", ")}. Five questions, prize on the board. You clever? Go.”`;
@@ -2926,8 +2926,8 @@ function _quizTalk(npc) {
   // count- and mode-honest: the challenge runs it at one bar (the Vic), the
   // full game at three the day's hash picks (grapevine playtest F2, 2026-08-25)
   return G.mode === "soi6"
-    ? "“Quiz night is Thursday — eight o'clock, at the Queen Vic. The pub does it. Prize money, teachers from Rayong, no appeal. Check the TIME.”"
-    : "“Quiz night is Thursday — eight o'clock, prize money. Which bars, you ask on the day. Check the TIME, everybody know.”";
+    ? "“Quiz night is Thursday — eight o'clock, at the Queen Vic. The pub does it. Prize money, teachers from Rayong, no appeal.” (TIME lists it.)"
+    : "“Quiz night is Thursday — eight o'clock, prize money. Which bars, you ask on the day. Everybody know.” (TIME lists it.)";
 }
 function _dartsTalk() {
   if (_room().darts) return "“Darts? Board's on the wall. Chalk's on the string. PLAY DARTS, if you think you can.”";
@@ -3864,7 +3864,7 @@ function _districtPath(a, b) {
 // bought minutes before six took the money and ended the night without the hour)
 function _tooLateFor(turns, what) {
   if (G.nightTurn + turns < NIGHT_TURNS) return false;
-  _say(`(${what || "That"} takes longer than the night has left — it is nearly six. Nothing is charged.)`, "dim");
+  _say(`(${what || "That"} takes longer than the night has left — it is ${_clockStr(G.nightTurn)}, and the night ends at six. Nothing is charged.)`, "dim");
   return true;
 }
 function _passTime(n) {

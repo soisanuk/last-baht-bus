@@ -140,7 +140,7 @@ test("prose review: the 51% is not the bar, and peak season is two months (slice
     _setFlag("act1Done"); expat(); for (const f of ["barPremises", "barLicence", "barPartner", "partnerCandy"]) _setFlag(f);
     G.season0 = m0; G.day = 9; G.room = "stinky_bar"; G.money = 130000; G.bank = 0;
     assert.equal(_seasonTier(), "peak"); out = []; _barDeposit();
-    assert.match(text(), new RegExp(`it's ${name}, so he's a queue`));
+    assert.match(text(), new RegExp(`it's ${name}, so he's got a line`));
   }
 });
 
