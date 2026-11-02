@@ -4,6 +4,7 @@
 //   node tools/askable-audit.mjs            # full report
 //   node tools/askable-audit.mjs --json
 //   node tools/askable-audit.mjs --fact closing
+//   node tools/askable-audit.mjs --fact closing --mutate unanswer   # prove it goes red: closing answered with a shrug
 //
 // THE FOURTH SIBLING, and the first one that runs the other way round.
 // promises.test.js asserts a printed hint PARSES; afford-audit plays everything
@@ -54,6 +55,11 @@ const asJson = args.includes("--json");
 const fi = args.indexOf("--fact");
 const onlyFact = fi !== -1 ? args[fi + 1] : null;
 const SHOW = args.includes("--show");   // every question and its answer, for reading a batch by hand
+// --mutate unanswer: the closing-time answerer gives the speaker's own miss line instead; the audit must report the
+// shrugs, or its per-mouth oracle is not judging the answers
+const MUTATE = args.includes("--mutate") ? args[args.indexOf("--mutate") + 1] : null;
+if (MUTATE === "unanswer") globalThis._closingTalk = npc => _topicMiss(npc);
+else if (MUTATE) { console.error("unknown --mutate " + MUTATE + " (unanswer)"); process.exit(2); }
 
 // ── the table: a fact the engine computes → the words a player types ────────
 // `hour` is a nightTurn (10 per hour from 18:00); `day` is G.day, whose %7 the

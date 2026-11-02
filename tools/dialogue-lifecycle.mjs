@@ -41,13 +41,11 @@
 //     `_topicMiss` is "I have nothing on that"; `_topicLocked` is "I have that
 //     and cannot discuss it yet" — the sentence a CLOSED CHANNEL prints, and the
 //     one no nonsense word can ever provoke, because nonsense matches no node.
-// Verify the instrument can fail. `--mutate <npc>#<index>` drops a node before
-// the sweep, but since the engine's miss path started reading the seen-book
-// (2026-09-15) a dropped successor is no longer a defect — the gist answers in
-// its place — so the mutation to use is the ENGINE one: revert that check in
-// _doTalkBody's miss path and the 21 original findings come back (verified
-// 2026-09-16). That is the class this tool exists for.
-// re-creates the round-47 Wimon finding that earned the successor nodes.
+// Verify the instrument can fail. Dropping a node no longer proves it: since the
+// engine's miss path started reading the seen-book (2026-09-15) a dropped
+// successor is no longer a defect — the gist answers in its place — so the
+// mutation is the ENGINE one: `--mutate seenbook` reverts that check in the miss
+// path, and the closed channels come back. That is the class this tool exists for.
 //
 // WHAT IT CANNOT SEE. A node whose gate is a `when(st, G)` closure reading
 // something other than flags and quest state — a bond tier, an hour, a meter —
@@ -60,28 +58,31 @@ import vm from "node:vm";
 import fs from "node:fs";
 import { isParseMiss } from "./parse-miss.mjs";
 
-const JS = new URL("../web/js/", import.meta.url);
-for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters",
-  "engine-play", "engine-systems", "engine-parser"])
-  vm.runInThisContext(fs.readFileSync(new URL(f + ".js", JS), "utf8"), { filename: f });
-
-const out = [];
-engineInit(t => out.push(String(t)), null, () => {});
-
 const argv = process.argv.slice(2);
 const asJson = argv.includes("--json");
 const qi = argv.indexOf("--quest");
 const onlyQuest = qi !== -1 ? argv[qi + 1] : null;
 // A green audit proves nothing unless the instrument can be shown to go red.
-// `--mutate <npc>#<index>` drops a node before the sweep, so the round-47
-// findings can be re-created on demand: the successor node Arturo's report
-// earned is exactly what a mutation removes.
-//   node tools/dialogue-lifecycle.mjs --quest keys --mutate wimon#5 --mutate wimon#1
-for (let i = 0; i < argv.length; i++) {
-  if (argv[i] !== "--mutate") continue;
-  const [id, idx] = String(argv[i + 1] || "").split("#");
-  if (NPCS[id] && NPCS[id].dialogue[+idx]) NPCS[id].dialogue[+idx] = { text: "(removed by --mutate)" };
+// `--mutate seenbook` loads the engine with the miss path's seen-book check reverted (a topic she has told you on a
+// node now gated off reads as LOCKED again, not as the gist), which re-creates the closed channels this tool exists for.
+//   node tools/dialogue-lifecycle.mjs --mutate seenbook
+const _mi = argv.indexOf("--mutate"), MUTATE = _mi >= 0 ? argv[_mi + 1] : null;
+if (MUTATE && MUTATE !== "seenbook") { console.error("unknown --mutate " + MUTATE + " (seenbook)"); process.exit(2); }
+const SEENBOOK = "const _heard = gated && NPCS[npc]";
+
+const JS = new URL("../web/js/", import.meta.url);
+for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters",
+  "engine-play", "engine-systems", "engine-parser"]) {
+  let src = fs.readFileSync(new URL(f + ".js", JS), "utf8");
+  if (MUTATE === "seenbook" && f === "engine-parser") {
+    if (!src.includes(SEENBOOK)) { console.error("--mutate seenbook: the seen-book check moved; update SEENBOOK"); process.exit(2); }
+    src = src.replace(SEENBOOK, "const _heard = false && NPCS[npc]");
+  }
+  vm.runInThisContext(src, { filename: f });
 }
+
+const out = [];
+engineInit(t => out.push(String(t)), null, () => {});
 
 // ── the trajectory ───────────────────────────────────────────────────────────
 

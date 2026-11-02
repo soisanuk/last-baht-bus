@@ -4,7 +4,7 @@
 // match, a parse-failure list from before the miss lines were rewritten.
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import { spawnSync } from "node:child_process";
@@ -79,5 +79,21 @@ test("S10-5: the instruments read a parse failure from the engine's miss pools, 
   for (const f of ["soak.mjs", "dialogue-lifecycle.mjs", "errand-audit.mjs", "askable-audit.mjs"]) {
     const src = readFileSync(fileURLToPath(new URL(`../../tools/${f}`, import.meta.url)), "utf8");
     assert.doesNotMatch(src, /"That one didn't parse"|\/didn't understand\/i\.test/, f);
+  }
+});
+
+test("S10-6: every gated audit CLAUDE.md names has a --mutate, and a test runs it", () => {
+  const md = readFileSync(fileURLToPath(new URL("../../CLAUDE.md", import.meta.url)), "utf8");
+  const m = /\*\*The gated audits\*\*[^:]*--mutate[^:]*:([\s\S]*?)\(the last four/.exec(md);
+  assert.ok(m, "the gated-audits sentence");
+  const names = m[1].split(",").map(s => s.trim()).filter(Boolean);
+  assert.ok(names.length >= 15, names.join(" "));
+  const dir = fileURLToPath(new URL(".", import.meta.url));
+  const tests = readdirSync(dir).filter(f => f.endsWith(".test.js")).map(f => readFileSync(dir + f, "latin1"));
+  for (const n of names) {
+    const file = n === "dialogue-lifecycle" ? "dialogue-lifecycle.mjs" : n + "-audit.mjs";
+    const src = readFileSync(fileURLToPath(new URL(`../../tools/${file}`, import.meta.url)), "utf8");
+    assert.match(src, /mutate/i, file + " has a mutation");
+    assert.ok(tests.some(s => s.includes(file) && /"--mutate"|mutate: "/.test(s)), "a test runs " + file + "'s mutation");
   }
 });

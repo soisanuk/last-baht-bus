@@ -23,3 +23,11 @@ test("every modal answers a question, a read-only verb, a stale answer and a rel
   assert.deepEqual(r.unarmed, [], "a gate without a recipe or a SKIP reason");
   assert.deepEqual(r.findings.map(f => `${f.state} · ${f.probe} · ${f.msg}`), []);
 });
+
+test("the modal audit goes red when a gate reads a question as a yes (--mutate yes)", () => {
+  let raw;
+  try { raw = execFileSync(process.execPath, [TOOL, "--json", "--state", "synjob", "--mutate", "yes"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }); }
+  catch (e) { raw = String(e.stdout || ""); if (!raw.trim()) throw e; }
+  const r = JSON.parse(raw);
+  assert.ok(r.findings.some(f => f.state === "synjob" && f.probe === "nonanswer"), "a question taken as a yes went unseen");
+});

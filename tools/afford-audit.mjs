@@ -8,6 +8,7 @@
 //   node tools/afford-audit.mjs               # full report
 //   node tools/afford-audit.mjs --json        # machine-readable
 //   node tools/afford-audit.mjs --room mama_yai
+//   node tools/afford-audit.mjs --mutate refuse   # prove it goes red: the food verbs refuse
 //
 // WHY THIS EXISTS (docs/testing-gap-analysis.md §2.4). The promise lint
 // (tests/js/promises.test.js) harvests parenthesized ALL-CAPS hints and asserts
@@ -53,6 +54,11 @@ const asJson = args.includes("--json");
 // work reports no findings; the test asserts `tested > 0` for exactly this.
 const _roomAt = args.indexOf("--room");
 const onlyRoom = (_roomAt >= 0 ? (args[_roomAt + 1] || "") : "").trim();
+// --mutate refuse: BUY, EAT and DRINK give a voiced refusal and move nothing — every promise the audit plays must then
+// be reported, or it is judging the words and not the state
+const _mutAt = args.indexOf("--mutate"), MUTATE = _mutAt >= 0 ? args[_mutAt + 1] : null;
+if (MUTATE === "refuse") for (const n of ["_doBuy", "_doEat", "_doDrink"]) globalThis[n] = () => _say("Not for sale here.", "dim");
+else if (MUTATE) { console.error("unknown --mutate " + MUTATE + " (refuse)"); process.exit(2); }
 
 // ── availability frames ──────────────────────────────────────────────────────
 // Deliberately narrow. Each frame is prose that ASSERTS the thing is to be had

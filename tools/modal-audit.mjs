@@ -5,6 +5,7 @@
 //   node tools/modal-audit.mjs --json
 //   node tools/modal-audit.mjs --state synjob
 //   node tools/modal-audit.mjs --show     # every probe's output, for reading by hand
+//   node tools/modal-audit.mjs --state synjob --mutate yes   # prove it goes red: the question read as a yes
 //
 // CLASS G (modal / input gating) was the ledger's top row for a month — 75 findings,
 // 11% severe, 0% instrumented (docs/persona-findings-ledger-analysis.md). Every other
@@ -177,6 +178,13 @@ for (const k of Object.keys(_ENC)) discovered.add("enc:" + k);
 for (const g of ["bf", "soapy", "fare"]) discovered.add(g);
 const covered = new Set(Object.values(STATES).map(s => s.gate));
 const unarmed = [...discovered].filter(g => !covered.has(g) && !SKIP[g]);
+
+// --mutate yes: every gate reads "what happens if i say yes?" as its first chip — the unanchored-yes class (Darren
+// asked and moved to Pattaya). The non-answer probe must report it, or it is not judging what the gate committed.
+{ const mi = args.indexOf("--mutate"), m = mi >= 0 ? args[mi + 1] : null;
+  if (m === "yes") { const dc = globalThis.doCommand;
+    globalThis.doCommand = c => { const ch = gate() && /what happens if i say yes/.test(c) ? _chipSet()[0] : null; return dc(ch ? ch.cmd : c); }; }
+  else if (m) { console.error("unknown --mutate " + m + " (yes)"); process.exit(2); } }
 
 // ── the oracle and the probes ────────────────────────────────────────────────
 const HUH = new Set(_HUH);

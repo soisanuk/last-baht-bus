@@ -208,7 +208,7 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
   **regenerate it before every commit that touches an engine file** (graph.test goes red on a stale one). The three
   manifests (`docs/scene-manifest.json`, `docs/world-export.json`, `docs/portrait-manifest.json`) are regenerated after any
   `world.js` change and are last-writer-correct on a conflict.
-- **The gated audits** (each derived from the engine, each with a `--mutate` that proves it goes red): modal, money,
+- **The gated audits** (each derived from the engine, each with a `--mutate` that its test runs to prove it goes red): modal, money,
   happiness, composition, memory, chorus, question, remark, offer, gogo, witness, askable, afford, asktopic,
   dialogue-lifecycle (the last four in `promises.test.js`). Run by hand: `examine-audit`, `errand-audit`, `dialogue-walk
   --lint` / `--shared`, `prose-corpus --delta`. **A promise must be KEPT, not merely parse.** **Coverage means observed
