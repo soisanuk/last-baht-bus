@@ -55,6 +55,10 @@ const HAPPY_OPEN = {
 };
 const HAPPY_OK = {
   // "scene:verb:inv": "why it is benign"
+  "bandbar:eat:H2": "EAT with the starting noodles at hunger 10: refused as too full until hunger rises, then the one packet is eaten once (+1) — one item, one pay, not a farm",
+  "beerbar:eat:H2": "EAT with the starting noodles at hunger 10: refused as too full until hunger rises, then the one packet is eaten once (+1) — one item, one pay, not a farm",
+  "beach:eat:H2": "EAT with the starting noodles at hunger 10: refused as too full until hunger rises, then the one packet is eaten once (+1) — one item, one pay, not a farm",
+  "poolroom:eat:H2": "EAT with the starting noodles at hunger 10: refused as too full until hunger rises, then the one packet is eaten once (+1) — one item, one pay, not a farm",
 };
 const NEVER = new Set(["restart", "quit", "reset", "end", "logout", "load", "save", "undo", "sleep", "again", "unsubscribe", "break sim", "work"]);
 

@@ -5161,7 +5161,7 @@ const _CONTACT_SWAP_LINES = [
 ];
 
 // A CONTACT FROM A TYPED NAME, for anything that pays or texts her: the person is resolved, never a name that merely
-// contains what was typed (Kwanjai is not Kwan, Saifon is not Fon, Mercedes is not "me"). Her exact name, last name or id
+// contains what was typed (a longer name that starts with the typed one is not her, and "me" is not a woman whose name holds it). Her exact name, last name or id
 // first (the whole line, then its first word — "lamai miss you"), then a name with a word that BEGINS with the first typed
 // word of three letters or more. One match is the id; several are returned as an array for the caller to ask "which one?".
 function _contactNamed(nameW) {
