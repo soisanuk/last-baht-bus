@@ -1726,7 +1726,7 @@ it — `_topicExact` exists for that.
 
 **Tests.** conversation.test.js, round47.test.js (every printed label asked), round62.test.js (dead nodes),
 patronfold.test.js, reader.test.js, steve.test.js, question-audit.test.js, remarks.test.js, deferred1029.test.js (the house's LAST TIME); tools/asktopic-audit.mjs,
-tools/askable-audit.mjs and tools/dialogue-lifecycle.mjs (gated in promises.test.js); tools/dialogue-walk.mjs is run by hand.
+tools/askable-audit.mjs and tools/dialogue-lifecycle.mjs (gated in promises.test.js); tools/dialogue-walk.mjs is run by hand., dialogue1101.test.js
 
 **Design docs.** none.
 
@@ -1813,7 +1813,7 @@ shared `G.talked`.
 **Touches.** `quests` (`_questWhere`'s patron branch), `conversation`, the season (`_seasonTier` in `_benchOut`), the
 quiz and the Queen Vic kitchen. Adding a `_rand()` anywhere on the drift path desyncs the seeded daily.
 
-**Tests.** drift.test.js, patronfold.test.js, queenvic.test.js, round22.test.js, round40.test.js, predicates.test.js.
+**Tests.** drift.test.js, patronfold.test.js, queenvic.test.js, round22.test.js, round40.test.js, predicates.test.js., dialogue1101.test.js
 
 **Design docs.** none.
 
@@ -1859,7 +1859,7 @@ never renamed; change the record's `role`, not the key.
 
 **Tests.** floor.test.js, soi6expansion.test.js (including the generator template pin), sweep.test.js,
 round47.test.js (pool depth), chorus-audit.test.js, term.test.js (no filler line taps a stray name);
-tools/gen-floor-staff.mjs writes new floors, tools/chorus-audit.mjs gates the shared pools.
+tools/gen-floor-staff.mjs writes new floors, tools/chorus-audit.mjs gates the shared pools., dialogue1101.test.js
 
 **Design docs.** docs/soi6-expansion.md.
 
@@ -2486,7 +2486,7 @@ The money of a life lived here and the long game: the month, the jobs, the condo
 
 **Touches.** `money` (`G.acctUntil`), `quests` (`_questTick` is the payout loop), `expat-jobs` (Mort's stringer pays for a licence read), `police` (the risk costs reputation). Any real-world-derived detail here is bound by docs/guardrails.md: structure only, nobody real.
 
-**Tests.** tests/js/laundering.test.js, licence.test.js, rulings1022.test.js, round74.test.js, round103.test.js, round105.test.js.
+**Tests.** tests/js/laundering.test.js, licence.test.js, rulings1022.test.js, round74.test.js, round103.test.js, round105.test.js., dialogue1101.test.js
 
 **Design docs.** docs/bar-ownership-structures.md, docs/guardrails.md.
 

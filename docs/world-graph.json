@@ -2,73 +2,73 @@
  "constants": [
   {
    "file": "world.js",
-   "line": 15521,
+   "line": 15523,
    "name": "AFFAIR_BOND_GATE",
    "value": 3
   },
   {
    "file": "world.js",
-   "line": 15523,
+   "line": 15525,
    "name": "AFFAIR_BREAK",
    "value": 12
   },
   {
    "file": "world.js",
-   "line": 15526,
+   "line": 15528,
    "name": "AFFAIR_DRAG",
    "value": 0.92
   },
   {
    "file": "world.js",
-   "line": 15527,
+   "line": 15529,
    "name": "AFFAIR_DRAG_SOUR",
    "value": 0.85
   },
   {
    "file": "world.js",
-   "line": 15545,
+   "line": 15547,
    "name": "AFFAIR_FAMILY_ASK",
    "value": 15000
   },
   {
    "file": "world.js",
-   "line": 15528,
+   "line": 15530,
    "name": "AFFAIR_GOOD_DAYS",
    "value": 60
   },
   {
    "file": "world.js",
-   "line": 15529,
+   "line": 15531,
    "name": "AFFAIR_GOOD_STRAIN",
    "value": 4
   },
   {
    "file": "world.js",
-   "line": 15522,
+   "line": 15524,
    "name": "AFFAIR_HONEYMOON",
    "value": 14
   },
   {
    "file": "world.js",
-   "line": 15530,
+   "line": 15532,
    "name": "AFFAIR_SALE",
    "value": 150000
   },
   {
    "file": "world.js",
-   "line": 15544,
+   "line": 15546,
    "name": "AFFAIR_SCAR_DAYS",
    "value": 10
   },
   {
    "file": "world.js",
-   "line": 15524,
+   "line": 15526,
    "name": "AFFAIR_STRAIN_AWAY",
    "value": 2
   },
   {
    "file": "world.js",
-   "line": 15525,
+   "line": 15527,
    "name": "AFFAIR_STRAIN_WORK",
    "value": 1
   },
@@ -200,7 +200,7 @@
   },
   {
    "file": "world.js",
-   "line": 15501,
+   "line": 15503,
    "name": "BAR_QUOTA",
    "value": 30
   },
@@ -248,7 +248,7 @@
   },
   {
    "file": "world.js",
-   "line": 15502,
+   "line": 15504,
    "name": "BAR_SALARY",
    "value": 10000
   },
@@ -260,25 +260,25 @@
   },
   {
    "file": "world.js",
-   "line": 15542,
+   "line": 15544,
    "name": "BAR_SALE_COOL",
    "value": 60
   },
   {
    "file": "world.js",
-   "line": 15541,
+   "line": 15543,
    "name": "BAR_SALE_MIN",
    "value": 90
   },
   {
    "file": "world.js",
-   "line": 15543,
+   "line": 15545,
    "name": "BAR_SALE_PREMIUM",
    "value": 1.25
   },
   {
    "file": "world.js",
-   "line": 15540,
+   "line": 15542,
    "name": "BAR_SALE_REP",
    "value": 4
   },
@@ -362,7 +362,7 @@
   },
   {
    "file": "world.js",
-   "line": 14412,
+   "line": 14414,
    "name": "BOOK_PRICE",
    "value": 2500
   },
@@ -392,13 +392,13 @@
   },
   {
    "file": "world.js",
-   "line": 15596,
+   "line": 15598,
    "name": "CARE_DAYS",
    "value": 3
   },
   {
    "file": "world.js",
-   "line": 15597,
+   "line": 15599,
    "name": "CARE_UNPAID_COLD",
    "value": 2
   },
@@ -422,7 +422,7 @@
   },
   {
    "file": "world.js",
-   "line": 14413,
+   "line": 14415,
    "name": "CLUB_TAXI",
    "value": 2000
   },
@@ -500,19 +500,19 @@
   },
   {
    "file": "world.js",
-   "line": 14411,
+   "line": 14413,
    "name": "FORTUNE_MERIT",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 14409,
+   "line": 14411,
    "name": "FORTUNE_READ",
    "value": 199
   },
   {
    "file": "world.js",
-   "line": 14410,
+   "line": 14412,
    "name": "FORTUNE_RITUAL",
    "value": 1900
   },
@@ -530,31 +530,31 @@
   },
   {
    "file": "world.js",
-   "line": 15595,
+   "line": 15597,
    "name": "GIFT_BIG",
    "value": 1000
   },
   {
    "file": "world.js",
-   "line": 14414,
+   "line": 14416,
    "name": "GIFT_DEBT",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 14415,
+   "line": 14417,
    "name": "GIFT_TIP",
    "value": 100
   },
   {
    "file": "world.js",
-   "line": 15498,
+   "line": 15500,
    "name": "GROUP_WEEK_BASE",
    "value": 1250
   },
   {
    "file": "world.js",
-   "line": 15504,
+   "line": 15506,
    "name": "HOME_SEND",
    "value": 7000
   },
@@ -620,7 +620,7 @@
   },
   {
    "file": "world.js",
-   "line": 15494,
+   "line": 15496,
    "name": "LADY_CUT",
    "value": 60
   },
@@ -680,7 +680,7 @@
   },
   {
    "file": "world.js",
-   "line": 15589,
+   "line": 15591,
    "name": "MERIT_COST",
    "value": 2500
   },
@@ -860,19 +860,19 @@
   },
   {
    "file": "world.js",
-   "line": 14422,
+   "line": 14424,
    "name": "POLICE_ARGUE",
    "value": 1000
   },
   {
    "file": "world.js",
-   "line": 14421,
+   "line": 14423,
    "name": "POLICE_PAY",
    "value": 500
   },
   {
    "file": "world.js",
-   "line": 14420,
+   "line": 14422,
    "name": "POLICE_WAI",
    "value": 300
   },
@@ -950,7 +950,7 @@
   },
   {
    "file": "world.js",
-   "line": 15505,
+   "line": 15507,
    "name": "ROOM_RENT",
    "value": 4000
   },
@@ -992,13 +992,13 @@
   },
   {
    "file": "world.js",
-   "line": 14419,
+   "line": 14421,
    "name": "SEVEN_BEER",
    "value": 60
   },
   {
    "file": "world.js",
-   "line": 14417,
+   "line": 14419,
    "name": "SEVEN_WATER",
    "value": 10
   },
@@ -1058,13 +1058,13 @@
   },
   {
    "file": "world.js",
-   "line": 14418,
+   "line": 14420,
    "name": "SOI6_CLOSE",
    "value": 80
   },
   {
    "file": "world.js",
-   "line": 15503,
+   "line": 15505,
    "name": "SOI6_SALARY",
    "value": 15000
   },
@@ -1136,31 +1136,31 @@
   },
   {
    "file": "world.js",
-   "line": 14416,
+   "line": 14418,
    "name": "TOASTIE_PRICE",
    "value": 35
   },
   {
    "file": "world.js",
-   "line": 14407,
+   "line": 14409,
    "name": "TONIC_FLEECE",
    "value": 6000
   },
   {
    "file": "world.js",
-   "line": 14423,
+   "line": 14425,
    "name": "TONIC_POLICE_CUT",
    "value": 0.35
   },
   {
    "file": "world.js",
-   "line": 14406,
+   "line": 14408,
    "name": "TONIC_PRICE",
    "value": 99
   },
   {
    "file": "world.js",
-   "line": 14408,
+   "line": 14410,
    "name": "TONIC_SHAKEDOWN",
    "value": 3000
   },
@@ -4623,7 +4623,7 @@
   {
    "chip": false,
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 49,
    "key": "bert#49",
@@ -4684,7 +4684,7 @@
   },
   {
    "hasFx": false,
-   "hasShort": false,
+   "hasShort": true,
    "hasWhen": false,
    "index": 53,
    "key": "bert#53",
@@ -20853,12 +20853,12 @@
    "index": 6,
    "key": "jenny#6",
    "npc": "jenny",
-   "topic": "klaus singapore|met klaus|how did you meet|where did you meet",
+   "topic": "how did you meet|where did you meet|met klaus|klaus singapore",
    "topics": [
-    "klaus singapore",
-    "met klaus",
     "how did you meet",
-    "where did you meet"
+    "where did you meet",
+    "met klaus",
+    "klaus singapore"
    ]
   },
   {
@@ -26084,12 +26084,12 @@
    "index": 28,
    "key": "lek#28",
    "npc": "lek",
-   "topic": "salary|quota|thirty drinks|nine thousand",
+   "topic": "salary|quota|thirty drinks|ten thousand",
    "topics": [
     "salary",
     "quota",
     "thirty drinks",
-    "nine thousand"
+    "ten thousand"
    ]
   },
   {
@@ -39839,18 +39839,18 @@
    "index": 9,
    "key": "pensri#9",
    "npc": "pensri",
-   "topic": "oil|aloe|sunburn|sunburned|price|prices|how much|herbal|compress|kinds",
+   "topic": "prices|price|how much|aloe|sunburn|sunburned|herbal|compress|kinds|oil",
    "topics": [
-    "oil",
+    "prices",
+    "price",
+    "how much",
     "aloe",
     "sunburn",
     "sunburned",
-    "price",
-    "prices",
-    "how much",
     "herbal",
     "compress",
-    "kinds"
+    "kinds",
+    "oil"
    ]
   },
   {
@@ -65986,7 +65986,7 @@
   },
   {
    "from": "AFFAIR_BREAK",
-   "to": "world.js:15514",
+   "to": "world.js:15516",
    "type": "INTERPOLATES"
   },
   {
@@ -66006,12 +66006,12 @@
   },
   {
    "from": "AFFAIR_FAMILY_ASK",
-   "to": "world.js:15575",
+   "to": "world.js:15577",
    "type": "INTERPOLATES"
   },
   {
    "from": "AFFAIR_FAMILY_ASK",
-   "to": "world.js:15576",
+   "to": "world.js:15578",
    "type": "INTERPOLATES"
   },
   {
@@ -66776,17 +66776,17 @@
   },
   {
    "from": "BOOK_PRICE",
-   "to": "world.js:14644",
+   "to": "world.js:14646",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_PRICE",
-   "to": "world.js:14649",
+   "to": "world.js:14651",
    "type": "INTERPOLATES"
   },
   {
    "from": "BOOK_PRICE",
-   "to": "world.js:14652",
+   "to": "world.js:14654",
    "type": "INTERPOLATES"
   },
   {
@@ -66846,7 +66846,7 @@
   },
   {
    "from": "BUS_CHARTER",
-   "to": "world.js:14349",
+   "to": "world.js:14351",
    "type": "INTERPOLATES"
   },
   {
@@ -67016,7 +67016,7 @@
   },
   {
    "from": "BUS_FARE",
-   "to": "world.js:14324",
+   "to": "world.js:14326",
    "type": "INTERPOLATES"
   },
   {
@@ -67406,7 +67406,7 @@
   },
   {
    "from": "GROUP_WEEK_BASE",
-   "to": "world.js:15500",
+   "to": "world.js:15502",
    "type": "INTERPOLATES"
   },
   {
@@ -67761,17 +67761,17 @@
   },
   {
    "from": "LADY_DRINK",
-   "to": "world.js:15494",
+   "to": "world.js:15496",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "world.js:15583",
+   "to": "world.js:15585",
    "type": "INTERPOLATES"
   },
   {
    "from": "LADY_DRINK",
-   "to": "world.js:15885",
+   "to": "world.js:15887",
    "type": "INTERPOLATES"
   },
   {
@@ -67996,12 +67996,12 @@
   },
   {
    "from": "MERIT_COST",
-   "to": "world.js:15610",
+   "to": "world.js:15612",
    "type": "INTERPOLATES"
   },
   {
    "from": "MERIT_COST",
-   "to": "world.js:15611",
+   "to": "world.js:15613",
    "type": "INTERPOLATES"
   },
   {
@@ -68116,17 +68116,17 @@
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "world.js:14382",
+   "to": "world.js:14384",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "world.js:14383",
+   "to": "world.js:14385",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_FAR",
-   "to": "world.js:14388",
+   "to": "world.js:14390",
    "type": "INTERPOLATES"
   },
   {
@@ -68221,16 +68221,6 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:14373",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
-   "to": "world.js:14374",
-   "type": "INTERPOLATES"
-  },
-  {
-   "from": "MOTOSAI_TOWN",
    "to": "world.js:14375",
    "type": "INTERPOLATES"
   },
@@ -68266,22 +68256,32 @@
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:14387",
+   "to": "world.js:14382",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:14393",
+   "to": "world.js:14383",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
-   "to": "world.js:14394",
+   "to": "world.js:14389",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:14395",
    "type": "INTERPOLATES"
   },
   {
    "from": "MOTOSAI_TOWN",
    "to": "world.js:14396",
+   "type": "INTERPOLATES"
+  },
+  {
+   "from": "MOTOSAI_TOWN",
+   "to": "world.js:14398",
    "type": "INTERPOLATES"
   },
   {
@@ -68581,7 +68581,7 @@
   },
   {
    "from": "ORCHID_CLOSE",
-   "to": "world.js:14418",
+   "to": "world.js:14420",
    "type": "INTERPOLATES"
   },
   {
@@ -68751,7 +68751,7 @@
   },
   {
    "from": "QV_BASKET",
-   "to": "world.js:15853",
+   "to": "world.js:15855",
    "type": "INTERPOLATES"
   },
   {
@@ -68771,7 +68771,7 @@
   },
   {
    "from": "QV_CRISPS",
-   "to": "world.js:15863",
+   "to": "world.js:15865",
    "type": "INTERPOLATES"
   },
   {
@@ -68786,17 +68786,17 @@
   },
   {
    "from": "QV_CURRY",
-   "to": "world.js:15857",
+   "to": "world.js:15859",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_PIE",
-   "to": "world.js:15855",
+   "to": "world.js:15857",
    "type": "INTERPOLATES"
   },
   {
    "from": "QV_PLOUGH",
-   "to": "world.js:15859",
+   "to": "world.js:15861",
    "type": "INTERPOLATES"
   },
   {
@@ -68806,7 +68806,7 @@
   },
   {
    "from": "QV_ROAST",
-   "to": "world.js:15861",
+   "to": "world.js:15863",
    "type": "INTERPOLATES"
   },
   {
@@ -69386,17 +69386,17 @@
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:15749",
+   "to": "world.js:15751",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:15780",
+   "to": "world.js:15782",
    "type": "INTERPOLATES"
   },
   {
    "from": "SYN_JOB_NIGHT",
-   "to": "world.js:15813",
+   "to": "world.js:15815",
    "type": "INTERPOLATES"
   },
   {
@@ -72461,7 +72461,7 @@
   },
   {
    "from": "barOpen",
-   "to": "world.js:14003",
+   "to": "world.js:14005",
    "type": "READ_BY_DATA"
   },
   {
@@ -72496,7 +72496,7 @@
   },
   {
    "from": "barPaid",
-   "to": "world.js:20961",
+   "to": "world.js:20963",
    "type": "READ_BY_DATA"
   },
   {
@@ -72521,7 +72521,7 @@
   },
   {
    "from": "barSoldOn",
-   "to": "world.js:20958",
+   "to": "world.js:20960",
    "type": "READ_BY_DATA"
   },
   {
@@ -72551,7 +72551,7 @@
   },
   {
    "from": "barToBert",
-   "to": "world.js:20952",
+   "to": "world.js:20954",
    "type": "READ_BY_DATA"
   },
   {
@@ -72591,7 +72591,7 @@
   },
   {
    "from": "barToPlg",
-   "to": "world.js:20955",
+   "to": "world.js:20957",
    "type": "READ_BY_DATA"
   },
   {
@@ -72771,12 +72771,12 @@
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:16401",
+   "to": "world.js:16403",
    "type": "READ_BY_DATA"
   },
   {
    "from": "diamondTruth",
-   "to": "world.js:16410",
+   "to": "world.js:16412",
    "type": "READ_BY_DATA"
   },
   {
@@ -72796,12 +72796,12 @@
   },
   {
    "from": "gingSawSheet",
-   "to": "world.js:21717",
+   "to": "world.js:21719",
    "type": "READ_BY_DATA"
   },
   {
    "from": "glamHeard",
-   "to": "world.js:16444",
+   "to": "world.js:16446",
    "type": "READ_BY_DATA"
   },
   {
@@ -72856,7 +72856,7 @@
   },
   {
    "from": "heardWhispers",
-   "to": "world.js:14785",
+   "to": "world.js:14787",
    "type": "READ_BY_DATA"
   },
   {
@@ -72866,12 +72866,12 @@
   },
   {
    "from": "jokeWho",
-   "to": "world.js:16419",
+   "to": "world.js:16421",
    "type": "READ_BY_DATA"
   },
   {
    "from": "jokeWho",
-   "to": "world.js:16470",
+   "to": "world.js:16472",
    "type": "READ_BY_DATA"
   },
   {
@@ -72911,12 +72911,12 @@
   },
   {
    "from": "mortGlam",
-   "to": "world.js:16444",
+   "to": "world.js:16446",
    "type": "READ_BY_DATA"
   },
   {
    "from": "mortMet",
-   "to": "world.js:16419",
+   "to": "world.js:16421",
    "type": "READ_BY_DATA"
   },
   {
@@ -73021,7 +73021,7 @@
   },
   {
    "from": "partnerCandy",
-   "to": "world.js:14003",
+   "to": "world.js:14005",
    "type": "READ_BY_DATA"
   },
   {
@@ -73091,12 +73091,12 @@
   },
   {
    "from": "quietSideDone",
-   "to": "world.js:15953",
+   "to": "world.js:15955",
    "type": "READ_BY_DATA"
   },
   {
    "from": "quietSideDone",
-   "to": "world.js:15959",
+   "to": "world.js:15961",
    "type": "READ_BY_DATA"
   },
   {
@@ -73171,12 +73171,12 @@
   },
   {
    "from": "tiffinDelivered",
-   "to": "world.js:14827",
+   "to": "world.js:14829",
    "type": "READ_BY_DATA"
   },
   {
    "from": "verifDone",
-   "to": "world.js:21717",
+   "to": "world.js:21719",
    "type": "READ_BY_DATA"
   },
   {
@@ -79227,7 +79227,7 @@
    "name": "barOpen",
    "readByData": [
     "world.js:13469",
-    "world.js:14003"
+    "world.js:14005"
    ],
    "readByEngine": [
     "engine-parser.js:20325",
@@ -79267,7 +79267,7 @@
     "world.js:13498",
     "world.js:13517",
     "world.js:13526",
-    "world.js:20961",
+    "world.js:20963",
     "world.js:8867"
    ],
    "readByEngine": [
@@ -79369,7 +79369,7 @@
    "name": "barSoldOn",
    "readByData": [
     "world.js:13415",
-    "world.js:20958",
+    "world.js:20960",
     "world.js:8863",
     "world.js:8867",
     "world.js:9818"
@@ -79393,7 +79393,7 @@
    "readByData": [
     "world.js:13411",
     "world.js:13426",
-    "world.js:20952",
+    "world.js:20954",
     "world.js:6064",
     "world.js:9823"
    ],
@@ -79412,7 +79412,7 @@
     "world.js:13406",
     "world.js:13419",
     "world.js:13423",
-    "world.js:20955",
+    "world.js:20957",
     "world.js:8856",
     "world.js:8859",
     "world.js:8863",
@@ -79853,8 +79853,8 @@
    ],
    "name": "diamondTruth",
    "readByData": [
-    "world.js:16401",
-    "world.js:16410"
+    "world.js:16403",
+    "world.js:16412"
    ],
    "requiredBy": [
     "wimon#0"
@@ -80023,7 +80023,7 @@
   {
    "name": "gingSawSheet",
    "readByData": [
-    "world.js:21717"
+    "world.js:21719"
    ],
    "setByDialogue": [
     "ging#2"
@@ -80035,7 +80035,7 @@
    ],
    "name": "glamHeard",
    "readByData": [
-    "world.js:16444"
+    "world.js:16446"
    ],
    "setByDialogue": [
     "glam#2"
@@ -80711,7 +80711,7 @@
    ],
    "name": "heardWhispers",
    "readByData": [
-    "world.js:14785"
+    "world.js:14787"
    ],
    "requiredBy": [
     "oy#10",
@@ -80836,8 +80836,8 @@
   {
    "name": "jokeWho",
    "readByData": [
-    "world.js:16419",
-    "world.js:16470"
+    "world.js:16421",
+    "world.js:16472"
    ],
    "readByEngine": [
     "engine-systems.js:4715",
@@ -81143,7 +81143,7 @@
   {
    "name": "mortGlam",
    "readByData": [
-    "world.js:16444"
+    "world.js:16446"
    ],
    "readByEngine": [
     "engine-systems.js:3721"
@@ -81155,7 +81155,7 @@
   {
    "name": "mortMet",
    "readByData": [
-    "world.js:16419"
+    "world.js:16421"
    ],
    "setByDialogue": [
     "mort#7"
@@ -81419,7 +81419,7 @@
    "readByData": [
     "world.js:13465",
     "world.js:13469",
-    "world.js:14003"
+    "world.js:14005"
    ],
    "readByEngine": [
     "engine-parser.js:10076",
@@ -81690,8 +81690,8 @@
    ],
    "name": "quietSideDone",
    "readByData": [
-    "world.js:15953",
-    "world.js:15959"
+    "world.js:15955",
+    "world.js:15961"
    ],
    "setByDialogue": [
     "sumalee#1"
@@ -82129,7 +82129,7 @@
    ],
    "name": "tiffinDelivered",
    "readByData": [
-    "world.js:14827"
+    "world.js:14829"
    ],
    "requiredBy": [
     "duangjai#5",
@@ -82222,7 +82222,7 @@
    ],
    "name": "verifDone",
    "readByData": [
-    "world.js:21717"
+    "world.js:21719"
    ],
    "setByDialogue": [
     "nigel#10",
