@@ -6697,13 +6697,13 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "and I am so jealous I could cry.\" She laughs at herself. \"That is the dream, " +
           "tilac. Fat and bored. Don't tell the men.\"",
         short: "\"{{Noi}} in Chum Phae did it — fat and bored now, shouting at her husband. I'm so jealous I could cry.\"" },
-      { topic: "salary|quota|thirty drinks|nine thousand", bond: 2,
-        text: "\"Salary is nine thousand. That is the number on the paper.\" She says it like " +
-          "reading a receipt, the way she said the price of things once. \"Nine thousand " +
+      { topic: "salary|quota|thirty drinks|ten thousand", bond: 2,
+        text: "\"Salary is ten thousand. That is the number on the paper.\" She says it like " +
+          "reading a receipt, the way she said the price of things once. \"Ten thousand " +
           "for thirty night — is the seat, not the work. The work is the drink. Thirty " +
           "drink a month is the quota; after that, a little bonus, and the drinks are " +
           "where the money is, if the money is anywhere.\" A glance at your glass. \"So.\"",
-        short: "\"Nine thousand on the paper, for the seat. The work is the drinks — thirty a month, then bonus.\"" },
+        short: "\"Ten thousand on the paper, for the seat. The work is the drinks — thirty a month, then bonus.\"" },
       { topic: "bonus|commission", bond: 2,
         text: "\"Bonus.\" A short laugh. \"Thirty drink is the quota. Thirty-one, thirty-two, " +
           "Mamasan write a little star. At the end of the month the stars are — \" she " +
@@ -7605,7 +7605,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
           "drink, so I learn to count also. I learn the till there. And the aiyoo, and the lah — every auntie in that " +
           "building say it. Klaus say I sound like Chinese grandmother.\" A shrug. \"Pattaya is easier lah. One visa, no airport every month.\"",
         short: "\"Singapore, two year — Thai disco, Golden Mile. That is where I learn the till. And the aiyoo. Ok lah.\"" },
-      { topic: "klaus singapore|met klaus|how did you meet|where did you meet",
+      { topic: "how did you meet|where did you meet|met klaus|klaus singapore",
         text: "\"Not Singapore — Singapore is for work, everybody tired.\" She smiles at the till. \"Here. My first month " +
           "at this bar, he sit there, he order one beer for one hour, he ask my real name. Nobody in Singapore ask " +
           "my real name. Two year ago.\" She touches the ring. \"I count that night also.\"",
@@ -10352,7 +10352,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
         text: "“Bert?” Terry considers it. “Runs the Stinky for a man who isn't well and isn't here. Knows everybody, tells nobody. Best barman I ever drank with, and he'd hate me saying it.” A pull on the Chang. “If Bert sent you, you're alright.”",
         short: "“Bert. Knows everybody, tells nobody. If he sent you, you're alright.”" },
       { topic: "doyle",
-        text: "\u201cThe American?\u201d Terry considers the ceiling. \u201cCopper. Was, anyway.\u201d He says it without dropping his voice, which tells you it isn't a secret. \u201cYou can tell because he sits facing the door and he has never once asked me a question he didn't already know the answer to.\u201d A pull on the Chang. \u201cGood company, mind. Drinks soda water and doesn't make a thing of it, which round here is practically a personality.\u201d",
+        text: "\u201cThe American?\u201d Terry considers the ceiling. \u201cCopper. Was, anyway.\u201d He says it without dropping his voice, which tells you it isn't a secret. \u201cYou can tell because he sits facing the door, and I have yet to hear him ask a question he didn't already have the answer to.\u201d A pull on the Chang. \u201cGood company, mind. Drinks soda water and doesn't make a thing of it, which round here is practically a personality.\u201d",
         short: "\u201cCopper. Was, anyway. Sits facing the door, never asks a question he doesn't know the answer to.\u201d" },
       { topic: "mort",
         text: "\u201cMort's had me in the column. Twice.\u201d Terry is transparently delighted and entirely unwilling to say so. \u201cNo name, mind. 'A long-serving resident of the quiet end.' That's me, that is.\u201d He drinks. \u201cHe's been here longer than this bar. Longer than half the soi. And he has never once printed a thing that got a bloke in trouble at home \u2014\u201d he points the bottle at you \u2014 \u201cwhich is harder than it sounds, in a town like this.\u201d",
@@ -10747,7 +10747,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "hurt|pain|back|shoulder|neck", text: "\"Where you pain? Here?\" A thumb finds the exact knot before " +
           "you can point. \"Mm. This one from carry too much — not money, worry. Lie down.\" (MASSAGE)" },
       // the board she stands under (Terence, round 57: aloe and oil were "the wrong girl")
-      { topic: "oil|aloe|sunburn|sunburned|price|prices|how much|herbal|compress|kinds",
+      { topic: "prices|price|how much|aloe|sunburn|sunburned|herbal|compress|kinds|oil",
         text: "\"Oil, Thai, foot, herbal — all ฿" + MASSAGE_LEGIT + " the hour.\" Pensri points at the board. \"Aloe for the sunburn, free, " +
           "if you are red like lobster. Most farang are red like lobster.\"",
         short: "\"Oil, Thai, foot, herbal — ฿" + MASSAGE_LEGIT + " the hour. Aloe free for the lobster.\"" },
@@ -11252,7 +11252,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { topic: "benjawan|the name on the wall|benjawan srisuk|the other lady|who signed before you|the lady before you|srisuk", req: ["benjawanSeen"], text: "\"Benjawan?\" The glasses stay on. \"You have found her on a wall somewhere, or you would not have the name. Find her on two more. Then ask me — I do not tell a story for one frame.\"", short: "\"Find her on two more walls. Then ask me.\"" },
       { topic: "benjawan|the name on the wall|benjawan srisuk|srisuk", text: "\"Benjawan?\" A small, exact shake of the head. \"A common name. Read some walls, and come back when it is on more than one.\"", short: "\"A common name. Read some walls.\"" },
       { topic: "second paper|the second paper|fixtures|the fixtures|side letter|the other paper", text: "\"The second paper.\" She approves of the question. \"A side letter: the company owns the stools and the fridge and the light, and when the company closes, the farang who paid for them gets them back. One page. The lawyer charges three thousand for it, and most farang do not ask, because they think the company is theirs.\" The lemon turns. \"It is not. It is mine for one thousand baht. The second paper is the only thing in the folder that is actually his.\"", short: "\"A side letter: when the company closes, the fixtures go back to the man who paid. Most farang never ask for it.\"" },
-      { topic: "lawyer|the lawyer|second road|the stamp|stamp|who sends|the farang's lawyer", text: "\"The lawyer.\" Orathai does not say his name either; it is the one courtesy of the trade. \"Second Road, the stamp on every paper I sign. He sends me the farang, he takes three thousand for the paper, I take one for the signature.\" She squares the folder. \"Before me he sent them to a lady called Benjawan. You will find her name on walls, if you read walls.\"", short: "\"Second Road. Before me he sent them to a lady called Benjawan.\"" },
+      { topic: "lawyer|the lawyer|second road|the stamp|stamp|who sends|the farang's lawyer", text: "\"The lawyer.\" Orathai does not say his name either; it is the one courtesy of the trade. \"Second Road, the stamp on every paper I sign. He sends me the farang, he takes ten thousand for the paper, I take one for the signature.\" She squares the folder. \"Before me he sent them to a lady called Benjawan. You will find her name on walls, if you read walls.\"", short: "\"Second Road. Before me he sent them to a lady called Benjawan.\"" },
     ],
   },
   // Bill answers a question Wimon's dialogue asked and never resolved: she draws a
@@ -13212,7 +13212,7 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       // Nont does not do favours, so he prices it — the first price he has named
       // that he plainly wishes you wouldn't meet. The node only ARMS the modal.
       { topic: "job|rabbit|the job|eddy|rabbit's job|heist", chip: false,
-        when: (st, G) => G.rabbitWay === "kid" && !_flag("kidPaid") && !_flag("kidRefused"),
+        when: (st, G) => G.rabbitWay === "kid" && !_flag("kidPaid") && _kidOpen(),
         fx: () => { if (typeof _kidPriceAsk === "function") _kidPriceAsk(); },
         text: "He hears the name and something in his face closes and opens again in the same " +
           "second, like a shutter. “Rabbit sent you.” Not a question. “He can't ask me himself. " +
@@ -13475,7 +13475,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Fifty-one's not mine to give, bud — it's got to be a Thai name, and it's got to be a " +
           "PERSON.\" A nod down the soi. \"Candy'll tell you how she'd do it, and she's the one to ask " +
           "first. Tan'll tell you how he'd do it, and he won't be asking for money. Hear both. Then " +
-          "pick the one you'd hand your passport to.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)",
+          "pick the one you'd leave the keys with.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)",
         short: "\"Candy first, then Tan. Hear both before you pick.\" (ASK CANDY ABOUT THE PARTNERSHIP · ASK TAN ABOUT THE PARTNERSHIP)" },
       { topic: "key money|key|lease|pae jia", when: (st, G) => !!(G.bar && G.bar.lease) && !G.bar.lease.paid,
         text: "\"The landlord's month. Due with the first rent on the app — or notes in his hand before then and he takes a little off the top. He'd rather the notes. He'd rather everything was notes.\" " +
@@ -13650,7 +13650,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       // night you met him (Tomasz, round 54). Met on an earlier day, or a save from
       // before metDay existed.
       { when: (st, G) => st.dstate !== "stranger" && !(G.metDay && G.metDay.bert === G.day),
-        text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Not moved off this stool " +
+        text: "\"There he is.\" Bert's got a cold one open before you've sat. \"Stool hasn't moved " +
           "since you left, funny enough. Table's true, beer's cold.\" A crooked grin. \"What's the good " +
           "word, bud?\"",
         short: "\"There he is.\" A cold one's open before you sit — on your tab, obviously. \"What's the good word, bud?\"",
@@ -13785,7 +13785,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         text: "\"Still chewing on it, bud. Get me the full picture before I advise the old man: Terry's " +
           "watched Pattaya Leisure work this soi for years, Kesinee runs one of their bars over at the Kitten " +
           "Corner — she'll talk straight if you are — and the Pattaya Leisure man himself, Gavin, he's usually " +
-          "smiling into a lager at the Golden Dragon, down on Soi 6. Hear all three, then come tell me what you make of it.\"" },
+          "smiling into a lager at the Golden Dragon, down on Soi 6. Hear all three, then come tell me what you make of it.\"",
+          short: "\"Terry at the Vic, Kesinee at the Kitten Corner, Gavin at the Golden Dragon. Hear all three, then come back.\"" },
       { topic: "offer", chip: false, req: ["plgResolved"],
         text: "\"The Pattaya Leisure thing? Told the old man to hold, and he did. Gavin came back once, all " +
           "smiles, took the no like it was a delivery running late.\" A crooked grin. \"They'll be back — " +
@@ -13809,7 +13810,8 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
       { topic: "league", text: "\"Killer pool. Everybody's got three lives, sink one or " +
         "you lose a life, last man standing takes the pot. Every third night, right " +
         "here. Half the piwins in North Pattaya play. Bring your hundred baht and " +
-        "your humility.\"" },
+        "your humility.\"",
+        short: "\"Three lives, sink one or lose a life, last man takes the pot. Every third night, right here, hundred baht in.\"" },
       { topic: "pool", text: "\"Table's a Brunswick, older than most of my customers. " +
         "I re-cloth her every year, level her every month, and love her more than " +
         "I loved either of my wives. She holds no grudges. Unlike either of my wives.\"",
@@ -13882,7 +13884,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
         "the head.\"" },
       { topic: "laurent vasseur", req: ["knowOyHasIt"],
         text: "He lowers the Singha half an inch, which for Bert is a whisper. " +
-        "\"Pattaya Leisure Group. Front company, owns most of the paper on Soi 6. Man behind " +
+        "\"Pattaya Leisure Group. Front company, owns more of the paper on Soi 6 than anybody — the inner end, mostly. Man behind " +
         "it's a Frenchman, Laurent Vasseur — and don't go picturing some untouchable villain, bud. " +
         "He's a quiet fella with a good accountant who buys bars off men who can't say no " +
         "any more.\" A shrug. \"Bars run clean enough on top. The books don't. It " +
@@ -13966,7 +13968,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "the rail, the one the farang can see from the soi. \"Familiar face. You keep them " +
           "coming back. I keep everything else coming.\"\n\nThe old man is on speakerphone from a hospital corridor in " +
           "Ohio for about four minutes. He asks after the table, not the takings. " +
-          "Bert holds the {{phone}} up so he can hear the room.\n\nAnd at half eleven " +
+          "Bert holds the {{phone}} up so he can hear the room.\n\nAnd later " +
           "Gavin comes in, because of course he does. Buys a beer, pays for it, " +
           "looks round with a valuer's eye and finds nothing to work with. " +
           "\"Congratulations,\" he says, and means about half of it. \"You know " +
@@ -13988,7 +13990,7 @@ desc: "The Stinky's manager — American, sixty-something, forearms like dock ro
           "park, folded once.\n\nThe old man is on speakerphone from a corridor in " +
           "Ohio for four minutes and asks after the table, not the takings.\n\n" +
           "Tan does not come. He sends a crate of Singha and a text — 🙂 — and is " +
-          "somewhere else, being somewhere else.\n\nAt half eleven Gavin comes in, " +
+          "somewhere else, being somewhere else.\n\nLater, Gavin comes in, " +
           "because of course he does. Buys a beer, pays for it, and does the sum " +
           "behind his eyes: who signed, what it cost, why it was quick. Whatever he " +
           "arrives at, he doesn't say it. \"Congratulations,\" he says, and for " +
@@ -14765,7 +14767,7 @@ const QUESTS = {
   // declining is free, both outcomes complete, nobody is graded, no threat is ever made.
   nameonwall: { name: "The Name on the Wall", giver: "orathai", desc: "A name on the paper by one bar's till is on another bar's, across town. Read the frame by the till (EXAMINE LICENCE) in bars that are nobody's chain until the same name is on three, then ask the woman who signs (ASK ORATHAI ABOUT BENJAWAN).", deps: [], reqFlags: ["act1Done", "benjawanSeen"], at: "orathai", doneFlag: "benjawanFound", reward: { happy: 5 } },
   covers: { name: "The Covers", giver: "grace", desc: "Grace wants somebody who isn't her to sit in Jasmine Garden three nights and COUNT the stools — one night is a Friday, three is a pattern — then tell Hong on the till what you counted (ASK HONG ABOUT THE COUNT).", deps: [], reqFlags: ["act1Done"], at: "hong", doneFlag: "coversDone", reward: { happy: 4 } },
-  fiftyone: { name: "Fifty-One", giver: "reginald", desc: "Reginald's share papers want walking to Khun Orathai at the Old Market on Soi Buakhao, who signs the fifty-one (GIVE PAPERS TO ORATHAI) — then back to him.", deps: [], reqFlags: ["act1Done"], item: "share_papers", at: "orathai", doneFlag: "fiftyoneDone", reward: { happy: 4 } },
+  fiftyone: { name: "Fifty-One", giver: "reginald", desc: "Reginald's share papers want walking to Khun Orathai at the Old Market on Soi Buakhao, who signs the fifty-one (GIVE PAPERS TO ORATHAI) — then back to him.", deps: [], reqFlags: ["act1Done"], item: "share_papers", at: (G) => _flag("fiftyoneSigned") ? "reginald" : "orathai", doneFlag: "fiftyoneDone", reward: { happy: 4 } },
   verification: { name: "Under Verification", giver: "nont", desc: "Nont's broker wants a bar-for-sale sheet in front of Nigel. Show it to a cashier or two on the way if you like — the ones on Soi Buakhao have long memories (ASK THE CASHIER ABOUT THE LISTING) — then Nigel (ASK NIGEL ABOUT THE LISTING).", deps: [], reqFlags: ["act1Done"], item: "bar_listing", at: "nigel", doneFlag: "verifDone", reward: { happy: 3 } },
   presale: { name: "Pre-Sale", giver: "colin", desc: "Colin's chat group put forty thousand each into a friend's app and were told there is no paperwork. Ask him for the slips (ASK COLIN ABOUT THE SLIPS), then decide where twelve bank transfers go.", deps: [], reqFlags: ["act1Done"], at: "fast_eddy", doneFlag: "presaleDone", reward: { happy: 4 } },
   // Tree Town's first sandbox pull (docs/map-coverage.md). Oy is the Act One
@@ -14836,7 +14838,7 @@ const QUESTS = {
       "REGULAR, then bring it back to her (ASK SUMALEE ABOUT GORDON).",
     deps: [],
     reqFlags: ["act1Done"],
-    at: "nok",
+    at: (G) => _flag("heardGordon") ? "sumalee" : "nok",
     doneFlag: "quietSideDone",
     reward: { money: 1500, happy: 7 },
   },
@@ -14917,7 +14919,7 @@ const QUESTS = {
       "where it was taken, down at the pier, then come back and tell him " +
       "(ASK BOB ABOUT THE PHOTOGRAPH).",
     deps: ["hill_order"],
-    at: "bali_hai",
+    at: (G) => (G.visited && G.visited.bali_hai) ? "bob" : "bali_hai",
     doneFlag: "photoBetSettled",
     reward: { money: 0, happy: 8 },
   },
@@ -14963,7 +14965,7 @@ const QUESTS = {
     desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
       "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE). The rope lifts for the group's friends — and Gavin, at the Golden Dragon, decides who those are.",
     deps: [],
-    at: "orchid_room",
+    at: (G) => (G.visited && G.visited.orchid_room) ? "doyle" : "orchid_room",
     doneFlag: "orchidReported",
     reward: { money: 1500, happy: 4 },
   },
@@ -16091,7 +16093,7 @@ const _REGULARS = {
           "a girl. Not from the bars — that was the whole point of her, I thought. Good " +
           "English, laughed at the right bits, and every single time she came down to see " +
           "me, she came on the bus. Baht bus, then the big bus from Ekkamai. I read that as " +
-          "modesty.\" A short laugh with no bottom in it. \"It wasn't modesty, squire. It was " +
+          "modesty.\" A short laugh with no bottom in it. \"It wasn't modesty, mate. It was " +
           "manners. A woman whose family has three drivers takes the bus so that you never " +
           "have to see the car. She was coming down to where I could look at her level. I " +
           "should have known from the bus. Everybody should. Nobody does.\"",
@@ -16135,13 +16137,13 @@ const _REGULARS = {
           "outside the bars, the man who'd got it right. That's what went, at table thirty-one. She " +
           "was lovely. She's still lovely, somewhere across the river, being lovely to somebody " +
           "her mother doesn't have to seat at thirty-one.\" He signals for a beer, and it comes " +
-          "cold. \"I'm not bitter, squire. I'm calibrated. This town spends years telling a " +
+          "cold. \"I'm not bitter, mate. I'm calibrated. This town spends years telling a " +
           "man he's the money in the room. One wedding told me I was the guest. " +
           "Cheapest lesson I ever bought — I didn't even pay for it.\"",
         short: "\"Wrong question. You can only miss what you had, and what I had was a very good idea of myself. I'm not bitter — I'm calibrated.\"" },
       // PRE-SALE (the laundering quests, 2026-10-08): the chat that was a bank
-      { notFlags: ["presaleSlips"], topic: "offer|presale|pre-sale|the app|crypto|the lads|the chat|chat group|group chat|the group|investment|the money|digital", chip: false, text: "\"You'll like this one. I don't.\" He nudges the cold cup an inch along the rail. \"Twelve of us, a chat group — expats, nine years on the hill between us and a hundred and forty. A lad we all knew, nice lad, had an app. Card services, a wallet, the usual words. 'Friends and family pre-sale', he called it — get in before the public. Forty thousand each, twelve of us.\" The cup goes another inch. \"Last message from him, verbatim: 'I'm not leaving Thailand, don't be daft.' That was in March. The lads say there's no paperwork, it was all on the chat, nothing to be done. I'd like somebody who isn't one of us to look at that sentence and tell me if it's true.\" (ASK COLIN ABOUT THE SLIPS)", short: "\"Twelve of us, forty thousand each, a lad with an app. 'I'm not leaving Thailand.' He left. The lads say there's no paperwork.\" (ASK COLIN ABOUT THE SLIPS)" },
-      { topic: "slips|transfer slips|the slips|paperwork|bank app|transfers|receipts|proof|the transfers|evidence", when: (st, G) => G.quests.presale === "active", notFlags: ["presaleSlips"], sets: ["presaleSlips"], fx: (st, G) => { G.presaleSlipsDay = G.day; }, text: "\"Paperwork.\" He says it like a man who has already been told there isn't any and believed it. Then, because you asked, he gets the {{phone}} out and opens the banking app, and scrolls, and stops. Forty thousand baht, 14 March, to a named account at a named bank, reference 'PRESALE — CS'. He looks at it for a long time. \"That's a slip,\" he says. \"That's a bank transfer slip with his company's account on it. Twelve of these, if the lads look.\" He sets the {{phone}} down face-up, which for him is a decision. \"We wrote it off as a chat. It was never a chat. It was a bank.\"", short: "\"Forty thousand, 14 March, a named account. It was never a chat. It was a bank.\"" },
+      { notFlags: ["presaleSlips"], topic: "offer|presale|pre-sale|the app|crypto|the lads|the chat|chat group|group chat|the group|investment|the money|digital", chip: false, text: "\"You'll like this one. I don't.\" He nudges the cold cup an inch along the rail. \"Twelve of us, a chat group — expats, nine years on the hill between us and a hundred and forty. A lad we all knew, nice lad, had an app. Card services, a wallet, the usual words. 'Friends and family pre-sale', he called it — get in before the public. Forty thousand each, twelve of us.\" The cup goes another inch. \"Last message from him, verbatim: 'I'm not leaving Thailand, don't be daft.' That was four months ago. The lads say there's no paperwork, it was all on the chat, nothing to be done. I'd like somebody who isn't one of us to look at that sentence and tell me if it's true.\" (ASK COLIN ABOUT THE SLIPS)", short: "\"Twelve of us, forty thousand each, a lad with an app. 'I'm not leaving Thailand.' He left. The lads say there's no paperwork.\" (ASK COLIN ABOUT THE SLIPS)" },
+      { topic: "slips|transfer slips|the slips|paperwork|bank app|transfers|receipts|proof|the transfers|evidence", when: (st, G) => G.quests.presale === "active", notFlags: ["presaleSlips"], sets: ["presaleSlips"], fx: (st, G) => { G.presaleSlipsDay = G.day; }, text: "\"Paperwork.\" He says it like a man who has already been told there isn't any and believed it. Then, because you asked, he gets the {{phone}} out and opens the banking app, and scrolls, and stops. Forty thousand baht, four months ago to the day, to a named account at a named bank, reference 'PRESALE — CS'. He looks at it for a long time. \"That's a slip,\" he says. \"That's a bank transfer slip with his company's account on it. Twelve of these, if the lads look.\" He sets the {{phone}} down face-up, which for him is a decision. \"We wrote it off as a chat. It was never a chat. It was a bank.\"", short: "\"Forty thousand, four months ago to the day, a named account. It was never a chat. It was a bank.\"" },
       { topic: "slips|transfer slips|the slips|paperwork|bank app|transfers|receipts|proof|the transfers|evidence|the lads|the twelve", req: ["presaleReported"], when: (st, G) => G.day - ((G.questDoneDay || {}).presale ?? G.day) >= 7, text: "\"A man rang me. Polite, didn't say which office, knew the account number before I read it out.\" Colin has, for the first time since you met him, drunk the flat white. \"The lad's name is on a list now — the next time he comes back through an airport, somebody polite will be waiting at passport control. Won't get the money back, probably. But it's a case with a number on it, not a chat with a sad face on it, and the lads have stopped saying nothing can be done.\" He nods at you, once. \"That was the sentence I needed looked at.\"", short: "\"A man rang. It's a case with a number now, not a chat with a sad face.\"" },
       { topic: "slips|transfer slips|the slips|paperwork|bank app|transfers|receipts|proof|the transfers|evidence|the lads|the twelve", req: ["presaleSold"], text: "\"Still nothing.\" He nudges the cup. \"Funny thing — two of the lads got a message this week about a recovery service. Very professional. Knew the amounts.\" He looks at the view the way he looks at it. \"I told them not to. They're thinking about it.\"", short: "\"Two of the lads got a message about a recovery service. I told them not to.\"" },
       { notFlags: ["presaleSlips"], topic: "slips|transfer slips|the slips|paperwork|bank app|transfers|receipts|proof|the transfers|evidence", text: "\"Paperwork?\" The cup moves an inch. \"Ask me about the pre-sale first, and then ask me that again. It's a better question the second time.\"", short: "\"Ask me about the pre-sale first.\"" },
@@ -17506,12 +17508,12 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
     dialogue: [
       { text: "\"Howard.\" A dry handshake, Scottish, and a nod at the stool beside him, which he does not consider his to offer — he waits for you to take it. \"Thirty years reading other people's money for a bank in Edinburgh. Now I read the crossword.\" He taps the folded paper. \"It lies less.\"", short: "\"Howard. Thirty years reading other people's money. Now the crossword.\"" },
       { topic: "bank|work|job|career|edinburgh|what do you do|fraud|financial crime|retired", text: "\"Financial crime, they called it by the end — fraud, before that, and before that just 'the investigations team'.\" He folds the crossword along its crease. \"Thirty years of looking at money that had a story and asking whether the story would survive somebody reading it. Mostly it would. My job was the ones that didn't.\"", short: "\"Thirty years asking whether money's story would survive somebody reading it.\"" },
-      { topic: "accused|dropped|de-risk|derisk|closed|exited|risk policy|the letter", text: "\"We never accused anybody. That's the thing nobody believes.\" He lines his glass up with the edge of the mat. \"We wrote a letter: the bank has reviewed the relationship and exited it under its risk policy, and wishes you well. No charge, no hearing, no appeal. The accountant resigned the same week, very politely. Being dropped is worse than being caught, because there's nobody to argue with — I spent thirty years being nobody.\"", short: "\"We never accused anyone. We wrote a letter. Being dropped is worse than being caught.\"" },
-      { topic: "mule|mule account|bank book|sold account|the list|the registry|three thousand", text: "\"A girl opens an account at a branch, sells the book and the card the same afternoon for three thousand baht, and the money that goes through it is never hers.\" Flat, without contempt. \"In my day the bank that froze it knew her name and nobody else did. Here they share a list now, and the list follows the person. She'll never hold an account again, anywhere, for a week's wages.\" A sip. \"The man who bought the book was three steps away and on a plane by the time the list caught up.\"", short: "\"Three thousand baht for a lifetime off every bank's books. The man who bought it was on a plane.\"" },
+      { topic: "accused|dropped|de-risk|derisk|closed|exited|risk policy|the letter", text: "\"We never accused anybody. That's the thing nobody believes.\" He lines his glass up with the edge of the mat. \"We wrote a letter. Two paragraphs: the relationship has been reviewed, the relationship is exited, kind regards. No charge, no hearing, no appeal. The accountant resigned the same week, very politely. You weren't caught — you were tidied away, and there is nobody at a tidy desk to argue with. I spent thirty years being nobody.\"", short: "\"We never accused anyone. Two paragraphs and kind regards, and nobody to argue with.\"" },
+      { topic: "mule|mule account|bank book|sold account|the list|the registry|three thousand", text: "\"A girl opens an account at a branch, sells passbook and card that same afternoon for three thousand baht, and the money that goes through it is never hers.\" Flat, without contempt. \"In my day the bank that froze it knew her name and nobody else did. Here the banks pool their names, so hers goes everywhere her book went. She'll never hold an account again, anywhere, for a week's wages.\" A sip. \"The man who bought the book was three steps away and on a plane by the time the list caught up.\"", short: "\"Three thousand baht for a lifetime off every bank's books. The man who bought it was on a plane.\"" },
       { topic: "frame|the frame|licence|license|registration|the paper|benjawan|benjawan srisuk|two stools|this bar|the bar|owner|who owns", text: "\"The frame by the cool box?\" The first real smile. \"Benjawan Srisuk, 2019, a Second Road lawyer's stamp. I read it the first night I sat here. Occupational habit.\" He glances at the woman behind the cool box. \"Ratree runs this place and has for years. The farang who bought the stools registered it in a nominee's name, went home, and nobody ever paid to change the paper — it costs money and it was never Ratree's name to change. So a woman somewhere in the north owns eleven stools on Pratumnak she has never seen.\" He goes back to the crossword. \"You'll find her on other walls. I did. Somebody who signs these things for a living would know who she was.\"", short: "\"Benjawan Srisuk, 2019. Ratree runs it; the paper never changed. You'll find her on other walls.\"" },
-      { topic: "two million|work permit|permit|capital|the grid|company", text: "\"Two million baht per work permit, one if you've a Thai wife, four for two.\" He says it like a rate he's quoted a thousand times. \"Which means the capital on a bar company tells you how many farang work there and nothing about the business. Every bar company in this town is two or four. In my old job a capital figure that round was the first thing we'd have flagged.\" He shrugs. \"Here it's just the law, being read literally.\"", short: "\"The capital tells you the permits, not the business. Every bar company here is two or four.\"" },
+      { topic: "two million|work permit|permit|capital|the grid|company", text: "\"Two million baht per work permit, one if you've a Thai wife, four for two.\" He says it like a rate he's quoted a thousand times. \"Which means the capital on a bar company tells you how many farang work there and nothing about the business. Walk the register and it reads two, two, four, two — never three. In my old job a capital figure that round was the first thing we'd have flagged.\" He shrugs. \"Here it's just the law, being read literally.\"", short: "\"The capital tells you the permits, not the business. Two, two, four — never three.\"" },
       { topic: "nont|the boy|the market|the phone boy|cash", text: "\"The lad at the Old Market?\" Howard considers it with professional interest. \"He runs the cleanest small book in the province — a {{phone}}-case company with an accountant and a very boring year.\" A pause. \"That's exactly what would have worried me, once. Boring is what a story looks like when somebody's written it properly.\"", short: "\"The cleanest small book in the province. That's what would have worried me, once.\"" },
-      { topic: "orathai|the folder|the nominee|nominee|the lady with the folder", text: "\"The lady with the folder.\" He nods slowly. \"She signs the fifty-one for a thousand baht and closes the companies properly, which costs money and which nobody else bothers with. In thirty years I met three people who closed things properly.\" He folds the paper. \"She's the only honest professional in a dishonest structure, and the structure is legal. That's not a riddle. That's most of finance.\"", short: "\"She closes things properly. In thirty years I met three people who did.\"" },
+      { topic: "orathai|the folder|the nominee|nominee|the lady with the folder", text: "\"The lady with the folder.\" He nods slowly. \"A thousand baht a signature, and when a company dies she files the death — pays the fee, stamps the forms, the part everybody else leaves in a drawer. In thirty years I met three people who filed the death.\" He folds the paper. \"She's the only honest professional in a dishonest structure, and the structure is legal. That's not a riddle. That's most of finance.\"", short: "\"She files the death when a company dies. In thirty years I met three people who did.\"" },
       { topic: "covers|count|the count|jasmine|jasmine garden|forty thousand|the till|volume", text: "\"A till that says forty thousand on a night with eight men in it?\" Howard nearly laughs. \"That's the first thing anyone in my old team would have flagged. Volume — receipts that a room that size cannot take. Count the stools three nights running and you have a pattern; one night is a Friday.\" He taps the bar. \"Nobody would have accused the bar. We'd have written to it.\"", short: "\"Volume. Three nights is a pattern; one is a Friday. We'd have written to it.\"" },
       { topic: "accountant|wipa|khun wipa|source of funds|the bank called|half", when: (st, G) => G.acctDay != null, text: "\"Your accountant rang about a source of funds.\" He doesn't ask how he knows; the hill is small. \"Then she's good, and she's protecting you. Half your cash for a month is the polite version. The impolite version is a letter with no {{phone}} number on it.\" A sip. \"Wire it from home, in your own name. Boring is the whole defence.\"", short: "\"Half your cash for a month is the polite version. Wire it from home. Boring is the defence.\"" },
       { topic: "pattaya|why|why here|retire|scotland|home", text: "\"Why here?\" He has an answer ready, and gives the true one. \"It's warm, it's cheap, and nobody on this hill has ever asked me what I used to do. After thirty years of asking other people that, it's the only luxury I wanted.\" He looks out at the road. \"And Ratree keeps a single malt in the cool box for me, which I've never asked her to do. That's a kind of account too.\"", short: "\"Warm, cheap, and nobody asks what I used to do.\"" },
@@ -19384,7 +19386,7 @@ const FLOOR_OWN = {
       { topic: "hong|the count|count|jasmine garden|across the road|covers|the covers", req: ["coversFaked"], text: "\"She signed the month.\" Grace does not look up. \"I did not ask you what you counted. I will not.\" The pen moves on. \"{{Ple}} sent her a gift basket. She has put it on the till where she can see it.\"", short: "\"She signed. I did not ask you what you counted.\"" },
       { topic: "hong|the count|count|jasmine garden|across the road|the month|sign the month|covers|the covers", text: "\"Hong keeps the till at Jasmine Garden, down the soi.\" Grace's pen pauses. \"A good cashier with a bad month in front of her. Ask me again when you have sat in there.\"", short: "\"A good cashier with a bad month in front of her.\"" },
       // UNDER VERIFICATION: the till that remembers the unit
-      { topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos|green neon|third road", when: (st, G) => G.itemLoc.bar_listing === "inventory", text: "Grace looks at the three photographs and turns the sheet over, as if the name might be on the back. \"Third Road. That unit has been three bars since I came to this soi — the Russian one, a Thai name, and the one that never opened.\" The headset murmurs; she ignores it. \"No company, it says. True. There was never a company. A man buys the chairs and the sign and the fact that people once came, and the landlord keeps the only thing that is real.\"", short: "\"Three bars on one unit since I came. A man buys the chairs; the landlord keeps the only real thing.\"" },
+      { topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos|green neon|third road", when: (st, G) => G.itemLoc.bar_listing === "inventory", text: "Grace looks at the three photographs and turns the sheet over, as if the name might be on the back. \"Third Road. That unit has been three bars since I came to this soi — the Russian one, a Thai name, and the one that never opened.\" The headset murmurs; she ignores it. \"No company, it says. True. There was never a company. The buyer gets the chairs, the sign and a story about how busy it used to be. The landlord keeps the only thing that is real.\"", short: "\"Three bars on one unit since I came. A man buys the chairs; the landlord keeps the only real thing.\"" },
       { topic: "listing|the listing|the sheet|for sale|bar for sale|the advert|the photos|green neon|third road", text: "\"A listing?\" Grace holds a hand out without looking up from the puzzle. \"Bring it here. I have read every bar-for-sale sheet on this soi; it is how I know which bars to avoid working in.\"", short: "\"Bring it here. I read every sheet on this soi.\"" },
       // THE COVERS, a month after: enforcement follows an incident (the laundering quests, 2026-10-08)
       { topic: "wallet", notFlags: ["hasWallet"], text: "\"Not through my till.\" A small shake of the headset. \"For a wallet, Candy — Candy Bar, down the soi. She hears about everything that goes missing.\"", short: "\"Candy Bar, down the soi.\"" },
@@ -20848,7 +20850,7 @@ const _R84 = {
       text: "\"Nakhon Phanom — the town, not the river. My father fix motorbikes behind the market, and there was nothing to do but help him and the football.\" She shrugs. \"So — the football.\"",
       short: "\"Nakhon Phanom, on the Mekong. Nothing to do but the football.\"" },
     { topic: "family|husband|son|kids|children|baby",
-      text: "\"My husband go, leave me the baby and the loan on the motorbike.\" She says it like a scoreline. \"The baby is eight now, with my mum in Nakhon Phanom. Liverpool, obviously. I didn't give him a choice.\"",
+      text: "\"Husband go. Left me the baby and the bike payments.\" She says it like a scoreline. \"The baby is eight now, with my mum in Nakhon Phanom. Liverpool, obviously. I didn't give him a choice.\"",
       short: "\"Husband went. My boy's eight, with my mum. Liverpool, obviously.\"" },
     { topic: "uncle|taxi|commentary|radio",
       text: "\"My uncle drive taxi in Bangkok twenty-two years, radio always on the match.\" She does the commentator's voice for one sentence, perfectly. \"He is why I talk like this. Mum say I sound like a man calling the races.\"",
@@ -21765,7 +21767,7 @@ NPCS.tar.dialogue.push(   // after her own lines (the written floor is sliced by
 // department"; the kid who cashes the account without a card said "above my pay grade" to the word wallet)
 NPCS.doyle.dialogue.push(
   { topic: "wallet|my wallet|the wallet|lost wallet|pickpocket", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
-    text: "\"Twenty-six years I read rooms.\" Doyle does not turn round. \"A wallet lifted off a man who can't stand up is at a fence inside the hour, and this town has exactly one who matters. You don't go to the police — they want a face and a name and you have neither. You go to the woman who runs the soi's lost-and-found and you bring her something: Candy, Candy Bar, Soi Buakhao. Then you do what she says, in order.\"",
+    text: "\"Listen.\" Doyle does not turn round. \"A wallet lifted off a man who can't stand up is at a fence inside the hour, and this town has exactly one who matters. You don't go to the police — they want a face and a name and you have neither. You go to the woman who runs the soi's lost-and-found and you bring her something: Candy, Candy Bar, Soi Buakhao. Then you do what she says, in order.\"",
     short: "\"A fence inside the hour. Not the police — Candy, on Buakhao, with something in your hand.\"" });
 NPCS.nont.dialogue.push(
   { topic: "wallet|my wallet|the wallet|lost wallet|my card|no card|lost card|the card", when: (st, G) => (typeof _walletHunt === "function" && _walletHunt()),
@@ -21774,8 +21776,8 @@ NPCS.nont.dialogue.push(
 // THE TOWER ON THE HILL — the fixer knows where the men who stay end up (Willem, round 100: "above my pay grade" about a condo)
 NPCS.tan.dialogue.push(
   { topic: "condo|a condo|flat|a flat|apartment|an apartment|a place to live|somewhere to live|rent|renting|where to live|a room by the month|cheaper place", when: (st, G) => G.stage === "expat",
-    text: "\"A flat.\" Tan nods as if you have passed something. \"Pratumnak Soi 5 — the top of the soi, the tower behind the wall with the intercom. Nine thousand a month and the electric, two months down, the office on the ground floor. Every man who stays asks me this in his second week. The lift is slow and the woman in the office remembers everything, which is the same thing as a good building.\" He turns the key. \"Say Pratumnak to any bike.\"",
-    short: "\"Pratumnak Soi 5, the tower behind the wall. Nine thousand and the electric. Say Pratumnak to any bike.\"" });
+    text: "\"A flat.\" Tan nods as if you have passed something. \"Pratumnak Soi 5 — the top of the soi, the tower behind the wall with the intercom. ฿" + CONDO_RENT.toLocaleString() + " a month and the electric, " + CONDO_DEPOSIT_MONTHS + " months down, the office on the ground floor. Every man who stays asks me this in his second week. The lift is slow and the woman in the office remembers everything, which is the same thing as a good building.\" He turns the key. \"Say Pratumnak to any bike.\"",
+    short: "\"Pratumnak Soi 5, the tower behind the wall. ฿" + CONDO_RENT.toLocaleString() + " and the electric. Say Pratumnak to any bike.\"" });
 // THE UNCLE'S PRICE, from the man who counts the stock (Wendell, round 111: the inside price on every page of BOOKS, and
 // Bert "No idea" about stock): what it is, and why a night will not show it
 NPCS.bert.dialogue.unshift(
