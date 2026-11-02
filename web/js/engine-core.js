@@ -301,6 +301,14 @@ function _topicKnown(t) {
 
 let G = null;
 
+// AN IN-GAME RESET (RESTART, START OVER, PLAY AGAIN) is a fresh game in the month the player arrived in: the frontend
+// seeds G.season0 off the wall clock on its start panel only, so a bare newGame() here would fall back to November.
+// The Act One record and its attempt count (which unlock HINT) carry with it, as they do across a failed run.
+function _freshGame() {
+  const keep = G ? { season0: G.season0, act1Best: G.act1Best, act1Tries: G.act1Tries } : {};
+  newGame();
+  for (const k in keep) if (keep[k] != null) G[k] = keep[k];
+}
 function newGame() {
   G = {
     room: "jomtien_beach",
@@ -690,16 +698,16 @@ function importBaton(b) {
 // its few life-long books), so its keys are "night" (reset at dawn — _endNight resets every one listed, by type) or "trip".
 const STATE_SCHEMA = {
   night: (
-    "bank battery chamNight checkoutNight crashInjury darkStreak encPrompt enteredVia game hangover hunger hurt " +
+    "battery chamNight checkoutNight crashInjury darkStreak encPrompt enteredVia game hangover hunger hurt " +
     "jaded kickedTonight kpPlayed lastBfBase lastBfHonest lastBfId lastBfPreTier lastBfWhy lastBusWarned " +
     "lastNightWas lightOn monthClosing nightTurn nontStuck offstage party partyLog peddlerNight pendingBf pendingEnc " +
     "pendingFare pendingSoapy quizPlayed rain rideSeq room roomWater roughLost safeTries salengCart selfBfId thirst " +
     "wakeTurn ").trim().split(/\s+/),
   trip: (
-    "atmDay atmToday care curseOwed everBond happy hotel weekStart lastNight lastNightSaid ledgerSeen loan loanSkipped " +
-    "loanSkippedOwed money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
+    "atmDay atmToday care curseOwed happy hotel weekStart lastNight lastNightSaid ledgerSeen loan " +
+    "money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
   life: (
-    "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
+    "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho bank " +
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
     "bankNotes bar barBought barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
@@ -707,7 +715,7 @@ const STATE_SCHEMA = {
     "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
     "convoIdx convoLapsed convoPage convoQ coversNights dailyId dailySeed darkDoorDay day destitute destituteDay dog " +
     "dogNudgeDay dogPhakhama dogRegion dogRoomSeen dogTagged dragDay drizzleTurn dropped drunk eddyBackDay encDone " +
-    "endKind endWarn envelopeDue examined exitSaid exitTried faction firedBars flags flatTold flowerDay flowerFor " +
+    "endKind endWarn envelopeDue everBond examined exitSaid exitTried faction firedBars flags flatTold flowerDay flowerFor " +
     "flowerSeen freeTeaDay fridgeDay fridgeWater frontierSaid giftIn giftLog gifts givenEver glass halfThaiClocked " +
     "heardOf heardRegion homeSeen hospitalVisits hotelDebt insulted introAfter introStep itNpc itemLoc jadeSaid job " +
     "jobFired jobOffer jobPaid jobPay jobQuit joinSaid joinerDay joinerPaid keptAskText keptBy keptByLog keptByUsed " +
@@ -715,7 +723,7 @@ const STATE_SCHEMA = {
     "lastCoda lastComp lastConquest lastDrizzle lastEnc lastGame lastGate lastKp lastNightBye lastNightNotice " +
     "lastNightWith lastOffer lastPeddler lastPolice lastRain lastRide lastSaleng launderBack launderRisk leaveLine " +
     "leaveOn leaveSaid ledgerNotes levelsSeen licNominees licencesRead lifeStats lightWarn loanBorrowed loanPrin " +
-    "loanRepaid lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
+    "loanRepaid loanSkipped loanSkippedOwed lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
     "miffed missTarget mode month monthAdj monthLine monthRate mortDeclined mortDeclinedDay motBoots motoAsked motoBalkTurn " +
     "motoHomeDoor motoRides motoRiding namedBy nokLeftDay nontBorrowed nontCashCount nontCashed nontCut nontOut " +
     "nontPayNow nontPrin nontRepaid npc offIn offShift offTill officeTries over overheardSaid owed owlRead " +

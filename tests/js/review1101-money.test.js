@@ -214,3 +214,35 @@ test("S2-9: every { day } record ages across a trip — the league night is not 
   G.game = null; G.room = _hotelRoomId(); G.lightOn = true;
   assert.doesNotMatch(t("examine dog"), /on day -?\d/);
 });
+
+test("S2-10: RESTART, PLAY AGAIN and START OVER keep the month the player arrived in, and the Act One record", () => {
+  const id = () => ({ origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" });
+  newGame(); G.season0 = 5; G.player = id(); t("restart"); assert.equal(G.season0, 5, "full RESTART");
+  G.season0 = 5; startSoi6Mode(); G.day = 8; G.pendingChoice = "vacation_end"; t("play again"); assert.equal(G.season0, 5, "Soi 6 PLAY AGAIN");
+  G.season0 = 5; G.pendingChoice = "vacation_end"; t("restart"); assert.equal(G.season0, 5, "Soi 6 RESTART");
+  newGame(); G.player = id(); G.season0 = 5; G.act1Best = 3; G.act1Tries = 2; G.pendingChoice = "vacation_end"; t("restart");
+  assert.deepEqual([G.season0, G.act1Best, G.act1Tries], [5, 3, 2], "the full game's gate RESTART");
+});
+
+test("S2-12: a command whose own wait crossed the night is not ticked again on the new morning or the new Act One run", () => {
+  newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" };
+  G.room = "beach_rd_s"; G.money = 500; G.nightTurn = NIGHT_TURNS - 1; t("hail bus");
+  assert.equal(G.act1Tries, 1, "the run failed at dawn"); assert.equal(G.nightTurn, 0, "the fresh run had already spent a tick");
+  sandbox(); G.money = 500; G.day = 3; G.room = "beach_rd_s"; G.nightTurn = NIGHT_TURNS - 1; t("hail bus");
+  assert.equal(G.day, 4); assert.equal(G.nightTurn, 0, "the morning started at turn 1");
+});
+
+test("S2-13: STATE_SCHEMA declares the lifetimes the code keeps — the account and the black book are the life's, every trip field goes with the trip", () => {
+  for (const k of ["bank", "everBond", "loanSkipped", "loanSkippedOwed"]) {
+    assert.ok(STATE_SCHEMA.life.includes(k), `${k} is a life field`);
+    assert.ok(!STATE_SCHEMA.night.includes(k) && !STATE_SCHEMA.trip.includes(k), `${k} is declared twice`);
+  }
+  sandbox(); G.room = _hotelRoomId(); G.day = 3; G.nightTurn = 60; G.bank = 777; _endNight("sleep"); assert.equal(G.bank, 777);
+  // a trip field is the trip's: _newVacation resets each one (weekStart is re-set by the Soi 6 week that reads it)
+  const kept = [];
+  for (const k of STATE_SCHEMA.trip) {
+    if (k === "weekStart") continue;
+    sandbox(); G.day = 8; const s = { sentinel: k }; G[k] = s; _newVacation(); if (G[k] === s) kept.push(k);
+  }
+  assert.deepEqual(kept, [], "declared trip, kept across a trip");
+});
