@@ -5965,7 +5965,7 @@ function _nightSnapshot() {
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     spcB: G.massageSpend || 0, strB: G.streamSpent || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
     wonB: (G.offIn || 0) + (G.quizWon || 0), quizB: G.quizWon || 0, giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0, boughtB: G.barBought || 0, refundB: G.refundIn || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
-    nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
+    nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bfFineB: G.bfFinePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
     nums: Object.keys(G.phone.contacts || {}).filter(id => G.phone.contacts[id] && NPC_ROLES[id]).length,
@@ -6064,7 +6064,10 @@ function _morningLedger() {
   if (topUp > 0 || stockN > 0) bits.push([topUp > 0 ? "\u0e3f" + _num(topUp) + " of your own money into the till when it went under" : "", stockN > 0 ? "\u0e3f" + _num(stockN) + " from the pocket for your own drinks' stock" : ""].filter(Boolean).join(" and ") + ", on top of that \u2014 \u0e3f" + _num(G.money) + " in the pocket now");
   if (borrowed > 0) bits.push("\u0e3f" + _num(borrowed) + " borrowed from Nira \u2014 a debt, not a win");
   const polN = (G.policePaid || 0) - (b.polB != null ? b.polB : (G.policePaid || 0));
-  if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");   // a fine was lumped into "down" (Gordie, round 72)
+  if (polN > 0) bits.push("\u0e3f" + _num(polN) + " of it to the police");
+  // the bar's part of a take-out, named as its own movement: the ledger named her ฿2,000 and not the ฿3,700 fine (Keith, round 113)
+  const bfFineN = (G.bfFinePaid || 0) - (b.bfFineB != null ? b.bfFineB : (G.bfFinePaid || 0));
+  if (bfFineN > 0) bits.push("\u0e3f" + _num(bfFineN) + " of it to a till for her time off the floor");   // a fine was lumped into "down" (Gordie, round 72)
   const spcN = (G.massageSpend || 0) - (b.spcB != null ? b.spcB : (G.massageSpend || 0));   // the specials and the joiner fee were in "down" and nowhere else (László, round 73)
   if (spcN > 0) bits.push("\u0e3f" + _num(spcN) + " of it on the massage table");
   const strN = (G.streamSpent || 0) - (b.strB != null ? b.strB : (G.streamSpent || 0));   // drinks bought on the stream, from the account (2026-10-22)

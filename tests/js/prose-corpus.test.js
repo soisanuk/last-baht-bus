@@ -69,7 +69,7 @@ test("--quests is the third pivot: a quest's prose AND its wiring in one place",
   const o = run("--quests", "plg_deal");
   assert.match(o, /giver: bert/);
   assert.match(o, /doneFlag: plgResolved — set by npc\.bert\.dialogue\[\d+\]/, "who actually sets the flag");
-  assert.match(o, /at: bert/);
+  assert.match(o, /at: .*"bert"/);   // the where-clause follows the step (Mario, 2026-11-03): the dump prints the function
   assert.match(o, /reward:/);
   // the wiring is the point: a quest whose flag nothing sets is unfinishable, and
   // the header says so rather than leaving it to be discovered in play

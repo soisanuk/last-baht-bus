@@ -83,3 +83,27 @@ test("Keith: a question belongs to the conversation it was asked in — turning 
   t("talk to somo"); assert.equal(G.convoQ, null, "and she does not come back to it");
   assert.equal(typeof _answerOwner, "undefined", "no answer is routed to another asker by its words");
 });
+
+// ── Keith's small rows and Mario's rulings, 2026-11-03 ──
+test("Keith: TAO RAI on Soi 6 names the room upstairs", () => {
+  sandbox(); G.room = "ruby_kiss"; G.nightTurn = 40;   // a Soi 6 bar (the Silk Rose is Soi Buakhao's)
+  assert.match(t("tao rai"), /room upstairs ฿[\d,]+ \(flat, all night/);
+  G.room = "lucky_tiger"; assert.doesNotMatch(t("tao rai"), /room upstairs/);
+});
+test("Keith: the morning ledger names the bar's fine as its own movement", () => {
+  sandbox(); G.room = _hotelRoomId(); _nightSnapshot();
+  G.bfFinePaid = (G.bfFinePaid || 0) + 3700; G.money -= 3700;
+  _endNight("sleep");
+  assert.match(JSON.stringify(G.lastNightSaid), /฿3,700 of it to a till for her time off the floor/);
+  assert.ok(STATE_SCHEMA.life.includes("bfFinePaid"));
+});
+test("Mario: a three-stop errand's where-clause follows the step — no atTargets", () => {
+  sandbox();
+  assert.equal(QUESTS.plg_deal.at(G), "terry");
+  _setFlag("heardPlgHistory"); assert.equal(QUESTS.plg_deal.at(G), "kesinee");
+  _setFlag("heardPlgInside"); assert.equal(QUESTS.plg_deal.at(G), "gavin");
+  _setFlag("heardPlgPitch"); assert.equal(QUESTS.plg_deal.at(G), "bert");
+  sandbox(); assert.equal(QUESTS.orchid_recon.at(G), "gavin");
+  _align("plg", 2); assert.equal(QUESTS.orchid_recon.at(G), "orchid_room");
+  G.visited.orchid_room = 1; assert.equal(QUESTS.orchid_recon.at(G), "doyle");
+});

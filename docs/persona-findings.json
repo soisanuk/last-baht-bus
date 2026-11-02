@@ -44148,12 +44148,12 @@
    "instrument": "",
    "between": "",
    "claim": "TAO RAI lists beer, lady drink, water, bell, games — not the room upstairs",
-   "verdict": "deferred",
-   "note": "the Soi 6 room fee is missing from the price list",
+   "verdict": "fixed",
+   "note": "the Soi 6 room fee is missing from the price list — 2026-11-03: TAO RAI on Soi 6 names the room upstairs, flat all night, her own money on top",
    "system": "money",
    "cls": "B",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44178,12 +44178,12 @@
    "instrument": "",
    "between": "",
    "claim": "the morning ledger names her ฿2,000 but not the bar's ฿3,700 of a ฿5,700 take-out",
-   "verdict": "deferred",
-   "note": "reconciles, does not say; the ledger could name the fine as its own movement",
+   "verdict": "fixed",
+   "note": "reconciles, does not say; the ledger could name the fine as its own movement — 2026-11-03: G.bfFinePaid (life) is booked where the money leaves the pocket; the ledger names the night's share as its own movement",
    "system": "money",
    "cls": "E",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44208,8 +44208,8 @@
    "instrument": "",
    "between": "",
    "claim": "the room upstairs is '฿500 room upstairs' / '฿600 bar's fine' / '฿700 room upstairs' in three bars",
-   "verdict": "deferred",
-   "note": "three framings of BF_SOI6 across the floors' lines",
+   "verdict": "design",
+   "note": "three framings of BF_SOI6 across the floors' lines — 2026-11-03: each floor prices its room by its own markup (_barMarkup); three floors, three numbers, by design",
    "system": "barfine",
    "cls": "M",
    "sev": "trivial",

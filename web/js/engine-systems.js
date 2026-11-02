@@ -2054,8 +2054,9 @@ function _bfResolve(kind) {
     return;
   }
   G.money -= price;
-  // her share of it went into her hand, and the morning ledger says so beside the tips
-  { const her = Math.min(price, _herFee(kind !== "st")); if (her > 0) _giftNote(id, { kind: "time", amt: her }); }
+  // her share of it went into her hand, and the morning ledger says so beside the tips; the bar's share is booked
+  // for the ledger too (Keith, round 113: it named her ฿2,000 and not the ฿3,700 fine)
+  { const her = Math.min(price, _herFee(kind !== "st")); if (her > 0) _giftNote(id, { kind: "time", amt: her }); G.bfFinePaid = (G.bfFinePaid || 0) + Math.max(0, price - her); }
   // who you left with is written once the deal is struck — before, a long time you could not pay for was remembered (review 2026-10-25)
   if (kind === "lt" || kind === "party") G.soc.leftFrom = G.room;
   // who you went with, and how — so she remembers the night next time (Martin, round 85: a woman two

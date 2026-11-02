@@ -420,6 +420,7 @@ function newGame() {
     npc: {},             // per-character conversation state: id → {trust,mood,dstate,know} (see _npcState)
     convo: null,         // active conversation partner id — bare topics/actions aim here (see _convoActive)
     itNpc: null,         // last person addressed — the antecedent for "her/him/them" (see _resolveActor)
+    bfFinePaid: 0,       // every bar's fine / room upstairs you have paid for a woman's time, cumulative — the morning ledger names the night's share
     convoQ: null,        // a question the partner has put to YOU, awaiting a reply: {id,key} (see _convoAsk/_convoAnswer)
     convoLapsed: {},     // …and questions you walked away from, re-asked next time you talk to them
     darkDoorDay: -1,     // the once-a-night "there's no lights out there" nudge at your own door
@@ -729,7 +730,7 @@ const STATE_SCHEMA = {
     "motoHomeDoor motoRides motoRiding namedBy nokLeftDay nontBorrowed nontCashCount nontCashed nontCut nontOut " +
     "nontPayNow nontPrin nontRepaid npc offIn offShift offTill officeTries over overheardSaid owed owlRead " +
     "ownRescueDay paper paperFlag paperPaid paperShort paperUntil partnerWho partyLed partyMates partyRescued " +
-    "patronTalk payCount payDay phone pityOwed pityRideDay pityRides player policeAt policePaid poolDay poolHold " +
+    "patronTalk payCount payDay phone pityOwed pityRideDay pityRides player policeAt policePaid bfFinePaid poolDay poolHold " +
     "potDay presaleSlipsDay prevRoom priewDay priewSeen priewTextDay probeAt questDoneDay questHailed questPaid " +
     "quests quizLast quizSeen quizWon refundIn qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
     "returnHello reviewOf revisitSaid rideEverTaken rideLog rivalLog rng rodeVenues rodeWith roofless roomNight " +

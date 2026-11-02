@@ -145,7 +145,8 @@ test("after the middle stop, the four two-leg quests point home", () => {
   assert.equal(_qAt(QUESTS.fiftyone), "orathai"); _setFlag("fiftyoneSigned"); assert.equal(_qAt(QUESTS.fiftyone), "reginald");
   assert.equal(_qAt(QUESTS.quietside), "nok"); _setFlag("heardGordon"); assert.equal(_qAt(QUESTS.quietside), "sumalee");
   assert.equal(_qAt(QUESTS.hill_photo), "bali_hai"); G.visited.bali_hai = true; assert.equal(_qAt(QUESTS.hill_photo), "bob");
-  assert.equal(_qAt(QUESTS.orchid_recon), "orchid_room"); G.visited.orchid_room = true; assert.equal(_qAt(QUESTS.orchid_recon), "doyle");
+  assert.equal(_qAt(QUESTS.orchid_recon), "gavin"); _align("plg", 2); assert.equal(_qAt(QUESTS.orchid_recon), "orchid_room");   // the rope first (Mario, 2026-11-03)
+  G.visited.orchid_room = true; assert.equal(_qAt(QUESTS.orchid_recon), "doyle");
   G.quests.fiftyone = "active"; G.room = "beach_rd_c";
   assert.match(t("hint"), /Reginald is at|Where Reginald is/);
   assert.doesNotMatch(said(), /Where Orathai is tonight/);

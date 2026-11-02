@@ -16147,6 +16147,8 @@ function _priceTalk(npc) {
       ? `her own money ฿${_num(bf.st)} short time, ฿${_num(bf.lt)} long — the bar's fine comes off after midnight, hers does not`
       : `short time ฿${_num(bf.st)}, long time ฿${_num(bf.lt)} — the bar's fine and her own money together, the fine to the till and hers into her hand`);
   }
+  // on Soi 6 every woman knows the room upstairs — a flat fee all night, hers on top; the till side already said it inside the two fees (Keith, round 113)
+  if (_inBar() && r.barType === "soi6" && !_till && !(_atOwnBar())) bits.push(`the room upstairs ฿${_num(_barfinePrice("soi6"))} — flat, all night — and her own money on top`);
   bits.push(`water or soda ฿${_num(_waterPrice())} — you pay for the seat, not the bottle`);
   if (_inBar() && r.barType && r.barType !== "pub") bits.push(`the bell ฿${_num(_bellPrice(G.room))} (a drink a head)`);   // priced per head, said so (Marcus, round 96)
   const _draw = _inBar() ? _npcsHere().find(x => NPC_ROLES[x] === "hostess" && _isDraw(x)) : null;
@@ -16310,6 +16312,7 @@ function _doTaoRai() {
     if (G.room === "orchid_room") { _say(`“เท่าไหร่?” (tao rai — how much?) ${_tillKeeper(G.room) ? NPCS[_tillKeeper(G.room)].name : "The till"}: beer ฿${_num(_beerPrice())} · water or soda ฿${_num(_waterPrice())} · by the bottle, ${_orchidListLine()}. "A bottle is a table, and the girls are the tables'. For a guest without one: beer, soda, and that is all."`, "dim"); return; }
     if (_inBar() && r.barType !== "pub") bits.push(`lady drink ฿${_num(_ladyPrice())}`);   // the Vic has no bar-girl economy (Neville, round 53)
     else if (G.party && (G.party.ids || []).length) bits.push(`a drink for the woman with you ฿${_num(_ladyPrice())}`);   // …but the woman you brought in drinks, and it is charged
+    if (_inBar() && r.barType === "soi6" && !(_atOwnBar())) bits.push(`the room upstairs ฿${_num(_barfinePrice("soi6"))} (flat, all night; her own money on top)`);   // the board's largest number was missing (Keith, round 113)
     bits.push(`water or soda ฿${_num(_waterPrice())} (the seat, not the bottle)`);
     if (_inBar() && r.barType) bits.push(`the bell ฿${_num(_bellPrice(G.room))} right now (a drink a head — it moves with the room)`);   // the Vic rings one too, so it is quoted
     // the games take a stake: quoted before the frame goes up, not after (Liam, round 93)

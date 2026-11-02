@@ -14923,7 +14923,8 @@ const QUESTS = {
     desc: "Pattaya Leisure want to buy Bert's bar out from under its dying owner. Get him the " +
       "real picture — the history (ASK TERRY ABOUT PATTAYA LEISURE), the inside view (ASK KESINEE ABOUT PATTAYA LEISURE, at the Kitten Corner), and the pitch (ASK GAVIN ABOUT THE OFFER), at the Golden Dragon on Soi 6 — then tell Bert (ASK BERT ABOUT THE OFFER). Kesinee talks straight to men she has seen spend: a drink for one of her girls first.",
     deps: [],
-    at: "bert",
+    // the where-clause follows the step: the three informants in the order the desc names them, then Bert (Mario, 2026-11-03: `at` as a function of the step, no atTargets)
+    at: (G) => !_flag("heardPlgHistory") ? "terry" : !_flag("heardPlgInside") ? "kesinee" : !_flag("heardPlgPitch") ? "gavin" : "bert",
     doneFlag: "plgResolved",
     reward: { money: 0, happy: 5 },
   },
@@ -14958,7 +14959,7 @@ const QUESTS = {
     desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
       "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE). The rope lifts for the group's friends — and Gavin, at the Golden Dragon, decides who those are.",
     deps: [],
-    at: (G) => (G.visited && G.visited.orchid_room) ? "doyle" : "orchid_room",
+    at: (G) => (G.visited && G.visited.orchid_room) ? "doyle" : _orchidOpen() ? "orchid_room" : "gavin",   // the rope first: Gavin decides who the group's friends are
     doneFlag: "orchidReported",
     reward: { money: 1500, happy: 4 },
   },

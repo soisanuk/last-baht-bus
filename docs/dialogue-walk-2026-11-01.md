@@ -315,6 +315,12 @@ sign and Somchith's coffee.
 
 ## Open calls (Mario's)
 
+**Ruled 2026-11-03.** 0: no `atTargets` — `at` as a function of the step, built for the Pattaya Leisure offer (Terry, Kesinee,
+Gavin, then Bert) and the President's Table (Gavin until the rope lifts, the room, then Doyle). 1: left as pinned. 2: Jinda gets
+her own words (the after-work session, `claude/after-work-1103`). 3: Orathai stays dry — the one person in the laundering thread
+simply doing a job.
+
+
 0. The Pattaya Leisure offer and the President's Table are three-stop errands with one `at`. HINT names the
    closer (Bert, Doyle) and the desc names the informants; `atTargets` could carry all three so the journal's
    where-clause walks the informants too. A design call, not a defect.
