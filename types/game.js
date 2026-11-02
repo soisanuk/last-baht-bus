@@ -107,6 +107,7 @@
  * @property {string} room                        home room — the DEFAULT, not the answer (see _npcRoom)
  * @property {string} desc
  * @property {DialogueNode[]} dialogue
+ * @property {{ text: string, short?: string }} [afterWork] — where she goes after close, in her own words; world.js appends it as her last node
  * @property {string} [th]                        Thai name (313)
  * @property {boolean} [filler]                   generated from the _FILLER_* tables, not hand-authored (209)
  * @property {string} [look]                      portrait-generator prompt line (87)

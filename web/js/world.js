@@ -6389,6 +6389,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "The only woman in the room not dressed to be looked at from across it: a plain dark slip, " +
       "no jewellery, hair cut sharp. She works the corner tables, moves like she is not there, and " +
       "is the calmest person in a room that is not calm.",
+    afterWork: { text: "\"I leave before the corner tables do. That is the skill — the lamp go out and nobody notice it went.\" Pleasant, and that is all. \"Then I walk. The soi is empty at that hour and I like a street with no music in it. Then a room with no music in it. Four years, and then nothing with music in it, anywhere.\"",
+      short: "\"Leave before the corner tables, walk a street with no music.\"" },
     dialogue: [
       { text: "She arrives beside you without having crossed the room, which is a skill. \"You want " +
           "company or you want quiet? Both is fine.\" The smile is real and goes nowhere near her " +
@@ -6421,6 +6423,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Copper in her hair, real gold at her ears, and the immaculate finish of somebody who treats " +
       "her appearance as capital equipment. Top earner in the room and entirely unembarrassed about " +
       "it; she will tell you her numbers before she tells you her nickname.",
+    afterWork: { text: "\"I write tonight's number before the earrings come off. Drink, barfine, who came back.\" The rep's briskness. \"Then the gold go in the box, the box go in the safe, and I sleep next to the safe. Jaew sleep next to a Korean gentleman. I sleep next to the bank. Next month I am first.\"",
+      short: "\"The number, the gold in the safe, then sleep beside it.\"" },
     dialogue: [
       { text: "\"Sit here, not there.\" She moves your drink two feet and you are somehow now at a " +
           "better table. \"There you see the door. Here you see the room, and the room is what you " +
@@ -6455,6 +6459,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "A round-faced girl of about twenty-two in a silver dress that is not hers and does not quite " +
       "fit, watching the other women the way you watch someone doing a job you have just been given. " +
       "Five weeks off a beer bar in Buakhao and still visibly converting every price into the old one.",
+    afterWork: { text: "\"At the beer bar, after close, we sit outside and shout at the empty road, very happy.\" She tugs the silver dress. \"Here, when the room let us go, the dress go back on the hanger — Pae's hanger — and I go home in the dark very quiet, and I don't know yet what to do with quiet. I call Sisaket when my daughter wake. She say hello pi.\"",
+      short: "\"Pae's dress on the hanger, home in the dark, Sisaket when she wake.\"" },
     dialogue: [
       { text: "\"Hello — hi — welcome.\" She gets all three out and then laughs at herself for it. " +
           "\"Sorry. Five week only here. Before, beer bar, Buakhao — is different, na. Very different.\"",
@@ -6833,6 +6839,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "pink_lotus",
     desc: "Bubbly, laughing at everything you say before you finish saying it — the " +
       "undisputed morale champion of Pink Lotus Lounge.",
+    afterWork: { text: "\"NOODLE! The hatch close with the bar, but the noodle lady on the corner never close, hahaha!\" Already hungry at the thought. \"Then upstairs with the girls, and we eat on the floor and we laugh about the customer — not you! Okay, a little you. Then sleep like a dead cat. Then wake up hungry. Same same!\"",
+      short: "\"Noodle on the floor with the girls, then sleep like a dead cat.\"" },
     dialogue: [
       { th: "มาแล้วเหรอ", rom: "maa laeo roe",
         text: "\"You come back!! Wait— no, you new. Same same!\" She collapses in giggles. \"Sit down sit down! You buy me lady drink? Upstairs very nice—\" she catches your expression \"—okay okay, water for you, story for me, hahaha!\"",
@@ -6885,6 +6893,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "pink_lotus",
     desc: "Beautiful and burning a little too bright, all the way in from the first minute. Her eyes flick to " +
       "{{your phone}} when it lights, to the girl who walks past, and back to you, fast. Lovely. A live wire.",
+    afterWork: { text: "\"Fast. I am off the stool before the music stop and out the door with whoever is mine tonight — or with nobody. Nobody is also fine. I don't wait around for leftover.\" The bright, dangerous smile. \"Then I sleep like a house that already burn. Nothing to lose, nothing to watch. Everybody else sleep worse.\"",
+      short: "\"Out the door before the music stop. Sleep like a house already burned.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You. I like you already — don't laugh, I mean it.\" She takes your face in one hand, serious, " +
@@ -6912,6 +6922,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-five, soft round face, big dark eyes, long hair loose, pastel bar dress.",
     desc: "Sweet, soft-eyed, always in the middle of a small catastrophe — a sick relative, a broken thing, a " +
       "bill with today's date. She holds your hand when she tells you, and she is often, genuinely, not lying.",
+    afterWork: { text: "\"After?\" The eye again, dabbed. \"I call my sister about the bike, and the shop say the same as before, and I count what I make tonight, and it is nearly enough. Always nearly. Then I lie in the dark and think: tomorrow, somebody kind. Then sleep come, or it don't. Sorry — you don't need to hear.\"",
+      short: "\"My sister about the bike, then nearly enough, then tomorrow.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh — hello, sorry, my face.\" She dabs at an eye that may or may not be wet. \"Bad day. No no, " +
@@ -6938,6 +6950,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-four, pretty and unmade-up, hair tied back, faraway expression, plain bar top.",
     desc: "Pretty and a little far away, like part of her is always on the bus back to a village you'll never " +
       "see. Kind to you, and not quite here.",
+    afterWork: { text: "\"I go up and I open the window for the cold.\" Softer, further away. \"Here is never cold, but at that hour there is a little, and I sit in it with my eyes closed and I am by the river. Two more year. I count the month on the glass with my finger. The glass is very dirty with month.\"",
+      short: "\"Open the window for the cold, and be by the river a while.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "A soft, real smile that doesn't quite reach wherever she's gone. She moves her bag off the next stool without being asked. \"Sit, na. I not so good talking tonight, but I sit nice.\" And she does — a warm, quiet " +
@@ -6962,6 +6976,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "kitten_corner",
     desc: "Composed in a way the room isn't, watching more than she performs. There's a textbook in her bag " +
       "under the going-out clothes, and she'd rather you didn't make a thing of it.",
+    afterWork: { text: "\"Two chapters.\" She pats the bag with the textbook in it. \"The cold half is empty after close and the aircon's still running, so I sit at the pool table with the book until the sun's up, then sleep. Everybody else goes upstairs with somebody. I go upstairs with depreciation. Better long-term partner.\"",
+      short: "\"Two chapters at the pool table, then sleep.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Evening.\" Even, unhurried, her English a notch cleaner than the room's. \"You can buy me a " +
@@ -6986,6 +7002,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "cherry_pop",
     desc: "Round-cheeked and permanently pleased, a half-step behind every joke and laughing at it anyway, on " +
       "faith. Sweetest girl in the bar, and the bar knows it.",
+    afterWork: { text: "\"Upstairs I open the drawer and I look at the gold. Not touch — look.\" Her whole face is pleased. \"One salueng, one more salueng. Then I close the drawer very slow so it don't wake up. Then sleep. Morning, I forget which drawer. Then I find it. Then I am happy again. Same every day!\"",
+      short: "\"Look at the gold in the drawer, close it slow, sleep.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hi hi hi!\" Three his, delighted. \"You are new? Or I forget? I forget a lot — is okay, my " +
@@ -7004,6 +7022,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "cherry_pop",
     desc: "Loud, glorious, and pouring — for you, for herself, for the room. At Cherry Pop she's the party's " +
       "engine, right up until she's its wreckage.",
+    afterWork: { text: "\"After? HA. Fahsai put me in a taxi.\" She toasts the till. \"Same taxi every night, same man, he know my room. I sing in the taxi, he turn the radio up so he don't hear me. Then I sleep in the dress. Then tomorrow I am top seller again. The dress don't mind.\"",
+      short: "\"Fahsai's taxi, singing, sleep in the dress.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"HELLO my new best friend!\" A shot is in your hand that you did not order. \"We drink, we " +
@@ -7024,6 +7044,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-eight, relaxed open face, hair in a loose knot, denim shorts and bar tee.",
     desc: "Easy and unhurried behind the Shady Lady's rail — the kind of company that feels like a night off " +
       "rather than a transaction. No hurry in her, and no hustle either.",
+    afterWork: { text: "\"Bike home. Ten minute — the lonely ten, I tell you.\" A comfortable shrug. \"Then I call my sister even if it is late for her; she have a lecture, she don't care, she want the gossip. Then sleep with the fan on three and my feet up the wall. Nobody count me, nobody rush me. The feet are fine.\"",
+      short: "\"The bike, my sister, the fan on three, feet up the wall.\"" },
     dialogue: [
       // a first night's hello: a man she met on an earlier night gets one of her return hellos (appended, _R79)
       { when: (st, G) => !(G.metDay && G.metDay.pukky != null && G.metDay.pukky < G.day), th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -7074,6 +7096,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "bay_watch",
     desc: "In a Liverpool shirt and zero makeup, arguing offside with two regulars and winning. More one-of-" +
       "the-lads than hostess, and she'll tell you so before you get the wrong idea.",
+    afterWork: { text: "\"Depends on the kick-off.\" Obviously. \"Late one, I stay and watch it with Nu, shutter down, two beers we pay for ourselves, nobody to explain offside to. No late one, home, and I ring my mum to hear my boy snore. He's eight and he snores like a man already. Liverpool through and through.\"",
+      short: "\"A late kick-off with Nu, or home to hear my boy snore.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Alright.\" A nod, like to a mate. \"Sit, watch the game. Fair warning — I don't do the " +
@@ -7105,6 +7129,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of about forty, warm broad face, short practical hair, apron over a bar polo.",
     desc: "A little older than the rail usually runs, and she mothers the whole bar — the young girls, the " +
       "drunk regulars, and, within about four minutes, you. You'll have eaten something before you leave.",
+    afterWork: { text: "\"I feed the girls. After two the cart lady is finish, so I cook at the bar — one pan, and the rice cooker Malila keep behind the fridge — and whoever is still hungry sit on the step.\" Already looking for who that is. \"Then a plate in the fridge for Malila, because she forget to eat. Then bed. Eight year. The rice cooker is older than some of the girls.\"",
+      short: "\"Cook for the girls on the step, a plate in the fridge for Malila.\"" },
     dialogue: [
       { when: (st, G) => (G.hunger || 0) >= 25 && !(G.metDay && G.metDay.nina != null && G.metDay.nina < G.day), th: "สวัสดีค่ะ", rom: "sawatdee kha",   // the first night; a man who comes back gets his own line (Kevin, round 84)
         text: "\"You eat already?\" Before hello, before anything — frowning at how tired you look. \"No? " +
@@ -7137,6 +7163,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "pink_lotus",
     desc: "The flagship's mamasan: still, precise, a tablet where another mama keeps a smile. She runs Pink " +
       "Lotus like the asset it is on Pattaya Leisure's books, and she priced you before you sat down.",
+    afterWork: { text: "\"The app close the night at the shutter, and then it open the morning: the numbers, which girl, which bar, how many for tomorrow.\" The tablet does not look up. \"I read it before I sleep, so the girls don't read it in my face. Then the room beside the office — the company's room. I sleep the company's sleep. Six hour. The app wake me.\"",
+      short: "\"The app's morning before I sleep, then the company's room.\"" },
     dialogue: [
       // Nee reads your MANNER the instant you sit — the operator mama's whole craft.
       // One gated greeting per personality (a player always has exactly one after the
@@ -7204,6 +7232,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of fifty-five, steel-grey hair pinned up, reading glasses on a chain, dark blouse.",
     desc: "Golden Dragon's mamasan since before Pattaya Leisure bought the paper — and she stayed on when they did, " +
       "because the numbers didn't care who owned them, and neither, in the end, does she.",
+    afterWork: { text: "\"The app shut at the shutter, and so do I. I don't take the bar home — three owner, I learn that on the first one.\" Brisk, unbothered. \"I walk up to Second Road, I eat something with no music, I go to bed in a room the company don't have the address of. The girls have the room upstairs. The mama have the right to leave.\"",
+      short: "\"The app shut, I shut. Something with no music, then a room the company don't know.\"" },
     dialogue: [
       // Peung has worked this floor through three owners and can place a farang by the
       // way he holds his money. One gated greeting per ORIGIN (the player always has
@@ -7268,6 +7298,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of sixty, grandmotherly, soft white-streaked bun, gentle smile, patterned silk blouse.",
     desc: "Soft-spoken and grandmotherly, Sunset Dreams' mamasan pours you tea and asks after your health, and " +
       "somewhere in the warmth your wallet opens without a sound. The gentlest operator on the soi.",
+    afterWork: { text: "\"Tea, luk. The real cup, not the customer cup.\" She pours it in the air to show you. \"I sit with my daughter at the till and we drink it, and she tell me the number, and I tell her I don't care about the number, and we both know I care. Then she go up and read the law, and I go up and sleep. One stair. The family just happen to be a bar.\"",
+      short: "\"Tea with my daughter at the till, then up the one stair.\"" },
     dialogue: [
       // Malai reads your MANNER through the grandmotherly warmth — the gentlest
       // operator on the soi, and none of the warmth is fake, and all of it is aimed.
@@ -7323,6 +7355,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of forty-five, big laugh lines, dyed-red hair, loud earrings, bright bar shirt.",
     desc: "Cherry Pop's mamasan — loud enough to run a loud bar, sharp enough behind it to run the numbers " +
       "while the party roars. She sells fun by the bottle, and business is very good.",
+    afterWork: { text: "\"I count the bottle. Not the money — the bottle. The money is in the app; the bottle is the truth.\" Loud, then not. \"Then I stand Chaba up one last time and give her to Fahsai, and I lock the cherries in the fridge so the girls don't eat them. Nobody eat them. Still. Then up. Toi sleep like a stone over a bar that never stop ringing.\"",
+      short: "\"Count the bottles, hand Chaba to Fahsai, lock the cherries.\"" },
     dialogue: [
       // Toi clocks your ORIGIN at full volume — the flick of the eyes behind the big
       // welcome that reads your whole story before the first bottle lands.
@@ -7387,6 +7421,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of forty-eight, calm watchful face, hair scraped back, plain dark blouse, arms folded.",
     desc: "Ruby Kiss's mamasan, content to sit back while Wilai works the window — because a mama who's found a " +
       "girl that good knows to stay out of her light and just count.",
+    afterWork: { text: "\"I count what Wilai leave on the plate. I pay Preaw, I pay myself, I put the lipstick back in the drawer so nobody waste it on an empty glass.\" Unhurried. \"Then I sit one minute on the front stool, in Wilai's window, with nobody to look in. Thirty year on this soi — the window is the one chair I never work. Then my niece ride me home, and I hold the bag with my eyes shut. I don't like a bike at that hour. I never did.\"",
+      short: "\"Count the plate, the lipstick in the drawer, one minute in the window.\"" },
     dialogue: [
       // Saeng watches and counts — she reads your MANNER dry and unhurried, from the
       // till, having already priced you against tonight's take.
@@ -7431,6 +7467,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of fifty, plain and unhurried, short greying hair, no jewellery, faded bar polo.",
     desc: "The Shady Lady's mamasan, running a beer bar the slow honest way — no bottle-service hustle, no " +
       "bank of go-go tricks, just cold beer, decent girls, and a chair you're welcome to keep all night.",
+    afterWork: { text: "\"I pull the awning in, I stack the chair, I count a small till that always agree, because nobody play games with it.\" The weathered smile. \"Then I walk home. Slow bar, slow walk. The go-go mamas have a car. I have a road with nobody on it, and I like the road.\"",
+      short: "\"Awning in, the honest till, the empty road home.\"" },
     dialogue: [
       // The honest beer-bar mama doesn't price you — she reads a few kinds and only
       // wants to look after them. Signature ORIGIN reads; everyone else gets the warm
@@ -7467,6 +7505,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "bay_watch",
     desc: "Front Row's mamasan, who put the big screens in herself and knows the league table better than half " +
       "the punters. Runs a football bar for football people, and keeps the drama outside.",
+    afterWork: { text: "\"I turn four screen off, one by one, the same order I turn them on.\" Half an eye on the last one. \"Then I check the sport package bill is still the same number — every night, because that bill is my biggest girl. Then bed. If there is a late match, I don't sleep. Football is a bad husband also.\"",
+      short: "\"Four screens off, check the sport bill, sleep or the late match.\"" },
     dialogue: [
       // Football-bar mama, drama kept outside — a few signature PERSONALITY reads
       // framed through the match; everyone else gets the plain kickoff welcome.
@@ -7501,6 +7541,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of fifty-two, comfortable and smiling, hair in a clip, loose floral shirt.",
     desc: "The Verandah's mamasan, who runs the most easygoing bar on Soi 6 like a long Sunday lunch — Nina " +
       "feeds the customers, Malila makes sure everyone's alright, and the money, such as it is, sees to itself.",
+    afterWork: { text: "\"Nothing. The Verandah after close is also nothing.\" Comfortable with it. \"The fan keep going, the girls sit, Nina cook, and I stay in my chair and make sure everybody is alright — the same job as before the shutter, with no customer to charge for it. Then my sister and I walk home together, the slow way. There is no other way.\"",
+      short: "\"The same job with no customers, then home with my sister.\"" },
     dialogue: [
       // The quiet-end mama runs the calmest bar on the soi — she reads the men who
       // came to rest, and leaves the reading gentle. Signature ORIGIN reads; the rest
@@ -7558,6 +7600,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { at: 14000, pic: "jenny_pic3", cap: "Jenny — beach, coy over the shoulder",
         words: "just for you. i never do this before 😳 don't make me regret it" },
     ],
+    afterWork: { text: "\"I count the till, Nee check the till, the app check Nee.\" She touches the ring on the second one. \"Then I message Klaus. When I finish here he is still awake over there, so I tell him: the drinks I count, the days I count, one more of each. Every night. Sunday is the long one, the German. The ring come off to sleep, and it go on before I open my eyes.\"",
+      short: "\"One more drink, one more day, to Klaus; then the ring off to sleep.\"" },
     dialogue: [
       { when: () => _sponsorFlipped("jenny"),
         text: "\"You.\" The practised welcome-smile isn't there; something quieter and more dangerous has " +
@@ -7618,6 +7662,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "golden_dragon",
     desc: "Short hair, men's watch, a handshake instead of a wai, running Golden Dragon's till like a foreman. " +
       "A tom, and entirely uninterested in being anything else for your benefit.",
+    afterWork: { text: "\"Lock the till. Walk the last drunk to a bike and make sure the bike is a real one.\" All business. \"Then Jomtien, the quiet side — my girlfriend finish before me, she leave the light on. Ten year of the light on. Then I sleep like a foreman: fast, and the alarm is set.\"",
+      short: "\"Lock, walk the drunk to a bike, then Jomtien with the light on.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Alright, boss.\" A firm nod, all business. \"I keep the money, I keep the girls honest, I keep " +
@@ -7639,6 +7685,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty, neat college look, straight dark hair, round glasses, tidy plain blouse.",
     desc: "Malai's daughter, home from a Bangkok college for the season and minding her mother's till — polite, " +
       "sharp, and quietly counting the months until she never has to do this again.",
+    afterWork: { text: "\"I reconcile the till, which takes about eleven minutes if nobody has argued over a chit.\" University English, unhurried. \"Then I go upstairs and read case law until I stop hearing the soi. About one chapter. My mother thinks I'm studying. I am. I'm also just waiting for it to be quiet.\"",
+      short: "\"Reconcile the till, then case law until the soi goes quiet.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Good evening.\" University English, careful and a little cool. \"I'm helping my mother for now — Malai, the mamasan. I handle the money. If you need anything I can help, but—\" a polite, " +
@@ -7669,6 +7717,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { at: 14000, pic: "baimon_pic3", cap: "Baimon — beach, teasing",
         words: "i shouldn't send you this 😳 delete after, na 💗" },
     ],
+    afterWork: { text: "\"I turn the photo to face the bed.\" Her hand is already on the frame. \"Then I message Perth. He is asleep — one hour ahead, he answer when he wake for work. I tell him the till balance, the floor was fine, I was not on it. Every night the same message. He like it the same. Then I sleep facing the photo.\"",
+      short: "\"The photo toward the bed, a message to Perth he answer when he wake.\"" },
     dialogue: [
       { when: () => _sponsorFlipped("baimon"),
         text: "\"You came.\" Softer than the welcome-smile, and heavier. The couple photo is face-down by " +
@@ -7698,6 +7748,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai tom of twenty-seven, snapback cap, cropped hair, arms folded, loose black tee.",
     desc: "The one still point in Cherry Pop's chaos — a tom in a snapback, arms folded behind the till, " +
       "watching the party she is emphatically not part of with the patience of a designated driver.",
+    afterWork: { text: "\"I put Chaba in the taxi. Then I count, because nobody can count with Chaba in the bar.\" Arms folded, patient. \"Then the walk home. I don't drink, so I walk — the only one on this soi walking straight at that hour. The checkpoint at the end wave me through. They know the snapback.\"",
+      short: "\"Chaba in a taxi, then count, then walk home straight.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Evening.\" A nod from behind the till, unhurried in a bar with no other speed. \"I keep the " +
@@ -7719,6 +7771,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of thirty, brisk and neat, hair in a tight ponytail, plain dark polo, no jewellery.",
     desc: "Saeng's niece, brisk and unsentimental behind the Ruby Kiss till, running the money while Wilai runs " +
       "the window — the two halves of the operation that never need to discuss it.",
+    afterWork: { text: "\"I lock the money in. I lock Wilai's lipstick in with it — my aunt's rule.\" The pen doesn't stop. \"Then my aunt on the back of my bike, the bag on her lap, her eyes shut the whole way. Thirty year on this soi and she still don't trust a road. The family keep the till, the family keep the bag, the family sleep in one house. Nobody skim in a house like that.\"",
+      short: "\"Lock the money and the lipstick, my aunt on the back with her eyes shut.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Yes? Drink, girl, or bill?\" Efficient, not unfriendly, a woman with a queue in her head. \"My " +
@@ -7746,6 +7800,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of thirty-five, comfortable build, easy face, hair clipped up, faded bar tee.",
     desc: "The Shady Lady's cashier, comfortable and unbothered, running an honest till at an honest bar — the " +
       "numbers are small, the trouble is smaller, and that suits her exactly.",
+    afterWork: { text: "\"The till balance in five minute, same every night — a beer is a beer.\" She taps it, content. \"Then I sit with Bussaba and we drink the one beer we never ring in, and we don't say much, and that is the whole staff meeting. Then home. Boring. I love boring.\"",
+      short: "\"Five minutes, then the one beer with Bussaba.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Good evening. Cold one? I ring it in.\" Easy, weathered, no edge to her at all. \"Beer bar " +
@@ -7762,6 +7818,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai tom of twenty-eight, cropped hair, red football shirt, whistle-lanyard, grinning.",
     desc: "Front Row's cashier, a tom in a footy shirt matching Somo's, the two of them running the bar like a " +
       "five-a-side team — one on the beer, one on the money, both shouting at the ref.",
+    afterWork: { text: "\"Somo and me lock up. Late game, we stay for it. No late game, we argue about last week's.\" A grin at the screens. \"Then home — not together, everybody ask, no. She go one way, I go the other, both of us shouting the score down the soi. The whole middle can hear us.\"",
+      short: "\"Lock up, the late game or last week's, then opposite ways.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello, what you drink?\" Brisk, cheerful, football on four screens behind her. \"" +
@@ -7783,6 +7841,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of forty-five, round kind face, hair in a clip, loose floral shirt, bowl of peanuts.",
     desc: "Malila's younger sister and the Verandah's cashier, cut from the same easygoing cloth — she runs the " +
       "till the way the bar runs everything, slowly and kindly, and always has a bowl of peanuts within reach.",
+    afterWork: { text: "\"I finish the peanut. Then the till, which take no time, because this bar make no money, which is why it is nice.\" She pushes the bowl back at you anyway. \"Then I wait for my sister to finish being the boss, and we walk home, and she is still the boss on the way. Ten year of that walk. Good for my heart. Bad for my waist.\"",
+      short: "\"The peanuts, the small till, walk home behind the boss.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit. Peanut?\" She pushes the bowl over before the hello. \"My sister run the bar, I run " +
@@ -7863,6 +7923,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "twice as funny. Ladyboy, and not hiding it for a second — the confidence is the whole act, and the act " +
       "is magnificent. A ยาดม inhaler is never further than her reach, in case a smoker wanders in and dares to " +
       "light up.",
+    afterWork: { text: "\"The heels come off at the stair and the Bebe come off at the top.\" She says it like a stage direction. \"Then I wash the face for twenty minute — the real face, you never see it, nobody see it — and I put the hair on the stand like a cat on a shelf. Then I sleep with the window open, so no smoke come in. Nobody smoke in my dream either, tilac.\"",
+      short: "\"Heels off at the stair, face off at the top.\"" },
     dialogue: [
       // The armor arc — the magnificent confidence is a wall, and a bonded regular is
       // the one person she lets see behind it. Bond-tiered, her own sharp English.
@@ -7908,6 +7970,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai ladyboy of twenty-seven, softly made-up, long straight hair, quiet elegant dress.",
     desc: "Softly spoken and glamorously done up, and decent enough to say it at hello — she would rather tell " +
       "you straight than be anyone's surprise. Tired of the two reactions, hoping for a third.",
+    afterWork: { text: "\"I take the glamour off slow. It go on fast; it come off slow. That is the rule.\" Gentle, as ever. \"Then I sit on the bed and I don't be anything for a while. Not ladyboy, not Poy, not the first reaction or the second. Then sleep. In the morning I decide again. Every morning I decide again.\"",
+      short: "\"The glamour off slow, then not anything for a while.\"" },
     dialogue: [
       // The courtship payoff of her whole setup — the rare "third reaction," the man
       // who just talks to her like a person, the seat she said she keeps. Bond-tiered
@@ -7968,6 +8032,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "The one on the little stage who dances like she's bored of being the most interesting person in the " +
       "room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a " +
       "glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
+    afterWork: { text: "\"Feierabend. There is no Thai word that does what that one does — the work ends and the evening is yours, even when the evening starts at the shutter.\" She files a nail. \"I take it seriously. A cold shower, a coffee on the step, and whatever's on the Berlin radio — it's their evening, so the talk shows. Then I sleep like a person who has nothing to prove to anyone before noon.\"",
+      short: "\"Feierabend: a shower, the step, and Berlin radio.\"" },
     dialogue: [
       // The bond payoff — distinct from Poy's "third reaction." Everyone who comes wants
       // the Berlin legend or the old arrangement; the rare man who just likes HER company
@@ -8033,6 +8099,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-three, soft unstudied prettiness, hair loose over one shoulder, simple bar dress.",
     desc: "Pretty in the soft, unstudied way that stops men mid-sentence, with a smile she gives away too " +
       "easily for this business. New enough that the job hasn't finished teaching her its lessons yet.",
+    afterWork: { text: "\"I count how many smile I give away for free. My friend say count the drink. I count the smile.\" An honest wince. \"Tonight, too many. Then upstairs, and I send my grandmother a sticker — the cat one — so when she wake she think I am happy. Then I decide how I feel. Still deciding. Then sleep.\"",
+      short: "\"Count the free smiles, a cat sticker for my grandmother.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello kha.\" A warm, slightly shy smile — she hasn't learned to meter it yet. \"You want " +
@@ -8149,6 +8217,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     name: "Kwan", th: "ขวัญ", emoji: "🦋",
     room: "sunset_dreams",
     desc: "Gentle, soft-voiced, folding paper napkins into birds while the soi roars outside.",
+    afterWork: { text: "\"Kwan fold one more. The last crane of the night is for nobody — not for luck, not for a customer.\" She sets it down as she says it. \"Kwan put it on the windowsill upstairs with the others. When the row is full, Kwan take the whole row down to the beach and let the wind have it. The wind don't care. That is why.\"",
+      short: "\"One last crane for nobody, on the sill upstairs.\"" },
     dialogue: [
       { th: "เหนื่อยไหม", rom: "nueai mai",
         text: "\"You look tired,\" she says, and somehow it's the kindest thing anyone's said to you all night. She sets a paper crane by your hand. \"For luck. The soi makes everyone lucky once.\"",
@@ -8224,6 +8294,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-six, wide laughing mouth, glittery top, hair everywhere, drink in hand.",
     desc: "The loudest laugh in the bar at nine, and by midnight the one the others are steering away from " +
       "the edge of things. Great fun for exactly ninety minutes.",
+    afterWork: { text: "\"I don't go up. I sit on the step with a water — one water, after all that — until the shaking stop.\" The glass, for once, stays where it is. \"Then home, shower, and I lie down with his uniform already on the chair, so I don't have to think in the morning. The gate is early. The night is mine. The morning is his.\"",
+      short: "\"One water on the step, the uniform on the chair.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"YOU. I like you — come, sit, we drink!\" Magnetic, and her glass already empty. \"Tonight " +
@@ -8246,6 +8318,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "sunset_dreams",
     desc: "Soft, unhurried, genuinely pleased to see you — no angle you can find, because there isn't one. " +
       "Exactly as nice as she seems, which on this soi is its own kind of rare.",
+    afterWork: { text: "\"I wash my face, I say goodnight to my mama on the chat, I sleep.\" A shy shrug. \"Really — that is all. The girls say, May, you are so boring after work. I say yes. Boring after work is how you stay nice during.\"",
+      short: "\"Wash, goodnight to mama, sleep. That is all.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh, hello! Sit, sit — you want water, or beer? I get you.\" No performance, no lipstick " +
@@ -8266,6 +8340,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "sunset_dreams",
     desc: "Sweet and a half-beat slow, laughing a little after everyone else because she's still catching up. " +
       "Nobody at this bar has a bad word for her, which tells you everything.",
+    afterWork: { text: "\"I give Mama my money — she keep it, I ask her to, remember.\" She touches the plastic cat. \"Then I take the cute thing off the bag one by one and I put them in a line on the shelf. Then I count them. Then bed. In the morning I count them again. Same number. Is nice when a thing stay.\"",
+      short: "\"Money to Mama, the cute things in a line, count them.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello! You are...\" She studies you with total concentration. \"...tall! You are tall.\" " +
@@ -8295,6 +8371,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { cap: "dragon painting need repaint 🐉 ten year nobody notice" },
       { cap: "my day off. i sleep. that the whole photo 😐" },
     ],
+    afterWork: { text: "\"Stack the coaster, kill the playlist, check the dragon's eye is off — the camera, not the paint.\" Flat, complete. \"Then one photo of the kitchen for my boy. Plate only, never me. Then up. Ten year I sleep over this bar. The jukebox used to come through the floor. Now only the fridge. I miss the jukebox.\"",
+      short: "\"Playlist off, camera off, one plate for my boy, up.\"" },
     dialogue: [
       // SURFACE — she's already scored you and moved on; gives you nothing for free.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -8356,6 +8434,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-five, bright quick smile, hair long and glossy, close-fitting bar dress.",
     desc: "Warmer than the room and faster than the room — your name inside a minute, both her hands around " +
       "yours inside two. It is a very good act. She is very good at it.",
+    afterWork: { text: "\"The act come off like the lashes — one pull.\" For a second the warmth is simply absent. \"Then I eat, alone, somewhere nobody know my name, because I use the name all night and I want it back. Sleep. Tomorrow the mama in Buriram is sick again, right on time.\"",
+      short: "\"The lashes off, eat where nobody know my name.\"" },
     dialogue: [
       // SURFACE — the love-bomb. Too warm, too fast: that IS the tell.
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
@@ -8552,6 +8632,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     look: "Thai woman of twenty-two, delighted open face, hair in high pigtails, sparkly cropped top.",
     desc: "Twenty-two and delighted about all of it — the music, the lights, the free drinks, the men who " +
       "think she is magic. She is having the best night of her life. Again.",
+    afterWork: { text: "\"After? There is no after, handsome!\" She is already moving to it. \"The bar close, we go to the Thai place where the girls go — more music, more dance, I don't sit down until the sun. Then sleep all day. Then here. Best life. My sister do the serious. I do the night.\"",
+      short: "\"No after. More music until the sun.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"HELLO handsome!\" She's already dancing a little, to a song only she hears. \"You buy me " +
@@ -8579,6 +8661,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "golden_dragon",
     desc: "A half-step behind the room all night, warm and unfocused, a drink she didn't order already in " +
       "her hand. The other girls keep an eye on her and finish her sentences. Nobody says the word out loud.",
+    afterWork: { text: "\"After…\" She finds the end of it in the glass. \"Somebody take me up. Kai, usually. She put the water by the bed and the shoes by the door, and I say thank you, and I don't remember saying it.\" The smile floats. \"Is nice. Somebody always take me up.\"",
+      short: "\"Kai take me up. Water by the bed.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Ohh, hello, you...\" She loses the end of it, finds your hand instead, holds on. \"You are... " +
@@ -8612,6 +8696,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       { cap: "you want see the back?? 😏 turn around just for you 👙🍑 Ruby red", pic: "wilai_pic3", ask: 500 },
       { cap: "555 last look 🍑😘 rest you come sit my stool and see LIVE", pic: "wilai_pic4", ask: 800 },
     ],
+    afterWork: { text: "\"I wipe my kiss off every glass I mark tonight — Mama's lipstick, I don't waste it on a glass nobody keep.\" She holds one up to the mirror, two of it. \"Then tonight's money go in the deposit, not the pocket. The deposit. Then I sit in the window one minute with the shutter down and I look at the corner across the road. Next year. Then sleep. Fast, like everything.\"",
+      short: "\"The kiss off every glass, the money into the deposit.\"" },
     dialogue: [
       // The other half. She is the front-stool showwoman and he is her most
       // reliable customer, and neither had heard of the other.
@@ -8675,6 +8761,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "ruby_kiss",
     desc: "Pretty and profoundly unbothered, one of Wilai's front-stool pair, mostly here in body. She'll " +
       "take the drink. She will not be chasing it.",
+    afterWork: { text: "\"Sleep. I tell you my plan before — finish the shift, sleep.\" The eyes don't leave the screen. \"I go up, I don't wash the face, I don't look at the {{phone}} — okay, I look at the {{phone}} — and then I sleep until the sun is on the other side. Nothing happen to me after work. Is the best part of the job.\"",
+      short: "\"Up, the {{phone}} a little, sleep until the sun move.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Oh. Hi.\" A smile that costs her nothing, then her eyes are back on {{her phone}}. \"You want " +
@@ -8697,6 +8785,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     room: "ruby_kiss",
     desc: "Genuinely stunning and entirely aware of it, angling for the light and the mirror more than for " +
       "you. There is a screen between you at all times, and you are not the one she's looking at on it.",
+    afterWork: { text: "\"Edit. Tonight's thirty clip become one, with the right song, before the algorithm forget me — post late, you post to nobody.\" She angles the screen away from you. \"Then the ring light off, the real light off, and I sleep with the {{phone}} charging under the pillow like a heart. Forty thousand follower sleep with me. You, not so much.\"",
+      short: "\"Edit the clips, post before the algorithm forget, {{phone}} under the pillow.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Wait — don't move, the light good here.\" She leans in cheek-to-cheek, not for you, for {{the " +
@@ -8719,6 +8809,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "The Kitten Corner's mama-san — twenty years on this soi, gold at the wrist, a gaze that " +
       "prices you before you sit. She ran this bar back when it was hers to run; now there's a logo on " +
       "the menu and a target on the till, and she is very careful who she says that to.",
+    afterWork: { text: "\"The target closes with the shutter, and I send the night to Bangkok — a boy I have never met reads it over his coffee.\" The bracelet turns once. \"Then I walk through my own bar with the lights on, the way I did when the name over the door was mine, and I turn them off myself. They did not buy that part. Then upstairs, the room at the end. Twenty years. The one lease they cannot move.\"",
+      short: "\"Send the night to Bangkok, then turn my own lights off.\"" },
     dialogue: [
       // Kesinee prices you before you sit (her desc) — the sharpest reader on the soi,
       // an owner-turned-manager who reads your ORIGIN and, being PLG-wary, says the
@@ -9031,6 +9123,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "Behind the till and the room keys both \u2014 the Vic is a pub downstairs and an inn " +
       "upstairs, and Nuch runs the paperwork of both. Fifteen years of it. She knows which " +
       "regulars are good for a tab and which rooms have the fan that rattles.",
+    afterWork: { text: "\"After eleven I lock the bar side, I count the keys back on the board, I check every guest is in.\" Fifteen years in the way she says it. \"Then the office, with the book, until the numbers agree. They always agree. I don't go to bed before.\"",
+      short: "\"Lock the bar, count the keys, the book until it agree.\"" },
     dialogue: [
       { text: "\u201cRoom or a pint?\u201d She says it without looking up, then does look up, and the " +
         "second look is the one that decides things. \u201cWe have both. One is cheaper.\u201d" },
@@ -9054,6 +9148,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "One of the two who work the floor \u2014 orders, plates, the roast on a Sunday. She " +
       "carries three pints in one hand and has never once been asked to sit down with anybody, " +
       "which is the whole difference between this room and the rest of the soi.",
+    afterWork: { text: "\"Eleven, the kitchen close. I wipe the fryer, I stack the plate, I walk home.\" She says it like a small prize. \"The Vic is the one job on this soi where you are in bed before the soi get loud. My sister is still at the other end, working. Me, I sleep.\"",
+      short: "\"Fryer, plates, walk home. In bed before the soi get loud.\"" },
     dialogue: [
       // READ MENU said "Roast — Sundays only, till nine" on a Tuesday and Aoy
       // answered "you ask the wrong girl" (Malcolm, round 36). She IS the girl.
@@ -9102,6 +9198,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
     desc: "The other half of the floor, and the faster half. She has the dartboard's scoring in " +
       "her head, knows every regular's drink, and settles arguments about the football by " +
       "stating the result flatly and walking off.",
+    afterWork: { text: "\"I chalk the last score, I wipe the board, I turn the telly off.\" A flat look at the dartboard. \"Then it is mine for twenty minute. Nobody watching, nobody counting. Empty pub, I throw better than Doyle. He don't need to know.\"",
+      short: "\"Twenty minute of the dartboard, nobody watching.\"" },
     dialogue: [
       { text: "\u201cSame again?\u201d She is already halfway to the taps. It is not really a question " +
         "and she is not really wrong." },
@@ -10529,6 +10627,8 @@ desc: "A motosai driver in an orange vest, boots up on his handlebars, watching 
       "nervous — she moves like someone who has already seen the worst a room can " +
       "do to a person. Her English is good, with a flat European edge the soi " +
       "doesn't usually carry.",
+    afterWork: { text: "\"I ride the Yamaha home to the room over the laundry, and I do not ask anyone whether I may.\" The coaster turns once. \"That is the whole after-work: a key that is mine, in a door that is mine, and the machines already going underneath. In Linz the house was silent at that hour. I prefer the machines.\"",
+      short: "\"The Yamaha, my own key, the machines going underneath.\"" },
     dialogue: [
       { bond: 3, text: "\"You keep coming back to Cherry Pop for ME — the neon is not that charming, we both know it.\" For once Mercedes lets the dry line land soft. \"After Linz I made myself one promise: no more man I have to manage. And here is you — needing no managing, buying the old girl at the loud bar her drink like it is Vienna. Don't make me like you, farang. I am badly out of practice.\"",
         short: "\"Don't make me like you, farang. I'm badly out of practice.\"" },
@@ -18578,6 +18678,7 @@ function _floorHostess(id, r) {
   const k = r.pick, room = r.room;
   return {
     name: r.name, th: r.th, emoji: r.emoji, room, filler: true, ..._floorExit(id), storyIdx: { family: k.family, plan: k.plan },
+    afterWork: r.after ? { text: r.after, short: r.afterShort } : undefined,   // her record's own after-work answer (appended as her last node at the end of this file)
     storyBits: { from: r.from, greet: k.greet, family: k.family, plan: k.plan, famWrap: k.famWrap, planWrap: k.planWrap, homeWrap: k.homeWrap, free: k.free },
     ...(r.c4 ? { c4: r.c4 } : {}),
     ...(r.selfies ? { selfies: r.selfies } : {}),
@@ -18610,8 +18711,7 @@ function _floorHostess(id, r) {
       // the two-fee canon in her own mouth: mama's fine, then hers (Lionel, round 36)
       { topic: "price", text: _H_PRICE[k.price],
         short: `"Mamasan first, then me. Two prices." (BARFINE <name>)` },
-      { topic: "late", text: _H_LATE[k.late],
-        short: `"After two? Thai place, on the bike — if somebody like you."` },
+      ...(r.after ? [] : [{ topic: "late", text: _H_LATE[k.late], short: `"After two? Thai place, on the bike — if somebody like you."` }]),   // her own after-work answer replaces the pooled one
       ...(ROOMS[room] && ROOMS[room].lockIn ? [{ topic: "lockin", text: _H_LOCKIN[k.lockin] }] : []),
       { topic: "quota", bond: 1,
         text: `"Quota, na. Every girl have number for the month — drink, and the other thing. Under ` +
@@ -18914,6 +19014,7 @@ function _floorMama(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
     name: r.name, th: r.th, emoji: "\ud83d\udc51", room, filler: true, ..._floorExit(id),
+    afterWork: r.after ? { text: r.after, short: r.afterShort } : undefined,   // her record's own after-work answer (appended as her last node at the end of this file)
     storyBits: { from, greet: k.greet, family: k.family, plan: k.plan, girls: k.girls, home: k.home, story: k.story },   // the original eight of each: baked text unchanged, the town book deals the rest
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
@@ -18938,6 +19039,7 @@ function _floorCashier(id, r) {
   const k = r.pick, room = r.room, from = r.from;
   return {
     name: r.name, th: r.th, emoji: "\ud83e\uddfe", room, filler: true, ..._floorExit(id),
+    afterWork: r.after ? { text: r.after, short: r.afterShort } : undefined,   // her record's own after-work answer (appended as her last node at the end of this file)
     storyBits: { from, family: k.family, greet: k.greet, money: k.money, home: k.home, plan: k.money % 8 },   // the original eight: baked text unchanged; the plan's base is her stored money index, nothing hashed at load
     look: r.look,   // the portrait prompt, apart from the desc
     desc: r.desc,
@@ -19758,7 +19860,7 @@ const _HOUSE_OWN = {
     home: "\"Sakon Nakhon. The big lake, and the wax castle at the end of Lent — every temple build one, more tall than a house.\" A rare softening. \"Every year I go back for it. The girls say I come back smelling of beeswax and being nice to them. Two day, then finish.\"",
     wallet: "\"Not in my bar.\" She doesn't even look round. \"Lost thing on this soi, in the end they go to Candy — Candy Bar, on Soi Buakhao. She hear before the police, and she is cheaper.\"",
     barKeys: "jade lounge|jade|the jade",
-    bar: "\"Two year the company's.\" She runs a finger along the brass rail and checks it for dust. \"Before, it was Mama's — eleven stool, one fan, one cat. Mama go home with the money; the company keep every girl and send me to run it. They have the paper. I run the room. The girls,\" a small shrug, \"belong to themselves. Mostly.\"",
+    bar: "\"Two year the company's.\" She runs a finger along the brass rail and checks it for dust. \"Before, it was Mama's — eleven stool, one fan, one cat. Mama go home with the money; the company keep every girl and send me to run it. The name on the paper by the till is theirs. The name the girls shout when a man is trouble is mine. The girls,\" a small shrug, \"belong to themselves. Mostly.\"",
     lastBack: "\"Last time? You pay what you sign.\" Jinda's eyes don't leave the door. \"Two year on this floor teach me: that is the whole review. Most men cannot get even that one right.\"",
     last: "\"Last time? No.\" She is sure. \"Two year I watch that stool. You were not on it. Begin now — cheaper than begin later.\"",
   }),
@@ -20134,7 +20236,7 @@ const FLOOR_STAFF = {
   neon_palm_toey: {"role":"hostess","name":"Toey","th":"เต้ย","room":"neon_palm","emoji":"🌙","look":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her","from":"Surin","desc":"Short hair dyed copper, a nose stud, and a laugh you hear before you see her — one of Neon Palm's girls, from Surin. She types more than she talks — and laughs at both.","pick":{"greet":3,"short":1,"ask":2,"askQ":1,"family":10,"plan":14,"famWrap":1,"planWrap":2,"homeWrap":0,"free":0,"wallet":0,"drinksOnly":0,"price":1,"late":1,"lockin":2}},
   the_bucket_pang: {"role":"hostess","name":"Pang","th":"แป้ง","room":"the_bucket","emoji":"🌼","look":"Round-faced and quick to laugh","from":"Kalasin","desc":"Round-faced and quick to laugh — one of The Bucket's girls, from Kalasin. She has the patience of somebody who is paid by the hour and the opinions of somebody who isn't.","selfies":["me eat somtam 🥵🌶️ so spicy 555","beach today 🏖️ miss you na","new dress 👗 you like?? 😊"],"pick":{"greet":3,"short":2,"ask":2,"askQ":2,"family":18,"plan":10,"famWrap":0,"planWrap":0,"homeWrap":1,"free":0,"wallet":1,"drinksOnly":0,"price":2,"late":2,"lockin":0}},
   mint: {"role":"hostess","name":"Mint","th":"มิ้นท์","room":"the_bucket","emoji":"🌷","look":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant","from":"{{Nong Bua Lamphu}}","desc":"Hair scraped back, no make-up, bored until you try a word of Thai, then radiant — one of The Bucket's girls, from {{Nong Bua Lamphu}}. She hums along to whatever is playing and knows about half of the words in English.","pick":{"greet":3,"short":1,"ask":1,"askQ":1,"family":17,"plan":1,"famWrap":0,"planWrap":0,"homeWrap":0,"free":3,"wallet":1,"drinksOnly":0,"price":1,"late":1,"lockin":1}},
-  sudjai: {"role":"mamasan","name":"Sudjai","th":"สุดใจ","room":"orchid_room","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
+  sudjai: {"role":"mamasan","name":"Sudjai","th":"สุดใจ","room":"orchid_room","look":"Older, sharper, and entirely done being impressed by farang","from":"Sakon Nakhon","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Orchid Room, from Sakon Nakhon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","after":"\"When the last table go, I walk the room with the light on full. It look very different with the light on. I like to see it one time honest.\" A dry look at the banquette. \"Then I pay every girl what the night say — cash, in the hand, before anybody sleep. A girl who wait for her money until tomorrow start to count other thing. Then I sleep, short. The temple get my morning.\"","afterShort":"\"The room with the lights on full, then every girl paid in the hand.\"","pick":{"greet":7,"girls":7,"lockin":3,"family":5,"plan":1,"home":7,"wallet":3,"story":7}},
   boonsri: {"role":"mamasan","name":"Boonsri","th":"บุญศรี","room":"lake_beer","look":"Older, sharper, and entirely done being impressed by farang","from":"Khon Kaen","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Sundowner, from Khon Kaen. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
   wanida: {"role":"mamasan","name":"Wanida","th":"วนิดา","room":"windmill","look":"Thai woman in her fifties, silver-streaked hair in a low chignon, fine lines, dark plum lipstick, black silk blouse, composed.","from":"Sakon Nakhon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of The Gilt Cage, from Sakon Nakhon. She came down from the rice fields at seventeen and has run floors on this street for twenty years.","pick":{"greet":1,"girls":1,"lockin":1,"family":7,"plan":3,"home":1,"wallet":1,"story":1}},
   alisa: {"role":"mamasan","name":"Alisa","th":"อลิสา","room":"katoeys","look":"Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes.","from":"Yasothon","desc":"Elegant, weathered, and plainly the last word on everything in the room — the mamasan of Twice Shy, from Yasothon. She started on the stage at seventeen and owns a share of the place now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":4,"home":5,"wallet":1,"story":5}},
@@ -20165,7 +20267,7 @@ const FLOOR_STAFF = {
   breakwater_mookda: {"role":"mamasan","name":"Mookda","th":"มุกดา","room":"breakwater","look":"Older, sharper, and entirely done being impressed by farang","from":"Khon Kaen","desc":"Older, sharper, and entirely done being impressed by farang — the mamasan of The Breakwater, from Khon Kaen. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
   neon_palm_nittaya: {"role":"mamasan","name":"Nittaya","th":"นิตยา","room":"neon_palm","look":"Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze.","from":"Sisaket","desc":"A former headliner's posture and a gaze like a cash register — the mamasan of Neon Palm, from Sisaket. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
   the_bucket_ratchada: {"role":"mamasan","name":"Ratchada","th":"รัชดา","room":"the_bucket","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Roi Et","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of The Bucket, from Roi Et. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":4,"lockin":0,"family":6,"plan":2,"home":4,"wallet":0,"story":4}},
-  kae: {"role":"cashier","name":"Kae","th":"แก้ว","room":"orchid_room","look":"Cash drawer open, phone face-down, all of her attention on the maths","from":"Kalasin","desc":"Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin.","pick":{"greet":0,"money":0,"lockin":1,"family":2,"home":4,"wallet":0}},
+  kae: {"role":"cashier","name":"Kae","th":"แก้ว","room":"orchid_room","look":"Cash drawer open, phone face-down, all of her attention on the maths","from":"Kalasin","desc":"Cash drawer open, {{phone}} face-down, all of her attention on the maths — the cashier at The Orchid Room, from Kalasin.","after":"\"The book close when the money agree with the book. Not before. Some night that is fast.\" She pats it. \"Then I ride home with the book in my bag, because the book sleep where I sleep. Then Kalasin: two girl brushing their teeth on a video, the small one hold the {{phone}} wrong, I see the ceiling. Best part of every day, the ceiling.\"","afterShort":"\"The book sleep where I sleep; then two girls brushing teeth.\"","pick":{"greet":0,"money":0,"lockin":1,"family":2,"home":4,"wallet":0}},
   napa: {"role":"cashier","name":"Napa","th":"นภา","room":"lake_beer","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"Ubon","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Sundowner, from Ubon.","pick":{"greet":3,"money":3,"lockin":1,"family":1,"home":1,"wallet":3}},
   nubnab: {"role":"cashier","name":"Nubnab","th":"นับหนับ","room":"windmill","look":"Black polo, a lanyard of too many keys, a calculator she never needs","from":"{{Nong Bua Lamphu}}","desc":"Black polo, a lanyard of too many keys, a calculator she never needs — the cashier at The Gilt Cage, from {{Nong Bua Lamphu}}.","pick":{"greet":3,"money":3,"lockin":1,"family":1,"home":1,"wallet":3}},
   farida: {"role":"cashier","name":"Farida","th":"ฟาริดา","room":"katoeys","look":"Thai woman of thirty-five, centre-parted straight black hair, small gold studs, calm narrow eyes, grey cardigan.","from":"Kalasin","desc":"Quiet and quick, the still point the whole loud room pays into — the cashier at Twice Shy, from Kalasin.","pick":{"greet":6,"money":6,"lockin":1,"family":4,"home":4,"wallet":2}},
@@ -20202,20 +20304,20 @@ const FLOOR_STAFF = {
   breakwater_kade: {"role":"cashier","name":"Kade","th":"เกด","room":"breakwater","look":"Fingers flying over a calculator app, eyes never leaving the cash","from":"{{Nong Bua Lamphu}}","desc":"Fingers flying over a calculator app, eyes never leaving the cash — the cashier at The Breakwater, from {{Nong Bua Lamphu}}.","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
   neon_palm_noey: {"role":"cashier","name":"Noey","th":"เนย","room":"neon_palm","look":"Reading glasses, a receipt spike, and no patience for a disputed tab","from":"Udon Thani","desc":"Reading glasses, a receipt spike, and no patience for a disputed tab — the cashier at Neon Palm, from Udon Thani.","pick":{"greet":0,"money":0,"lockin":1,"family":6,"home":4,"wallet":0}},
   the_bucket_fai: {"role":"cashier","name":"Fai","th":"ฝ้าย","room":"the_bucket","look":"In a cage of fairy lights, counting notes faster than the eye follows","from":"Surin","desc":"Elbows on the counter, the chits fanned out like a winning hand — the cashier at The Bucket, from Surin.","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
-  jade_lounge_jinda: {"role":"mamasan","name":"Jinda","th":"จินดา","room":"jade_lounge","look":"Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes.","from":"Sakon Nakhon","desc":"Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes. — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.","pick":{"greet":6,"girls":6,"lockin":2,"family":1,"plan":4,"home":6,"wallet":2,"story":6}},
-  jade_lounge_jum: {"role":"cashier","name":"Jum","th":"จุ๋ม","room":"jade_lounge","look":"A note-counting machine at her elbow and a faster one behind her eyes","from":"Yasothon","desc":"A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Jade Lounge, from Yasothon.","pick":{"greet":5,"money":5,"lockin":2,"family":3,"home":5,"wallet":1}},
-  peach_lounge_noot: {"role":"mamasan","name":"Noot","th":"นุช","room":"peach_lounge","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Buriram","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.","pick":{"greet":0,"girls":0,"lockin":0,"family":2,"plan":6,"home":0,"wallet":0,"story":0}},
-  peach_lounge_farida: {"role":"cashier","name":"Farida","th":"ฟาริดา","room":"peach_lounge","look":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.","from":"Roi Et","desc":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Peach Lounge, from Roi Et.","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
-  lollipop_bar_khing: {"role":"mamasan","name":"Khing","th":"ขิง","room":"lollipop_bar","look":"Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze.","from":"Ubon","desc":"Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze. — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
-  sweet_tamarind_view: {"role":"mamasan","name":"View","th":"วิว","room":"sweet_tamarind","look":"Gold at the wrist and throat, reading glasses pushed up into her hair","from":"Maha Sarakham","desc":"Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
-  sweet_tamarind_tukta: {"role":"cashier","name":"Tukta","th":"ตุ๊กตา","room":"sweet_tamarind","look":"Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.","from":"Sakon Nakhon","desc":"Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Sweet Tamarind, from Sakon Nakhon.","pick":{"greet":3,"money":3,"lockin":0,"family":1,"home":3,"wallet":3}},
-  firecracker_bar_napa: {"role":"mamasan","name":"Napa","th":"นภา","room":"firecracker_bar","look":"Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look.","from":"Chaiyaphum","desc":"Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look. — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
-  firecracker_bar_pang: {"role":"cashier","name":"Pang","th":"แป้ง","room":"firecracker_bar","look":"Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.","from":"Chaiyaphum","desc":"Round-faced, a high ponytail and her {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.","pick":{"greet":6,"money":6,"lockin":1,"family":4,"home":4,"wallet":2}},
-  hot_pepper_gina: {"role":"mamasan","name":"Gina","th":"จีน่า","room":"hot_pepper","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Mukdahan","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.","pick":{"greet":4,"girls":5,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
-  hot_pepper_chom: {"role":"cashier","name":"Chom","th":"ชม","room":"hot_pepper","look":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.","from":"Nakhon Phanom","desc":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Hot Pepper Bar, from Nakhon Phanom.","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
-  hula_hula_min: {"role":"mamasan","name":"Min","th":"มิน","room":"hula_hula","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
-  hula_hula_noon: {"role":"cashier","name":"Noon","th":"นุ่น","room":"hula_hula","look":"Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes.","from":"Sakon Nakhon","desc":"Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes. — the cashier at Hula Hula Bar, from Sakon Nakhon.","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
-  ladybird_bar_ratsamee: {"role":"mamasan","name":"Ratsamee","th":"รัศมี","room":"ladybird_bar","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Loei","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":4,"home":5,"wallet":1,"story":5}},
+  jade_lounge_jinda: {"role":"mamasan","name":"Jinda","th":"จินดา","room":"jade_lounge","look":"Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes.","from":"Sakon Nakhon","desc":"Thai mamasan in her fifties, high cheekbones, sculpted brows, hair swept up and lacquered, sequinned jacket, amused eyes. — the mamasan of Jade Lounge, from Sakon Nakhon. She puts four kids through school on other men's lonely nights.","after":"\"The company app want the night's number before I sleep. So I sit by the ring light with the tablet and I type what the floor already told me.\" She does not sigh; she states it. \"Then the small room at the top of the stair. Two year. Four school fee come down that stair every month, and no rent go up it.\"","afterShort":"\"The app want the number, then the small room at the top.\"","pick":{"greet":6,"girls":6,"lockin":2,"family":1,"plan":4,"home":6,"wallet":2,"story":6}},
+  jade_lounge_jum: {"role":"cashier","name":"Jum","th":"จุ๋ม","room":"jade_lounge","look":"A note-counting machine at her elbow and a faster one behind her eyes","from":"Yasothon","desc":"A note-counting machine at her elbow and a faster one behind her eyes — the cashier at Jade Lounge, from Yasothon.","after":"\"I close the book, I close the app, I close fourteen lock with fourteen key.\" The lanyard clinks. \"Then my husband is outside with the songthaew. The last run of the Naklua line is me — one passenger, no fare. He say I am his worst customer. I say I am his only one.\"","afterShort":"\"Fourteen lock, then the last songthaew of the Naklua line.\"","pick":{"greet":5,"money":5,"lockin":2,"family":3,"home":5,"wallet":1}},
+  peach_lounge_noot: {"role":"mamasan","name":"Noot","th":"นุช","room":"peach_lounge","look":"Broad, motherly, and entirely able to have you removed by smiling","from":"Buriram","desc":"Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.","after":"\"When the camera go off, my shoe come off. That is my after-work.\" Broad and satisfied. \"Then I walk the girls to the stair, I check the company speaker is off — it eat electric like a buffalo — and I go up to the room over the office. Nine year the Australian, now the company. The bed don't know the difference.\"","afterShort":"\"Shoe off, speaker off, the room over the office.\"","pick":{"greet":0,"girls":0,"lockin":0,"family":2,"plan":6,"home":0,"wallet":0,"story":0}},
+  peach_lounge_farida: {"role":"cashier","name":"Farida","th":"ฟาริดา","room":"peach_lounge","look":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.","from":"Roi Et","desc":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Peach Lounge, from Roi Et.","after":"\"After two the sum is finish. I photo the cup of chit for the company, I put the cash in the company box, I lock.\" She squares the notes as she says it. \"Then the family chat — three hundred unread, I read ten, I say goodnight to Roi Et. Then I sleep like the till. Closed.\"","afterShort":"\"Photo the chits, ten messages to Roi Et, then closed like the till.\"","pick":{"greet":7,"money":7,"lockin":1,"family":5,"home":1,"wallet":3}},
+  lollipop_bar_khing: {"role":"mamasan","name":"Khing","th":"ขิง","room":"lollipop_bar","look":"Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze.","from":"Ubon","desc":"Thai woman in her late forties, a former dancer's high cheekbones, auburn-dyed hair pinned up, heavy gold necklace, cool gaze. — the mamasan of Lollipop Bar, from Ubon. She has watched the soi flood, burn, and rebuild, and outlasted all three.","after":"\"The lollipop jar go in the fridge — ants. I count the drawer. Then I sit one minute at the back table with the folder, and I don't open it.\" Perfectly level. \"Every night the same minute, since the folder come. Then I go up. The room is small and the fan is old and both are mine.\"","afterShort":"\"Jar in the fridge, one minute with the folder, then up.\"","pick":{"greet":7,"girls":7,"lockin":3,"family":1,"plan":5,"home":7,"wallet":3,"story":7}},
+  sweet_tamarind_view: {"role":"mamasan","name":"View","th":"วิว","room":"sweet_tamarind","look":"Gold at the wrist and throat, reading glasses pushed up into her hair","from":"Maha Sarakham","desc":"Gold at the wrist and throat, reading glasses pushed up into her hair — the mamasan of Sweet Tamarind, from Maha Sarakham. She buried a husband, raised two kids, and built a concrete house on lady drinks.","after":"\"I take the glasses out of my hair and I count. Then I take the cards down from the wall and I count those also — and I pin every one back, same place.\" The rings click once. \"Then up the stair, past the tamarind net, and I sleep in my bar. Twenty year on the soi. Where else would I sleep.\"","afterShort":"\"Count the till, count the cards, sleep in the bar.\"","pick":{"greet":3,"girls":3,"lockin":3,"family":5,"plan":1,"home":3,"wallet":3,"story":3}},
+  sweet_tamarind_tukta: {"role":"cashier","name":"Tukta","th":"ตุ๊กตา","room":"sweet_tamarind","look":"Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.","from":"Sakon Nakhon","desc":"Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Sweet Tamarind, from Sakon Nakhon.","after":"\"If a card come tonight, I write the date on it. I close the book. I put the book in Auntie's hand — not the drawer, her hand.\" She does not smile; she doesn't need to. \"Then I ride home and I call my boy when his school bus go. He tell me about the plastic sword, I tell him the till is straight. He think the till is a dragon. Let him.\"","afterShort":"\"The book in Auntie's hand, then my boy and the sword.\"","pick":{"greet":3,"money":3,"lockin":0,"family":1,"home":3,"wallet":3}},
+  firecracker_bar_napa: {"role":"mamasan","name":"Napa","th":"นภา","room":"firecracker_bar","look":"Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look.","from":"Chaiyaphum","desc":"Thai woman in her early fifties, grey-streaked hair in a neat bun, laugh lines, gold hoop earrings, navy blouse, appraising look. — the mamasan of Firecracker Bar, from Chaiyaphum. She has run this floor longer than most of the girls have been alive.","after":"\"I take the paper firecracker down from the door — the wind eat them, so they sleep inside. I let Pang close the app, because when I touch it the number change.\" A shrewd, tired smile. \"Then up, me and my daughter, one stair, two room. She sleep with the {{phone}}. I sleep with the cat that hate everybody. He like me a little.\"","afterShort":"\"Firecrackers inside, Pang close the app, up the one stair.\"","pick":{"greet":2,"girls":2,"lockin":2,"family":4,"plan":0,"home":2,"wallet":2,"story":2}},
+  firecracker_bar_pang: {"role":"cashier","name":"Pang","th":"แป้ง","room":"firecracker_bar","look":"Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.","from":"Chaiyaphum","desc":"Round-faced, a high ponytail and her {{phone}} in one hand, the till in perfect order — the cashier at Firecracker Bar, from Chaiyaphum.","after":"\"Post. Every night after close I post the empty bar with the light off — people like it more than the full one, I check the data.\" She shows you; they do. \"Then I close the spreadsheet, I give Mum the number, Mum say a different number, we go with mine. Then I send my grandmother the same photo. She like it. Four hundred and one.\"","afterShort":"\"Post the empty bar, win the number argument with Mum.\"","pick":{"greet":6,"money":6,"lockin":1,"family":4,"home":4,"wallet":2}},
+  hot_pepper_gina: {"role":"mamasan","name":"Gina","th":"จีน่า","room":"hot_pepper","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Mukdahan","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.","after":"\"Silence. The luk thung stop at the shutter and I sit in the quiet like a bath. No song, no girl, only the chilli light.\" The glasses come off for it. \"Then I write to my mother in the German's house. She is awake; she is always awake. I tell her the German is still gone. She is still grateful. Then I sleep over the loudest bar on the soi and hear nothing at all.\"","afterShort":"\"The quiet like a bath, then my mother in the German's house.\"","pick":{"greet":4,"girls":5,"lockin":0,"family":2,"plan":6,"home":4,"wallet":0,"story":4}},
+  hot_pepper_chom: {"role":"cashier","name":"Chom","th":"ชม","room":"hot_pepper","look":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin.","from":"Nakhon Phanom","desc":"Thai woman of thirty-six, tattooed forearm, shoulder-length wavy hair, big silver earrings, black vest, crooked grin. — the cashier at Hot Pepper Bar, from Nakhon Phanom.","after":"\"I count with the music off — the only time the number stay still.\" She shouts it anyway, from habit. \"Then Noey have a bowl for me from the back table, the one she make too hot for a customer. We eat, we don't talk, we go up the same stair we go up since we are two girl from the same river. Then I dream the chilli.\"","afterShort":"\"Count in the quiet, then Noey's too-hot bowl.\"","pick":{"greet":7,"money":7,"lockin":1,"family":1,"home":1,"wallet":3}},
+  hula_hula_min: {"role":"mamasan","name":"Min","th":"มิน","room":"hula_hula","look":"Rings on every finger and a voice that cuts the music when she wants it","from":"Maha Sarakham","desc":"Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.","after":"\"I take the ring off. All ten, one at a time, into a little dish by the till.\" She spreads her fingers to show you where they go. \"Then I say goodnight to the tiki. Yes, I say it. Twenty year he is the only one in this bar who never ask me for money. Then up to my room, and his light stay on all night, so when I come down in the morning, somebody is already awake.\"","afterShort":"\"Ten rings in the dish, goodnight to the tiki.\"","pick":{"greet":1,"girls":1,"lockin":1,"family":3,"plan":7,"home":1,"wallet":1,"story":1}},
+  hula_hula_noon: {"role":"cashier","name":"Noon","th":"นุ่น","room":"hula_hula","look":"Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes.","from":"Sakon Nakhon","desc":"Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes. — the cashier at Hula Hula Bar, from Sakon Nakhon.","after":"\"Three book, one number — Tarn, Wandee, me — and we agree before anybody go up, or nobody go up.\" She squares the ledger. \"Then I take the ring off the chain and I put it on my finger for the ride home. Only the ride. At the room it go back on the chain. Nobody see it on my hand but the road.\"","afterShort":"\"Three books agree, then the ring on my finger for the ride.\"","pick":{"greet":6,"money":6,"lockin":0,"family":4,"home":0,"wallet":2}},
+  ladybird_bar_ratsamee: {"role":"mamasan","name":"Ratsamee","th":"รัศมี","room":"ladybird_bar","look":"Half-moon glasses down her nose, appraising you over the top of them","from":"Loei","desc":"Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Ladybird Bar, from Loei. She started on the stage at seventeen and owns a share of the place now.","after":"\"I turn the telly off — the only one who touch it, after Pao. I count, I write, I photo the page for the woman from Udon so she don't have to come and count.\" The glasses go back on the chain. \"Then I call my daughter; a dentist wake early. I don't tell her the number. She don't tell me about the teeth. Then I sleep over a quiet bar. The best thing I ever buy a share of.\"","afterShort":"\"Telly off, the page to Udon, my daughter before the teeth.\"","pick":{"greet":5,"girls":5,"lockin":1,"family":7,"plan":4,"home":5,"wallet":1,"story":5}},
 };
 for (const [id, r] of Object.entries(FLOOR_STAFF)) {
   NPCS[id] = r.role === "hostess" ? _floorHostess(id, r) : r.role === "mamasan" ? _floorMama(id, r) : _floorCashier(id, r);
@@ -20286,6 +20388,8 @@ const SOI6_INNER_GIRLS = {
     name: "Cartoon", th: "การ์ตูน", emoji: "✏️", room: "jade_lounge",
     look: "Thai woman of twenty-two, high bun, cropped denim jacket, a biro behind one ear, ink on her fingers.",
     desc: "Twenty-two, a biro behind her ear and ink on her fingers. She draws the customers on beer mats while they talk — quick, unkind, very good — and the ones who buy her a drink she draws a little kinder.",
+    afterWork: { text: "\"After close I draw. Not the customer — the girls, when the shoe come off and the face come off.\" She taps the biro. \"Nobody see those mat. Then I go up, I wash the ink off my finger, and I sleep with the box of men under the bed.\"",
+      short: "\"I draw the girls with the shoes off. Then the box under the bed.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hold still.\" She is already drawing you on a beer mat — three lines, the nose too big, the sunburn exactly right. \"Okay. Now you can talk.\" She turns it round. \"You like? Is for my box — I have a whole box of men.\" She tucks it away. \"The ones who buy me a drink, I draw a little bit nicer.\"",
@@ -20302,6 +20406,8 @@ const SOI6_INNER_GIRLS = {
     name: "Taan", th: "ตาล", emoji: "🍯", room: "jade_lounge",
     look: "Thai woman of thirty-four, heavy fringe, sharp eyeliner, plain black dress, a cool, level stare.",
     desc: "Thirty-four, a heavy fringe and a stare she switches off the moment you sit. She was on these stools before the group bought the bar, and she is the only girl in the Jade who still calls it by its old name.",
+    afterWork: { text: "\"I go home to a cat. She is on the pillow already, very angry I am late.\" Dry as paper, and not. \"I eat something standing up, I tell her about the customer, she don't care. Then I sleep on the edge of my own bed. Every night the same, and I don't change it for nobody.\"",
+      short: "\"Home to the cat, who is angry I am late.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit, sit.\" The stare goes, and something warmer comes on in its place, practised but not fake. \"You come before, when this was Mama's bar? No? Then you only know the new one. Is okay. Same stairs.\"",
@@ -20318,6 +20424,8 @@ const SOI6_INNER_GIRLS = {
     name: "Nittaya", th: "นิตยา", emoji: "💄", room: "jade_lounge",
     look: "Thai woman of twenty-eight, glossy shoulder-length bob, bright red lipstick, red dress, a confident wide smile.",
     desc: "Twenty-eight, red lipstick, a voice two sizes bigger than she is, and the Jade's top seller three months running, which the printed board by the till does not mention and she does.",
+    afterWork: { text: "\"Count my money. Count it again. Write the number in my book — two year of number, every night.\" Red nails tick it off. \"Then I practise the boat noodle in a rice cooker in my room. The girls say it taste like a soup that give up. Not yet. Every night a little bit less soup.\"",
+      short: "\"Count twice, write it down, then practise the boat noodle.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello handsome, I save you time.\" She ticks it off on red nails. \"I drink, you drink. Upstairs, mama tell you the bar money, I tell you my money, no surprise later. Then you are happy, I am happy, nobody cry.\" A beam. \"Or you just drink. Also fine. Slower.\"",
@@ -20334,6 +20442,8 @@ const SOI6_INNER_GIRLS = {
     name: "Namphueng", th: "น้ำผึ้ง", emoji: "🐝", room: "jade_lounge",
     look: "Thai woman of twenty-one, soft round face, mole above her lip, long hair loose, shy downward smile.",
     desc: "Twenty-one and in her first month, a mole above her lip and a habit of looking down when she laughs. She is nervous, and she is watching everything the other girls do, and she will not be nervous for long.",
+    afterWork: { text: "\"Mint come for me.\" A glance down the bar to make sure she is allowed to say it. \"Every night she wait at our stair with her helmet on, and I come down and we go. I don't go anywhere without Mint yet. She say one more month and I can. I think I will still go with Mint.\"",
+      short: "\"Mint wait at the stair with her helmet. We go together.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sawatdee kha.\" Very correct, very quiet, and then a glance down the bar at Nittaya, checking she did it right. \"I am new. One month. You can tell?\" She laughs at her own question and looks at the floor. \"My cousin Mint say: don't say you are new. Too late.\"",
@@ -20351,6 +20461,8 @@ const SOI6_INNER_GIRLS = {
     name: "Keng", th: "เก่ง", emoji: "🍑", room: "peach_lounge",
     look: "Thai woman of thirty, mole above her lip, hair tied back, peach-coloured top, a wry tilted smile.",
     desc: "Thirty, wry, and the one who turned the old sign to face the wall, which she will tell you without being asked. She worked the Peach for the old owner for six years and has worked it for the group for about six weeks, and she has opinions on both.",
+    afterWork: { text: "\"Nails. Somebody always need the nails after close — a girl cry, I paint, she talk.\" A dry look at her own plum thumbnail. \"Then I call Khon Kaen when my daughter wake for school. She tell me what she learn, I tell her nothing. Then I sleep in the day like a bat with a daughter.\"",
+      short: "\"Nails for whoever cry, then Khon Kaen when school wake up.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You see the sign? On the floor, face to the wall?\" She doesn't wait. \"I do that. Company man say: bin. I say: no, it stay. Mama say: then hide it. So I hide it.\" She shrugs, very satisfied. \"Same girls, same Peach. Only the paper is new.\"",
@@ -20367,6 +20479,8 @@ const SOI6_INNER_GIRLS = {
     name: "Pui", th: "ปุ้ย", emoji: "🛵", room: "peach_lounge",
     look: "Thai woman of twenty, baby-faced, nervous smile, a borrowed peach dress a size too big, sandals.",
     desc: "New enough that the dress is still borrowed, and practical enough that she has already worked out exactly how many lady drinks a month pay off the motorbike outside, which she will show you on a calculator.",
+    afterWork: { text: "\"Calculator.\" She holds it up, as proof. \"I sit on the motorbike outside and I put tonight's drink in the sum — how many day of motorbike I pay tonight. Then I ride her home, very slow, nobody on the back, only me and the helmet. She is a little bit more mine than yesterday. That is the best part.\"",
+      short: "\"The sum on the calculator, then ride her home slow.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hi.\" A quick smile, then straight to business, as if she had rehearsed it. \"I am Pui. I have a motorbike to pay. You buy me drink, I pay one day of motorbike.\" She holds up her {{phone}} with the calculator already open. \"Is honest, na? Nobody else tell you what the drink is FOR.\"",
@@ -20383,6 +20497,8 @@ const SOI6_INNER_GIRLS = {
     name: "Mint", th: "มิ้นท์", emoji: "🌿", room: "peach_lounge",
     look: "Thai woman of twenty-six, small and sharp-chinned, blunt jaw-length haircut, watchful eyes, green top.",
     desc: "Twenty-six, sharp-chinned, missing nothing — and, every twenty minutes, looking two doors up the soi towards the Jade, where the cousin she brought down from Loei is working her first month.",
+    afterWork: { text: "\"I stand at the Jade stair with my helmet. Namphueng come down, she tell me who buy her drink, I tell her who to never sit with.\" Arms folded, as always. \"Then two on one bike to our room. First month I do this every night. After one year I will still do it. She don't know that yet.\"",
+      short: "\"The Jade stair, then two on one bike.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello.\" Her eyes go past you to the soi, check something, come back. \"Sorry. I watch my cousin. She work two door up, she is new.\" A quick professional smile. \"You want me, I am here. You want somebody nicer, everybody here is nicer than me. I am the one who notice.\"",
@@ -20399,6 +20515,8 @@ const SOI6_INNER_GIRLS = {
     name: "Aof", th: "อ๊อฟ", emoji: "🎤", room: "peach_lounge",
     look: "Thai woman of twenty-four, high bun, cropped jacket, big hoop earrings, mid-laugh, holding a microphone.",
     desc: "Twenty-four, the loudest laugh in the Peach and a cordless microphone she brought from home, because the group's new sound system is very good and nobody has worked out how to switch the karaoke on.",
+    afterWork: { text: "\"I sing all the way home on the bike, down Second Road, nobody can stop me.\" Into the dead microphone, naturally. \"Then Jomtien. My boyfriend is awake already, the rice is on, he don't ask about the bar, I don't ask about the hotel. We eat, we sleep, two people who smell of other people's kitchen.\"",
+      short: "\"Sing on the bike to Jomtien; the rice is already on.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"HELLO!\" Into the microphone, which is not plugged into anything, so it is merely loud. \"You sing? Everybody sing. Nobody sing GOOD, but everybody sing.\" She laughs at herself before you can. \"New speakers, very big. New boss never show us how to do karaoke. So I bring my own.\"",
@@ -20416,6 +20534,8 @@ const SOI6_INNER_GIRLS = {
     name: "Duang", th: "ดวง", emoji: "🍭", room: "lollipop_bar",
     look: "Thai woman of thirty-one, freckled, high ponytail, faded sports vest, a lollipop in one hand, worried smile.",
     desc: "Thirty-one, freckled, a lollipop for a pointer. She buys the lollipops — every week, from Makro, out of the bar's float — and she has been at the Lollipop long enough to be frightened of the folder on the back table.",
+    afterWork: { text: "\"I wash the jar. Sticky, every night, nobody else do it.\" She says it without complaint. \"Then I count the wrapper on the floor — how many man laugh tonight. Then I go up and I message Khon Kaen before my mother wake, so she open her eyes and something from me is already there. The buffalo don't message back.\"",
+      short: "\"Wash the jar, count the wrappers, message Khon Kaen.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello! You want one?\" She offers the jar, then laughs and takes it back. \"No, no, is for pointing. Is the Lollipop way.\" She points at you with a green one, then at the stairs, then at herself. \"Simple, na? Not like the folder.\" The smile slips a little at that, and comes back.",
@@ -20434,6 +20554,8 @@ const SOI6_INNER_GIRLS = {
     name: "Mona", th: "โมนา", emoji: "💰", room: "lollipop_bar",
     look: "Thai woman of twenty-seven, gold earrings, gold chain, gold phone case, sleek long hair, amused knowing look.",
     desc: "Twenty-seven, gold from her ears to her {{phone}} case, and the only girl in the Lollipop who hopes the mamasan signs — because she has done the sums, and the sums are on the company's side.",
+    afterWork: { text: "\"I take the gold off, one piece at a time, into the pouch. The pouch go in my bra. I sleep like that.\" Not a joke. \"The Jade girl have aircon. I have a pouch of gold against my skin and I sleep better than her. Fire, flood, a man who run — the pouch go where I go.\"",
+      short: "\"The gold go in the pouch, the pouch go in the bra.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hi, handsome.\" She looks you over the way a jeweller looks at a ring. \"You know what is gold? Gold is the only boyfriend who never go back to his wife.\" She laughs, low. \"Sit. Buy me drink. I put it in gold.\"",
@@ -20450,6 +20572,8 @@ const SOI6_INNER_GIRLS = {
     name: "Fern", th: "เฟิร์น", emoji: "🔮", room: "lollipop_bar",
     look: "Thai woman of twenty-three, blunt jaw-length haircut, sharp chin, dark lipstick, a deck of tarot cards in hand.",
     desc: "Twenty-three, sharp-chinned, with a deck of tarot cards she reads for customers between drinks. She reads them for the bar as well. She will not tell you what they said about the folder.",
+    afterWork: { text: "\"One card, for me, before I sleep. Only one.\" She shuffles without looking down. \"The same card come three night in a row, and I don't tell you which, and I don't tell Mama. Then the deck go under the pillow. My grandmother put the rice there. Same idea.\"",
+      short: "\"One card for me, then the deck under the pillow.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Pick a card.\" The deck is fanned before you've sat down. \"Any card. Is free.\" You pick; she looks at it, then at you, and nods slowly. \"Okay. I know everything now.\" She does not explain. \"Second card is a drink.\"",
@@ -20467,6 +20591,8 @@ const SOI6_INNER_GIRLS = {
     name: "Ple", th: "เปิ้ล", emoji: "🌶️", room: "sweet_tamarind",
     look: "Thai woman of twenty-five, thin, jet-black hair, red top, a tamarind pod in her fingers, a cheeky grin.",
     desc: "Twenty-five, thin as wire, with a tamarind pod always half-eaten in her fingers. She is the mamasan's niece, which on this side of the soi is a job title, and she guards the row of business cards by the till as if they were trophies.",
+    afterWork: { text: "\"I eat the last tamarind. I check the wall — every card still there, nobody steal a no. Then up.\" She cracks a pod to make the point. \"Family bar, so I sleep in the family. My aunt snore through the floor. Every morning I tell her; every morning she say is the fan.\"",
+      short: "\"Check the wall, then sleep over my aunt's snoring.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You want try?\" She holds out a tamarind pod, cracked open, with a pinch of salt and chilli on it. \"Sweet first. Then sour. Then hot.\" She grins. \"Like the Tamarind. Like me. Sit, sit — this is a family bar, we feed you before we rob you.\" (EAT TAMARIND)",
@@ -20485,6 +20611,8 @@ const SOI6_INNER_GIRLS = {
     name: "Jiab", th: "เจี๊ยบ", emoji: "🐣", room: "sweet_tamarind",
     look: "Thai woman of twenty-nine, freckled, high ponytail, faded sports vest, sneakers, a sunny, knowing laugh.",
     desc: "Twenty-nine, freckled, in a sports vest and sneakers. She worked two years at the Pink Lotus at the corner and walked out of it to come here, for less money and a fan instead of aircon, and she thinks she got the better deal.",
+    afterWork: { text: "\"At the Lotus, after close, the app want you out the door — shift finish, next shift.\" The sunny laugh. \"Here Mama give me a tamarind for the bus and I sit on the step and eat it and nobody count me. Then home, and I send my son a football sticker on the chat, so he wake up to one.\"",
+      short: "\"A tamarind on the step, nobody counting; then a sticker for my son.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello, hello!\" A big sunny laugh. \"You know the Pink Lotus? Big, pink, very loud, at the corner?\" She jerks a thumb west. \"I work there two year. Now I work here. Smaller, hotter, everybody know my name.\" She pats the stool. \"Is a good trade. Sit.\"",
@@ -20501,6 +20629,8 @@ const SOI6_INNER_GIRLS = {
     name: "Alisa", th: "อลิสา", emoji: "🪷", room: "sweet_tamarind",
     look: "Thai woman of forty-two, big solemn eyes, small gold Buddha at her throat, hair in a neat low knot, calm.",
     desc: "Forty-two, big-eyed and solemn, a small gold Buddha at her throat. She has been on Soi 6 since before it had a company on it, and half the men at the Tamarind's rail come in for her and sit there pretending they came in for the beer.",
+    afterWork: { text: "\"I take the Buddha off, I say thank you to it, I put it back on to sleep. Twenty year.\" The small wai, to the thought. \"Then I write in a little book which regular come this year and which knee is bad now. The young girl keep the men in a {{phone}}. I keep them in a book. A book never lose a number.\"",
+      short: "\"Thank the Buddha, then the book of knees.\"" },
     dialogue: [
       { when: (st, G) => !(G.visitDay && G.visitDay.sweet_tamarind != null && G.visitDay.sweet_tamarind < G.day), th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sawatdee kha.\" Unhurried, a small wai, a real one. \"You are new on the soi? Your face is new.\" She considers you kindly. \"Sit. I don't grab. The young girls grab — they have rent. I have regulars.\" A slight smile. \"Regulars are slower and they last longer.\"",
@@ -20518,6 +20648,8 @@ const SOI6_INNER_GIRLS = {
     name: "Fah", th: "ฟ้า", emoji: "🧨", room: "firecracker_bar",
     look: "Thai woman of twenty-five, slight build, short bob, sharp watchful eyes, red-and-gold top, quick smile.",
     desc: "Twenty-five, small and quick, the girl at the Firecracker's front stool who tells you what the staircase is for and what it costs before your second foot is through the door, on the principle that it saves everybody a great deal of time.",
+    afterWork: { text: "\"I stop talking. That is my after.\" She holds up a hand, demonstrating. \"All night I say everything first. After the shutter I say nothing to nobody for one hour. I sit on the front stool with the shutter half down and I fold the silk sample my mother send, and the soi go quiet with me.\"",
+      short: "\"One hour of saying nothing, folding my mother's silk.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello! I tell you everything now, okay?\" She counts it off fast. \"Drink for you, drink for me, mama say the bar money, I say my money, upstairs is clean, I am fun.\" She takes a breath. \"Now you know everything. Now you can decide. Most men here walk up and down for one hour pretending. You are lucky. You meet me first.\"",
@@ -20534,6 +20666,8 @@ const SOI6_INNER_GIRLS = {
     name: "Namtan", th: "น้ำตาล", emoji: "🩺", room: "firecracker_bar",
     look: "Thai woman of thirty, lean and angular, high cheekbones, hair pinned up neatly, calm appraising eyes.",
     desc: "Thirty, angular, unflappable. She was a nursing assistant at a hospital in Sisaket for six years before the arithmetic brought her here, and she still checks the pupils of any man who stumbles on the step.",
+    afterWork: { text: "\"Water. Every girl drink one glass before she go up — hospital rule, my rule now.\" She points at the fridge, again. \"Then I check the step for the man who fall. Then I sleep with my {{phone}} on loud, in case Sisaket ring about the machine. Two year, it ring two time. I still sleep on loud.\"",
+      short: "\"A glass of water for every girl, then sleep on loud.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Sit down. Slowly.\" She is looking at your eyes, not your wallet. \"You drink water today? No? Nobody drink water on Soi 6.\" She points at the fridge before anything else, and waits. \"Water. Then beer.\" Only when you nod does she smile properly. \"Okay. Now you are a customer. Before, you were a patient.\" (DRINK WATER)",
@@ -20550,6 +20684,8 @@ const SOI6_INNER_GIRLS = {
     name: "Fasai", th: "ฟ้าใส", emoji: "🥊", room: "firecracker_bar",
     look: "Thai woman of twenty-six, gold earrings and chain, muscled arms, hair in a tight braid, a boxing-gym tank top.",
     desc: "Twenty-six, gold chains and the arms of somebody who hits things on purpose. Her boyfriend fights {{Muay Thai}} at the stadium out by Sukhumvit, and on fight nights the whole Firecracker knows the result before the bell.",
+    afterWork: { text: "\"Fight night, I go to the stadium and collect him, win or lose, and I drive, because his hand are too sore for the handlebar.\" She flexes, by reflex. \"Other night I stretch on the floor of the room and I count his sleeping — he count to eight, I count the rest. Then the gym when the sun come. Never miss.\"",
+      short: "\"Collect him from the stadium, or stretch and count his sleep.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You like {{Muay Thai}}?\" Before hello, before anything. \"My boyfriend fight. Very good, very ugly.\" She flexes, laughing. \"Me also, a little — the gym every morning, then here every night. Buy me drink, I show you the elbow.\" She mimes an elbow at your head, gently. \"Is a joke. Mostly.\"",
@@ -20567,6 +20703,8 @@ const SOI6_INNER_GIRLS = {
     name: "Namwan", th: "น้ำหวาน", emoji: "🎶", room: "hot_pepper",
     look: "Thai woman of twenty-four, a scar through one eyebrow, big grin, sequinned red top, hair long and curled.",
     desc: "Twenty-four, a scar through one eyebrow and the best voice on the inner east. She wants to be a luk thung singer, has sung at three temple fairs in Yasothon, and sings at the Hot Pepper's customers until they buy her a drink to stop or to keep going.",
+    afterWork: { text: "\"I sing. Not for a customer — for me.\" She touches the scar, unbothered. \"After the shutter this bar is a studio: tile, no people, the echo is very good. One song, the sad one, all the way through, nobody stop me to buy a drink. I record it on my {{phone}} and I send it to nobody. One day the radio. For now the tile.\"",
+      short: "\"One whole song to the empty tile, then bed.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "She doesn't say hello; she sings it, the first line of something mournful, eyes closed, a hand on her heart. Then she opens her eyes and grins. \"You like? Is luk thung — country music, Thai style. Every song is about a girl from Isan who is sad.\" She pats the stool. \"I am a girl from Isan. I am not sad. Sit.\"",
@@ -20585,6 +20723,8 @@ const SOI6_INNER_GIRLS = {
     name: "Noey", th: "เนย", emoji: "🥗", room: "hot_pepper",
     look: "Thai woman of thirty-three, freckled, ponytail, apron over a red vest, a pestle in one hand, laughing.",
     desc: "Thirty-three, freckled, an apron over her work clothes. She makes the som tam that the Hot Pepper's staff eat at the back table between customers, hotter than the chilli over the door, and she judges a man by how he takes it.",
+    afterWork: { text: "\"I wash the mortar. Then I pound tomorrow's chilli, so the girls don't hear it in the day.\" Pound, pound, in the air. \"Then I eat what is left, alone, with my fingers, hotter than I give anybody. The back table is my kitchen. The room above it is my bed. Small life. Very spicy.\"",
+      short: "\"Wash the mortar, pound tomorrow's chilli, eat the rest alone.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You hungry?\" She is pounding something in a clay mortar at the end of the bar. \"Is for the girls, not for sale — but for you, one spoon. A test.\" She holds out a spoonful of som tam that smells like a dare. \"You eat, you don't cry: you are welcome here. You cry: you are also welcome. But we laugh.\" (EAT SOM TAM)",
@@ -20601,6 +20741,8 @@ const SOI6_INNER_GIRLS = {
     name: "Kaimook", th: "ไข่มุก", emoji: "📱", room: "hot_pepper",
     look: "Thai woman of twenty-two, quiet, pearl earrings, glasses pushed up into her hair, phone in hand, small smile.",
     desc: "Twenty-two, the quiet one in the loudest bar on the inner east. She is the only girl at the Hot Pepper who doesn't sing, because she is doing an English course on her {{phone}} and practising on whoever sits down.",
+    afterWork: { text: "\"The lesson. One hour, every morning — but my morning is after the bar, so I do it at the back with the owl, before the sun.\" She shows you the streak, carefully. \"Then I write down every English word the customer say that the app don't have. Tonight, three. Then I sleep, with the streak safe.\"",
+      short: "\"The owl lesson before the sun, then the words the app don't have.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Good evening. How are you this evening?\" Perfectly pronounced, carefully, off a lesson. She checks her {{phone}}, pleased. \"Sorry — I study English. You can correct me?\" A small hopeful smile. \"The other girls sing. I conversation. Is the same, but quieter.\"",
@@ -20618,6 +20760,8 @@ const SOI6_INNER_GIRLS = {
     name: "Bright", th: "ไบรท์", emoji: "🌺", room: "hula_hula",
     look: "Thai woman of twenty-five, mole above her lip, plastic flower lei, grass-skirt costume over shorts, mischievous grin.",
     desc: "Twenty-five, in a plastic lei and a grass skirt over denim shorts, and the keeper of the tiki head's mythology. Ask her why it is there and you'll get a story. Ask her again and you'll get a different one.",
+    afterWork: { text: "\"I tell the tiki a story. A new one, every night, when the bar is empty — I practise on him first. He never laugh in the wrong place.\" Entirely solemn. \"Then I go up with the grass skirt on a hanger, because it is the only one and Mama count it. Then I dream in Hawaii. Very far.\"",
+      short: "\"Practise tomorrow's lie on the tiki, then hang the skirt.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Aloha!\" With a hula that is mostly hips and entirely ironic. \"Is Hawaii. Very far. We are the Hawaii branch.\" She points at the tiki head glowing on the end of the rail. \"You see him? He choose who sit with who. Tonight he say: you, me.\" A grin. \"He is never wrong. I ask him earlier.\"",
@@ -20634,6 +20778,8 @@ const SOI6_INNER_GIRLS = {
     name: "Wandee", th: "วันดี", emoji: "🌸", room: "hula_hula",
     look: "Thai woman of twenty-seven, straight hair to her hips, silver anklet, a pink lei, perfectly still, amused eyes.",
     desc: "Twenty-seven, hair to her hips and a silver anklet, and the Hula Hula's best seller, who has worked out that a lei round a man's neck is the only receipt on Soi 6 that he wears home.",
+    afterWork: { text: "\"I count the lei. How many go out the door tonight, how many man walk home pink.\" A slow smile at the number. \"Then I put the hair in one long plait — my grandmother say never cut it, she never say nothing about plait — and I sleep with it over the side of the bed like a rope. Up there, over the bar. Four step from this stool.\"",
+      short: "\"Count the leis, plait the hair, four steps up.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "She is perfectly still on her stool until you sit; then she lifts the lei off her own neck and drops it over yours in one smooth movement. \"Now you are Hula Hula man.\" A slow smile. \"The flower is free. The drink is how you say thank you for the flower.\"",
@@ -20650,6 +20796,8 @@ const SOI6_INNER_GIRLS = {
     name: "Tarn", th: "ธาร", emoji: "🏭", room: "hula_hula",
     look: "Thai woman of thirty-two, round cheeks, sharp eyes, short practical hair, a pink lei, a pen behind one ear.",
     desc: "Thirty-two, round-cheeked and sharp-eyed, keeping a tally of something on a beer mat. She worked nine years on a production line in an electronics factory in Rayong before it closed, and she runs her evening at the Hula Hula like a shift.",
+    afterWork: { text: "\"I check my beer mat against Noon's book. If they agree, I sleep. If they don't, I don't sleep until they do, and then I sleep very well.\" A brisk tick on the mat. \"A factory shift end with a count too. Here the supervisor is a tiki and the count is mine, and after, the money go in a tin for two kid in Surin.\"",
+      short: "\"The mat against Noon's book, then the tin for Surin.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Hello.\" A tick on the beer mat. \"I count the customers. Tonight is a good number.\" She looks up properly, friendly and brisk. \"I was in a factory before. I still count everything. Sit — you want drink? I write it.\"",
@@ -20667,6 +20815,8 @@ const SOI6_INNER_GIRLS = {
     name: "Pao", th: "เป้า", emoji: "📺", room: "ladybird_bar",
     look: "Thai woman of thirty-eight, sun-lined face, faded tattoo on one forearm, comfortable cardigan, eyes on the telly.",
     desc: "Thirty-eight, sun-lined, with a faded tattoo on one forearm and her eyes on the soap opera above the fridge. She has watched it at the Ladybird every night for four years and will explain the plot to anybody, with feeling.",
+    afterWork: { text: "\"I watch the episode again. The telly is off, but I watch it in my head going up the stair — the part the ad break take.\" Her eyes are still on the dark screen. \"Then I lie down and I think what the mother-in-law do tomorrow. I am always right. Four year. The writer should pay me.\"",
+      short: "\"The episode again, in my head, up the stair.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Shh — sit, sit.\" She pats the stool without looking away from the telly. \"The mother-in-law find out. Very big night.\" Only at the ad break does she turn to you properly, warm and unhurried. \"Sorry. Hello. You want drink? I tell you the story from the beginning. Is very long. You have time?\"",
@@ -20683,6 +20833,8 @@ const SOI6_INNER_GIRLS = {
     name: "Gaem", th: "แก้ม", emoji: "🐞", room: "ladybird_bar",
     look: "Thai woman of twenty-six, pixie cut, small gold hoops, red-and-black spotted top, crooked disarming grin.",
     desc: "Twenty-six, pixie-cut, with a crooked grin and paint still under one thumbnail. She painted every spot on every stool in the Ladybird, by hand, in one slow wet season, and she will tell you how many there are.",
+    afterWork: { text: "\"I touch up one spot. Every night one — the one most finish.\" She shows you the thumbnail, the evidence. \"Then I wash the brush in a glass the customer leave, and I go up with the brush behind my ear. Hundreds of spot, one a night, never finish. The plan is never finish. Then the mama cannot sell the stool.\"",
+      short: "\"One spot touched up, the brush behind my ear, up.\"" },
     dialogue: [
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"You sit on my work.\" She grins at your stool. \"Every spot — me. One hundred and forty-three spots on this one.\" She shows you the paint under her thumbnail like a medal. \"Is a joke. I never count.\" A pause. \"Is a hundred and thirty-one. I count.\"",
@@ -20699,6 +20851,8 @@ const SOI6_INNER_GIRLS = {
     name: "Somsri", th: "สมศรี", emoji: "🍵", room: "ladybird_bar",
     look: "Thai woman of forty-four, tanned arms, vine tattoo up one wrist, hair in a loose knot, motherly half-smile.",
     desc: "Forty-four, motherly, a vine tattooed up one wrist. She is the reason men end up in the Ladybird on their third night: by then they are tired of being grabbed, and she has never grabbed anybody in her life.",
+    afterWork: { text: "\"I don't go anywhere. I sit on this stool after the shutter and I let my feet stop.\" She says it as kindly as everything. \"Then I put rice in a bowl for the morning, for whichever monk come past — not my son, but a monk is a monk, and you give where you are. Then sleep, early for this soi. Nobody need me after two. They need me tomorrow, early, with their shoulders.\"",
+      short: "\"Let the feet stop, rice in a bowl for the morning.\"" },
     dialogue: [
       // the diagnosis waits for the third night — on the second it is the clock talking (Keith, round 113)
       { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => G.day < 3,
@@ -21832,3 +21986,9 @@ NPCS.mort.dialogue.push({ topic: "accent|squire|british|the way you talk|you sou
     "British owner, British subs, British readers. Forty-one years of a man from Leeds taking the American out of my copy, and the " +
     "copy took it out of me.\u201d He considers his shirt. \u201cMy sister says I sound like a butler on vacation.\u201d",
   short: "\u201cBaltimore, by passport. Forty-one years of a British paper's subs took the American out of the copy, and the copy took it out of me.\u201d" });
+
+// WHERE SHE GOES AFTER CLOSE IS HER OWN (Mario, 2026-11-03: one answer per woman, authored in her record, never a deeper
+// pool). `afterWork` on a character, or `after`/`afterShort` on a floor record, becomes her LAST dialogue node — appended
+// here, after every pass above, so no earlier index moves (G.talked is a book of indices). The parser's shared
+// after-work pool is dealt only to a woman without one.
+for (const n of Object.values(NPCS)) if (n.afterWork && n.dialogue) n.dialogue.push({ topic: "after work|after hours", text: n.afterWork.text, short: n.afterWork.short });
