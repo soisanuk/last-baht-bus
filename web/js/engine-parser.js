@@ -1564,7 +1564,7 @@ function _arriveAt(to) {
   // both fired back to back ("lights up like payday" twice in a row, Alan
   // playtest 2026-08-17), so the invite consumes the greeting slot.
   const _invHere = G.phone.invite && G.phone.invite.day === G.day &&
-    _npcRoom(G.phone.invite.id) === to;
+    _npcWhere(G.phone.invite.id) === to;
   // A month later, she still knows the face: the one-girl playtest (2026-08-22)
   // came back to "a name and a number" after five nights, three LTs and the ride.
   // Once per girl per vacation — a beat and a small head start, not the old ledger.
@@ -1638,9 +1638,10 @@ function _arriveAt(to) {
   }
   // quiz night: walk in during the window and the microphone finds you
   if (_quizHere()) { _startQuiz(); return; }
-  // a standing invitation, honoured: she said come, and you came
+  // a standing invitation, honoured: she said come, and you came — and only if she is on the floor to see it
+  // (her home bar is not her presence: a woman away for the season keeps no seat)
   const inv = G.phone.invite;
-  if (inv && inv.day === G.day && _npcRoom(inv.id) === G.room) {
+  if (inv && inv.day === G.day && _npcsHere().includes(inv.id)) {
     G.phone.invite = null;
     _addBond(inv.id, 1);
     (G.soc.greeted = G.soc.greeted || {})[G.room] = true; // this IS tonight's greeting
@@ -4889,6 +4890,11 @@ function _doTalkCore(arg, topic) {
   if (!arg || _PRONOUN.test(arg.toLowerCase())) {
     const a = _resolveActor(arg, _addressable());
     if (a) arg = a;
+    // "her" with a man for a partner and several women on the floor: ask, never hand the question to him
+    else if (_pronounSex(arg)) {
+      const c = _addressable().filter(id => _pr(id).s === _pronounSex(arg));
+      if (c.length > 1) { _say(`Who do you mean? (${c.map(_convoName).join(", ")})`); return; }
+    }
   }
   if (G.dog && arg && _isDogWord(arg)) {
     _say(_dogN(_pickVary([
@@ -8528,14 +8534,17 @@ function _partyTalk(npc, topic) {
   const sunWords = /\b(sunrise|sun ?rise|dawn|morning|the sun|beach|the sand|sea)\b/.test(t);
   const outWords = /\b(club|disco|walking street|go-?go|the night out|night out|party|dancing|dance|the bars|our night|took me out|went out)\b/.test(t);
   const lastQ = /\blast night\b/.test(t) && L.day === G.day - 1;
+  // the room and the morning are words of her own too: an unheard node of hers on the word answers first. The taxi
+  // branch takes no bare "home" — that is her village — and "taxi" the day after is the one you paid
+  const _hers = _ownsUnheard(npc, t);
   // the room and the morning after a night that ended at home with her, and the taxi she was sent home in (Dagny, round 91)
-  if (/\b(my room|your room|the room|hotel|the morning|morning|bed|breakfast)\b/.test(t) && L.home && L.day === G.day - 1) {
+  if (/\b(my room|your room|the room|hotel|the morning|morning|bed|breakfast)\b/.test(t) && L.home && L.day === G.day - 1 && !_hers) {
     _say(_pickVary(floor ? [`"Your room?" ${n} laughs behind her hand. "Small. The air-con make noise like old man. I sleep anyway — very good sleep."`,
         `"The morning!" ${n} covers her face. "You snore, na. Little bit. I don't tell anybody. Only you."`]
       : [`"Your room was fine," ${n} says. "The morning was better. Don't make me say more in here."`], "partyroom:" + npc));
     return true;
   }
-  if (/\b(taxi|the ride home|sent me home|send me home|home)\b/.test(t) && L.sentHome && L.day >= G.day - 1) {
+  if (/\b(taxi|the ride home|sent me home|send me home|sent you home|send you home)\b/.test(t) && L.sentHome && L.day >= G.day - 1) {
     _say(_pickVary(floor ? [`"The taxi?" ${n} smiles. "You give too much for it, na. I keep the change. Thank you — home safe, sleep early for once."`,
         `"You send me home like a gentleman," ${n} says, a little surprised still. "Taxi, money in my hand, no argument. I tell mama."`]
       : [`"You put me in a taxi and paid it," ${n} says. "That is rarer than you'd think on this street."`], "partytaxi:" + npc));
@@ -9265,6 +9274,9 @@ function _lastTimeTalk(npc, topic) {
   // the house keeps a count too: Jinda's written "this week — you sit here already" a week after you last sat (Desmond, round 106)
   // a house that met you on an earlier night never says "no last time": the night you last sat, or else the night you met
   if (NPCS[npc] && ["mamasan", "cashier"].includes(NPC_ROLES[npc]) && (G.metDay || {})[npc] != null && G.metDay[npc] < G.day) {
+    // …except on a return trip to a woman who knew you: her gated returning-trip node is hers to say, as a hostess's is
+    const own = _pickDialogue(npc, "last time");
+    if (own && own.topic && own.when && G.vacation > 1 && ((G.prevBond || {})[npc] || 0) >= 1) return false;
     const bs = (G.barSat || {})[NPCS[npc].room];
     if (bs != null && bs < G.day && _awayTalk(npc, "last time")) return true;
     const d = G.day - G.metDay[npc], reg = _hoursRegister(npc), nm = NPCS[npc].name;
@@ -9426,7 +9438,9 @@ function _jobFloorTalk(npc, topic) {
 }
 function _jobMemoryTalk(npc, topic) {
   const t = String(topic || "").toLowerCase();
-  if (!/\b(remember me|know me|me|who am i|last time|do you remember|you remember|recognise me|recognize me)\b/.test(t)) return false;
+  // a question ABOUT the two of you — never any sentence with "me" in it ("drive me", "help me" are their own asks)
+  if (!/\b(remember me|know me|who am i|last time|do you remember|you remember|recognise me|recognize me)\b/.test(t)) return false;
+  if (_ownsUnheard(npc, t)) return false;
   for (const [q, ids] of Object.entries(_JOB_PARTIES))
     if (ids.includes(npc) && G.quests && G.quests[q] === "done" && _JOB_MEMORY[q][npc]) { _say(_JOB_MEMORY[q][npc]); return true; }
   const q = Object.keys(QUESTS).find(k => G.quests && G.quests[k] === "done" && QUESTS[k].giver === npc);
@@ -9468,8 +9482,7 @@ function _ownWordTalk(npc, topic) {
   if (/\bagain\b/.test(t)) return false;
   const dl = NPCS[npc].dialogue || [], heard = ((G.talked || {})[npc] || []).map(i => dl[i]).filter(d => d && d.text);
   if (!heard.length) return false;
-  const seenI = (G.talked || {})[npc] || [];
-  if (dl.some((d, i) => d.topic && !seenI.includes(i) && _topicHits(d.topic, t))) return false;   // an unheard node of hers on it answers first
+  if (_ownsUnheard(npc, t, false)) return false;   // an unheard node of hers on it answers first
   const keys = new Set(heard.flatMap(d => String(d.topic || "").split("|").map(k => k.trim())));
   const texts = heard.map(d => { const ts = typeof _townStory === "function" ? _townStory(npc, d) : null; return String((ts && ts.text) || d.text).toLowerCase(); }).join(" ");
   // a subject key (family, home, plan) is her node's, retold as itself; a NAMED THING inside it (Udon, the baby) is a follow-up
@@ -12094,7 +12107,10 @@ function _doBuy(arg) {
     // mid-conversation, "buy drink" is for HER — the chip says so, the typed word asked who (Dev, round 65)
     const _partner = typeof _convoActive === "function" ? _convoActive() : null;
     if (!nameW && _partner && NPC_ROLES[_partner] && girlsHere.includes(_partner)) { doCommand("buy drink for " + NPCS[_partner].name); return; }
-    if (!nameW && girlsHere.length) {
+    // "buy her a drink": HER is a woman here — the partner if she is one, the only one if there is one, else ask
+    const _her = /^(?:her|she)(?: a)?$/.test(nameW);
+    if (_her) { const r = _resolveActor("her", girlsHere); if (r) { doCommand("buy drink for " + NPCS[r].name); return; } }
+    if ((!nameW || _her) && girlsHere.length) {
       _say(_fmt("A drink for who? Yours is a BEER (\u0e3f{b}); hers is \u0e3f{l} and goes on " +
         "her tally. (BUY BEER \u00b7 BUY WATER \u00b7 BUY DRINK FOR {who})",
         { b: _beerPrice(), l: _ladyPrice(), who: _npcLabel(girlsHere[0]) }), "dim");
@@ -14893,17 +14909,31 @@ function _doCall(arg) {
     _say("The number you have for Eddy rings once and dies. New number. You don't have it. He said.", "dim");
     return;
   }
-  const id = _findNpc(arg) || _contactByName(arg);   // a contact who is not in the room is still in the phone (Marek, round 53: CALL PRIEW)
+  const id = _contactByName(arg) || _findNpc(arg);   // a contact who is not in the room is still in the phone (Marek, round 53: CALL PRIEW)
   if (!id) { _say("Call who? Nobody by that name in your phone or your eyeline."); return; }
+  // a phone rings a NUMBER: somebody in your eyeline without one in your contacts is somebody to talk to, not to call
+  if (!(G.phone.contacts && G.phone.contacts[id])) {
+    _say(`You don't have a number for ${NPCS[id].name}.` + (NPC_ROLES[id] === "hostess" ? ` (CONTACT ${NPCS[id].name.toUpperCase()} — she'll put it in your phone herself.)` : ""), "dim");
+    return;
+  }
   if (G.battery <= 0) { _say("Dead phone. The town's most reliable excuse."); return; }
-  if (NPCS[id].offmap && G.phone.contacts[id]) {   // LINE only — there is no number to ring
+  if (NPCS[id].offmap) {   // LINE only — there is no number to ring
     _say(`${NPCS[id].name} is a LINE contact, not a number: there's nothing to ring. (MESSAGE ${NPCS[id].name.split(" ").pop().toUpperCase()})`, "dim");
     return;
   }
+  G.battery = Math.max(0, G.battery - 1);
   const name = NPCS[id].name;
-  _say(`You call ${name}. It rings out. Nine seconds later the phone buzzes in ` +
-    `your hand: “ทำไมโทรมา 555 why you CALL???” — nobody in this town answers a ` +
-    `phone. (MESSAGE ${name.toUpperCase()} instead.)`);
+  // a woman who has decided, and one the affair ended with, answer a call the way they answer a text: not at all
+  if (_maiDee(id) || (G.affair && G.affair.ended && !G.affair.won && id === G.affair.id)) {
+    _say(`You call ${name}. It rings out, and nothing comes back — no text, no missed-call emoji, no "why you CALL". That is the whole of the answer.`, "dim");
+    return;
+  }
+  // the floor's "why you CALL???" is the floor's; anybody else just doesn't pick up
+  _say(_texts(id)
+    ? `You call ${name}. It rings out. Nine seconds later the phone buzzes in ` +
+      `your hand: “ทำไมโทรมา 555 why you CALL???” — nobody in this town answers a ` +
+      `phone. (MESSAGE ${name.toUpperCase()} instead.)`
+    : `You call ${name}. It rings out, the way every phone in this town rings out. (MESSAGE ${name.toUpperCase()} instead.)`);
 }
 
 // CHECKOUT — after Act One, at the start of an evening, from your own room.
@@ -17594,7 +17624,8 @@ function _readRouteBody(raw) {
   // BUY HER A DRINK: HER is the woman in front of you (Steve: "she's not working this bar — nobody here by that name")
   if (R.act === "buyfor") {
     const pr = (R.raw.toLowerCase().match(/\b(?:buy|get) (her|him|them|you)\b/) || [])[1];
-    const id = pr === "you" || pr === "her" ? who : null;
+    // HER is a woman: with Bert for a partner it is not Bert
+    const id = pr === "you" || (pr === "her" && who && _pr(who).s === "she") ? who : null;
     if (id) { doCommand("buy drink for " + String(NPCS[id].name).toLowerCase()); return true; }
   }
   // CAN WE GO SOMEWHERE TOGETHER TONIGHT: that is TAKE HER OUT (Margit, round 101: "Again, na? Short words.")

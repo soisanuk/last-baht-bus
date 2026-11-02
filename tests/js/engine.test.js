@@ -6911,6 +6911,8 @@ test("photo costs battery; call teaches you to text", () => {
   run("photo");
   assert.equal(state().battery, b - 1);
   assert.match(lastOut(), /peace signs at maximum deployment/);
+  // CALL rings a number in the phone: a woman at the bar without one is not called (review 2026-11-01, S4-8)
+  state().phone.contacts.candy = {};
   run("call candy");
   assert.match(lastOut(), /nobody in this town answers a phone/);
 });

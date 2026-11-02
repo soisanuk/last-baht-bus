@@ -2146,9 +2146,19 @@ function _resolveActor(word, pool) {
     const id = _findNpc(w); // one cast — _findNpc resolves the regulars too
     return pool.includes(id) ? id : null;
   }
+  // a gendered pronoun names a sex: "buy her a drink" while talking to Bert means a woman, never Bert
+  const sex = _pronounSex(w);
+  if (sex) pool = pool.filter(id => _pr(id).s === sex);
   const ante = _lastActor();                    // pronoun or omitted → antecedent
   if (ante && pool.includes(ante)) return ante;
   return pool.length === 1 ? pool[0] : null;    // else the only candidate, if unambiguous
+}
+// "she" / "he" for a gendered pronoun or noun ("her", "the lady", "him", "the bloke"), else null
+function _pronounSex(w) {
+  w = String(w || "").trim().toLowerCase();
+  if (/^(her|she|the (girl|lady|woman))$/.test(w)) return "she";
+  if (/^(him|he|the (guy|man|bloke))$/.test(w)) return "he";
+  return null;
 }
 
 // The topics currently OPEN with a partner: their dialogue nodes whose gates
@@ -2627,6 +2637,17 @@ function _nodeOpen(npcId, d, st) {
   if (d.bond && _knownTier(npcId) < d.bond) return false; // a warmer line only a regular unlocks (The Regular)
   if (d.when && !d.when(st || _npcState(npcId), G)) return false;   // state-machine condition (trust/mood/dstate/know)
   return true;
+}
+// HER OWN WORD SPEAKS FIRST: an authored node of hers on the word asked, not yet heard, outranks any answerer above
+// _deliver that would take the word from memory (a text, a night out, a job, the last visit). `open` (the default)
+// also requires its gates to pass — a locked node cannot answer, so it must not silence the answerer either;
+// _ownWordTalk asks with open=false, its long-standing rule.
+function _ownsUnheard(npc, topic, open = true) {
+  const dl = (NPCS[npc] && NPCS[npc].dialogue) || [], seen = (G.talked && G.talked[npc]) || [];
+  const t = String(topic || "").toLowerCase();
+  if (!t) return false;
+  const st = open ? _npcState(npc) : null;
+  return dl.some((d, i) => d.topic && !seen.includes(i) && _topicHits(d.topic, t) && (!open || _nodeOpen(npc, d, st)));
 }
 // an alias that IS the word asked, not merely a word inside it
 function _topicExact(key, asked) {

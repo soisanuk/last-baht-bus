@@ -3743,9 +3743,9 @@ function _doAccept(arg) {
   if (G.quests[qid] === "done") { _say("That one's finished. Bask."); return; }
   // "(You now have the bottle of Sang Som.)" from a giver who was working her
   // other bar (Bronwyn, round 39): a quest with a THING to hand over is accepted
-  // where she is; a flag-only errand can be taken on from the journal
-  if (QUESTS[qid].item && NPCS[QUESTS[qid].giver] && NPCS[QUESTS[qid].giver].bars &&
-      _npcRoom(QUESTS[qid].giver) !== G.room && !_npcsHere().includes(QUESTS[qid].giver)) {
+  // where she is; a flag-only errand can be taken on from the journal. Presence, not her home room or her bar
+  // count: a one-bar giver across town (Kwan's crane) cannot hand it over either
+  if (QUESTS[qid].item && NPCS[QUESTS[qid].giver] && !_npcsHere().includes(QUESTS[qid].giver)) {
     const gv = NPCS[QUESTS[qid].giver];
     const where = _npcWhere(QUESTS[qid].giver);
     _say(`${gv.name} isn't here to hand it over` + (where && _barName(where) ? " — " + _pr(QUESTS[qid].giver).s + " is at " + _barName(where) + " tonight." : "."));
@@ -4509,7 +4509,8 @@ function _pushMsg(from, text, gives, fromName, photo) {
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
   // photo (a caption string) marks a texted selfie — rendered with her portrait
   // and filed in the gallery when read.
-  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0,
+  // the day it came: what she says about a text is about a text of this week (_textTalk), not one from a month ago
+  G.phone.inbox.push({ from, text, turn: G.turns, day: G.day, read: false, gives: gives || 0,
     fromName: fromName || null, photo: photo || null });
   // a hard cap, read or unread: the phone keeps the newest 80 (code review 2026-08-22 —
   // the old trim ran before insertion and kept every unread, so a player who never
@@ -4735,12 +4736,14 @@ function _doMessage(arg) {
     _say(_pickVary(_CHAM_TEXT_REPLIES, "chamtext"));
     return;
   }
-  const _judged = Object.keys(G.phone.contacts).find(c => (c === w || (NPCS[c] && NPCS[c].name.toLowerCase() === w)) && _maiDee(c));
-  if (_judged) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[_judged].name}'s answer, tonight and after.`, "dim"); return; }   // Marcus, round 61: "miss you na" thirty seconds after "we finish"
   // an EMPTY name matched every contact ("".includes) and texted whoever was first —
   // Tan, then called "her" (Margaret, round 65)
-  const id = w && Object.keys(G.phone.contacts).find(c =>
-    c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
+  const _cn = _contactNamed(w);
+  if (Array.isArray(_cn)) { _say("Which one? (" + _cn.map(c => "MESSAGE " + NPCS[c].name.toUpperCase()).join(" · ") + ")"); return; }
+  const id = _cn;
+  // the face-loss verdict is read on the contact the lookup RESOLVED, so a prefix or a few words after her name
+  // ("message lamai miss you") meet the same closed door as her bare name — nothing reopens it
+  if (id && _maiDee(id)) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[id].name}'s answer, tonight and after.`, "dim"); return; }
   if (!id) {
     // a bare MESSAGE with texts in the phone is the inbox first — ข้อความ (the messages) opened a
     // send prompt to a man who wanted to read (Jens, round 67)
@@ -4786,6 +4789,13 @@ function _doMessage(arg) {
   // like themselves, which for a number without a voice of its own is briefly
   if (!NPC_ROLES[id]) {
     _pushMsg(id, _pickVary(["👍", "ok 🙂", "haha. later na", "thumbs up, busy — talk soon"], "plainreply"));
+  } else if (_awayForSeason(id)) {
+    // a woman away for the season answers from where she is — never "come see me tonight" from a floor she is not on
+    _pushMsg(id, _awayForSeason(id) === "harvest"
+      ? _pickVary(["cutting rice 🌾 phone in the mud all day 555. back soon na", "home for harvest, signal one bar 😩 back ten day, keep my seat",
+          "🌾🌾 mama say i talk phone more than i cut. back soon", "rice time na. tired tired. you wait me ok? 😤"], "awayreply_harvest")
+      : _pickVary(["i in bangkok na, till rain stop 🌧️ pattaya too quiet now. back high season", "bangkok busy busy 😩 come back when farang come back na",
+          "not in pattaya na, bangkok till the rain finish. you miss me? 555", "work bangkok now, small room, big rent 😩 back in pattaya when sun come back"], "awayreply_bkk"));
   } else
   {   // a woman with her own voice answers in it: Somo, who "doesn't do the sweetheart thing", texted "miss you na 🥺" (Kevin, round 84)
     const _tv = NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.reply;
@@ -5097,14 +5107,28 @@ const _CONTACT_SWAP_LINES = [
   "{n} takes your phone off you, adds herself, and rings her own number from it to be sure. Somewhere in her bag her phone lights up with your name already in it. Efficient. Slightly chilling. Wonderful.",
 ];
 
+// A CONTACT FROM A TYPED NAME, for anything that pays or texts her: the person is resolved, never a name that merely
+// contains what was typed (Kwanjai is not Kwan, Saifon is not Fon, Mercedes is not "me"). Her exact name, last name or id
+// first (the whole line, then its first word — "lamai miss you"), then a name with a word that BEGINS with the first typed
+// word of three letters or more. One match is the id; several are returned as an array for the caller to ask "which one?".
+function _contactNamed(nameW) {
+  const w = String(nameW || "").toLowerCase().replace(/\s+/g, " ").trim(), w0 = w.split(" ")[0];
+  if (!w) return null;
+  const cs = Object.keys(G.phone.contacts || {}).filter(c => NPCS[c]), only = { filter: c => cs.includes(c) };
+  const exact = _npcByName(w, only) || (w0 !== w ? _npcByName(w0, only) : null);
+  if (exact) return exact;
+  if (w0.length < 3) return null;
+  const pre = cs.filter(c => String(NPCS[c].name).toLowerCase().split(/\s+/).some(p => p.startsWith(w0)));
+  return pre.length > 1 ? pre : pre[0] || null;
+}
 function _doSendMoney(arg) {
   if (_phoneDead()) return;
   arg = String(arg || "").replace(/(\d),(?=\d{3}\b)/g, "$1");   // "1,500" is fifteen hundred, not one baht and a contact called "500" (review 2026-10-25)
   const m = arg.match(/(\d+)/);
   const amt = m ? parseInt(m[1], 10) : null;
-  const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").trim();
-  const id = Object.keys(G.phone.contacts).find(c =>
-    c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
+  const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+  const id = _contactNamed(nameW);
+  if (Array.isArray(id)) { _say("Which one? (" + id.map(c => "SEND " + (amt || "<amount>") + " TO " + NPCS[c].name.toUpperCase()).join(" · ") + ")"); return; }
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
   // the banking app draws on the ACCOUNT, not the notes in your pocket (Mario, round 58 —
@@ -5129,7 +5153,7 @@ function _doSendMoney(arg) {
   // the verdict: she takes it as severance, once, and the phone goes quiet (theme 6)
   if (_maiDee(id)) {
     G.bank -= amt; G.sentTotal = (G.sentTotal || 0) + amt; G.battery = Math.max(0, G.battery - 1);
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    _say(_fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
     if (!(G.maiDeeMoney = G.maiDeeMoney || {})[id]) {
       G.maiDeeMoney[id] = true;
       _pushMsg(id, _MAI_DEE_MONEY);
@@ -5169,7 +5193,7 @@ function _doSendMoney(arg) {
     _addBond(id, 1);
     _giftNote(id, { kind: "send", amt });
     _say(_npcsHere().includes(id) ? _fmt("฿{a}, phone to phone across the width of a bar. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) })
-      : _fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+      : _fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
     _pushMsg(id, _pickVary(_GIFT_ACCOUNT, "giftacct:" + id));
     _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
@@ -5189,7 +5213,7 @@ function _doSendMoney(arg) {
       "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left in the account.)",
       { a: amt, m: _num(G.bank) }));
   else
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    _say(_fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
   // the girls who aren't in the bar economy answer in their own voices, not the
   // hostess patter (mobile playtest 2026-08-22: Priew got "tonight I take care YOU")
   if (id === "priew") {
@@ -5323,7 +5347,7 @@ function _doPhoneScreen() {
       ? "📭 No messages yet. (CONTACT a lady and she'll start texting.)"
       : "📭 No messages — nobody has your number yet. (CONTACT a lady and she'll start texting.)", "dim");
   }
-  if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
+  if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id] && !_awayForSeason(G.phone.invite.id)) {
     _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.` +
       ((_closedNow(_npcRoom(G.phone.invite.id))) ? " (Her bar has shut for the night — she'll keep the seat tomorrow.)" : ""), "dim");
   }
@@ -6053,7 +6077,10 @@ function _maybeIncomingText() {
   // Presence check: a girl you are LOOKING AT does not text that she misses you
   // — Nong texted "i keep you seat every night, you no come i sad" from the next
   // stool (Alan playtest, 2026-08-17). Girls in the room sit the round out.
-  const away = contacts.filter(c => _npcRoom(c) !== G.room);
+  // a woman away for the season is not on a floor to invite you to: she texts her one away-text (the harvest's,
+  // below) and is otherwise out of the round
+  const away = contacts.filter(c => _npcRoom(c) !== G.room &&
+    (!_awayForSeason(c) || (_awayForSeason(c) === "harvest" && (G.phone.harvestTexted || {})[c] !== G.vacation)));
   if (!away.length) return;
   const pool = [];
   for (const c of away) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
@@ -6085,6 +6112,7 @@ function _maybeIncomingText() {
     _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
     return;
   }
+  if (_awayForSeason(id)) return;
   if (id === "priew") {
     if (G.day - (G.priewTextDay || -9) < 3) return;
     G.priewTextDay = G.day;
@@ -6610,6 +6638,9 @@ function _textTalk(npc, topic) {
     // happened to say "mama" (Bernard, round 88: "ask jiab about her family" got the ฿400 ask back)
     const _own = /^(famil|mama|mum|mom|mother|papa|dad|father|home|plan|kid|son|daughter|sister|brother|villag|parent|grandm)/;
     if (typeof _qAsked !== "undefined" && _qAsked) return false;   // a question about her is not a question about her texts
+    // her own node on the word, not yet heard, is her answer: "ask somo about dream" is the rubber and the two rai,
+    // not her "i dream about you" text
+    if (_ownsUnheard(npc, t)) return false;
     const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w) && !_own.test(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)
@@ -13792,6 +13823,8 @@ function _doLesson(arg) {
   }
   const tier = _lessonTier(arg);
   if (!tier) { _say("\"Phrases, reading, or verbs.\" She holds up three fingers and does not offer a fourth. (LESSON PHRASES · LESSON READING · LESSON VERBS)"); return; }
+  // like every paid hour, refused before the money (or the free hour) moves when it would run into the dawn
+  if (_tooLateFor(LESSON_TURNS, "An hour at the board")) return;
   if (G.clozeFree) {
     G.clozeFree = false;
     _say("\"You do not pay for this one.\" She says it once and does not repeat it.", "dim");
