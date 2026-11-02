@@ -2845,6 +2845,7 @@ function _abandonGame(why, houseClosed) {
     _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : "game"} is folded away unfinished, and the ฿${_num(g.stake)} comes back across the table. ฿${_num(G.money)} in your pocket.)`, "dim");
     return;
   }
+  _ownStakeKept(g);
   _say(`(${why} — the ${g.type === "c4" ? "Connect 4" : g.type === "jp" ? "Jackpot" : g.type === "quiz" ? "quiz" : "game"} dies with the stool you left` +
     (g.stake ? `; the ฿${_num(g.stake)} stays with the house` : "") + ".)", "dim");
 }
@@ -2854,6 +2855,10 @@ const _C4_LOSS = [
   (o, c) => `${o} taps column ${c} home and the rail makes the small noise a rail makes. Four in a row; you never saw the second threat, and she never let on there was one.`,
   (o, c) => `A counter drops into column ${c} like a coin into a till. ${o} says nothing. Four in a row says it for her.`,
 ];
+// a stake the house keeps — conceded, or left on the table — is the house's: at your own bar that is your till, on BOOKS
+function _ownStakeKept(g) {
+  if (g && g.stake && g.type !== "kp" && _atOwnBar() && G.bar) { G.bar.cash += g.stake; _barEvent(g.stake, "a game's stake conceded to the house"); }
+}
 function _gameQuit() {
   if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE after a concede too
   const g = G.game;
@@ -2867,6 +2872,7 @@ function _gameQuit() {
     _describeRoom(true);
     return;
   }
+  _ownStakeKept(g);
   _say(g.stake ? `You concede. The stake stays where stakes stay. (฿${_num(G.money)} left.)` :
     "You concede with what dignity remains.");
 }

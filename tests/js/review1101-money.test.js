@@ -246,3 +246,13 @@ test("S2-13: STATE_SCHEMA declares the lifetimes the code keeps — the account 
   }
   assert.deepEqual(kept, [], "declared trip, kept across a trip");
 });
+
+test("S5-9: a stake conceded at your own bar, or left on the table, rings into your till and onto BOOKS", () => {
+  const own = () => { sandbox(); G.stage = "expat"; for (const f of ["expatLife", "barPremises", "barLicence", "barPartner", "barPaid", "barOpen", "partnerCandy"]) _setFlag(f);
+    Object.assign(G.bar, { room: "stinky_bar", cash: 8000 }); G.room = "stinky_bar"; G.nightTurn = 30; };
+  own(); const m = G.money; t("play connect 4"); const st = G.game.stake; assert.ok(st > 0); t("quit");
+  assert.equal(G.money, m - st); assert.equal(G.bar.cash, 8000 + st, "the conceded stake left the economy");
+  assert.ok((G.bar.eventNotes || []).some(n => /stake conceded/.test(n)), "BOOKS never names it");
+  own(); t("play connect 4"); const st2 = G.game.stake; _abandonGame("The night ran out mid-frame");
+  assert.equal(G.bar.cash, 8000 + st2);
+});
