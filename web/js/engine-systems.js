@@ -2457,13 +2457,17 @@ function _nightRide(input) {
   const seq = G.rideSeq;
   if (!seq) { _say("The night's already carried you off. Sleep it off."); return; } // state lost — safety
   const id = seq.id, name = NPCS[id].name;
-  const stop = /\bno\b|\bnope\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish|\bbye\b|goodnight|good night/.test(input) || /^\s*just\s*$/.test(input);   // a bare JUST is the first word of JUST HOME (Eoin, round 101)
-  const go = /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input) && !stop;
+  // "don't stop" and "not yet" are riding on; any other refusal ("i don't want to go", "let's not") is the end of it
+  const keepOn = /\bdon'?t stop\b|\bkeep (?:going|riding)\b|^not (?:yet|done|finished|tired)\b/.test(input);
+  const stop = !keepOn && (_streetNo(input) || /\bno\b|\bnope\b|hotel|home|enough|call|done|bed|sleep|stop|tired|late|finish|\bbye\b|goodnight|good night/.test(input) || /^\s*just\s*$/.test(input));   // a bare JUST is the first word of JUST HOME (Eoin, round 101)
+  // "hang on" and "hold on" mean wait, not ride on
+  const go = (keepOn || /\b(ride|yes|on|more|another|sure|ok|okay|go|keep|again|deeper|why not|lets?|come|drive)\b/.test(input)) && !stop && !/\b(?:hang|hold) on\b/.test(input);
   if (stop) return _endRide(seq, "choice");
   // A NON-ANSWER IS NOT GOODBYE (Ruairi, round 75: "what?" on the back of the bike ended the best
   // night of the trip). Water at a stop is bought where you stand; anything else and she waits.
   if (!go) {
-    if (seq.stops > 0 && /\b(water|drink|thirsty|thirst|soda|coke|eat|food|hungry|snack)\b/.test(input)) {
+    const bought = seq.stops > 0 && /\b(water|drink|thirsty|thirst|soda|coke|eat|food|hungry|snack)\b/.test(input);
+    if (bought) {
       const food = /\b(eat|food|hungry|snack)\b/.test(input), price = food ? 40 : 20;
       const paid = G.money >= price;
       if (!paid) _say(`${name} pays for it before you can find out you can't, and hands it over without comment.`);
@@ -2486,7 +2490,9 @@ function _nightRide(input) {
       ], "ridewait"));
     }
     G.pendingEnc = "nightride";   // the dispatcher dropped the gate before calling us; she is still waiting
-    return _renderEncounter();
+    _renderEncounter();
+    // a non-answer costs no turn; water bought at a stop is a thing done, and does
+    return bought ? undefined : "reprompt";
   }
   G.rideEverTaken = true; // you actually rode — kept for anything reading the global
   if (G.rideSeq && G.rideSeq.id) (G.rodeWith = G.rodeWith || {})[G.rideSeq.id] = true; // …and whose bike it was
@@ -2866,7 +2872,9 @@ function _doMassage(arg) {
     return;
   }
   arg = (arg || "").replace(/^(a |for |the )/, "").trim();
-  const wantsSpecial = /special|happy|extra|hand|mouth|boom|sex|sexy|finish/.test(arg);
+  // a negated extra is the plain hour: "no happy ending", "but no extra", "without the extras"
+  const wantsSpecial = /special|happy|extra|hand|mouth|boom|sex|sexy|finish/.test(arg) &&
+    !/\b(?:no|not|without|nothing|don'?t|do not|never)\b/.test(arg);
   if (wantsSpecial && r.massage !== "legit" && _partyBlocksTrade()) return;
   const she = _npcsHere().find(id => NPCS[id] && NPCS[id].masseuse);
   // the shop's own woman where there is no cast masseuse (Graeme, round 58)
@@ -3038,6 +3046,8 @@ function _doMeetOffShift(arg) {
       `then not. You put the phone away.`, "dim");
     return;
   }
+  // the hour at her place must fit in the night, or nothing is charged
+  if (_tooLateFor(9, "Her place")) return;
   const cost = Math.min(G.money, 300); // taxi both ways + a 7-Eleven raid — a fraction of any barfine
   G.money -= cost;
   G.itemLoc.masseuse_note = null;
@@ -3051,7 +3061,8 @@ function _doMeetOffShift(arg) {
   if (os.id) _addBond(os.id, 4);
   G.offShift = null;
   // "an hour later" took one turn (Marek, round 53): the hour passes, offstage
-  G.offstage = true; _passTime(9); G.offstage = false;
+  G.offstage = true; const ended = _passTime(9); G.offstage = false;
+  if (ended) return;
   // …and the prose took him to her room while the game left him on the pavement (Terence,
   // round 57): say how he gets back to where he stands
   _say("Later she walks you down to the soi and flags a bike, and it drops you back where the night found you.", "dim");
@@ -3109,7 +3120,8 @@ function _soapyPrompt() {
 // Returns true when it consumes the modal (paid or cancelled), false on a
 // reprompt — so doCommand only spends a _tick on a real resolution.
 function _soapyResolve(input) {
-  if (/^(no\b|cancel|never|forget|leave|out|nothing|maybe|nvm)/.test(input)) {
+  // a refusal is asked before the number: "not the model" and "i don't want 99" are a no, not a pick
+  if (_isRefusal(input) || /^(no\b|cancel|never|forget|leave|out|nothing|maybe|nvm)/.test(input)) {
     G.pendingSoapy = null;
     _say("You take one more look at the glass and decide your wallet has strong opinions. " +
       `${_ucfirst(_soapyBoss())} shrugs, entirely unoffended — the fish keep swimming.`);
@@ -12015,6 +12027,12 @@ function _doFeedDog(arg) {
   }
   if (_isHotelRoom(G.room)) {
     _say("No street dog is climbing to your room, tilac. You meet them where they " +
+      "live — down on the soi, or out on the sand.");
+    return;
+  }
+  // any other roof — the station, an office, the mall, a shop — is not where a soi dog paces you for half a block
+  if (_underRoof(G.room)) {
+    _say("No soi dog is coming in here after you. You meet them where they " +
       "live — down on the soi, or out on the sand.");
     return;
   }

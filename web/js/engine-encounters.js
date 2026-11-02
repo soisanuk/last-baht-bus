@@ -15,6 +15,11 @@ function _isRefusal(input) {
   return /^(?:no|nah|nope|not|pass|never|leave|go away)\b/.test(t) ||
     /\b(?:won.?t|don.?t|do not|will not|not (?:sure|now|tonight|paying|interested|today)|no thanks|no thank you|not for me|i'?m broke|too much|rather not|refuse|another time|maybe later)\b/.test(t);
 }
+// A pitch on the street also hears the polite English no — "i'm fine", "i'm good", "let's not", "no need" — which a
+// gate asking a real question may not read as a refusal, so it is kept out of _isRefusal and asked only by the pitches.
+function _streetNo(input) {
+  return _isRefusal(input) || /\b(?:i'?m (?:fine|good|alright|all right)|let'?s not|no need)\b/.test(String(input || "").toLowerCase());
+}
 
 const ENC_COOLDOWN = 12; // min turns between encounters
 const ENC_CHANCE = 0.2;  // roll per eligible arrival (dialled 0.3->0.2, ~a third fewer, 2026-08-22)
@@ -1038,7 +1043,8 @@ const _ENC = {
   // about them outdoors (Marco, round 44). You pay more; nobody takes anything.
   seawall(input) {
     const both = /both|two|threesome|pair|aor|baiyok|kate/.test(input) && /both|two|threesome|pair/.test(input);
-    const yes = both || /yes|yeah|ok|sure|deal|come|why not|how much|price|please|kate|aor|baiyok|her/.test(input);
+    // a refusal is asked first, and the yes words are whole: "her" hid in "rather", "ok" in "broke"
+    const yes = !_streetNo(input) && (both || /\b(?:yes|yeah|ok|okay|sure|deal|come|why not|how much|price|please|kate|aor|baiyok)\b|^her\b|\btake her\b/.test(input));
     if (!yes) {
       _say("You pass on it, and you do it politely, and that is all it takes. \u201cOkay, " +
         "hansum. Have good night, na.\u201d She is back on the wall before you have gone ten " +
@@ -1253,7 +1259,7 @@ const _ENC = {
   },
 
   pingpong(input) {
-    if (!/yes|go|show|watch|see|up|why not|ok|sure/.test(input)) {
+    if (_streetNo(input) || !/\b(?:yes|yeah|go|show|watch|see|up|why not|ok|okay|sure)\b/.test(input)) {
       _say("You wave him off. He keeps pace for half a block, price falling with " +
         "every step — six hundred, five hundred, FOUR hundred my friend — before " +
         "peeling away toward a stag party in matching singlets. They're doomed.");
@@ -1485,6 +1491,13 @@ const _ENC = {
       _addHappy(1);
       return;
     }
+    // a refusal is never a yes: "i won't follow you", "i'm fine", "i don't want your tonic" walk past him
+    if (_streetNo(input)) {
+      _say("You keep walking. He keeps pace for exactly eleven more compliments, " +
+        "then peels away toward a sunburnt couple with the smoothness of a man " +
+        "who has done this ten thousand times tonight.");
+      return;
+    }
     // Follow him to the shop — the friendly patter's whole purpose.
     if (/\b(?:shop|follow|come|vip|treatment|cousin|see|show|look)\b|\b(?:his|the|down the|that|your) soi\b/.test(input) &&
         !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
@@ -1502,7 +1515,8 @@ const _ENC = {
       return;
     }
     // The ฿99 street bottle — the soft, "harmless" version that never needed a shop.
-    if (/yes|buy|ok|sure|deal|take it|fine|bottle|ninety|99|tonic/.test(input)) {
+    // whole words: bare "fine" is the English polite no, "ok" hid in "broke", and naming the tonic is not buying it
+    if (/\b(?:yes|yeah|buy|ok|okay|sure|deal|take it|bottle|ninety|99)\b/.test(input)) {
       if (G.money < TONIC_PRICE) {
         _say(`You turn out your pockets: ฿${_num(G.money)}. He closes the briefcase with ` +
           "the quiet disappointment of a man who has badly misjudged his mark, " +
@@ -1550,7 +1564,7 @@ const _ENC = {
     // lamplight. An answer is the word you say to him, never a command that
     // merely contains one (rail persona, round 19).
     if (/^(?:read|yes|yeah|ok|okay|sure|palm|fine|199|sit|deal|hand|go on|why not)\b/.test(input) &&
-        !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
+        !_streetNo(input) && !/\bno\b|walk|leave|away|off|thanks|thank you/.test(input)) {
       if (G.money < FORTUNE_READ) {
         _say(`He turns your empty palm over, reads the ฿${_num(G.money)} future written ` +
           "there instantly, and is gone before you can close your hand.");
@@ -1591,7 +1605,8 @@ const _ENC = {
       G.pendingEnc = null; G.encPrompt = null;
       doCommand("sleep"); return;
     }
-    const yes = /yes|ok|sure|book|come|deal|why not|send her|yeah|\bpay\b/.test(input) &&   // PAY is a yes to a priced booking (Graham, round 74)
+    // PAY is a yes to a priced booking; the yes words are whole words, and a refusal is asked first
+    const yes = !_streetNo(input) && /\b(?:yes|ok|okay|sure|book|come|deal|why not|send her|yeah|pay)\b/.test(input) &&
       !/\bno\b|sleep|turn in|pass|not tonight/.test(input);
     if (!yes) {
       _tradeMark("no");
@@ -1837,8 +1852,18 @@ const _MAZE_HELP = [
 // the price, pay a small tip) closes the account before it opens; ACCEPT signs it,
 // and the debt is called in on the spot; REFUSE hands it back clean.
 function _freegift(input) {
-  const price = /tao ?rai|how much|price|i'?(ll| will) pay|\bpay\b|\bbuy\b/.test(input);
-  const refuse = !price && /\bno\b|refuse|decline|don'?t|not int|pass|wave|walk|away|leave/.test(input);
+  // asking what a word means is not saying it: "tao rai? what does that mean" is a question, not the tip
+  const asking = /\bwhat (?:does|do|is)\b|\bwhat'?s\b|\bmean(?:s|ing)?\b|\bexplain\b/.test(input);
+  const price = !asking && /tao ?rai|how much|price|i'?(ll| will) pay|\bpay\b|\bbuy\b/.test(input);
+  // a refusal is asked before any yes, and only an explicit yes takes the 'free' thing
+  const refuse = !asking && !price && (_streetNo(input) || /\bno\b|refuse|decline|not int|pass|wave|walk|away|leave|give it back|hand it back/.test(input));
+  const accept = !asking && !price && !refuse && /^(?:take|yes|yeah|accept|thanks|thank you|ok|okay|sure|put it on|tie it)\b/.test(input);
+  // anything else leaves her standing there with it held out: the question is still up, and nothing is signed
+  if (!price && !refuse && !accept) {
+    G.pendingEnc = "freegift";
+    _renderEncounter();
+    return "reprompt";
+  }
   if (price) {
     const tip = Math.min(GIFT_TIP, G.money); G.money -= tip;
     _say(`“Tao rai?” you say, already reaching for your wallet. Something shifts in her face — respect, ` +
@@ -1893,36 +1918,51 @@ function _catfishDoor(input) {
 // (a genuine-feeling conquest) → the morning ฿2,000 ask, resolved in _taxiAsk.
 function _clubpickup(input) {
   if (_flag("taxiPending")) { G.flags.taxiPending = false; return _taxiAsk(input); }
-  const yes = /yes|ok\b|okay|sure|come|home|room|back|yeah|invite|take her|let'?s/.test(input) &&
-    !/\bno\b|good ?night|sleep|turn in|pass|not tonight|nah|alone/.test(input);
+  // a refusal is asked first, and the yes words are whole: "i don't want to come back with you" is a no,
+  // and "i'm going back to my hotel" is a man going home
+  const yes = !_streetNo(input) &&
+    /\b(?:yes|yeah|ok|okay|sure|come|home|room|invite|take her|let'?s)\b|\bback with me\b/.test(input) &&
+    !/\bno\b|good ?night|sleep|turn in|pass|not tonight|nah|alone|\bi'?m (?:going|heading)\b/.test(input);
   if (!yes) {
     _say("You get a real laugh and a “text me tomorrow” that neither of you writes down. She melts " +
       "back into the strobe. Some nights the free one really is just a good night out — you'll never be " +
       "sure if that's what this was.");
     return;
   }
-  if (_passTime(4)) return; // the night runs long
+  G.lastBfId = null;   // a club, not a bar: no bond bonus
   _say("No lady drinks, no barfine, no mamasan doing arithmetic over your shoulder — just the two of " +
     "you, a late-night mookata, and hours of talk that feels like the realest thing to happen to you in " +
     "this town. She comes back to your room like it's the most natural thing in the world. It is a " +
     "wonderful night. You are, briefly, and against all your better judgement, in love.", "win");
-  _joinerFee();   // "she comes back to your room"
-  _conquestHappy(8);
+  // the night is spent in your room, so it ends there: the morning the ask belongs to is a real one, at the wake.
+  // _endNight("barfine") charges the joiner fee for the room she came back to and pays the night's สนุก on this base.
+  G.lastBfBase = 8;
+  const d0 = G.day;
+  _endNight("barfine");
+  // a morning that is the week's checkout, or that already has a question up, is not hers to invoice
+  if (G.day === d0 || G.over || G.pendingChoice || G.pendingEnc) return;
   G.pendingEnc = "clubpickup";
   _setFlag("taxiPending");
   _encPrompt(
-    ["Morning. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto her shoulder, and taps two fingers on the dresser, entirely casual. “Okay baby, I go now. You give " +
+    ["She is up before you. She does her lipstick at the mirror, clicks the compact shut, swings a little bag onto her shoulder, and taps two fingers on the dresser, entirely casual. “Okay baby, I go now. You give " +
       "me 2,000 baht for taxi.”", "alert"],
     [`(PAY the ฿${_num(CLUB_TAXI)} · offer the ฿80 BOLT instead · REFUSE)`, "dim"]);
 }
 
 function _taxiAsk(input) {
   const bolt = /bolt|grab|80|150|order|app|cheap|real|where.*live|meter/.test(input);
-  const refuse = !bolt && /refuse|won'?t|not pay|no way|nothing|hell|zero|forget|scam/.test(input);
+  // a refusal is a refusal: "no", "no thanks", "i don't want to" are the scene, never the ฿2,000
+  const refuse = !bolt && (_streetNo(input) || /refuse|won'?t|not pay|no way|nothing|hell|zero|forget|scam/.test(input));
+  // a question about the ask is not the answer to it: she waits, and nothing is paid
+  if (!bolt && !refuse && (/\?\s*$/.test(input) || /^(?:what|why|huh|sorry|eh|pardon)\b/.test(input))) {
+    G.pendingEnc = "clubpickup"; _setFlag("taxiPending");
+    _renderEncounter();
+    return "reprompt";
+  }
   if (!bolt && !refuse && G.money >= CLUB_TAXI) {
     // pay smiling — the fantasy stays intact; you're a "good man" (a returning account)
     G.money -= CLUB_TAXI;
-    _say(`You peel off two notes. The instant they leave your hand the girlfriend of last night is back like a light switched on — the whole-face smile, a quick hug. “Khop khun na! You look after me. Tonight again?” And she's gone, leaving you to work out, in the quiet, that the free night ended at nine and you have just paid the standing rate. (฿${_num(G.money)} left.)`, "");
+    _say(`You peel off two notes. The instant they leave your hand the girlfriend of last night is back like a light switched on — the whole-face smile, a quick hug. “Khop khun na! You look after me. Tonight again?” And she's gone, leaving you to work out, in the quiet, that the free night was never free and you have just paid the standing rate. (฿${_num(G.money)} left.)`, "");
     _addHappy(1);
     return;
   }

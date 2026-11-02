@@ -3792,6 +3792,8 @@ function _districtHops(a, b) {
 // earliest cloudburst is a day-stable hash: some nights it comes at seven, some
 // at one, some it never gets round to it.
 // on the back of her bike, between stops: the room you left is not the room you are in
+// _tick's ambient beats (the peddler, the drizzle, the saleng, the rail) also skip G.offstage: an hour at her place
+// or upstairs is away from the room as surely as her bike is
 function _onRide() { return G.pendingEnc === "nightride" || !!G.rideSeq; }
 function _rainEarliest() { return _hh("rainstart:" + G.day + ":" + G.vacation + ":x", 41) % 70; }   // day MID-key: a trailing day clustered the first downpour at half past six five nights of seven (Ingrid, round 62)
 function _districtBuild() {
@@ -3974,14 +3976,14 @@ function _tick() {
     _startRain(3 + Math.floor(_rand() * 6));
   } else if (_wxRainy() && G.turns - G.lastDrizzle >= 15 && G.turns - (G.lastRain || -99) >= 20 && _rand() < (_wetSeason() ? 0.10 : 0.05)) {   // not straight after a downpour: "the rain is doing all the talking" seven turns after it stopped (Kevin, round 84)
     G.lastDrizzle = G.turns; // light rain: atmosphere only, never mechanics
-    if (!_onRide()) _sayDrizzle();   // the bar you rode away from does not narrate its gutter (Kenji, round 47)
+    if (!_onRide() && !G.offstage) _sayDrizzle();   // the bar you rode away from does not narrate its gutter (Kenji, round 47)
   }
   // the peddlers work the Beach Road bars, stool to stool — but a bar gets a
   // couple of passes a night, not six (Frank, 2026-08-26: 4–6 identical visits
   // in one long evening on one stool)
   if (!G.game && !G.pendingEnc && _inBar() && _room().region === "Beach Road" &&
       // not on the back of her bike (Desmond, round 63)
-      G.turns - G.lastPeddler >= 20 && !(_onRide()) && (G.peddlerNight || 0) < (_atOwnBar() ? (G.day % 2 ? 1 : 0) : 2) && _rand() < 0.12) {   // your own rail every other night, not every night (Hal, round 62)   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
+      G.turns - G.lastPeddler >= 20 && !(_onRide() || G.offstage) && (G.peddlerNight || 0) < (_atOwnBar() ? (G.day % 2 ? 1 : 0) : 2) && _rand() < 0.12) {   // your own rail every other night, not every night (Hal, round 62)   // he works YOUR rail once a night, not twice — thirty shifts of it (Keith, round 40)
     G.lastPeddler = G.turns;
     G.peddlerNight = (G.peddlerNight || 0) + 1;
     G.pendingEnc = "peddler";
@@ -3992,19 +3994,19 @@ function _tick() {
   // the ซาเล้ง (mobile bar cart) — a fixture for the girls, not a modal gate:
   // it parks at the bar for a while, the girls swarm it, and the player may buy
   // any time before it moves on. All of that lives in _salengTick (encounters).
-  if (!_onRide()) _salengTick();
-  if (!_onRide()) _thaiOverheard();
+  if (!_onRide() && !G.offstage) _salengTick();
+  if (!_onRide() && !G.offstage) _thaiOverheard();
   // the reveal's hostess said she would tell Priew to sit with you after the round: she does, once
   if (!G.game && !G.pendingEnc) _priewSits();
   // her bike is not your stool: six minutes at the Mooring and a night ride read as
   // "three hours on the same stool" (Dieter, round 56)
-  if ((_inBar() || (G.room === "mikes_mall" && NPCS.wilf && NPCS.wilf.room === G.room)) && !(_onRide())) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // Wilf's food court is his local: an evening at his table is a night he saw you (Ruth, round 105)   // presence, for the regular's bond (Trevor, round 39)
+  if ((_inBar() || (G.room === "mikes_mall" && NPCS.wilf && NPCS.wilf.room === G.room)) && !(_onRide() || G.offstage)) (G.soc.barTurns = G.soc.barTurns || {})[G.room] = ((G.soc.barTurns || {})[G.room] || 0) + 1;   // Wilf's food court is his local: an evening at his table is a night he saw you (Ruth, round 105)   // presence, for the regular's bond (Trevor, round 39)
   // the house's patience clock (_nursed): money spent in this bar since last tick,
   // or a fresh arrival, resets it — one hook, every till (Mario, 2026-09-04)
   if (_inBar() && (G.room !== G.soc.tickRoom || G.money < (G.soc.moneyTick == null ? G.money : G.soc.moneyTick)))
     (G.soc.spentTurn = G.soc.spentTurn || {})[G.room] = G.turns;
   G.soc.moneyTick = G.money; G.soc.tickRoom = G.room;
-  if (!_onRide()) _railTick();
+  if (!_onRide() && !G.offstage) _railTick();
   _tanWalkTick();   // Tan on his round: said when he comes or goes from where you stand
   _streamTick();   // the group's cameras at work (2026-10-22)     // the hour turns and somebody drains a glass and moves on
   _nokLeavesTick();
@@ -4050,7 +4052,7 @@ function _tick() {
     if (G.job.shiftStood === 1 || G.job.shiftStood % 10 === 0) for (const id of (typeof _staffAt === "function" ? _staffAt(G.room) : [])) (G.seenDay = G.seenDay || {})[id] = G.day;   // the floor saw you (Dougal: "10 night you no come" to the man on its rail)
   }
   _workFloor();          // …and a stood shift is where your own staff live
-  if (!_onRide()) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
+  if (!_onRide() && !G.offstage) _lastBusWarn();  // ~01:30: heads-up that the last ฿15 ride home is about to leave
   _maybeIncomingText();
   _dailyJoke();   // the unknown number keeps its own hour, not your first step outside
   _wrongNumberTick(); // CTF stage 2 (docs/ctf.md), only if a probe armed it
