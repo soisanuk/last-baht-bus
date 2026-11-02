@@ -58,6 +58,7 @@
 
 import vm from "node:vm";
 import fs from "node:fs";
+import { isParseMiss } from "./parse-miss.mjs";
 
 const JS = new URL("../web/js/", import.meta.url);
 for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters",
@@ -220,9 +221,8 @@ function askShape(id, alias) {
 
 // The parser's own dead ends — refusals rather than pooled brush-offs, and the
 // only part of the oracle that is a list, because they are not reachable by
-// asking a present character about anything.
-const DEAD_ENDS = ["I didn't understand", "That one didn't parse", "isn't around right now",
-  "Nobody by that name", "isn't at this bar", "They're not here to ask"];
+// asking a present character about anything. A parse failure is read from the engine's own miss pools.
+const DEAD_ENDS = ["isn't around right now", "Nobody by that name", "isn't at this bar", "They're not here to ask"];
 
 // THE LOCKED POOL is the half a nonsense probe cannot reach, and it is the half
 // this audit is about. `_topicMiss` is what a character says about a subject
@@ -288,7 +288,7 @@ function reallyMisses(stage, q, cast, id, alias, heard) {
   // containment, not equality: a brush-off can come wrapped (a Thai-fluency
   // refusal, a chip nudge appended under it) and it is still a brush-off.
   const miss = [...pool].some(p => p && reply.includes(p)) ||
-    DEAD_ENDS.some(d => reply.includes(d));
+    DEAD_ENDS.some(d => reply.includes(d)) || isParseMiss(reply);
   return { miss, reply: reply.slice(0, 120) };
 }
 

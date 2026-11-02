@@ -39,6 +39,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import vm from "node:vm";
+import { parseMissLines } from "./parse-miss.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 for (const f of ["thai.js", "world.js", "games.js", "engine-core.js", "engine-encounters.js",
@@ -121,7 +122,7 @@ function missOracle() {
     }
   };
   for (const id of ["rose", "candy", "terry", "bank"]) if (NPCS[id]) probe(id);
-  for (const s of ["I didn't understand", "That one didn't parse", "Not for sale here",
+  for (const s of [...parseMissLines(), "Not for sale here",
     "isn't around right now", "Nobody by that name", "isn't at this bar",
     "this calls for a bar stool", "You're not carrying that", "They're not here to ask",
     "Telling isn't the verb here"])

@@ -39,6 +39,7 @@
 
 import vm from "node:vm";
 import fs from "node:fs";
+import { parseMissLines } from "./parse-miss.mjs";
 
 const JS = new URL("../web/js/", import.meta.url);
 for (const f of ["thai", "world", "games", "engine-core", "engine-encounters",
@@ -196,7 +197,7 @@ function oracleFor(room, who, hour, day, pre) {
     for (const l of replyLines(ask(room, who, NONSENSE[i % NONSENSE.length], hour, day, pre)))
       lines.add(l.slice(0, 40));
   // the parser's own last resorts, which are not topic misses at all
-  for (const s of ["I didn't understand", "That one didn't parse", "Nobody by that name",
+  for (const s of [...parseMissLines(), "Nobody by that name",
     "isn't at this bar", "isn't around right now", "They're not here to ask",
     "Telling isn't the verb here"])
     lines.add(s.slice(0, 40));

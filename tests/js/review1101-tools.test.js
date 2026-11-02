@@ -66,3 +66,18 @@ test("S10-4: the witness audit harvests every claim in a record, not only the fi
     assert.ok(keys.has(k), k + " is harvested");
   assert.deepEqual(all.filter(c => !c.cls).map(c => c.key), [], "and classed");
 });
+
+test("S10-5: the instruments read a parse failure from the engine's miss pools, the first soft miss included", async () => {
+  const { isParseMiss } = await import("../../tools/parse-miss.mjs");
+  sandbox(); G.room = "stinky_bar"; t("look");
+  const miss = t("frobnicate the gizmo");
+  assert.ok(_HUH.some(h => miss.includes(h)), "the parser missed");
+  assert.ok(isParseMiss(miss), "the soft first miss is a miss to the instruments");
+  for (const h of [..._HUH, _HUH_THAI, _HUH_THAI_SOFT]) assert.ok(isParseMiss(h), h);
+  assert.ok(!isParseMiss("Nok shrugs. “Not my story, that.”"), "a woman's brush-off is not a parse failure");
+  // no instrument keeps a typed copy of a miss line the parser no longer prints
+  for (const f of ["soak.mjs", "dialogue-lifecycle.mjs", "errand-audit.mjs", "askable-audit.mjs"]) {
+    const src = readFileSync(fileURLToPath(new URL(`../../tools/${f}`, import.meta.url)), "utf8");
+    assert.doesNotMatch(src, /"That one didn't parse"|\/didn't understand\/i\.test/, f);
+  }
+});
