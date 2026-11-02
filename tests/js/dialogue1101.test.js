@@ -291,3 +291,57 @@ test("Cream's shorts speak her own English; Vasseur keeps his French register; W
   assert.doesNotMatch(node("nok", /^regular/).text, /evening water/);
   assert.match(node("duangjai", /^family/).text, /Ask me about NONT/);
 });
+
+// ── slice E2 of the second reader pass: the Walking Street and Tree Town women and the remaining regulars (read 2026-11-02) ──
+test("the Ruby Kiss, the Peacock and the Rabbit agree with themselves: Saeng knows openly, Mala owes the headdress, Ampha is a niece", () => {
+  assert.doesNotMatch(String(NPCS.saeng.dialogue[0].short), /A charmer|makes the evening/); assert.match(String(NPCS.saeng.dialogue[0].short), /just make the evening/);
+  assert.match(node("saeng", /^wilai/).text, /She know I know/);
+  assert.doesNotMatch(NPCS.barry.dialogue[2].text, /paying out anyway/);
+  assert.match(node("mala", /^diamond/).text, /I owe HER a headdress/);
+  assert.match(NPCS.ampha.desc, /Nuan's little niece/);
+});
+test("Kwan keeps her third person, her gist answers nothing for the player, Joy's hunger has no hour, Nina's 'yesterday' is 'last time'", () => {
+  const k = NPCS.kwan.dialogue;
+  assert.doesNotMatch(node("kwan", /^dance/).text, /\bI think\b|make me feel|\bI want\b/); assert.match(node("kwan", /^dance/).text, /Kwan think about it the whole night/);
+  assert.doesNotMatch(String(k[2].short), /No\. Phi Nont/); assert.match(k[2].text, /She asks with her hands/); assert.ok(k[2].req.includes("craneDelivered"));
+  assert.doesNotMatch(node("joy", /^dream/).text, /it is late/);
+  assert.match(NPCS.nina.dialogue[3].text, /Same as last time/);
+});
+test("Pia's desc leaves room for the bond-3 score, Poy saves the seat, Glam's companion is at the back, and his boys bought the lot", () => {
+  assert.match(NPCS.pia.desc, /almost certainly never know your score/);
+  assert.match(NPCS.poy.dialogue[1].text, /the seat is saved/);
+  assert.match(node("glam", /^wife/).text, /at the back, where she speaks only to the mama/); assert.doesNotMatch(node("glam", /^wife/).text, /she never is/);
+  assert.doesNotMatch(node("glam", /^son/).text, /TASTE/);
+  assert.match(String(node("randy", /^barfine/).short), /That mama paid me back/);
+  assert.doesNotMatch(NPCS.fon.dialogue[1].text, /You ask me before/); assert.match(NPCS.fon.dialogue[1].text, /She is pleased you ask/);
+});
+test("Somo's football is team-blind, her town is not a river, and her English has one source; Rose keeps the good room", () => {
+  assert.doesNotMatch(nodeText("somo", 9), /Small club/); assert.match(NPCS.somo.dialogue[9].text, /say his team first/);
+  assert.match(node("somo", /^home/).text, /not the province/);
+  assert.match(node("somo", /^uncle/).text, /The English channel is why I talk like this/);
+  assert.match(node("rose", /^orchid room/).text, /Some things I tell\. That one I keep\./);
+});
+test("Gift tells her father's company once, keeps one spelling of math, and her gist keeps the fishbowl; Gary names no act and adds up", () => {
+  assert.doesNotMatch(node("gift", /^education/).text, /Japanese company/);
+  for (const d of NPCS.gift.dialogue) assert.doesNotMatch(String(d.text) + String(d.short), /\bmaths\b/);
+  assert.match(String(NPCS.gift.dialogue[0].short), /fishbowl is a myth/);
+  assert.doesNotMatch(node("gary", /^wallet/).text, /first act/); assert.match(node("gary", /^sabai/).text, /five years in town/);
+});
+test("Roy keeps his dialect for Barry, Danny's narrator drops 'early doors', Nong's gists speak her English and her ring answers", () => {
+  const r = node("roy", /^barry/); assert.doesNotMatch(r.text, /He has never played|the way he always is|he has worked out I would/); assert.match(r.text, /an' pretends it's an accident/);
+  assert.doesNotMatch(node("danny", /gilt cage/).text, /Early doors/);
+  for (const i of [0, 2, 3, 4]) assert.doesNotMatch(String(NPCS.nong.dialogue[i].short), /That's|keeps|comes|says|He's|I'm|every lock/, "nong#" + i);
+  assert.match(node("nong", /^ring/).text, /The ring turns once on her finger/); assert.match(node("nong", /^ring/).text, /The ring also/);
+});
+test("Drew's hallway is eighteen months and twenty years, Doug is Calgary not Eton, Thomas's second coffee is a cup, Nit's term has no date", () => {
+  assert.match(node("drew", /^angela/).text, /eighteen months and then it's twenty years/);
+  assert.doesNotMatch(node("doug", /^portfolio/).text, /rather the appeal/);
+  assert.match(node("thomas", /^coffee/).text, /second cup/); assert.doesNotMatch(node("thomas", /^coffee/).text, /second packet/);
+  assert.doesNotMatch(node("nit", /^shop/).text, /Term starts soon/); assert.match(node("nit", /^shop/).text, /There is always a term/);
+});
+test("Henning asks for company, not a coffee the bench cannot sell; Ploy's 'ask HER' only points at Candy while the errand is open", () => {
+  assert.doesNotMatch(nodeText("henning", 7), /coffee/); assert.match(NPCS.henning.dialogue[7].text, /Sit a minute/);
+  sandbox(); G.nightTurn = 40; G.stage = "expat"; G.room = _npcRoom("henning"); run("talk to henning"); assert.match(t("buy henning a coffee"), /Not for sale/);
+  const p = NPCS.ploy.dialogue[3]; assert.ok(p.notFlags.includes("hasWallet") && p.notFlags.includes("somTamDelivered"));
+  assert.equal(String(NPCS.ploy.dialogue[4].topic), "oy", "the wallet-found player still has an Oy answer");
+});

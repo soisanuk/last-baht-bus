@@ -220,6 +220,38 @@ written: Diamond's "my father build this place two time" covering both the build
 forty-five; Chompoo's ungated "buy me a drink and I might". Reported, not verified: Vasseur's insulted hello repeating as
 the flattered one (only if both flags are set, which the walker's stub does and the game may not).
 
+**Slice E2 — the Walking Street and Tree Town women and the remaining regulars** (32 characters, 251 nodes; Barry, Miss
+Mala, Nuan, Henning, Ploy, Kwan, Joy, Nina, Pia, Kyle, Jenny, Sumalee, Saeng, Bebe, Wilai, Poy, Pete, Glam, Randy, Somo,
+Rose, Gift, Lake Gary, Roy, Danny, Fon, Nong, Drew, Thomas, Rob, Doug, Nit; 53 findings, 40 fixed). The voices held
+almost everywhere (Barry's roar, Pete, Randy, Danny, Drew, Roy's dialect but for one node); the defects were facts and
+gists. Fixed: Mala's headdress owed the wrong way round against Diamond's own line in the engine ("she owes me a
+headdress"); Saeng pretending not to know about Wilai's bar when Wilai and Preaw both say everybody knows; Kwan dropping
+her third person for one argued paragraph, and her gist answering "No" for the player; Joy's dream "because it is late"
+at six in the evening; Nina's "same as yesterday" on a hello that fires a week later; Pia's desc promising you will never
+know your score when her bond-three node tells you; Poy saving her braced manner instead of the seat; Glam's companion
+"never here on his nights out" when the desc has her wheel him in; "the whole TASTE"; Randy's gist turning one refund into a
+rule; Fon telling a bond-two player he asked before; Somo calling every remembered team a small club, her Nakhon Phanom
+"not the river", and her English credited to a taxi radio in one node and the English channel in another; Rose's "some
+things I keep, that one I do not" inverting itself; Gift telling her father's Japanese company a third time unasked, her
+"math" and "maths", and a gist that invented a question; Gary's "classic first act" and a 2004 + 4 = 2009; Roy's one node
+of standard English (and "the way he always is"); Danny's narrator's "early doors"; Nong's four gists in fluent contracted
+English with an "every lock" the text does not say, and her RING — the desc's tappable thing — answered with a phone case
+(now the ring turns first and he bought it too); Drew's hallway of two years and twenty-five against his own eighteen
+months and Angela's twenty; Doug's "rather"; Thomas's second cup turning into a packet; Nit's "term starts soon"; Ampha
+"Nuan's little cousin" in the desc and her niece in four mouths; and two promises — Henning's "buy me a coffee" on a bench
+where BUY answers "Not for sale here" (he now asks you to sit), and Ploy's "Candy know my order, ask HER" pointing at an
+errand the code marks Act One only (her node now closes with the wallet found; her plain Oy answer takes over).
+
+Verified and not a defect: Sumalee's Gordon ask reaches her hand-in (the engine routes the quest's topic); Ploy's "request
+Sabai Sabai" is DJ Beer's first node; Rose's ungated "Candy sent you" sits behind a door that only Candy's sending opens
+(`round19.test` walks it); Candy answers Rose's Tuesday. Left as written: Mala's heavy Tinglish with the headdress off at
+bond three (the compère comes off with it — "Miss Mala reassembles around her like a curtain rising"); the Alcazar and
+Tiffany's as landmarks, and Somo's 1995 Liverpool squad (fandom, no allegation — Mario's call under `docs/guardrails.md`);
+Jenny's "I hope it was worth" (her own reproach, in her voice); Pia's "most American" and "just Tuesday"; Nuan's
+"cousin, niece, a neighbour" against Ampha's "cousins also"; Kyle's content line; Fon's seven o'clock market (Oy's habit,
+not an invitation). Reported, not verified: Joy's "(Joy put that to you…)" prompt appearing after the "deserves better"
+choice with no question asked — likely the walker carrying state across nodes; worth one probe.
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in
@@ -241,12 +273,10 @@ the flattered one (only if both flags are set, which the walker's stub does and 
 
 ## Deferred, and why
 
-- **109 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
-  the Darkside, the Silk Rose, the Doghouse and Succubus, and then slice E1, the Beach Road and Jomtien story characters
-  and patrons: 92 more characters, 957 nodes). What is left is the rest of the
-  cast in two size-balanced slices — the Walking Street and Tree Town women and the remaining regulars (Barry, Mala,
-  Nuan, Henning, Ploy, Kwan, Joy, Nina…), and the seventy-odd small parts (Ron, Mot, Somchith, Phil, Petch, Dave, Bee,
-  Macca…). The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
+- **77 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
+  the Darkside, the Silk Rose, the Doghouse and Succubus, then slices E1 and E2 — the Beach Road and Jomtien story
+  characters and patrons, the Walking Street and Tree Town women and the remaining regulars: 124 more characters, 1,208
+  nodes). What is left is the seventy-seven small parts (Ron, Mot, Somchith, Phil, Petch, Dave, Bee, Macca…). The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
   reader at a time, 150 KB a reader, findings only.
 - The dossier sweep (`prose-corpus --dossiers`) was run per name as needed, not seeded: the ledger records who
   read what, and the author of these fixes is the wrong person to mark them read.
