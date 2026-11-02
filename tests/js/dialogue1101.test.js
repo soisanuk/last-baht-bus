@@ -150,3 +150,46 @@ test("after the middle stop, the four two-leg quests point home", () => {
   assert.match(t("hint"), /Reginald is at|Where Reginald is/);
   assert.doesNotMatch(said(), /Where Orathai is tonight/);
 });
+
+// ── the massage shops (read 2026-11-02) ──
+test("Waan's sign reads what the shop's own wall reads, and Pensri's register has no tilac", () => {
+  const sign = NPCS.waan.dialogue.find(d => /^sign\|/.test(String(d.topic)));
+  assert.ok(sign); assert.match(String(sign.text) + String(sign.short), /NO SEX/); assert.doesNotMatch(String(sign.text) + String(sign.short), /NO BOOM BOOM,/);
+  assert.match(JSON.stringify(ROOMS.smile_massage), /NO SEX/, "the room's sticker is the source");
+  for (const d of NPCS.pensri.dialogue) assert.doesNotMatch(String(d.text || "") + String(d.short || ""), /\btilac\b/, "pensri: " + d.topic);
+});
+
+// ── slice 1 of the second reader pass: the eight hand-authored Soi 6 floors (read 2026-11-02) ──
+test("a floor woman's look is the one her own words describe", () => {
+  assert.match(FLOOR_STAFF.peach_lounge_noot.look, /motherly/); assert.match(NPCS.peach_lounge_noot.dialogue[1].text, /motherly/);
+  assert.match(FLOOR_STAFF.hula_hula_min.look, /Rings on every finger/); assert.match(NPCS.hula_hula_min.dialogue[1].text, /finger ringed|rings/i);
+  assert.match(FLOOR_STAFF.hot_pepper_gina.look, /Half-moon glasses/); assert.ok(NPCS.hot_pepper_gina.dialogue.filter(d => /glasses/i.test(d.text)).length >= 3, "her glasses are in her own words");
+  assert.match(FLOOR_STAFF.hula_hula_noon.look, /neat bun/); assert.match(NPCS.hula_hula_noon.dialogue[1].text, /neat bun/);
+  for (const id of ["peach_lounge_noot", "hula_hula_min", "hot_pepper_gina", "hula_hula_noon"]) assert.ok(FLOOR_STAFF[id].desc.startsWith(FLOOR_STAFF[id].look.replace(/\.$/, "")), id + ": desc opens on the look");
+  const relook = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-relook.json", import.meta.url)), "utf8")).ids;
+  for (const id of ["peach_lounge_noot", "hula_hula_min", "hot_pepper_gina", "hula_hula_noon"]) assert.ok(relook[id] && relook[id].was, id + " is on the relook queue");
+  assert.match(NPCS.firecracker_bar_napa.dialogue[1].text, /Early fifties.*bun.*gold hoops/);
+  for (const i of [0, 1]) assert.match(NPCS.sweet_tamarind_tukta.dialogue[i].text, /cropped hair/);
+});
+test("no two mamasans or two cashiers on Soi 6 open with the same sentence", () => {
+  const ids = Object.keys(FLOOR_OWN || {}).filter(id => /^(jade_lounge|peach_lounge|lollipop_bar|sweet_tamarind|firecracker_bar|hot_pepper|hula_hula|ladybird_bar)_/.test(id));
+  const hellos = ids.flatMap(id => (NPCS[id].dialogue || []).filter(d => !d.topic && !d.when && !(d.req || []).length && !d.bond).map(d => [id, String(d.text)]));
+  for (let a = 0; a < hellos.length; a++) for (let b = a + 1; b < hellos.length; b++) if (hellos[a][0].split("_").slice(0, -1).join("_") !== hellos[b][0].split("_").slice(0, -1).join("_"))
+    assert.deepEqual(shared(hellos[a][1], hellos[b][1]), [], hellos[a][0] + " / " + hellos[b][0]);
+});
+test("the Peach, the two doors, the tiki and the count agree with themselves", () => {
+  const far = NPCS.peach_lounge_farida.dialogue; assert.doesNotMatch(far.find(d => /^bar\|/.test(d.topic)).text, /ledger|run on paper/); assert.match(far[0].short, /Singha/);
+  assert.match(NPCS.peach_lounge_noot.dialogue[1].text, /most of the girls/);
+  assert.match(NPCS.peach_lounge_keng.dialogue[0].text, /Company man say: bin/); assert.doesNotMatch(NPCS.peach_lounge_keng.dialogue[0].text, /New boss want/);
+  for (const [id, i] of [["sweet_tamarind_view", 11], ["lollipop_bar_khing", 11], ["lollipop_bar_mona", 4]]) assert.doesNotMatch(NPCS[id].dialogue[i].text, /two doors? (apart|down)/, id);
+  assert.match(NPCS.hula_hula_bright.dialogue[1].text, /come with the bar/);
+  assert.doesNotMatch(NPCS.hula_hula_tarn.dialogue[0].text, /number six/);
+  assert.match(String(NPCS.hula_hula_tarn.dialogue[1].topic), /ayutthaya/); assert.doesNotMatch(String(NPCS.hula_hula_tarn.dialogue[1].topic), /rayong/);
+  for (const [id, i] of [["peach_lounge_noot", 11], ["firecracker_bar_pang", 11], ["sweet_tamarind_tukta", 10]]) assert.doesNotMatch(NPCS[id].dialogue[i].text, /night ago/, id);
+});
+test("Somsri's and Mint's shorts keep their own grammar, and the Firecracker's water is a verb, not a gift", () => {
+  const som = NPCS.ladybird_bar_somsri.dialogue; assert.match(som[6].short, /wife plant\. He come/); assert.match(som[7].short, /If he come out/); assert.match(som[5].text, /\{\{phone\}\}/);
+  assert.match(NPCS.peach_lounge_mint.dialogue[0].short, /I am the one who notice/); assert.doesNotMatch(NPCS.peach_lounge_mint.dialogue[3].text, /how a village works/);
+  const nam = NPCS.firecracker_bar_namtan.dialogue[0]; assert.match(nam.text, /\(DRINK WATER\)/); assert.doesNotMatch(nam.text, /puts a bottle in front of you/);
+  sandbox(); G.nightTurn = 40; G.room = "firecracker_bar"; const m = G.money; t("drink water"); assert.ok(G.money < m, "the water is charged, as the prose now lets it be");
+});

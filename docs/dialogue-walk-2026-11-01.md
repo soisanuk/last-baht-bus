@@ -148,6 +148,27 @@ The same correlation for the graph's other node kinds, over the 20,991 corpus re
   words before they are items, and "security" is a person — so it stays a reader's query, not a gate.
 - **Quests** (43): the where-clause rule above, plus the giver/target/setter table in the walk's scratch notes.
 
+## The second reader pass (2026-11-02, after the merge of the three review branches)
+
+Resumed one reader at a time on the 201 characters the usage cap left to the machine.
+
+**Slice 1 — the eight hand-authored Soi 6 floors** (40 women, 287 nodes; reader report in the walk's scratch notes).
+Within each floor the facts agree; nobody says tilac; no Thai woman uses British idiom. The defects were almost all
+*between* floors: four looks dealt out of step with the woman's own words (Noot's and Min's swapped; Gina's half-moon
+glasses in seven nodes and none on her prompt; Noon's bun and ring on a chain against a cropped-hair prompt) — fixed in
+the staff spec's overrides and queued in `docs/portrait-relook.json`, since all four thumbs have shipped; two hellos
+reused verbatim at two bars (Min's was View's, Chom's was Farida's); Farida's till both a ledger and "no book"; Noot's
+"same girls" against her own six-to-four; Keng speaking to a boss nobody sees; the Lollipop and the Tamarind "next door"
+in five places and "two doors" in three; Bright labelling as true a tiki origin the room's own read contradicts; Tarn
+counting tonight's customers; three "a few night ago" where the game counts no nights; Namtan handing over water the
+house charges for (now a verb); and five shorts that conjugated a Tinglish speaker into the narrator. Left as written,
+on purpose: the shared cashier scaffold for "money" (the house rule, said six times), Pui's red scooter, Keng's and
+Taan's second tellings (prompted), and the bare "View" (an ordinary-word name the decorator already knows).
+
+**The massage shops** (9 women, 85 nodes, read by hand): nine distinct voices on one deliberate template. Pensri, a
+Wat Pho masseuse of twenty years, said "tilac"; Waan's sign read NO SEX in one node and NO BOOM BOOM in another where the
+room's own sticker says NO SEX. Both fixed and pinned.
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in

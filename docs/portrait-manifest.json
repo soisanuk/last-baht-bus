@@ -11,11 +11,21 @@
       "patron": 26
     },
     "filler": 227,
-    "unrendered": 0,
-    "relook": 0
+    "unrendered": 4,
+    "relook": 4
   },
-  "unrendered": [],
-  "relook": [],
+  "unrendered": [
+    "peach_lounge_noot",
+    "hot_pepper_gina",
+    "hula_hula_min",
+    "hula_hula_noon"
+  ],
+  "relook": [
+    "peach_lounge_noot",
+    "hula_hula_min",
+    "hot_pepper_gina",
+    "hula_hula_noon"
+  ],
   "characters": [
     {
       "id": "aey",
@@ -6395,9 +6405,11 @@
       "th": "นุช",
       "room": "peach_lounge",
       "tags": [],
-      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
-      "look": "Rings on every finger and a voice that cuts the music when she wants it",
-      "rendered": true
+      "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
+      "look": "Broad, motherly, and entirely able to have you removed by smiling",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Rings on every finger and a voice that cuts the music when she wants it"
     },
     {
       "id": "peach_lounge_farida",
@@ -6507,9 +6519,11 @@
       "th": "จีน่า",
       "room": "hot_pepper",
       "tags": [],
-      "desc": "A cloud of perfume and authority, hair lacquered against the fans — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
-      "look": "A cloud of perfume and authority, hair lacquered against the fans",
-      "rendered": true
+      "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
+      "look": "Half-moon glasses down her nose, appraising you over the top of them",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "A cloud of perfume and authority, hair lacquered against the fans"
     },
     {
       "id": "hot_pepper_chom",
@@ -6539,9 +6553,11 @@
       "th": "มิน",
       "room": "hula_hula",
       "tags": [],
-      "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
-      "look": "Broad, motherly, and entirely able to have you removed by smiling",
-      "rendered": true
+      "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
+      "look": "Rings on every finger and a voice that cuts the music when she wants it",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Broad, motherly, and entirely able to have you removed by smiling"
     },
     {
       "id": "hula_hula_noon",
@@ -6555,9 +6571,11 @@
       "th": "นุ่น",
       "room": "hula_hula",
       "tags": [],
-      "desc": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling. — the cashier at Hula Hula Bar, from Sakon Nakhon.",
-      "look": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.",
-      "rendered": true
+      "desc": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes. — the cashier at Hula Hula Bar, from Sakon Nakhon.",
+      "look": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes.",
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling."
     },
     {
       "id": "ladybird_bar_ratsamee",

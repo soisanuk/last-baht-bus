@@ -19205,10 +19205,10 @@
    "index": 1,
    "key": "hula_hula_tarn#1",
    "npc": "hula_hula_tarn",
-   "topic": "factory|rayong|line|electronics|job",
+   "topic": "factory|ayutthaya|line|electronics|job",
    "topics": [
     "factory",
-    "rayong",
+    "ayutthaya",
     "line",
     "electronics",
     "job"

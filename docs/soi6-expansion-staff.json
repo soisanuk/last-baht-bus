@@ -1,62 +1,84 @@
 [
- {
-  "room": "jade_lounge",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 4,
-  "authored": true
- },
- {
-  "room": "peach_lounge",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 4,
-  "authored": true
- },
- {
-  "room": "lollipop_bar",
-  "mama": "solo",
-  "hostesses": 3,
-  "authored": true
- },
- {
-  "room": "sweet_tamarind",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 3,
-  "authored": true
- },
- {
-  "room": "firecracker_bar",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 3,
-  "authored": true,
-  "overrides": {
-   "firecracker_bar_pang": {
-    "look": "Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.",
-    "descOpen": "Round-faced, a high ponytail and her phone in one hand, the till in perfect order"
-   }
+  {
+    "room": "jade_lounge",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 4,
+    "authored": true
+  },
+  {
+    "room": "peach_lounge",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 4,
+    "authored": true,
+    "overrides": {
+      "peach_lounge_noot": {
+        "look": "Broad, motherly, and entirely able to have you removed by smiling",
+        "descOpen": "Broad, motherly, and entirely able to have you removed by smiling"
+      }
+    }
+  },
+  {
+    "room": "lollipop_bar",
+    "mama": "solo",
+    "hostesses": 3,
+    "authored": true
+  },
+  {
+    "room": "sweet_tamarind",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 3,
+    "authored": true
+  },
+  {
+    "room": "firecracker_bar",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 3,
+    "authored": true,
+    "overrides": {
+      "firecracker_bar_pang": {
+        "look": "Thai woman of twenty-four, round face, high ponytail, wide bright smile, red-and-gold bar shirt, phone in hand.",
+        "descOpen": "Round-faced, a high ponytail and her phone in one hand, the till in perfect order"
+      }
+    }
+  },
+  {
+    "room": "hot_pepper",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 3,
+    "authored": true,
+    "overrides": {
+      "hot_pepper_gina": {
+        "look": "Half-moon glasses down her nose, appraising you over the top of them",
+        "descOpen": "Half-moon glasses down her nose, appraising you over the top of them"
+      }
+    }
+  },
+  {
+    "room": "hula_hula",
+    "mama": true,
+    "cashier": true,
+    "hostesses": 3,
+    "authored": true,
+    "overrides": {
+      "hula_hula_min": {
+        "look": "Rings on every finger and a voice that cuts the music when she wants it",
+        "descOpen": "Rings on every finger and a voice that cuts the music when she wants it"
+      },
+      "hula_hula_noon": {
+        "look": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes.",
+        "descOpen": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes."
+      }
+    }
+  },
+  {
+    "room": "ladybird_bar",
+    "mama": "solo",
+    "hostesses": 3,
+    "authored": true
   }
- },
- {
-  "room": "hot_pepper",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 3,
-  "authored": true
- },
- {
-  "room": "hula_hula",
-  "mama": true,
-  "cashier": true,
-  "hostesses": 3,
-  "authored": true
- },
- {
-  "room": "ladybird_bar",
-  "mama": "solo",
-  "hostesses": 3,
-  "authored": true
- }
 ]
