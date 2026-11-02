@@ -163,3 +163,55 @@ test("Gordon: a toast at the bar he manages never catches the cashier's eye for 
   for (const f of _toastFor("jiap")) assert.doesNotMatch(f.toString(), /chit/);
   G.job = null; assert.ok(_toastFor("jiap").some(f => /chit/.test(f.toString())), "a customer's drink still has its chit");
 });
+
+// ── Ray (Sonnet, lens taps-only-phone): the Soi 6 week on a phone, never a typed word ──
+const soi6 = () => { sandbox(); G.mode = "soi6"; G.money = 30000; };
+const sniped = (id) => {   // a state where the regular at her elbow is buying her drinks, by the engine's own test
+  G.room = _npcRoom(id); G.known[id] = 1; G.soc.drinks[id] = 1; G.soc.drinkCount = {}; G.soc.patronBusy[G.room] = id; G.soc.patronMiffed[G.room] = false; G.soc.heat[G.room] = 0;
+  for (let t = 20; t < 90; t += 3) { G.nightTurn = t; if (_snipeOn(id)) return true; }
+  return false;
+};
+
+test("Ray: the Soi 6 barfine does not say 'one drink first, then upstairs' over a regular who is buying her drinks", () => {
+  soi6(); assert.ok(sniped("pukky"), "the engine can put a regular at Pukky's elbow");
+  out = []; run("barfine pukky");
+  assert.doesNotMatch(said(), /BUY DRINK FOR PUKKY|Then upstairs|One lady drink first/);
+  assert.match(said(), /Another lady, or another bar/); assert.match(said(), /since he sat down|all evening/);
+  assert.equal(G.soc.heat[G.room] || 0, 0, "asking costs nothing");
+  // the same predicate the lady drink reads: buying it anyway is still the bad form it was
+  out = []; run("buy pukky drink"); assert.ok(G.soc.patronMiffed[G.room], "the drink over his head still fires the snipe");
+  assert.ok(_BF_SNIPED.length >= 3);
+  // …and never on your own rail
+  G.flags.barOpen = true; G.bar.room = G.room; assert.equal(_snipeOn("pukky"), false); G.flags.barOpen = false;
+});
+
+test("Ray: 'last time' on the night itself is not 'all night, and in the morning' — the night is not finished", () => {
+  soi6(); const id = "may"; G.room = _npcRoom(id); G.known[id] = 1; G.nightTurn = 50;
+  (G.wentWith = G.wentWith || {})[id] = { day: G.day, turn: 30, kind: "out" };
+  out = []; assert.equal(_wentWithTalk(id, "last time"), true);
+  assert.doesNotMatch(said(), /in the morning|All night/); assert.match(said(), /not finished|Last time is now|Buy the ending first/);
+  G.wentWith[id] = { day: G.day - 1, turn: 30, kind: "lt" }; out = []; _wentWithTalk(id, "last time"); assert.match(said(), /Last night|All night|Long night/);
+  G.wentWith[id] = { day: G.day, turn: 30, kind: "st" }; out = []; _wentWithTalk(id, "last time"); assert.match(said(), /Upstairs, tonight|Tonight, upstairs/);
+});
+
+test("Ray: BUY LINGERIE FOR <lady> completes to the women in the room, the way a drink does", () => {
+  soi6(); G.room = _npcRoom("pukky"); G.nightTurn = 30;
+  const names = _npcsHere().filter(i => NPC_ROLES[i] === "hostess").map(i => NPCS[i].name.toLowerCase());
+  assert.ok(names.length >= 1);
+  const got = engineComplete("buy lingerie for ");
+  for (const n of names.slice(0, 3)) assert.ok(got.includes(n), `${n} in ${JSON.stringify(got)}`);
+  assert.ok(!got.includes("beer"));
+});
+
+test("Ray: Mort's READ THE COLUMN is a parenthesised hint, so a thumb can tap it", () => {
+  const texts = []; const walk = v => { if (typeof v === "string") texts.push(v); else if (Array.isArray(v)) v.forEach(walk); else if (v && typeof v === "object") Object.values(v).forEach(walk); };
+  walk(NPCS.mort.dialogue || NPCS.mort.nodes || NPCS.mort);
+  const hits = texts.filter(t => /READ THE COLUMN/.test(t));
+  assert.ok(hits.length >= 3, "the three lines are still there");
+  for (const t of hits) assert.match(t, /\(READ THE COLUMN[^)]*\)/, t.slice(0, 80));
+});
+
+test("Ray: the wheel and the chip name the woman-on-your-arm action the same way", () => {
+  const term = readFileSync(fileURLToPath(new URL("../../web/js/term.js", import.meta.url)), "utf8");
+  assert.match(term, /leadme:\s*l => \(\{ t: "follow her"/); assert.doesNotMatch(term, /let her lead/);
+});

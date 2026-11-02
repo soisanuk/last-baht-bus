@@ -16472,9 +16472,9 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "by the notebook, older than the notebook and better polished. \"I write Last Orders — the " +
         "back page, the one your granddad read on the toilet. Retired twice on paper, un-retired twice; a man " +
         "needs a deadline or the days run together and the mind goes to soup.\" He clicks the pen. " +
-        "\"So I watch, I write it down, and I don't much mind who minds. READ THE COLUMN if you like " +
-        "— it's mostly true.\"",
-        short: "\"I write Last Orders. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+        "\"So I watch, I write it down, and I don't much mind who minds. Read it if you like " +
+        "— it's mostly true.\" (READ THE COLUMN)",
+        short: "\"I write Last Orders. Mostly true. Keeps me sane.\" (READ THE COLUMN)" },
       { topic: "amulet", req: ["amuletReturned"],
         text: "\"The one off the far end of the beach.\" Mort does not ask how you know he " +
           "knows; he has been sitting in this window for twenty years. He clicks the biro " +
@@ -16490,7 +16490,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "gets old because the punters keep arriving new. A reader letter, a bar listing, " +
         "a joke, and whatever the street taught me that day. I don't moralise — I report " +
         "the weather and the women and let a man draw his own conclusions.\" A dry look. " +
-        "\"He never does. READ THE COLUMN — you can pull it up anywhere now.\"" },
+        "\"He never does.\" (READ THE COLUMN — you can pull it up anywhere now.)" },
       { topic: "sponsor", text: "\"The kept ones?\" He clicks the pen, pleased to be asked. " +
         "\"I have filed that story eleven times and never once got a letter about it, which " +
         "tells you it is the least interesting arrangement on this coast and the most " +

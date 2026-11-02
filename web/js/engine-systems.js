@@ -994,6 +994,12 @@ function _doBarfine(arg) {
   // rule) — one lady drink tonight from a stranger, none from a regular, counted in drinks
   const _onSoi6 = bt === "soi6" || _room().region === "Soi 6";   // the middle's beer bars are Soi 6 too (Gary, round 79: "3 more" at the Shady Lady)
   if (_onSoi6 && !bertAlly) {
+    // the regular at her elbow is buying her drinks: "one drink first, then upstairs" sent a man into that drink and the
+    // room's bad-form verdict, with the stairs shut after it (Ray, round 113) — say whose evening it is, and point elsewhere
+    if (_snipeOn(id) && !G.soc.patronMiffed[G.room]) {
+      _say(_fmt(_pickVary(_BF_SNIPED, "bfsniped"), { n: name, s: _snipeSince() }) + " (Another lady, or another bar.)");
+      return;
+    }
     const _had = ((G.soc.drinkCount || {})[id]) || 0;
     // money already in her hand TONIGHT is better than a drink — the same test _bfRefusal reads, never the trip's running total
     const _tipped = ((G.gifts || {})[id] || []).some(g => g.day === G.day && (g.kind === "tip" || g.kind === "give") && (g.amt || 0) >= _ladyPrice(G.room));
@@ -10015,6 +10021,11 @@ function _barDebts() {
   return { note: Math.max(0, b.owed || 0), arrears: Math.max(0, b.arrears || 0), rent: Math.max(0, b.rentOwed || 0),
     nont: Math.max(0, (b.loan && b.loan.owed) || 0) };
 }
+const _BF_SNIPED = [
+  "{n} tips her head, very slightly, at the man beside her. He has been buying her drinks {s}, and the stairs are his to ask for tonight, not yours to buy over him.",
+  "\u201cTonight I have customer, na.\u201d {n} says it kindly and does not look at him, which is how you know. The man at her elbow has been paying {s}.",
+  "The glass in front of {n} is not her first and none of them were yours: the regular beside her has stood every one {s}. Soi 6 has one other rule, and it is his.",
+];
 function _barSellable() { return ((G.bar && G.bar.nights) || 0) >= BAR_SALE_MIN; }
 function _barSaleTanOk() { return !!(_met("tan") || (G.known && G.known.tan) || (G.phone && G.phone.contacts && G.phone.contacts.tan)); }
 function _barSaleBertOk() { return _barHealth() !== "under" && _npcRoom("bert") === "stinky_bar"; }
