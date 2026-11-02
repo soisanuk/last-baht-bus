@@ -56,3 +56,13 @@ test("S10-3: a test compares the portrait manifest with its generator, and it is
   const r = tool("scripts/gen-portrait-manifest.mjs", "--check");
   assert.equal(r.status, 0, r.stderr || r.stdout);
 });
+
+test("S10-4: the witness audit harvests every claim in a record, not only the first", async () => {
+  const { witnessClaims } = await import("../../tools/witness-audit.mjs");
+  const all = witnessClaims(), keys = new Set(all.map(c => c.key));
+  assert.ok(all.length > 150, "the harvest is not empty");
+  // the second claim of a sentence whose first claim is classed differently
+  for (const k of ["engine-parser.js:_doBuy|the floor talks", "engine-systems.js:_SIGHT_OVER|the street watches", "engine-play.js:_REL_GREET|everyone knows"])
+    assert.ok(keys.has(k), k + " is harvested");
+  assert.deepEqual(all.filter(c => !c.cls).map(c => c.key), [], "and classed");
+});
