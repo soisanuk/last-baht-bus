@@ -252,6 +252,33 @@ Jenny's "I hope it was worth" (her own reproach, in her voice); Pia's "most Amer
 not an invitation). Reported, not verified: Joy's "(Joy put that to you…)" prompt appearing after the "deserves better"
 choice with no question asked — likely the walker carrying state across nodes; worth one probe.
 
+**Slice E3 — the seventy-seven small parts** (77 characters, 296 nodes, read by bar; 67 findings, 44 fixed). The small
+parts hold their voices (Ron's Wollongong, Roger's Everton, Dieter, Somsak's engineer, Somchith's flat Tinglish); what
+the reader found was the clock, the gists and a few hand-offs. Fixed: Ron's gist inventing a mate's wedding; Yai sending
+you to Kratae about the Heron without setting the flag Kratae's Heron node requires (now she does, pinned through the real
+ask); Kratae's "lads" and Aoy's "proper portion" (Thai house staff); Mot's "rubbish" and a hello that reacted to a line
+the player never spoke; Mot's cart promising a sauce; Aom's hello asserting a loss in every stage; Noi's one node of
+polished English and a knowing look that intensified from nothing; Aek's "this street" for a bar on another; Security's
+pooled repeat (now an authored short); Phil's phone carrying Nit's private thread (now her timeline); Tom's Shenzhen
+pupils in "their afternoon" at six in the morning; Petch's hello asserting you clapped before any show; the narrator
+grading Macca ("because he's a good man") and endorsing Nook; Kat's "an hour ago"; Jun's one dropped -s; Joon's "dee
+side"; Champa "like the bar" at the White Rabbit; Nangfah's textbook under the cashier's till and a "no-name"
+Ramkhamhaeng; Nott's girlfriends "some of them babies"; Arm's verdict on the town; Sopha's match starting soon and her
+Saturday; Superman's sunset "in a bit" at any hour; Somsak's checkpoint staged live; Fergie's gist handing him the
+narrator's line and a "last week" the game never staged; Roger's gists adding eighteen years and a prophecy, and his
+"ask me the score" answered "Search me" (score is now an alias of his football node); Dieter's Bavarian sigh and his
+Frankfurt flight; Priew glossed "every word of it true" in both nodes; Kluay filing Benz as a money-chaser against Benz's
+own lines.
+
+Verified and not a defect: Mem giving Oy her 71 at the Tequila Queen and Daeng knowing her as 71 at Crystal Palace (she
+carried it); Security's "ask DJ" is a loop that closes (DJ sends you to Ploy, Ploy gives the trick, DJ plays); Macca's
+driver with "English like a Yank" is Tan, who did six years in Ohio; the Golden Dragon and Sunset Dreams are next door on
+the graph; Mala's {{Gaew}} is already wrapped so the Queen Vic's Gaew is the only one that taps. Left as written:
+Somsak's "best seat in Pattaya" beside Superman's "best seat on earth" (two men, one rail, the joke); Nune's real smile
+that goes nowhere near her eyes; Aum and Praewa both far from home on one floor; Belle's narrator; Somchith's "everybody
+is the same size"; Pia's and Somsak's "Tuesday" idioms. Engine, not nodes (below): the house pools naming Ron; the motel's
+sign and Somchith's coffee.
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in
@@ -270,13 +297,16 @@ choice with no question asked — likely the walker carrying state across nodes;
    round re-tells a node, which nothing delivers, and "I don't mind saying it twice. It won't be better the second time"
    is the narrator's contracted English dealt to Tinglish mamasans (Wimon, Toi, Peung, Malai); both want voicing by
    register the way `_voiceKind` already sorts the patrons.
+7. Two house pools in `engine-parser.js` (`_HOUSE_FOOTBALL`, `_HOUSE_WORLD`) name Ron ("I know Liverpool because Ron
+   shout Liverpool", "Ask Ron") — a rugby-league man who sits only at Mama Yai's — in any bar they are dealt.
+8. The Short-Time Motel is "the motel with no sign" in `_bfResolve` (`engine-systems.js`) and "the sign says by the hour"
+   in `_doTalkCore` (`engine-parser.js`); `_MOTEL_ROOM_LINES` pours Somchith coffee where every other string pours tea.
 
 ## Deferred, and why
 
-- **77 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
-  the Darkside, the Silk Rose, the Doghouse and Succubus, then slices E1 and E2 — the Beach Road and Jomtien story
-  characters and patrons, the Walking Street and Tree Town women and the remaining regulars: 124 more characters, 1,208
-  nodes). What is left is the seventy-seven small parts (Ron, Mot, Somchith, Phil, Petch, Dave, Bee, Macca…). The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
+- **Every character has now been read by a reader** (2026-11-02): the 25 with fifteen nodes or more by hand, then the
+  second pass's five slices — the eight Soi 6 floors, the massage shops, the Darkside set, and E1–E3 — 201 characters
+  and 1,504 nodes through readers with no source access. The next pass is a re-read after the engine hand-offs land. The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
   reader at a time, 150 KB a reader, findings only.
 - The dossier sweep (`prose-corpus --dossiers`) was run per name as needed, not seeded: the ledger records who
   read what, and the author of these fixes is the wrong person to mark them read.
@@ -295,3 +325,11 @@ choice with no question asked — likely the walker carrying state across nodes;
 2. Two PLG-run mamasans (Nee at the Lotus, Jinda at the Jade) both say "they have the paper, I run the room".
    Read as the company's phrasing it is a feature; read cold it is one line in two mouths. Left as is.
 3. Orathai's register (above). A ruling either way is cheap; a rewrite is not.
+4. Real names as landmarks and fandom: Alcazar and Tiffany's in five strings (Mala, Petch, the scout quest, the flyer),
+   Somo's 1995 Liverpool squad. No allegation attaches to any of them; `docs/guardrails.md` says identifiability is what
+   matters. Left in place pending a ruling.
+5. Somchith carries four specific traits (the thirty-one years on the Bangkok–Udon night bus, the phone-charging counter,
+   the lost-property tin to the temple, the nailed window); the source audit of 2026-10 names him among the
+   real-person portraits. If he is drawn from life the trait budget is one.
+6. Josey (Rock Factory): a Melbourne swimmer, 200 fly at nationals, a panel-show "discussion", 800k followers. Reads as
+   invention, but the stack is dense enough to check it lands on nobody real.

@@ -345,3 +345,49 @@ test("Henning asks for company, not a coffee the bench cannot sell; Ploy's 'ask 
   const p = NPCS.ploy.dialogue[3]; assert.ok(p.notFlags.includes("hasWallet") && p.notFlags.includes("somTamDelivered"));
   assert.equal(String(NPCS.ploy.dialogue[4].topic), "oy", "the wallet-found player still has an Oy answer");
 });
+
+// ── slice E3 of the second reader pass: the seventy-seven small parts (read 2026-11-02) ──
+test("Mama Yai's: Ron's gist keeps his fortnight, Yai's Heron answer opens Kratae's, and Kratae's boys are not lads", () => {
+  assert.doesNotMatch(String(NPCS.ron.dialogue[0].short), /wedding/); assert.match(String(NPCS.ron.dialogue[0].short), /fortnight in 2011/);
+  const heron = node("yai", /^heron/); assert.ok(heron.sets && heron.sets.includes("knowYaiWall"), "Yai's Heron node sets what Kratae's Heron node requires");
+  assert.ok(node("kratae", /^heron/).req.includes("knowYaiWall")); assert.doesNotMatch(node("kratae", /^heron/).text, /\blads\b/);
+  sandbox(); G.nightTurn = 40; talk("yai"); t("ask yai about heron"); assert.ok(_flag("knowYaiWall"));
+});
+test("Walking Street's small parts: Mot's Tinglish, a hello that reacts to something said, Aom claims no loss, Noi's register, Aek's town", () => {
+  assert.doesNotMatch(node("mot", /^boots/).text, /rubbish/); assert.match(NPCS.mot.dialogue[5].text, /You tell him the rest/);
+  assert.doesNotMatch(node("mot", /^cart/).text, /good sauce/);
+  assert.doesNotMatch(NPCS.aom.dialogue[0].text, /\.\.\.You lost something/);
+  assert.doesNotMatch(NPCS.noi.dialogue[0].text, /intensifies/); assert.doesNotMatch(node("noi", /^wallet/).text, /flows through|professionals/);
+  assert.match(node("aek", /^oy/).text, /in this town who ever learn/);
+  assert.match(String(NPCS.security.dialogue[0].short), /all three, eyes closed/);
+});
+test("the Stinky's and the Peacock's facts: Phil's phone shows a timeline, Tom's pupils are in their morning, Petch asserts no clap", () => {
+  assert.doesNotMatch(node("phil", /^phone/).text, /The thread is with/); assert.match(node("phil", /^phone/).text, /LINE timeline/);
+  assert.doesNotMatch(nodeText("dave", 4), /their afternoon/); assert.match(node("dave", /^work/).text, /their morning, before school/);
+  assert.doesNotMatch(nodeText("petch", 0), /You clapped|already at song two/); assert.match(NPCS.petch.dialogue[0].text, /You will clap/);
+});
+test("Sunset Dreams, the Dragon, the Rabbit, Kitten Corner and the Adonis: no graded Macca, no counted hour, Jun's -s, the quiet side, a temple tree, a bag, no babies, no verdict", () => {
+  assert.doesNotMatch(node("macca", /^payout/).text, /because he's a good man/);
+  assert.doesNotMatch(node("kat", /^drink/).text, /an hour ago/);
+  assert.match(node("jun", /^mother/).text, /She agrees, actually/);
+  assert.match(node("joon", /^tom/).text, /the quiet side/); assert.doesNotMatch(node("joon", /^tom/).text, /dee side/);
+  assert.doesNotMatch(nodeText("champa", 0), /like the bar/); assert.match(NPCS.champa.dialogue[0].text, /temple tree/);
+  assert.match(node("nangfah", /^book/).text, /out of her bag/); assert.doesNotMatch(node("nangfah", /^book/).text, /no-name/);
+  assert.match(node("nott", /^gayforpay/).text, /some with babies/);
+  assert.doesNotMatch(node("arm", /^home/).text, /more than most of this town/); assert.match(node("arm", /^home/).text, /Nobody lied to anybody, here\./);
+  assert.doesNotMatch(node("nook", /^home/).text, /she is not wrong/);
+  assert.match(node("kluay", /^work/).text, /Benz chase the \{\{phone\}\}/);
+});
+test("the clock stays out of Front Row, the Blue Dog and Fergie: no match starting, no Saturday, no sunset imminent, no checkpoint live, no last week", () => {
+  for (const d of NPCS.sopha.dialogue) assert.doesNotMatch(nodeText("sopha", NPCS.sopha.dialogue.indexOf(d)), /game start soon|Saturday crowd/);
+  assert.doesNotMatch(NPCS.superman.dialogue[0].text, /starts in a bit/); assert.match(NPCS.superman.dialogue[0].text, /every evening/);
+  assert.doesNotMatch(node("somsak", /^police/).text, /as he says it/); assert.match(node("somsak", /^police/).text, /Every evening, six to seven, you see/);
+  assert.doesNotMatch(String(NPCS.fergie.dialogue[0].short), /lives, son/); assert.doesNotMatch(node("fergie", /^army/).text, /last week/); assert.match(node("fergie", /^army/).text, /next week/);
+});
+test("Roger answers the score he asks for, his gists add nothing, Aoy's portion is big not proper, Dieter flies to Munich, Priew is glossed once", () => {
+  assert.doesNotMatch(String(NPCS.roger.dialogue[0].short), /eighteen years/); assert.doesNotMatch(String(node("roger", /^jomtien/).short), /you one day/);
+  sandbox(); G.nightTurn = 40; G.room = _npcRoom("roger"); run("talk to roger"); assert.match(t("ask roger about score"), /Everton/);
+  assert.doesNotMatch(node("aoy", /^kitchen/).text, /proper portion/);
+  assert.match(node("dieter", /^jomtien/).text, /flight to Munich/);
+  assert.doesNotMatch(nodeText("priew", 0), /Every word of it true/); assert.match(NPCS.priew.dialogue[1].text, /Every word of it true/);
+});

@@ -279,7 +279,7 @@ function motBoots() {
   at(); out = []; run("tip mot 500");
   assert.match(text(), /What I do with four/, "he will not take a second pair");
   at(); out = []; run("ask mot about boots");
-  assert.match(text(), /rubbish in the shoes/i, "and the payoff is his, not yours");
+  assert.match(text(), /(rubbish|very bad) in the shoes/i, "and the payoff is his, not yours");
 }
 
 test("the women at a lock-in bar can discuss the bolt", () => {
