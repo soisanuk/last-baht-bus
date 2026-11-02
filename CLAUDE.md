@@ -109,7 +109,9 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
   wired five ways**: its intercept in `_doCommandInner`, its redraw in `_renderResume`, its chips in
   `_chipSet`, its completion in `engineComplete`, and a recipe in `tools/modal-audit.mjs` (a gate with no recipe fails the
   audit) — `tests/js/gates.test.js` fails on a prompt missing from `GATES` or from any of the five. Its prompt goes through one shared helper so the live prompt, the reprompt and the redraw are identical. A
-  non-answer ("what?", "what happens if I say yes?") must leave it up, commit nothing and cost no turn. A trigger never arms
+  non-answer ("what?", "what happens if I say yes?") must leave it up, commit nothing and cost no turn — the handler sees the line only after `_gateGuard`, so give the entry
+  its `no` (the word it declines on) and, if it explains itself, its `ask`, and a refusal, a hedge or a question that opens
+  with an option's word ("sell? …") never commits it. A trigger never arms
   on top of a gate already up. A choice that ends a night asks once (`_endConfirm`).
 - **A new `G` field is one line in `newGame()` and one word in `STATE_SCHEMA`** (engine-core, beside it) — `deserializeGame`
   merges a save over a fresh skeleton, so old saves gain it, and the schema declares how long it lives: `night` (reset at
@@ -219,7 +221,8 @@ implicit order, state lifetime, the `typeof` guards, the prompt registry. Follow
   model, lens, claim, verdict, system, cls, sev) and its fix a pin in `tests/js/roundNN.test.js`.
   `node tools/findings-ledger.mjs --aim` ranks where to point the next round. Fixed baselines of real player sentences
   (`tests/js/steve.test.js`) only ever grow.
-- **The adversarial code review** (`docs/code-review-2026-10-25.md`): reviewers per group of systems, `docs/architecture.md`
+- **The adversarial code review** (`docs/code-review-2026-10-25.md`, then `docs/code-review-2026-11-01.md` — ten
+  sections, 98 findings, all fixed, pins in `tests/js/review1101*.test.js`): reviewers per group of systems, `docs/architecture.md`
   as the map, every finding proven with a `tools/probe.mjs` reproduction, then verified and pinned
   (`tests/js/review1025.test.js`).
 - **Browser E2E** (`tests/e2e/`, Playwright) is a thin pass over the real page and gates the deploy with the vm suite.
