@@ -163,6 +163,7 @@ const MUST_CONSULT = {
     { fn: "_lastCall", why: "last call is his to call, not a nudge to him" },
     { fn: "_closingTick", needs: "_onShift", why: "the two o'clock close is his to lock up, not a walk-out — on a night he declared it (round 102)" },
     { fn: "_doTalkCore", why: "the floor greets its manager once a night" },
+    { fn: "_toastFor", why: "the manager's drink is the house's — no toast catches the cashier's eye for a chit nobody writes (Gordon, round 113)" },
   ],
   "_jobBarStaff()": [
     { fn: "_maybeIncomingText", why: "she texts her manager in the staff register" },

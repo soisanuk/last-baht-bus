@@ -4035,7 +4035,7 @@ function _doBell() {
   // at your own bar the round is your stock and your girls' drinks: the price goes into your own till less what the stock
   // costs (it left the economy entirely — review 2026-10-25), and BOOKS names it
   // the round you ring on your own rail goes through your own till, less its stock — and BOOKS names it, the way it names a lost stake
-  if (_atOwnBar() && G.bar) { const keep = Math.round(price * (1 - BAR_COGS)); G.bar.cash += keep; G.bar.ownBells = (G.bar.ownBells || 0) + keep; _barEvent(keep, "your bell on your own rail"); }
+  if (_atOwnBar() && G.bar) { const keep = Math.round(price * (1 - BAR_COGS)); G.bar.cash += keep; G.bar.ownBells = (G.bar.ownBells || 0) + keep; _barEvent(keep, `your bell on your own rail, ฿${_num(price)} less its stock`); }
   const r = G.room;
   _ringBell(r);
   _say("You reach up and RING THE BELL.", "win");
@@ -5958,7 +5958,7 @@ function _nightSnapshot() {
     happy: G.happy,
     money: G.money,
     tillDrawn: (G.bar && G.bar.drawn) || 0,
-    atm: G.atmTotal || 0,
+    atm: G.atmTotal || 0, atmIn: G.atmIn || 0,   // the notes fed back into the machine are named too, not only the ones that came out
     atmFees: G.atmFees || 0,
     bank: G.bank || 0, held: G.nontStuck || 0, bankIn: G.bankIn || 0,   // the account, Nont's overnight hold, and what ARRIVED (Marguerite, round 67; the money audit)
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
@@ -6042,6 +6042,10 @@ function _morningLedger() {
   const machine = drawn - nontOutN, _via = [];
   if (machine > 0) _via.push(`\u0e3f${_num(machine)} came out of the machine` + (fees > 0 ? `, plus \u0e3f${_num(fees)} in fees` : ""));
   if (nontOutN > 0) _via.push(`\u0e3f${_num(nontOutN)} through Nont, \u0e3f${_num(nontCutN)} his cut`);
+  // a DEPOSIT is the same money changing pockets, and the morning that names the withdrawal names it too (a man keeping
+  // books read "฿3,000 came out of the machine" the morning after he had fed it ฿5,000)
+  const putIn = (G.atmIn || 0) - (b.atmIn != null ? b.atmIn : (G.atmIn || 0));
+  if (putIn > 0) _via.push(`\u0e3f${_num(putIn)} went into the machine, pocket to account`);
   else if (nontCutN > 0) _via.push(`Nont's \u0e3f${_num(nontCutN)} cut, the rest held in his account overnight`);
   // the send is its own line below, and the headline must say it is not in it (Bernard, round 88: "I thought ฿1,300 was missing")
   const _sentApart = typeof sentNight !== "undefined" && sentNight > 0 ? ", not counting what you sent" : "";
@@ -6055,6 +6059,7 @@ function _morningLedger() {
   const safeTag = safeIn ? " (with the room safe's stash netted in)" : walletIn ? ` (with the wallet's ฿${_num(G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH)} back in it)` : "";   // it was never Madam Oy's money (Rolf, round 55)
   if (spent > 0) bits.push("down \u0e3f" + _num(spent) + " on the night" + via + safeTag);   // Kenji, round 47: "down ฿1,747" on a ฿4,450 night
   else if (spent < 0) bits.push("up \u0e3f" + _num(-spent) + " on the night" + via + safeTag);
+  else if (_via.length) bits.push("even on the night" + via + safeTag);   // money that only changed pockets (a deposit) is still named
   if (tillDraw > 0) bits.push("\u0e3f" + _num(tillDraw) + " drawn from your own till");
   // …and the other direction: a till that went under took the owner's own money, and
   // "down ฿270" on those mornings left ฿1,478 unaccounted for (Kwame, round 60)

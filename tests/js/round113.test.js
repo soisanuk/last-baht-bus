@@ -83,3 +83,83 @@ test("Keith: a question belongs to the conversation it was asked in — turning 
   t("talk to somo"); assert.equal(G.convoQ, null, "and she does not come back to it");
   assert.equal(typeof _answerOwner, "undefined", "no answer is routed to another asker by its words");
 });
+
+// ── Gordon (Opus, lens claims-ledger): an owner through the money — five dawns, three buyers, every figure checked ──
+const owner = () => { sandbox(); G.stage = "expat"; _setFlag("expatLife"); _setFlag("barPaid"); _setFlag("barOpen"); G.bar.room = "stinky_bar"; G.bar.cash = 2000; G.bar.nights = BAR_SALE_MIN; };
+
+test("Gordon: the night's own money is named in BOOKS by what it was, never by its id ('allin +฿1,500')", () => {
+  for (const ev of WORK_NIGHTS) if (ev.money) assert.ok(ev.label && /\s/.test(ev.label), `${ev.id} carries a label`);
+  owner(); G.room = "stinky_bar"; G.nightTurn = 40; G.bar.eventNotes = [];
+  const allin = WORK_NIGHTS.find(e => e.id === "allin"); _barEvent(allin.money, allin.label || allin.id);
+  out = []; _doBooks(); assert.match(said(), /every regular in at once \+฿1,500/); assert.doesNotMatch(said(), /\ballin\b|\bfooty\b|\bmillionaires\b/);
+});
+
+test("Gordon: the bell on your own rail names the ฿200 of stock the till never saw", () => {
+  owner(); G.room = "stinky_bar"; G.nightTurn = 40; G.money = 20000; G.bar.eventNotes = []; const c0 = G.bar.cash, m0 = G.money;
+  run("ring bell");
+  const price = m0 - G.money, keep = G.bar.cash - c0;
+  assert.equal(keep, Math.round(price * (1 - BAR_COGS)));
+  assert.equal(G.bar.eventNotes.length, 1); assert.match(G.bar.eventNotes[0], new RegExp(`฿${_num(price)} less its stock \\+฿${_num(keep)}`));
+});
+
+test("Gordon: a regular's slate still on the docket goes with the bar, named at the signing and on the morning's ledger", () => {
+  for (const via of ["plg", "bert", "tan"]) {
+    owner(); G.room = "stinky_bar"; G.bar.tabDue = { day: G.day + 2, amt: 1200, pays: true }; G.ledgerNotes = [];
+    const saved = _npcRoom; out = []; _barSaleDo(via);
+    assert.match(said(), /A regular's slate, ฿1,200, is still on the docket/, via);
+    assert.ok(G.ledgerNotes.some(n => /slate of ฿1,200 left on the docket/.test(n)), via + ": the morning names it");
+    assert.equal(G.bar.tabDue, undefined, via + ": the docket is not yours any more");
+  }
+});
+
+test("Gordon: the Tan sale's morning names the note that went with the bar, and whose fee the rest was", () => {
+  owner(); G.room = "stinky_bar"; G.bar.owed = 1605000; G.ledgerNotes = []; out = []; _barSaleDo("tan");
+  assert.ok(G.ledgerNotes.some(n => /the note to Ohio, ฿1,605,000, went to the Chonburi man/.test(n) && /Tan's fee/.test(n)));
+  owner(); G.bar.owed = 1605000; G.ledgerNotes = []; out = []; _barSaleDo("plg");
+  assert.ok(!G.ledgerNotes.some(n => /Chonburi/.test(n)), "the PLG morning says it on the price line already");
+});
+
+test("Gordon: TIME on a quiz night does not name the owner's own bar as a venue (the quiz never plays there)", () => {
+  owner(); let day = null;
+  for (let d = G.day; d < G.day + 400 && day == null; d++) { G.day = d; if (_quizDay() && _quizBars().includes("stinky_bar")) day = d; }
+  assert.ok(day != null, "a quiz night at the Stinky exists in the hash");
+  G.day = day; G.room = "stinky_bar"; G.nightTurn = 25;
+  assert.equal(_quizHere(), false);
+  out = []; run("time");
+  assert.doesNotMatch(said(), /Quiz night[^\n]*Stinky/); assert.match(said(), /your own rail, where you are the house/);
+  G.day = day; G.room = "beach_rd_c"; out = []; run("time"); assert.doesNotMatch(said(), /Quiz night[^\n]*Stinky/, "it is yours wherever you stand");
+  G.flags.barOpen = false; out = []; run("time"); assert.match(said(), /Quiz night[^\n]*Stinky/, "for a man who owns no bar it is a venue like any other");
+});
+
+test("Gordon: the morning that names what came out of the machine names what went in", () => {
+  sandbox(); G.stage = "expat"; G.money = 12000; G.bank = 30000; G.atmIn = 0; _nightSnapshot();
+  G.room = "dongtan_rd_n"; assert.ok(ROOMS[G.room].atm); run("deposit 5000"); assert.equal(G.money, 7000);
+  G.day++; out = []; _morningLedger();
+  assert.match(G.lastNightSaid[0], /฿5,000 went into the machine, pocket to account/);
+  assert.doesNotMatch(G.lastNightSaid[0], /down ฿5,000|up ฿5,000/, "a deposit is not a night's spending");
+});
+
+test("Gordon: BOOKS' 'up N%' is the rent's actual step — ฿15,000 to ฿17,500 is seventeen percent, not fifteen", () => {
+  owner(); G.bar.rentUp = 0; const base = _barRent(); G.bar.rentUp = BAR_RENT_RISE;
+  const pct = Math.round((_barRent() / base - 1) * 100);
+  assert.equal(_barRentUpPct(), pct); assert.notEqual(pct, 15, "the ฿500 rounding makes the step bigger than the constant");
+  G.room = "stinky_bar"; out = []; _doBooks(); assert.match(said(), new RegExp(`up ${pct}% since you opened`));
+});
+
+test("Gordon: the cashier's texts do not ask the boss to bring what no verb can bring", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.doesNotMatch(src, /small notes\. 20s\. bank close at 4 so you bring na/);
+  assert.match(src, /tomorrow i go bank before open for 20s/);
+});
+
+test("Gordon: the close-of-night figure she turns to you is BOOKS' figure, and the line says so", () => {
+  const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-systems.js", import.meta.url)), "utf8");
+  assert.match(src, /writes the figure in the book, and turns it to you — the same figure BOOKS gives you/);
+});
+
+test("Gordon: a toast at the bar he manages never catches the cashier's eye for a chit nobody writes", () => {
+  sandbox(); G.stage = "expat"; G.job = { kind: "manager", room: "stinky_bar" }; G.room = "stinky_bar"; G.soc.selfDrinks = { stinky_bar: 1 };
+  assert.ok(_atJobBar());
+  for (const f of _toastFor("jiap")) assert.doesNotMatch(f.toString(), /chit/);
+  G.job = null; assert.ok(_toastFor("jiap").some(f => /chit/.test(f.toString())), "a customer's drink still has its chit");
+});

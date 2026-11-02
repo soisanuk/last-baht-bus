@@ -356,7 +356,7 @@ test("the landlord raises on success, never on a dead quarter, and the rise is c
     for (let i = 0; i < 95 && !rose; i++) { const t = _night(true); if (/from next month the room is/.test(t)) rose = { day: G.day, t }; }
     assert.ok(rose, "a busy quarter, stood every night, and the daughter stays for a coffee");
     assert.equal(G.bar.rentUp, BAR_RENT_RISE); assert.ok(_barRent() > base);
-    out = []; run("books"); assert.match(said(), /up 15% since you opened/);
+    out = []; run("books"); assert.match(said(), new RegExp(`up ${_barRentUpPct()}% since you opened`)); assert.ok(_barRentUpPct() >= 15, "the step the rent took, read off the rent (round 113)");
     // the alternating operator at list is NOT success — his rent never moves (the measured comfortable middle stays comfortable)
     _owner(); for (let i = 0; i < 95; i++) _night(i % 2 === 0);
     assert.equal(G.bar.rentUp, 0, "half the nights stood at list: ordinary, not busy");

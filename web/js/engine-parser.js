@@ -142,8 +142,9 @@ const _TOAST_LINES = [
 function _toastFor(id) {
   const r = NPC_ROLES[id] || (NPCS[id] && NPCS[id].role);
   const _dry = !((G.soc.selfDrinks || {})[G.room]);   // "clinks the glass against your bottle" with no drink in front of you (Priya, round 58)
+  const _free = _atJobBar();   // the manager's drink is the house's: nobody writes a chit for it, so no toast catches the cashier's eye for one
   return _TOAST_LINES.filter(f => !(r === "mamasan" && /mamasan/.test(f.toString())) && !(r === "cashier" && /cashier/.test(f.toString())) &&
-    !(_dry && /your (bottle|beer)/.test(f.toString())));
+    !(_dry && /your (bottle|beer)/.test(f.toString())) && !(_free && /chit/.test(f.toString())));
 }
 // the guv'nor asking twice is not a punter to be sold a drink ("you forget so fast?
 // buy a drink — maybe it come back", to the owner, about her own mother — Rolf, round 55)
@@ -14234,8 +14235,11 @@ function _doTime() {
     // name the venues: _quizBars() is a pure hash (no dice), and an unfindable
     // quiz is an unplayed one — the optimizer walked 6 bars in-window and hit
     // none (2026-08-22)
-    const qv = (typeof _quizBars === "function" ? _quizBars() : [])
-      .map(r => _barName(r)).filter(Boolean).join(" · ");
+    // never at the bar you own (_quizHere): the venue list said "The Stinky Pinky" to its owner, who stood a shift waiting for it
+    const _ownQ = _barOwned() && G.bar && G.bar.room;
+    const _qb = (typeof _quizBars === "function" ? _quizBars() : []);
+    const qv = _qb.filter(r => r !== _ownQ).map(r => _barName(r)).filter(Boolean).join(" · ") +
+      (_ownQ && _qb.includes(_ownQ) ? " — the third is your own rail, where you are the house, not a team" : "");
     _say(t < 20 ? _fmt(_L("(Quiz night tonight: 20:00–22:00 — {venues} — teachers in from Rayong.)"), { venues: qv || _L("three bars") }) :
       (G.game && G.game.type === "quiz") ? _fmt(_L("(Quiz night is ON right now: {venues}.)"), { venues: qv || _L("three bars, somewhere") }) :
       // …and a man who has played his round has played it (Liam, round 93: "ON right now" after he'd won)
