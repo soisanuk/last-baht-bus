@@ -6033,7 +6033,8 @@ function _morningLedger() {
   const paperN = (G.paperPaid || 0) - (b.paperB != null ? b.paperB : (G.paperPaid || 0));   // the agent's fee, named (Dougal: the envelope "vanished" into it)
   if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");
   const condoN = (G.condoPaid || 0) - (b.condoB != null ? b.condoB : (G.condoPaid || 0));   // the lease's money, named (Victor)
-  if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
+  // labelled by what moved — the lease signed last night — never by the size of the figure
+  if (condoN > 0) bits.push("\u0e3f" + _num(condoN) + " to the condo's office" + (G.condo && G.condo.since === G.day - 1 && condoN >= CONDO_RENT * CONDO_DEPOSIT_MONTHS ? " (the deposit, held, and the first month)" : " (the rent and the electric)"));
   // what left your own pocket for the BAR — its rent, the old man's note, money put in the till — stays on the bar's page
   // (Gordon's doctrine) but is the month's spending all the same (Kaspar, round 101: the month never counted ฿9,252 to the note)
   const pdN = Math.max(0, barDraw - (b.pdB != null ? b.pdB : barDraw)) - (topUp > 0 ? topUp : 0);
@@ -6592,7 +6593,15 @@ function _endNight(reason) {
   G.day++;
   G.jaded = Math.max(0, G.jaded - 1); // a day cools the treadmill one notch
   // a visit from Prachuap ends at its week: the bus home, and the ending's gate again
-  if (G.visitUntil && G.day >= G.visitUntil) { _morningLedger(); _nightSnapshot(); _visitHome(); return; }
+  // like the week's last night: the woman on your arm says goodbye, the room is settled at checkout, the night is
+  // put away (bans, heat, the drink counts, the drunk) so the next visit does not open inside this one
+  if (G.visitUntil && G.day >= G.visitUntil) {
+    if (G.party && G.party.ids && G.party.ids.length) _partyNightEnd(reason);
+    G.checkoutNight = true; try { _chargeRent(false); } finally { G.checkoutNight = false; }
+    _morningLedger(); _nightSnapshot();
+    _resetNightSoc(true); G.hangover = 0;
+    _visitHome(); return;
+  }
   if (G.stage !== "expat" && G.day > 7) {
     // The last night of the week used to be strictly free: this return sits
     // ABOVE the rough-wake block, so the debrief printed "not making it home
@@ -7433,7 +7442,7 @@ function _tillMine() { return (_barOwned() && G.bar) ? Math.max(0, G.bar.cash ||
 function _debtsOwed() {   // what you owe, as MONEY names it: Nira, Nont's loan to the bar, the hotel's book, a loan flown home with
   const nira = G.loan && G.loan.owed > 0 ? G.loan.owed : 0, skipped = G.loanSkippedOwed || 0, hotel = G.hotelDebt || 0;
   const nont = G.bar && G.bar.loan && G.bar.loan.owed > 0 ? G.bar.loan.owed : 0;
-  return nira + skipped + hotel + nont;
+  return nira + skipped + hotel + nont + (G.paperShort || 0);
 }
 function _debtsLine() {
   const parts = [];
@@ -7441,6 +7450,7 @@ function _debtsLine() {
   if (G.loanSkippedOwed > 0) parts.push(`฿${_num(G.loanSkippedOwed)} to Nira from the last trip`);
   if (G.bar && G.bar.loan && G.bar.loan.owed > 0) parts.push(`฿${_num(G.bar.loan.owed)} to Nont against the bar`);
   if (G.hotelDebt > 0) parts.push(`฿${_num(G.hotelDebt)} on the hotel's book`);
+  if (G.paperShort > 0) parts.push(`฿${_num(G.paperShort)} to the visa agent, with the next payday`);
   return parts.length ? `Owed: ${parts.join("; ")} — not counted as yours.` : "";
 }
 // ── THE PAPER AND THE JOBS (Mario, 2026-10-20) — see PAPER_COST in world.js for the doctrine ──
@@ -7597,7 +7607,7 @@ function _stringerPay() {
 function _quitJob() {
   if (!G.job) { _say("You have no job to quit, which is either freedom or the problem."); return; }
   // what the mornings or the nights have earned so far is paid on the way out, never forfeit by quitting
-  const owed = _jobPay(), j = G.job; G.job = null; if (j.kind === "manager") G.jobQuit = { room: j.room, day: G.day };   // the floor notices (Renata, round 100)
+  const owed = _jobPay(true), j = G.job; G.job = null; if (j.kind === "manager") G.jobQuit = { room: j.room, day: G.day };   // the floor notices (Renata, round 100)
   if (owed > 0) {
     if (j.kind === "manager" && !j.corp) G.envelopeDue = { amt: owed + (G.envelopeDue && G.envelopeDue.room === j.room ? G.envelopeDue.amt : 0), room: j.room, day: G.day, nights: j.stood || 0 };
     else { _bankIn(owed); (G.bankNotes = G.bankNotes || []).push(j.kind === "teach" ? "the platform, the mornings you held" : j.kind === "school" ? "the school, the days you taught" : `${_barName(j.room)}'s salary, the nights you stood`); }
@@ -7745,10 +7755,14 @@ function _jobNight() {
     j.weekStart = G.day; j.weekStood = 0;
   }
 }
-function _jobPay() {   // the month's share, on the payday: what the nights earned
+// the month's share, on the payday: what the nights earned; atQuit, what the days since the last payday earned
+function _jobPay(atQuit) {
   const j = G.job; if (!j) return 0;
   // a job taken mid-month is paid for the days held on its first payday, not the whole month (review 2026-10-25: one day = ฿28,000)
-  const _part = j.firstPaid ? 1 : Math.min(1, Math.max(0, (G.day - (j.since != null ? j.since : G.day)) / INCOME_DAYS));
+  // and a quit is paid for the days since the later of the start and the last payday, never a whole month again
+  const _since = j.since != null ? j.since : G.day;
+  const _from = atQuit ? Math.max(_since, G.payDay != null ? G.payDay : _since) : _since;
+  const _part = j.firstPaid && !atQuit ? 1 : Math.min(1, Math.max(0, (G.day - _from) / INCOME_DAYS));
   if (j.kind === "teach") return Math.round(TEACH_PAY * _roughFactor() * _part / 100) * 100;
   if (j.kind === "school") return Math.round(SCHOOL_PAY * _part / 100) * 100;
   const need = Math.max(1, Math.round(j.nights * INCOME_DAYS / 7)), frac = Math.min(1, (j.stood || 0) / need);
@@ -7853,28 +7867,34 @@ function _doMoveOut() {
       : `The lease has run its term: hand the key back and the ฿${_num(c.deposit)} deposit comes back to the account, the office permitting; your bag goes to the Sabai Palms. (MOVE OUT again if you mean it.)`);
     return;
   }
-  const _owed = (c.short || 0) * (CONDO_RENT + CONDO_UTIL);   // a short month is collected from the deposit (review 2026-10-25: MOVE OUT returned it all)
+  const _owed = _condoOwed(c);   // a short month is collected from the deposit (review 2026-10-25: MOVE OUT returned it all)
   if (!kept) { const back = Math.max(0, c.deposit - _owed); G.bank = (G.bank || 0) + back; _bankIn(0); if (_owed) _say(`(The office takes the ฿${_num(Math.min(_owed, c.deposit))} you were short out of the deposit first.)`, "dim"); }
   G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
   if (kept) (G.ledgerNotes = G.ledgerNotes || []).push(`the condo's ฿${_num(c.deposit)} deposit kept by the office, inside the lease`);   // on the ledger by name, though no money moved that night (Renata)
   _say(kept ? `You give the key back inside the lease, and the office keeps the ฿${_num(c.deposit)} deposit the way the lease said it would, with a smile. Your bag makes its own way to the Sabai Palms.`
     : `The lease ran its term. The office counts the tiles, finds nothing, and the ฿${_num(c.deposit)} deposit lands back in the account a week later than it said. Your bag makes its own way to the Sabai Palms.`);
 }
+// what the office's book holds against you: the amount that was due and not paid, never a count of whole months
+// (a save from before the book was kept carries only the count, priced as the months it counted)
+function _condoOwed(c) { return !c ? 0 : c.owed > 0 ? c.owed : (c.short || 0) * (CONDO_RENT + CONDO_UTIL); }
 function _condoMonth() {   // on the payday: the rent and the electric; short twice and the bag is at the Sabai, the deposit the landlord's
   if (G.hotel !== "condo" || !G.condo) return "";
   // the advance paid the first month: a lease signed less than a month before the payday is billed only the electric
   // that payday, not the rent a second time (review 2026-10-25); a short month owed is collected with the next one
   const _fresh = G.condo.since != null && G.day - G.condo.since < INCOME_DAYS && !G.condo.billedOnce;
-  const due = (_fresh ? 0 : CONDO_RENT) + CONDO_UTIL + (G.condo.short || 0) * (CONDO_RENT + CONDO_UTIL); const have = (G.money || 0) + (G.bank || 0);
+  const due = (_fresh ? 0 : CONDO_RENT) + CONDO_UTIL + _condoOwed(G.condo); const have = (G.money || 0) + (G.bank || 0);
   G.condo.billedOnce = true;
   if (have >= due) {
     const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due;
     // (the new month is seeded with this rent after the reset in _incomeTick; writing it here too counted it in both — review 2026-10-25)
     if (false && G.month) { G.month.rent = (G.month.rent || 0) + due; G.month.spent = (G.month.spent || 0) + due; }   // the payday's rent is the new month's room AND its spending — "฿0 spent, ฿11,000 of it the room" (Renata)
+    const _was = _condoOwed(G.condo);
     if (G.condo.short) G.condo.short = 0;
+    G.condo.owed = 0;
     G.condo.lastDue = due;
-    return _fresh ? ` The condo: ฿${_num(CONDO_UTIL)} electric — the advance you paid at the desk was this month's rent.` : ` The condo: ฿${_num(CONDO_RENT)} rent and ฿${_num(CONDO_UTIL)} electric${due > CONDO_RENT + CONDO_UTIL ? `, and the month you were short, collected` : ""}.`;
+    return _fresh ? ` The condo: ฿${_num(CONDO_UTIL)} electric — the advance you paid at the desk was this month's rent.${_was ? ` And the ฿${_num(_was)} you were short, collected.` : ""}` : ` The condo: ฿${_num(CONDO_RENT)} rent and ฿${_num(CONDO_UTIL)} electric${_was ? `, and the ฿${_num(_was)} you were short, collected` : ""}.`;
   }
+  G.condo.owed = due;
   G.condo.short = (G.condo.short || 0) + 1;
   if (G.condo.short >= CONDO_GRACE) {
     const c = G.condo; G.condo = null; G.hotel = "sabai"; G.room = _hotelRoomId();
@@ -8020,7 +8040,9 @@ function _incomeTick() {
   // the agent's line: the paper costs what it costs, offstage
   const pc = PAPER_COST[_paper()] || 0; let paperLine = "";
   // the agent is paid what was there, and the rest is owed and said: it was booked as paid with an empty pocket (review 2026-10-25)
-  if (pc > 0) { let took = pc; if ((G.bank || 0) >= pc) G.bank -= pc; else { const r = pc - (G.bank || 0); G.bank = 0; const fromPocket = Math.min(r, G.money || 0); G.money -= fromPocket; took = pc - (r - fromPocket); } G.paperPaid = (G.paperPaid || 0) + took; if (took < pc) G.paperShort = (G.paperShort || 0) + (pc - took); paperLine = took < pc ? ` The agent's ฿${_num(pc)} for ${_paperWord(_paper())} — ฿${_num(took)} of it paid; he has noted the ฿${_num(pc - took)} he is owed.` : ` The agent's ฿${_num(pc)} for ${_paperWord(_paper())}.`; }
+  // what he noted last month is collected with this month's fee, and what is still short is noted again (a debt MONEY names)
+  const back = G.paperShort || 0, ask = pc + back;
+  if (ask > 0) { let took = ask; if ((G.bank || 0) >= ask) G.bank -= ask; else { const r = ask - (G.bank || 0); G.bank = 0; const fromPocket = Math.min(r, G.money || 0); G.money -= fromPocket; took = ask - (r - fromPocket); } G.paperPaid = (G.paperPaid || 0) + took; G.paperShort = ask - took; const fee = pc > 0 ? `The agent's ฿${_num(pc)} for ${_paperWord(_paper())}` : "The agent"; paperLine = took < ask ? ` ${fee}${back ? `, and the ฿${_num(back)} he had noted` : ""} — ฿${_num(took)} of it paid; he has noted the ฿${_num(ask - took)} he is owed.` : ` ${fee}${back ? `${pc > 0 ? ", and" : ":"} the ฿${_num(back)} he had noted from before, collected` : ""}.`; }
   // the job's share: the platform and a company bar pay into the account; a beer bar's envelope is notes in the hand
   let jobLine = "";
   if (G.job) {
@@ -8033,7 +8055,7 @@ function _incomeTick() {
       if (!j.paidOnce && G.day - (j.since || G.day) >= INCOME_DAYS - 2) { j.paidOnce = true; if (_paper() !== "permit") { G.paper = "permit"; G.paperUntil = null; G.thaiAccount = true; jobLine += " And its paper came through: a work permit in your name, a bank book with it."; } }
     }
     else if (j.corp) { if (jp > 0) { _bankIn(jp); G.bankNotes.push(`${_barName(j.room)}'s salary, through the company`); } jobLine = ` ${_barName(j.room)} paid ฿${_num(jp)} through the books for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }
-    else { if (jp > 0) G.envelopeDue = { amt: jp, room: j.room, day: G.day, nights: j.stood }; jobLine = jp > 0 ? ` ${_barName(j.room)}'s envelope — ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"} — is at the bar; the house hands it over when you are next behind the rail.` : ` ${_barName(j.room)}'s envelope: nothing for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }   // the envelope waits where the work was (Renata, round 100: it landed in his pocket at the condo)
+    else { if (jp > 0) { const _prev = G.envelopeDue && G.envelopeDue.room === j.room ? G.envelopeDue : null; G.envelopeDue = { amt: jp + (_prev ? _prev.amt : 0), room: j.room, day: G.day, nights: j.stood + (_prev ? _prev.nights || 0 : 0) }; } jobLine = jp > 0 ? ` ${_barName(j.room)}'s envelope — ฿${_num(jp)} for ${j.stood} night${j.stood === 1 ? "" : "s"} — is at the bar; the house hands it over when you are next behind the rail.` : ` ${_barName(j.room)}'s envelope: nothing for ${j.stood} night${j.stood === 1 ? "" : "s"}.`; j.stood = 0; }   // the envelope waits where the work was (Renata, round 100: it landed in his pocket at the condo)
   }
   // the condo's month comes out before the digest counts what is left, or the count is the rent too high
   const condoLine = _condoMonth();

@@ -13069,11 +13069,11 @@ function _doPay(arg) {
   // PAY CONDO / PAY THE OFFICE / PAY RENT at the tower: a month the payday went short is paid at the office, which
   // used to be nobody's to take (Kaspar, round 101: "Nobody's waiting to be paid", then the lock)
   if (G.condo && (G.condo.short || 0) > 0 && (/\b(condo|office|flat|apartment|juristic)\b/.test(arg || "") || (/\brent\b/.test(arg || "") && !(_atOwnBar())) || _inCondo() || G.room === "pratumnak_soi5")) {
-    const due = CONDO_RENT + CONDO_UTIL, have = (G.money || 0) + (G.bank || 0);
+    const due = _condoOwed(G.condo), have = (G.money || 0) + (G.bank || 0);
     if (have < due) { _say(`The office wants ฿${_num(due)} for the month that went short, and you have ฿${_num(have)} between the pocket and the account.`); return; }
-    const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due; G.condo.short = 0;
+    const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due; G.condo.short = 0; G.condo.owed = 0;
     if (G.month) { G.month.spent = (G.month.spent || 0) + due; G.month.rent = (G.month.rent || 0) + due; }
-    _say(`฿${_num(due)} across the office counter — the rent and the electric for the month that went short. The woman tears the note off the pad and the book is square. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+    _say(`฿${_num(due)} across the office counter — what the month that went short left on the book. The woman tears the note off the pad and the book is square. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
     return;
   }
   // A LANDLORD WHO WILL NOT TAKE YOUR MONEY. He comes to the bar in person to

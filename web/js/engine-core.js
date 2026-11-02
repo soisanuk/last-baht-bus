@@ -796,10 +796,11 @@ function _gateCarries(id) { return !!(GATES[id] && GATES[id].carry); }
 // the nightly G.soc keys _endNight does not reset by hand, reset by type at dawn (salengBar and steered were never reset:
 // three carts a night became three a trip — the architecture review, 2026-10-25)
 let _SOC_HAND_RESET = null;
-function _resetNightSoc() {
+// all: every socNight key, the ones _endNight resets by hand too — for a night that ends without passing through them
+function _resetNightSoc(all) {
   if (!_SOC_HAND_RESET) _SOC_HAND_RESET = new Set([..._endNight.toString().matchAll(/G\.soc\.([a-zA-Z_]\w*) = /g)].map(m => m[1]));
   for (const k of STATE_SCHEMA.socNight) {
-    if (_SOC_HAND_RESET.has(k)) continue;
+    if (!all && _SOC_HAND_RESET.has(k)) continue;
     const v = G.soc[k]; if (v === undefined) continue;
     G.soc[k] = Array.isArray(v) ? [] : v && typeof v === "object" ? {} : typeof v === "number" ? 0 : typeof v === "boolean" ? false : null;
   }
@@ -1722,7 +1723,7 @@ function _chargeRent(rough) {
   const _monthRoom = (n) => { if (G.stage === "expat" && G.month) { G.month.rent = (G.month.rent || 0) + n; G.roomNight = (G.roomNight || 0) + n; } };   // roomNight: the ledger counts the room into the month's spend even on a night that was "up" (Kaspar, round 101: "฿1,080 spent, ฿1,350 of it the room")   // the month's book counts what was PAID for the room (Dougal, round 97: "฿2,160 of it the room" from a book at its cap)
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
-    _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
+    _say(`(${G.checkoutNight ? `Checkout: the last night settled at the desk on the way to the ${G.visitUntil ? "bus" : "taxi"}` : rough ? "The folio is waiting at the desk when you finally get back" :
       "The folio slides under the door"}: ฿${_num(_hotelRate(G.hotel))}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
       `, the ${_HOTELS[G.hotel].name}. ฿${_num(G.money)} left.)`, "dim");

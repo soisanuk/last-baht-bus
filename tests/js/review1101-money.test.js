@@ -142,3 +142,58 @@ test("S1-10: DRAW and PUT IN TILL read the amount typed — half, 1.5k — and a
   G.money = 3000; t("put 1.5k in till"); assert.equal(G.bar.cash, 21500); assert.equal(G.money, 1500);
   t("draw"); assert.equal(G.bar.cash, 0, "a bare DRAW is still the whole drawer");
 });
+
+const expat = (money = 0) => { sandbox(); _goExpat(); G.money = money; G.bank = 0; out = []; };
+
+test("S2-4: QUIT JOB after a payday pays the days since that payday, never a whole month again", () => {
+  expat(); G.payDay = G.day; G.room = _hotelRoomId(); t("teach online");
+  G.day = G.payDay + 29; sleep();
+  assert.ok(G.job.firstPaid, "the first payday has been");
+  const b0 = G.bank; t("quit job");
+  assert.equal(G.bank - b0, 0, "quitting on the evening of a payday paid a month for no mornings");
+  // ten mornings on, a third of the month
+  expat(); G.payDay = G.day; G.room = _hotelRoomId(); t("teach online"); G.day = G.payDay + 29; sleep();
+  G.day = G.payDay + 10; const b1 = G.bank; t("quit job");
+  assert.ok(G.bank - b1 > 0 && G.bank - b1 <= Math.round(TEACH_PAY / 3 / 100) * 100 + 100, `paid ${G.bank - b1}`);
+});
+
+test("S2-5: a cash manager's envelope left at the bar adds the next payday's to it; it is never overwritten", () => {
+  expat();
+  G.job = { kind: "manager", room: "candy_bar", corp: false, prem: false, nights: MGR_CASH_NIGHTS, stood: 16, weekStood: 0, weekStart: G.day, strikes: 0, since: G.day, shiftDay: null, shiftStood: 0 };
+  G.payDay = G.day; G.day = G.payDay + 29; sleep();
+  const first = G.envelopeDue.amt; assert.ok(first > 0);
+  G.job.stood = 16; G.day = G.payDay + 29; sleep();
+  assert.equal(G.envelopeDue.amt, first * 2, "the first month's envelope vanished");
+  assert.equal(G.envelopeDue.nights, 32);
+});
+
+test("S2-6: a short first condo month owes what was due (the electric), not a month of rent; the ledger labels by what moved", () => {
+  expat(); G.day = 20; G.payDay = 0; G.room = "pratumnak_soi5"; G.money = CONDO_RENT * 3; G.bank = 0;
+  t("rent a condo"); t("rent a condo"); assert.equal(G.hotel, "condo");
+  G.day = 29; sleep();
+  assert.equal(G.condo.short, 1);
+  G.day = 59; G.bank = 100000; G.money = 0; const b0 = G.bank, paper = (PAPER_COST[_paper()] || 0) + (G.paperShort || 0); sleep();
+  assert.equal(b0 - G.bank - paper, CONDO_RENT + 2 * CONDO_UTIL, "the short month was collected as a month of rent");
+  assert.doesNotMatch(ledger(), /the deposit, held/, "a payday labelled the deposit by its size");
+});
+
+test("S2-7: the visa agent's unpaid fee is a debt MONEY names, and the next payday collects it", () => {
+  expat(); G.payDay = G.day - 29; sleep();
+  const owed = G.paperShort; assert.ok(owed > 0);
+  assert.ok(_debtsOwed() >= owed); assert.match(_debtsLine(), /visa agent/);
+  G.bank = 50000; G.payDay = G.day - 29; const b0 = G.bank, pc = PAPER_COST[_paper()] || 0; sleep();
+  assert.equal(G.paperShort, 0); assert.ok(b0 - G.bank >= pc + owed);
+  assert.match(said(), new RegExp(`the ฿${_num(owed)} he had noted from before, collected`));
+});
+
+test("S2-8: the visit's last night is put away — the room billed at checkout, the next visit opens clean", () => {
+  sandbox(); G.money = 5000; G.stage = "expat"; G.payDay = G.day; _gameEnd("sold"); t("visit pattaya");
+  G.day = G.visitUntil - 1;
+  G.soc.banned = { stinky_bar: true }; G.soc.heat = { stinky_bar: 9 }; G.soc.lockIn = { x: true }; G.soc.drinkCount = { lek: 3 }; G.soc.drunk = 6; G.soc.helloed = { lek: 1 };
+  const m0 = G.money; sleep();
+  assert.equal(G.pendingChoice, "gameend");
+  assert.ok(G.money < m0, "the last night's room was never billed");
+  assert.match(said(), /on the way to the bus/);
+  t("visit pattaya");
+  assert.deepEqual([G.soc.banned, G.soc.heat, G.soc.lockIn, G.soc.drinkCount, G.soc.drunk, G.soc.helloed], [{}, {}, {}, {}, 0, {}]);
+});
