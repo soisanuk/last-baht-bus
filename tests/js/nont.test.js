@@ -76,7 +76,7 @@ test("one transfer in six has a moment, and lands at the next wake", () => {
       assert.equal(G.money, 5000, "no notes tonight"); assert.equal(G.bank, 49000, "the account is down");
       assert.equal(G.nontStuck, 950);
       G.room = "hotel_room"; G.money = 5000; out = []; _endNight("sleep");
-      landed = /sorted/.test(text()) && G.bank === 49000 + 950 - 0 && G.nontStuck === 0;   // it lands in the ACCOUNT (Piotr)
+      landed = /“done\.”/.test(text()) && G.bank === 49000 + 950 - 0 && G.nontStuck === 0;   // it lands in the ACCOUNT (Piotr)
     }
   }
   assert.ok(stuckSeen, "the hash makes it happen within forty nights");

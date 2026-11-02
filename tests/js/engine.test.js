@@ -4785,7 +4785,7 @@ test("no barfining the mamasan, and heat freezes negotiations", () => {
   state().soc.drinks.fon = 5;
   state().soc.heat.jasmine_garden = 1;
   run("barfine fon");
-  assert.match(lastOut(), /Not tonight, tilac/i);
+  assert.match(lastOut(), /Not tonight, na/i);
   assert.equal(state().day, 2);
 });
 
@@ -5270,7 +5270,7 @@ test("the period reveal comes AFTER the fine — and the mama is right there", (
   run("complain");
   assert.equal(state().money, 5000, "refunded on the spot");
   assert.equal(state().bfIncident, null);
-  assert.match(lastOut(), /Not morality, tilac. Business/i);
+  assert.match(lastOut(), /Not morality, na. Business/i);
 });
 
 test("the bar-hop: NO buys back your night; YES-YES drains the wallet into her friends' tills", () => {
