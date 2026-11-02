@@ -6610,6 +6610,8 @@ function _endNight(reason) {
     // flight home and fired a month later, after he slept alone (Dieter, round 56)
     if (G.chamNight) {
       G.chamNight = false;
+      // the morning that never came is still the night that did: she has gone home with him, and remembers it
+      _setFlag("chamDone"); G.chamLast = { day: G.day, gift: 0 };
       _say("She is gone before you are properly awake — a bun, a bag, the door closing softly, " +
         "\"bus ten to eight\" said to the room. There is a coffee on the side table she must have " +
         "gone down for. She asked for nothing, and there is no morning left to offer her anything in.", "room");

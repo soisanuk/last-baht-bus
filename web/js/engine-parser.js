@@ -12479,6 +12479,8 @@ const _LOOP_EXPAT = [
     "colleagues. At your stop he says, \"Same time tomorrow,\" as if you'd agreed to " +
     "something. In a way you can't name, you have.",
 ];
+// the bench fare is a seat a head: you and whoever is on your arm. Read by the loop, the named stop and the fare it asks.
+function _busFare() { return BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)); }
 function _rideLoop() {
   // The whole circuit, ~forty minutes of town: paid in real ticks, TRAVEL-style
   const startDay = G.day, g0 = G;
@@ -12493,7 +12495,7 @@ function _rideLoop() {
     G.loopDay = G.day;
     _addHappy(2); // non-jading — the spectator family (WATCH SOI, the cats, the hill)
   }
-  G.pendingFare = { kind: "bus", price: BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)), dest: G.room };   // her fare too (Ingrid, round 62)
+  G.pendingFare = { kind: "bus", price: _busFare(), dest: G.room };   // her fare too (Ingrid, round 62)
   // the quote is what he charges: two heads are two fares (Anil, round 64 — ฿15 said, ฿30 taken)
   const _fq = G.pendingFare.price;
   _say(`Back where you flagged it, one whole town later. The driver leans out: “${thaiBaht(_fq)}”` + (_fq > BUS_FARE ? ` — and nods at your company. One fare a head.` : ""), "thai");
@@ -12629,8 +12631,9 @@ function _doRideBus(arg) {
         "Ride in to the Pattaya Tai junction and pick it up there.");
       return;
     }
-    if (G.money < BUS_FARE) {
-      _say(`The loop costs what any ride costs — ฿${_num(BUS_FARE)} — and you have ฿${_num(G.money)}. ` +
+    // refused before it starts, as the named stop is: a fare he cannot pay at the end was a free lap through WALK
+    if (G.money < _busFare()) {
+      _say(`The loop costs what any ride costs — ฿${_num(_busFare())}${_busFare() > BUS_FARE ? ", a seat a head" : ""} — and you have ฿${_num(G.money)}. ` +
         "The breeze, tragically, is not self-financing.");
       return;
     }
@@ -12708,14 +12711,14 @@ function _doRideBus(arg) {
       _say("(Or stay on and RIDE THE LOOP — the whole circuit, just for the breeze.)", "dim");
     return;
   }
-  if (G.money < BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0))) {   // a seat a head: the check read one seat and the fare gate then wedged (review 2026-10-25)
+  if (G.money < _busFare()) {   // a seat a head: the check read one seat and the fare gate then wedged (review 2026-10-25)
     _say(`You flag a bus and climb on… then remember. ฿${_num(G.money)} in your pocket, ` +
-      `and the fare is ฿${_num(BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)))}. You climb off to the driver's eternal, silent judgement.` +
+      `and the fare is ฿${_num(_busFare())}. You climb off to the driver's eternal, silent judgement.` +
       ((!_flag("act1Done") && G.phone && G.phone.contacts && G.phone.contacts.tan)
         ? " (Your phone still has one number in it — CALL TAN.)" : ""));
     return;
   }
-  G.pendingFare = { kind: "bus", price: BUS_FARE * (1 + ((G.party && G.party.ids && G.party.ids.length) || 0)), dest };
+  G.pendingFare = { kind: "bus", price: _busFare(), dest };
   if (G.soc.drunk >= 7) _say(_pickVary(_BUS_DRUNK_BENCH, "busbench"), "dim");
   // Boarding: at a waiting area the queue is the system; mid-route he swerves in.
   if (_BUS_WAITING.has(G.room)) {
@@ -13102,11 +13105,14 @@ function _doPay(arg) {
 
   if (amount === null || Number.isNaN(amount)) {
     _say(`He repeats, slower, the universal way: “${thaiBaht(price)}”. A number would help.`, "thai");
+    // a non-answer at the fare leaves it up and costs no turn
+    _moveRefused = true;
     return;
   }
-  if (amount > G.money) { _say(`You don't have ฿${_num(amount)}.`); return; }
+  if (amount > G.money) { _say(`You don't have ฿${_num(amount)}.`); _moveRefused = true; return; }
   if (amount < price) {
     _say(`He looks at the coins, then at you: “${thaiBaht(price)}!” Not a negotiation.`, "thai");
+    _moveRefused = true;
     return;
   }
   if (amount > price) {
@@ -19348,6 +19354,8 @@ function _doCommandInner(input) {
     // "tip rung 100" became a wave-off and the tip never happened)
     { const _r = _ENC[enc](lower);
       if (_r === "passthrough") { doCommand(raw); return; }
+      // a non-answer the encounter re-armed itself for: the question is still up, and it cost no turn
+      if (_r === "reprompt") return;
       if (_r === "hold") {   // the offer stands: the command runs, and the question is still on the table
         const d0 = G.day; doCommand(raw);
         if (G.day === d0 && !G.pendingEnc && !G.pendingChoice && !G.game) G.pendingEnc = enc;
@@ -19498,6 +19506,8 @@ function _doCommandInner(input) {
   if (G.pendingFare && G.money < (G.pendingFare.price || 0) && /^(?:walk|get off|off|leave|no|cancel|climb off|jump off)\b/.test(lower)) {
     G.pendingFare = null; _say("You climb back down. The driver shrugs at the road; somebody else will pay to sit there."); return;
   }
+  // "i won't pay" / "i don't have it" are sentences to the driver, not INVENTORY: they get his prompt, not the parser's miss
+  if (G.pendingFare && (_isRefusal(lower) || ((v === "i" || v === "inventory") && arg))) { _farePrompt(); return; }
   if (G.pendingFare && !["pay", "look", "l", "help", "i", "inventory", "say", "journal", "notes", "diary", "quests", "hint", "time"].includes(v)) {   // the notes are the one thing you want mid-modal (Ines, round 47)
     _farePrompt();
     return;
