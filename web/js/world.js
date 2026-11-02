@@ -20700,6 +20700,10 @@ const SOI6_INNER_GIRLS = {
     look: "Thai woman of forty-four, tanned arms, vine tattoo up one wrist, hair in a loose knot, motherly half-smile.",
     desc: "Forty-four, motherly, a vine tattooed up one wrist. She is the reason men end up in the Ladybird on their third night: by then they are tired of being grabbed, and she has never grabbed anybody in her life.",
     dialogue: [
+      // the diagnosis waits for the third night — on the second it is the clock talking (Keith, round 113)
+      { th: "สวัสดีค่ะ", rom: "sawatdee kha", when: (st, G) => G.day < 3,
+        text: "\"Early.\" She says it before you sit, kindly, as if she approves of it. \"Most men find the Ladybird on the third night, when the soi has shouted at them enough. You come before the shouting. Sit — I just sit. Maybe later something else.\"",
+        short: "\"Early. Most men find us the third night. Sit — I just sit.\"" },
       { th: "สวัสดีค่ะ", rom: "sawatdee kha",
         text: "\"Third night?\" She says it before you sit, kindly, as if diagnosing a cold. \"I can tell — your shoulders. Men come to the Ladybird when the soi has shouted at them for two nights. They want somebody who does not shout.\" She pulls out the stool. \"Sit. I just sit. Maybe later something else.\"",
         short: "\"Third night? I can tell. Sit — I just sit. Maybe later something else.\"" },
@@ -20925,6 +20929,9 @@ function _somoTeam(v) {
   const t = String(v || "").toLowerCase().split(/[,;.!?]| but | though | although /)[0].replace(/^(i support|i follow|i'?m|im|my team is|my team'?s|support|follow)\s+/, "").replace(/^the\s+/, "").trim();   // "Geelong Cats, but that's Aussie rules" is Geelong Cats (Kevin, round 84)
   const T = t.split(/\s+/).map(w => w ? w[0].toUpperCase() + w.slice(1) : w).join(" ").slice(0, 40);
   if (/\b(liverpool|lfc|the reds|reds|kop|anfield)\b/.test(t)) return "\"Liverpool!\" Somo hits the bar with the flat of her hand. \"Right answer. Cold one for you.\" She means the beer you already have. She means it anyway.";
+  // a woman who learned the game off the English channel and her uncle's taxi radio knows the old names — before 'united' reads Leeds United as Manchester's
+  if (/\b(leeds|west ham|hammers|wolves|wolverhampton|forest|nottingham|sunderland|sheffield|boro|middlesbrough|burnley|palace|brighton|fulham|southampton|leicester|bolton|blackburn|ipswich|norwich|derby|stoke|leeds united)\b/.test(t))
+    return `"${T}." Somo nods slowly, the way she nods at a result she expected. "I know them. Uncle's radio, Saturday — the man say ${T}, always, with the voice." A grin. "Not Liverpool. But a proper club. Cold one for you."`;
   if (/\b(everton|toffees)\b/.test(t)) return "\"Everton?\" Somo looks at you with real sympathy. \"Wrong side of the park, my friend. Warm one for you.\" She doesn't, quite.";
   if (/\b(man u|man utd|manchester united|united|red devils)\b/.test(t)) return "\"United.\" A slow, theatrical sigh from Somo. \"Warm one. Room temperature. You deserve.\" She is laughing before she has finished saying it.";
   if (/\b(chelsea|arsenal|gunners|spurs|tottenham|man city|manchester city|city|newcastle|villa|aston villa)\b/.test(t)) return `"${T}?" Somo makes a face like the beer turned. "Wrong answer. Warm one for you, na." She laughs before you can.`;

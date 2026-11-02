@@ -649,6 +649,17 @@
      "lens": "the-gossip"
     }
    ]
+  },
+  "round113": {
+   "date": "2026-11-02",
+   "note": "the Fable third on the merged tree of the three November reviews (code review, engine prose, dialogue walk): one blind persona through the Soi 6 week with a voice lens — every line heard at the table in the order the game deals them; Opus and Sonnet follow on next week's allowance",
+   "personas": [
+    {
+     "name": "Keith",
+     "model": "fable",
+     "lens": "reads-every-line-aloud"
+    }
+   ]
   }
  }
 }

@@ -188,7 +188,8 @@ test("the Peach, the two doors, the tiki and the count agree with themselves", (
   for (const [id, i] of [["peach_lounge_noot", 11], ["firecracker_bar_pang", 11], ["sweet_tamarind_tukta", 10]]) assert.doesNotMatch(NPCS[id].dialogue[i].text, /night ago/, id);
 });
 test("Somsri's and Mint's shorts keep their own grammar, and the Firecracker's water is a verb, not a gift", () => {
-  const som = NPCS.ladybird_bar_somsri.dialogue; assert.match(som[6].short, /wife plant\. He come/); assert.match(som[7].short, /If he come out/); assert.match(som[5].text, /\{\{phone\}\}/);
+  const som = NPCS.ladybird_bar_somsri.dialogue.filter(d => d.topic || !d.when);   // the early-night hello (round 113) sits before these
+  assert.match(som[6].short, /wife plant\. He come/); assert.match(som[7].short, /If he come out/); assert.match(som[5].text, /\{\{phone\}\}/);
   assert.match(NPCS.peach_lounge_mint.dialogue[0].short, /I am the one who notice/); assert.doesNotMatch(NPCS.peach_lounge_mint.dialogue[3].text, /how a village works/);
   const nam = NPCS.firecracker_bar_namtan.dialogue[0]; assert.match(nam.text, /\(DRINK WATER\)/); assert.doesNotMatch(nam.text, /puts a bottle in front of you/);
   sandbox(); G.nightTurn = 40; G.room = "firecracker_bar"; const m = G.money; t("drink water"); assert.ok(G.money < m, "the water is charged, as the prose now lets it be");

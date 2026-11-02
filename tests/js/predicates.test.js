@@ -81,6 +81,7 @@ const MUST_CONSULT = {
   // for every purpose the room has.
   "G.party": [
     { fn: "_bfResolve", why: "the jilt loop — a regular of yours souring must not count the girl you are WITH" },
+    { fn: "_doBuy", why: "the lady-drink line: a drink for the woman on your arm is not 'a smile calibrated to ฿150' (Keith, round 113)" },
     { fn: "_describeRoom", why: "the Here: line — she is standing there" },
     { fn: "_doBarfine", why: "the ledger only sells you another companion" },
     { fn: "_nursed", why: "her drinks are on the chit; nobody pitches a lady drink across her" },

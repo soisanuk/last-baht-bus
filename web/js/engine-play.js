@@ -3429,11 +3429,21 @@ const _LADYBOY_PASS_CAB = [
   n => _fmt("{n} receives the flirt, holds it up to the light like a tipped note, and hands it to the room: \"He is FLIRTING with me, everybody!\" The crowd roars. \"Tilac, you are adorable, and you are also a tourist in more ways than one, na.\" She pats your cheek, precise as choreography. \"Stay for the show. THAT part is for you.\"", { n }),
   n => _fmt("A beat, an eyebrow, and {n} reads you all the way down — the curiosity, the beer, the vacation — and grades it kindly. \"You don't want what you think you might want, tilac. Is okay. Half this room came in not sure and they are having the best night of the year.\" She points your drink at the stage like a compass needle. \"Watch. Cheer. Tip. That is your part, and you will be wonderful at it.\"", { n }),
 ];
+// She said it at hello, so nobody would feel stupid later — a pass that then asks
+// "you didn't know?" makes her forget her own opening (Keith, round 113: Poy).
+const _LADYBOY_PASS_TOLD = [
+  n => _fmt("{n} does not need to read your face this time. \"I told you at hello, na. So nobody feel stupid.\" A small shrug, no hurt in it. \"You are not stupid. You are just not my customer. The ladies are that way.\"", { n }),
+  n => _fmt("\"Mm. I said it first thing, remember?\" {n}, gently, already turning it into nothing. \"Is okay. Nobody surprised, nobody angry. That is the whole point of saying it.\" She nods you toward the ladies.", { n }),
+  n => _fmt("A soft laugh. \"You forget already? I tell you at hello.\" {n} pats the stool as if keeping it warm for somebody else. \"Both okay, I said. Still both okay.\"", { n }),
+];
+function _ladyboyToldAtHello(id) {
+  return _met(id) && (NPCS[id].dialogue || []).some(d => !d.topic && /\b(ladyboy|kathoey)\b/i.test(d.text || ""));
+}
 function _ladyboyGate(id) {
   if (!NPCS[id] || !NPCS[id].ladyboy) return false; // not a ladyboy → proceed
   if (_orient("bi")) return false; // open mind → a real option
   const cab = _queerVenue();
-  _say(_pickVary(cab ? _LADYBOY_PASS_CAB : _LADYBOY_PASS, "lbpass")(NPCS[id].name));
+  _say(_pickVary(cab ? _LADYBOY_PASS_CAB : _ladyboyToldAtHello(id) ? _LADYBOY_PASS_TOLD : _LADYBOY_PASS, "lbpass")(NPCS[id].name));
   return true;                                       // straight player: a gracious pass
 }
 

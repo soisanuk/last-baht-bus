@@ -11584,11 +11584,15 @@ const _NOT_TONIGHT = [
 // Sniping the girl a regular was attending: pooled, because the moment repeats
 // across nights and printed verbatim three times in one blind week (closer
 // playtest F10, 2026-08-26)
+// `s` is how long he has been at it — "all evening" at twenty to seven is a clock the game
+// did not show, so the caller passes _snipeSince(). The heat line that follows already
+// reads the room's temperature; these lines leave the thermometer to it.
 const _SNIPE_LINES = [
-  n => `Down the bar, the regular who has been buying ${n} drinks all evening goes very still over his Chang. Bad form, and every lady in the room clocked it.`,
-  n => `The man who has been keeping ${n} in colas all night sets his bottle down with exaggerated care and looks at a spot just past your head. The room's temperature moves one degree, all in your direction.`,
-  n => `${n} takes it with a professional smile, and the regular she was sitting with becomes very interested in the football. Nobody says anything. Everybody noticed.`,
+  (n, s) => `Down the bar, the regular who has been buying ${n} drinks ${s} goes very still over his Chang. Bad form, and every lady in the room clocked it.`,
+  (n, s) => `The man who has been keeping ${n} in colas ${s} sets his bottle down with exaggerated care and looks at a spot just past your head. He does not look at you. He does not need to.`,
+  (n, s) => `${n} takes it with a professional smile, and the regular she was sitting with ${s === "all evening" ? "becomes very interested in the football" : "finds something to read on his phone"}. Nobody says anything. Everybody noticed.`,
 ];
+function _snipeSince() { return G.nightTurn < 20 ? "since he sat down" : "all evening"; }
 
 // A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
@@ -12232,7 +12236,7 @@ function _doBuy(arg) {
     const _lazy = NPCS[id].type === "lazy";
     if (!_lazy || _rand() < 0.4) _boughtBond(id, _drinksOnly(id) ? 2 : 1);   // capped per girl per night; the drink IS the drinks-only girl's job (theme 12)
     const _warm = !_lazy && _bondTier(id) >= 2;
-    let _pool = (_ownBarStaff(id)) ? _LADY_DRINK_OWN : (_atJobBar() && _myFloorGirl(id)) ? _LADY_DRINK_JOB : (_atJobBar() && _jobBarStaff(id)) ? _LADY_DRINK_JOB_HOUSE : _lazy ? _LAZY_DRINK_LINES : _warm ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;   // your own staff ring it into your own till, and say so (composition audit, 2026-10-08)
+    let _pool = (_ownBarStaff(id)) ? _LADY_DRINK_OWN : (_atJobBar() && _myFloorGirl(id)) ? _LADY_DRINK_JOB : (_atJobBar() && _jobBarStaff(id)) ? _LADY_DRINK_JOB_HOUSE : _lazy ? _LAZY_DRINK_LINES : (_warm || _outWithMe(id)) ? _LADY_DRINK_WARM : _LADY_DRINK_LINES;   // the woman on your arm is company, not "a smile calibrated to ฿150" (Keith, round 113)   // your own staff ring it into your own till, and say so (composition audit, 2026-10-08)
     if (!((G.soc.selfDrinks || {})[G.room])) { const _dry = _pool.filter(l => !/your (bottle|beer)\b/i.test(typeof l === "function" ? String(l) : l)); if (_dry.length) _pool = _dry; }   // "clinks the glass against your bottle" with no bottle (Piet, round 62)
     const _pk = _lazy ? "lazydrink" : _warm ? "warmdrink" : "ladydrink";
     _say(_fmt("{line} (฿{m} left.)", { line: (typeof _pickTownLine === "function" ? _pickTownLine(_pool, _pk) : _pickVary(_pool, _pk))(NPCS[id].name), m: G.money }));   // the whole pool before a repeat: three women, one sentence (Margaret, round 78)
@@ -12301,8 +12305,8 @@ function _doBuy(arg) {
     // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
     if (sniped && !G.soc.patronMiffed[G.room] && !(_atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
-      _say(_pickVary(_SNIPE_LINES, "snipe")(NPCS[id].name), "alert");
-      _addHeat(1, _fmt("the man who was buying {n}'s drinks all evening", { n: NPCS[id].name }));
+      _say(_pickVary(_SNIPE_LINES, "snipe")(NPCS[id].name, _snipeSince()), "alert");
+      _addHeat(1, _fmt("the man who was buying {n}'s drinks {s}", { n: NPCS[id].name, s: _snipeSince() }));
     }
     if (id === "candy" && !_flag("knowMot")) {
       _setFlag("knowWasHere");
