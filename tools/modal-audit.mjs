@@ -181,7 +181,9 @@ const unarmed = [...discovered].filter(g => !covered.has(g) && !SKIP[g]);
 // ── the oracle and the probes ────────────────────────────────────────────────
 const HUH = new Set(_HUH);
 const isHuh = () => out.some(l => HUH.has(l));
-const NON_ANSWERS = ["what?", "huh?", "pardon?", "what happens if i say yes?"];
+// …and the shapes that open with an option's own word or a hedge: every gate tested its options as a prefix, so "yes?",
+// "let me think" and "<chip>? what does that mean" committed (the code review of 2026-11-01). The chip probe is per state.
+const NON_ANSWERS = ["what?", "huh?", "pardon?", "what happens if i say yes?", "yes?", "let me think"];
 const READ_ONLY = ["help", "time", "inventory", "quests", "journal", "diagnose"];
 const caps = s => [...String(s).matchAll(/\(([^()]*[A-Z]{2,}[^()]*)\)/g)].flatMap(m => m[1].match(/\b[A-Z][A-Z ]{1,}\b/g) || []).map(t => t.trim()).filter(t => t.length > 1);
 
@@ -214,7 +216,7 @@ for (const [name, st] of Object.entries(STATES)) {
   if (SHOW) console.log(`\n══ ${name} ══\n${live}\n  chips: ${chips.join(" · ")}`);
 
   // 1. non-answers: gate up, nothing committed, no turn, something said
-  for (const q of NON_ANSWERS) {
+  for (const q of [...NON_ANSWERS, ...chips.slice(0, 4).map(c => c + "? what does that mean")]) {
     deserializeGame(saveArmed); const before = snap(); out = []; probes++;
     try { doCommand(q); } catch (e) { note(name, "nonanswer", q, `threw: ${e.message}`); continue; }
     const after = snap();

@@ -14389,7 +14389,7 @@ function _doWait(arg) {
   if (target <= G.nightTurn) { _waitRefused = true; _say(`It's already ${_clockStr()}. Time only runs one way, even here.`); return; }
   // a wait that runs into the dawn ends the night inside it — asked once (Mario, 2026-10-07)
   const _dawnStr = _clockStr(NIGHT_TURNS);
-  if (target >= NIGHT_TURNS && !_endConfirm("wait", `That wait runs to ${_dawnStr} — the night ends inside it, wherever you are standing. (WAIT again if you mean it.)`)) { _waitRefused = true; return; }
+  if (target >= NIGHT_TURNS && !_endConfirm("wait", `That wait runs to ${_dawnStr} — the night ends inside it, wherever you are standing. (WAIT again if you mean it.)`, ("wait " + arg).trim())) { _waitRefused = true; return; }
   const startDay = G.day, inbox0 = G.phone.inbox.length, g0 = G, room0 = G.room;
   const body0 = { t: G.thirst, h: G.hunger };
   // a bar that shuts stops the wait at its shutters: an owner waited his own Soi 6 rail to 05:36 (Kaspar, round 101)
@@ -18648,6 +18648,34 @@ function _farePrompt() {
 // hidden state eats the player's next command. ONE dispatcher over every gate in
 // doCommand, in the same priority order; add a new modal state to both or the
 // restore goes blind again (the class of bug that hit c4, jackpot, and saleng).
+// A gate's answer, read before the gate's own handler: every handler tests its option words as a prefix, so "sell? what
+// happens to the girls?" sold the bar, "let me think" posted the girl's photo and "ok, no thanks" signed the 51%.
+// Returns false when the gate was put again (a hedge, or an option-word question at a gate that explains nothing), the
+// gate's own word to answer with instead (its `no` for a refusal, its `ask` for a question), or null to read the line as
+// typed. A question that opens with a question word goes to the handler, which answers it in its own terms.
+const _GATE_HEDGE = /^(?:let me (?:think|see|sleep on it)|i'?ll think|i need to think|i'?m thinking|thinking|(?:maybe|perhaps)(?!\s+(?:later|not|another|next))|hold on|hang on|one (?:sec|second|moment|minute)|give me a (?:sec|second|moment|minute)|wait a (?:sec|second|moment|minute)|dunno|i don'?t know|i'?m not sure|not sure|hm+|um+|uh+|er+m?)\b/;
+const _GATE_QWORD = /^(?:what|wha|why|how|who|where|when|which|whose|is|are|does|do|did|can|could|will|would|should|shall|explain|tell|if|and if|huh|pardon)\b/;
+const _GATE_HOLD = [
+  "(Still waiting on an answer.)",
+  "(That isn't an answer yet. The question is still there.)",
+  "(Nothing decided. It waits.)",
+  "(Take your time — nothing moves until you answer.)",
+];
+function _gateNo(lower) {
+  return _isRefusal(lower) || /(?:^|[\s,.])(?:no|nope|nah)[.!]*$/.test(lower) ||
+    /\b(?:i'?ll pass|pass on (?:it|that)|later|another time|not now|not yet|never mind|nevermind)\b/.test(lower);
+}
+function _gateGuard(id, lower) {
+  const g = GATES[id], l = lower.trim();
+  if (!l) return null;
+  if (_GATE_HEDGE.test(l)) { _say(_pickVary(_GATE_HOLD, "gatehold"), "dim"); _renderResume(); return false; }
+  if (/\?/.test(l) && !_GATE_QWORD.test(l)) {
+    if (g.ask) return g.ask;
+    _say(_pickVary(_GATE_HOLD, "gatehold"), "dim"); _renderResume(); return false;
+  }
+  if (g.no && _gateNo(l)) return g.no;
+  return null;
+}
 function _renderResume() {
   if (!G) return;
   // The "phone buzzed" nudge is a one-shot at arrival, so a reload with unread
@@ -18901,10 +18929,11 @@ function _doCommandInner(input) {
   }
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
   if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
-    raw = { sleep: "sleep", sunrise: "watch sunrise" }[G.endWarn.kind] || raw;
+    raw = G.endWarn.cmd || { sleep: "sleep", sunrise: "watch sunrise", embassy: "take the plane" }[G.endWarn.kind] || raw;
   // …and ANY other command disarms it: a free LOOK cost no turn, so the warning stayed armed and the next
   // SLEEP ended the night without asking again (Ilse, round 80). Only the same choice repeated commits.
-  if (G.endWarn && !({ sleep: /^(sleep|go to (bed|sleep)|bed|turn in|nap|zz+)\b/, sunrise: /^(watch|see|wait for) (the )?(sunrise|dawn|sun ?rise)\b/, wait: /^wait\b|^z$/ }[G.endWarn.kind] || /^$/).test(raw.trim().toLowerCase())) G.endWarn = null;
+  if (G.endWarn && !({ sleep: /^(sleep|go to (bed|sleep)|bed|turn in|nap|zz+)\b/, sunrise: /^(watch|see|wait for) (the )?(sunrise|dawn|sun ?rise)\b/, wait: /^wait\b|^z$/,
+    embassy: /^(take|plane|the plane|go home|fly|i'?ll go|yes|ok|okay|accept|go|home|y)\b/ }[G.endWarn.kind] || /^$/).test(raw.trim().toLowerCase())) G.endWarn = null;
   // THAI AT A PROMPT (Pieter, round 73: Cream's GO ignored ไป, the GIFT ignored สามร้อย, the police ignored ไม่).
   // The gates below read the English they were written for, and the script translation used to run only after
   // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
@@ -18917,7 +18946,7 @@ function _doCommandInner(input) {
     const _en = _thaiToCmd(raw.trim());
     if (_en && !/\b(sorry|wai)\b/.test(_en)) { _say(`(เข้าใจ — ${_en})`, "dim"); G.thaiScript = (G.thaiScript || 0) + 1; raw = _en; }
   }
-  const lower = raw.toLowerCase();
+  let lower = raw.toLowerCase();
   const words = lower.split(" ");
   const [v, ...rest] = words;
   // "up" was in this filler list until 2026-07-22 (caught by e2e-mega's BFS
@@ -18984,6 +19013,14 @@ function _doCommandInner(input) {
       if (G.pendingChoice === "vacation_end" && /^(share|card|score|standing|rep)$/.test(lower)) _vacationEndPrompt();
       else if (typeof _renderResume === "function") _renderResume();
       return; }
+    // a hedge, or a question that opens with an answer's own word ("yes?", "pay? what does that mean"), is not the
+    // answer under any prompt: it is held, and costs nothing. A quiz answer may be said as a question; at a street
+    // encounter a bare "um" is the dithering the katoey and the shakedown read, so only a worded hedge is held there.
+    if (!G.pendingChoice && !(G.game && G.game.type === "quiz" && !/^(?:q|quit|resign|concede|forfeit|leave)\b/.test(lower)) &&
+        !(G.pendingEnc && /^(?:hm+|um+|uh+|er+m?)\b/.test(lower)) &&
+        (_GATE_HEDGE.test(lower) || (/\?/.test(lower) && !_GATE_QWORD.test(lower) && !/^(?:tao ?rai|how much|price)\b/.test(lower)))) {
+      _say(_pickVary(_GATE_HOLD, "gatehold"), "dim"); _renderResume(); return;
+    }
     // "what?" at a tout or a drunk is not a reaction — the Brit wandered off on it, the
     // noodle girl took it as NO (Darren, round 66). The prompt is put again, no turn.
     if (G.pendingEnc && _read(lower).kind === "huh") { _renderEncounter(); return; }
@@ -19005,6 +19042,12 @@ function _doCommandInner(input) {
   // WORK typed while the bar's own question is up: the gate keeps it, and says the shift was not started
   if (G.pendingChoice && G.pendingChoice !== "intro" && /^(?:work|stand (?:the |a |my )?shift|start (?:the |my )?shift)$/.test(lower) && (_atOwnBar() || _atJobBar()))
     _say("(Not yet — the shift is not started. Answer this first, then WORK.)", "dim");
+  // a gate's answer is an answer: a hedge or an option-word question leaves it up, a refusal is its own NO (GATES)
+  if (G.pendingChoice && G.pendingChoice !== "intro" && GATES[G.pendingChoice]) {
+    const _ga = _gateGuard(G.pendingChoice, lower);
+    if (_ga === false) return;
+    if (_ga) lower = _ga;
+  }
   // the taxi ride owns input until you've said who you are
   if (G.pendingChoice === "intro") { _introAnswer(lower); return; }
 
@@ -19034,6 +19077,7 @@ function _doCommandInner(input) {
   }
   // CONTINUE's two doors: another week on the same soi a month on, or the ticket in the bin and the whole town
   if (G.pendingChoice === "soi6continue") {
+    if (/^(never ?mind|not yet)\b/.test(lower)) { G.pendingChoice = "vacation_end"; _vacationEndPrompt(); return; }
     if (/^(another|another week|week|a week|a month|month|come back|next week|week two|one more)\b/.test(lower)) { _newVacation({ soi6: true }); return; }
     if (/^(cancel|never|stay|not going|no flight|tear|bin|live|move|expat|for good|i'?m staying|keep)\b/.test(lower)) { _soi6Stay(); return; }
     if (/^(not yet|back|wait|hold on|hang on|no|nope)\b/.test(lower)) { G.pendingChoice = "vacation_end"; _vacationEndPrompt(); return; }
@@ -19094,7 +19138,9 @@ function _doCommandInner(input) {
   // `yeah` would have SOLD THE BAR or committed the 51%. The chips say YES and
   // NO; a player who types the letter gets the reprompt, which costs nothing.
   if (G.pendingChoice === "partner") {
-    if (/^(yes|ok|okay|sure|do it|agree|deal|him|her|candy|tan)\b/.test(lower)) { _partnerYes(); return; }
+    const _pOther = G.partnerWho === "tan" ? "candy" : "tan";
+    if (new RegExp("^(?:" + _pOther + ")\\b").test(lower)) { _partnerNo(); return; }
+    if (new RegExp("^(?:yes|ok|okay|sure|do it|agree|deal|" + (G.partnerWho === "tan" ? "him|tan" : "her|candy") + ")\\b").test(lower)) { _partnerYes(); return; }
     if (/^(no|not|think|wait|later|hold|both)\b/.test(lower)) { _partnerNo(); return; }
     _say("It's the biggest yes-or-no of the whole stage; the town will wait while " +
       "you decide. (YES \u00b7 NO)", "dim");
@@ -19195,6 +19241,7 @@ function _doCommandInner(input) {
   }
   // Cream gathering her bag at the Metro Beer Garden (the chameleon economy)
   if (G.pendingChoice === "cham") {
+    if (/^go home\b/.test(lower)) { _chamDecline(); return; }
     if (/^(go|yes|ok|okay|sure|come|with her|let'?s go|hotel)\b/.test(lower)) { _chamGo(); return; }
     if (/^(not tonight|no|stay|sorry|decline|another time|cancel)\b/.test(lower)) { _chamDecline(); return; }
     _say("She has her bag on her shoulder and is waiting, not quite looking at you.", "dim");
@@ -19266,16 +19313,17 @@ function _doCommandInner(input) {
 
   // mid-checkout: the desk is waiting on a hotel name
   if (G.pendingChoice === "checkout") {
-    if (/stay|cancel|no|keep|never ?mind/.test(lower)) {
+    if (/^(stay|cancel|no|nope|keep|never ?mind)\b/.test(lower)) {
       G.pendingChoice = null;
       _say("You re-pocket the key card. The clerk re-files the folio and the " +
         "smile. Home is home.");
       return;
     }
-    const pick = /sabai|palm|naklua|412/.test(lower) ? "sabai" :
-      /queen|vic|balcony/.test(lower) ? "queenvic" :
-      /areca|lodge|diana/.test(lower) ? "areca" :
-      /\bmetro(?:pole)?\b|\blk\b/.test(lower) ? "metropole" : null;   // "talk to the clerk" and "walk" moved you to the Metropole (review 2026-10-25)
+    const _co = lower.replace(/^(?:(?:move|go|check in|checking in) )?(?:to |into |at )?(?:the )?/, "");
+    const pick = /^(?:sabai|palm|naklua|412)\b/.test(_co) ? "sabai" :
+      /^(?:queen|vic|balcony)\b/.test(_co) ? "queenvic" :
+      /^(?:areca|lodge|diana)\b/.test(_co) ? "areca" :
+      /^(?:metro(?:pole)?|lk)\b/.test(_co) ? "metropole" : null;   // "talk to the clerk" and "walk" moved you to the Metropole (review 2026-10-25)
     if (!pick || pick === G.hotel) {
       _checkoutPrompt();
       return;
@@ -19406,10 +19454,14 @@ function _doCommandInner(input) {
       _bfPrompt();
       return;
     }
+    // a question about the terms, or a hedge, is not a term: "what happens if i take her out?" took her out
+    if (/\?/.test(lower) || /^(?:what|how|why|if|and if|when|does|do i|is|will|would|can|should)\b/.test(lower) || _GATE_HEDGE.test(lower)) { _bfPrompt(); return; }
+    // …and a refusal is a no before any term is read: "no, don't take her out" paid for her night out
+    const _bfNo = _gateNo(lower) || /\btake a pass\b/.test(lower);
     // the party barfine — bfparty's honest mirror: take her (or them) OUT
-    if (/^(take|party)/.test(lower) || /\b(her|them) out\b/.test(lower)) { _tradeMark("yes"); _bfResolve("party"); _tick(); return; }
-    if (/^(st\b|short)/.test(lower)) { _tradeMark("yes"); _bfResolve("st"); _tick(); return; }
-    if (/^(lt\b|long|overnight|all night)/.test(lower)) {
+    if (!_bfNo && (/^(take (?:her|them|\w+) out|take|party)\b/.test(lower))) { _tradeMark("yes"); _bfResolve("party"); _tick(); return; }
+    if (!_bfNo && /^(st\b|short\b(?!\s+on\b))/.test(lower)) { _tradeMark("yes"); _bfResolve("st"); _tick(); return; }
+    if (!_bfNo && /^(lt\b|long|overnight|all night)/.test(lower)) {
       // LONG TIME is the night: the first answer says so, the second commits (Mario, 2026-10-07)
       const _withParty = !!(G.party && G.party.ids && G.party.ids.length);   // the ledger refuses an LT mid-party itself — no confirm on a refusal
       // …and a man who cannot pay is told so first, not asked to confirm a night he cannot buy (Liam, round 93)
@@ -19417,7 +19469,7 @@ function _doCommandInner(input) {
       if (!_withParty && !_ltShort && !G.pendingBf.ltAsked) { G.pendingBf.ltAsked = true; _bfLtWarn(); return; }
       _tradeMark("yes"); _bfResolve("lt"); _tick(); return;
     }
-    if (/^(no\b|nah\b|cancel|never|forget|back out|walk|maybe later|later|not now|not tonight|another time|next time|some other time)/.test(lower)) {   // "maybe later love" (Steve's fifth run)
+    if (_bfNo || /^(no\b|nah\b|cancel|never|forget|back out|walk|maybe later|later|not now|not tonight|another time|next time|some other time)/.test(lower)) {   // "maybe later love" (Steve's fifth run)
       G.pendingBf = null;
       _tradeMark("no");
       _say("You shake your head, and that is the end of it. The number goes back in " +   // "off the ledge" on a stool, and a mamasan the room may not have (Gary, round 79)

@@ -6218,10 +6218,12 @@ const _ALLNIGHTER_STREET = [
 // same choice typed again inside that window goes through. Returns true to proceed. The
 // modals (LONG TIME, the encounters' YES, Cream's GO, Sao's car) carry the warning in
 // their own prompt instead — a modal is already a question — and LONG TIME asks twice.
-function _endConfirm(kind, text) {
+// `cmd` is the command a bare YES replays (the WAIT with its length); without one, YES replays the kind's own verb
+function _endConfirm(kind, text, cmd) {
   const w = G.endWarn;
   if (w && w.kind === kind && w.day === G.day && G.turns - w.turn <= 1) { G.endWarn = null; return true; }
   G.endWarn = { kind, day: G.day, turn: G.turns };
+  if (cmd) G.endWarn.cmd = cmd;
   _say(text, "dim");
   return false;
 }
@@ -7904,17 +7906,21 @@ function _destituteTick() {
   if (G.roofless !== G.day) { if (G.destituteDay !== G.day - 1 || G.roofless !== G.day) G.destitute = 0; return; }
   G.destitute = G.destituteDay === G.day - 1 ? (G.destitute || 0) + 1 : 1; G.destituteDay = G.day;
   const left = DESTITUTE_DAYS - G.destitute;
-  if (G.destitute >= DESTITUTE_DAYS) { G.pendingChoice = "embassy"; _embassyPrompt(); return; }   // the plane is offered, and can be refused (Mario, 2026-10-22)
+  // a morning prompt never lands on another: with a gate already up (or Cream's bus about to be), the plane and her mat
+  // wait for the next roofless morning rather than overwrite it
+  const _gateUp = !!(G.pendingChoice || G.chamNight);
+  if (G.destitute >= DESTITUTE_DAYS) { if (!_gateUp) { G.pendingChoice = "embassy"; _embassyPrompt(); } return; }   // the plane is offered, and can be refused (Mario, 2026-10-22)
+  const _mat = () => {
+    const her = !G.keptByUsed && !_gateUp && _bestWoman();
+    if (her) { G.keptByUsed = true; G.pendingChoice = "keptby"; G.keptOffer = her; _keptByPrompt(); }
+  };
   if (G.destitute === 1) {
     _say(`(No roof and nothing for one. The first morning of it: ${left} more and a desk in Bangkok has your name. Nira lends against nothing once; Nont moves money that is not there${G.job ? (G.job.kind === "manager" ? "; the envelope comes on the payday, and the nights before it are the problem" : "") : "; a bar whose floor knows your face pays a manager in notes"}.)`, "alert");
-    const her = !G.keptByUsed && _bestWoman();
-    if (her) {
-      G.keptByUsed = true; G.pendingChoice = "keptby"; G.keptOffer = her;
-      _keptByPrompt();
-    }
+    _mat();
   } else {
     _say(`(The second morning. ${left} more. A man from the consulate was asking at the Vic, Mort says — not for you by name, which is how they ask.)`, "alert");
     if (G.phone && (G.phone.contacts || {}).tan) _pushMsg("tan", "There is a desk in Bangkok that has your name on it now, my friend. Not police. Worse: polite. One more morning and they come with a ticket.");
+    _mat();
   }
 }
 // THE PLANE REFUSED (Mario, 2026-10-22, from the canon essay "the people who should not be here" — pattern only). The

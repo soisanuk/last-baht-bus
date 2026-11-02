@@ -103,7 +103,11 @@ examples card) and calls `_doCommandInner`, which runs these stages in order. **
 3. **The prompts, in priority.** `G.pendingChoice` (the intro, the end of the week, the bar's calls, the affair's
    crises, the embassy, every two-step question — each a named gate), then a live `G.game`, then `G.pendingEnc` (a street
    encounter), `G.pendingBf` (the barfine negotiation), `G.pendingSoapy`, `G.pendingFare`. While one is up it owns the
-   input; a non-answer ("what?", "what happens if I say yes?") redraws it and commits nothing. Pure Thai is translated
+   input; a non-answer ("what?", "what happens if I say yes?") redraws it and commits nothing. Every handler tests its
+   options as a prefix, so the line is read first: under any prompt a hedge (`_GATE_HEDGE`: "let me think") or a
+   question that opens with an option's own word ("yes?", "sell? what happens…") is held with a `_GATE_HOLD` line and no
+   turn; at a `pendingChoice` gate `_gateGuard` also answers a refusal (`_gateNo`) as the gate's `GATES[id].no` and an
+   option-word question as its `GATES[id].ask`. Pure Thai is translated
    for a gate first (`_thaiToCmd`). A gate's own labels typed after it closed are "that moment has passed"
    (`_staleModalAnswer`), never a parse failure.
 4. **Normalisation.** Lower case, articles and filler stripped, Thai script translated, synonyms folded.

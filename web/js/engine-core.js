@@ -763,31 +763,35 @@ const STATE_SCHEMA = {
 // that is not in this table or is missing a surface. `carry: true` is a prompt that belongs to the morning or survives
 // the night (it is armed at the wake, or it is a question across a day); every other prompt goes with the night that
 // raised it (_endNight clears it). `why` says in a line what the prompt asks.
+// A gate's answer is read by _gateGuard (engine-parser) before the gate's own handler sees it: a hedge ("let me think")
+// leaves it up; a REFUSAL is answered as the gate's own `no` (the word its handler declines on); a question that opens
+// with an option's word ("sell? what happens…", "go where?", "take what?") is answered as its `ask` (the word its handler
+// explains on), or the gate is put again when it has none. A gate with no `no` reads a refusal itself.
 const GATES = {
   intro:        { carry: true,  why: "the taxi ride's three questions: who you are" },
-  vacation_end: { carry: true,  why: "the week is over: a new trip, or move to Pattaya (or the Soi 6 week's card)" },
-  soi6continue: { carry: true,  why: "the Soi 6 week's CONTINUE: another week, or cancel the ticket" },
+  vacation_end: { carry: true,  ask: "explain", why: "the week is over: a new trip, or move to Pattaya (or the Soi 6 week's card)" },
+  soi6continue: { carry: true,  ask: "explain", why: "the Soi 6 week's CONTINUE: another week, or cancel the ticket" },
   gameend:      { carry: true,  why: "the ending: visit Pattaya or start over" },
-  embassy:      { carry: true,  why: "destitute, the third morning: the consulate's plane, or the bench" },
-  keptby:       { carry: true,  why: "destitute: her offer of her mat" },
+  embassy:      { carry: true,  no: "stay", ask: "explain", why: "destitute, the third morning: the consulate's plane, or the bench" },
+  keptby:       { carry: true,  no: "no", ask: "explain", why: "destitute: her offer of her mat" },
   chamgift:     { carry: true,  why: "the morning after Cream: what to leave on the table" },
-  bkkdinner:    { carry: true,  why: "Sao's car to the Sathorn dinner" },
-  kidfavour:    { carry: true,  why: "Tan's read on the kid's run: owe him for the boy" },
-  affair:       { carry: false, why: "she stays after close: the affair's door" },
-  affaircrisis: { carry: false, why: "one of the affair's crises" },
+  bkkdinner:    { carry: true,  no: "decline", why: "Sao's car to the Sathorn dinner" },
+  kidfavour:    { carry: true,  no: "no", ask: "ask", why: "Tan's read on the kid's run: owe him for the boy" },
+  affair:       { carry: false, no: "step back", ask: "what", why: "she stays after close: the affair's door" },
+  affaircrisis: { carry: false, ask: "what happens?", why: "one of the affair's crises" },
   bkkbill:      { carry: false, why: "the Sathorn dinner's bill" },
-  cham:         { carry: false, why: "Cream's GO or NOT TONIGHT" },
-  checkout:     { carry: false, why: "which hotel to move to" },
-  keptgirl:     { carry: false, why: "Bert with the bar phone: the kept girl's sponsor" },
-  kidprice:     { carry: false, why: "Nont's price for the kid's run" },
-  partner:      { carry: false, why: "the 51%: Candy or Tan, confirmed" },
-  rabbitjob:    { carry: false, why: "Eddy's interview: CARRY IT, KEYBOARD, THE KID, NOT ME" },
-  barsale:      { carry: false, why: "SELL UP: Pattaya Leisure, Tan's buyer, Bert — or keep it" },
-  sellbar:      { carry: false, why: "SELL UP, confirmed" },
-  shift:        { carry: false, why: "a shift call at your own rail" },
-  sighting:     { carry: false, why: "she is at a kerb table with another farang" },
-  synjob:       { carry: false, why: "a procurement job offered at your own bar" },
-  tanfavour:    { carry: false, why: "Tan asks for a name on the staff list" },
+  cham:         { carry: false, no: "not tonight", why: "Cream's GO or NOT TONIGHT" },
+  checkout:     { carry: false, no: "stay", why: "which hotel to move to" },
+  keptgirl:     { carry: false, no: "no", ask: "what", why: "Bert with the bar phone: the kept girl's sponsor" },
+  kidprice:     { carry: false, no: "no", ask: "ask", why: "Nont's price for the kid's run" },
+  partner:      { carry: false, no: "no", why: "the 51%: Candy or Tan, confirmed" },
+  rabbitjob:    { carry: false, no: "not me", ask: "ask", why: "Eddy's interview: CARRY IT, KEYBOARD, THE KID, NOT ME" },
+  barsale:      { carry: false, no: "no", ask: "what", why: "SELL UP: Pattaya Leisure, Tan's buyer, Bert — or keep it" },
+  sellbar:      { carry: false, no: "no", why: "SELL UP, confirmed" },
+  shift:        { carry: false, no: "no", ask: "what", why: "a shift call at your own rail" },
+  sighting:     { carry: false, no: "no", why: "she is at a kerb table with another farang" },
+  synjob:       { carry: false, no: "no", ask: "what", why: "a procurement job offered at your own bar" },
+  tanfavour:    { carry: false, no: "no", ask: "ask", why: "Tan asks for a name on the staff list" },
 };
 function _gateCarries(id) { return !!(GATES[id] && GATES[id].carry); }
 
