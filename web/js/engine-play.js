@@ -7227,6 +7227,7 @@ function _ageBooks(off) {
   if (G.gifts && typeof G.gifts === "object") for (const k of Object.keys(G.gifts)) (Array.isArray(G.gifts[k]) ? G.gifts[k] : []).forEach(shiftDay);
   shiftDay(G.lastNightWas); shiftDay(G.lastRide); shiftDay(G.chamLast); shiftDay(G.barSale);
   if (Array.isArray(G.streetLog)) G.streetLog.forEach(shiftDay);
+  if (G.phone && Array.isArray(G.phone.inbox)) G.phone.inbox.forEach(shiftDay);
   // …and the absolute-day deadlines: a bank review begun on one trip ran into every later one, and a payout due "in a
   // week" never came to a man whose next trip started at day 1 (review 2026-10-25)
   // every absolute day number STATE_SCHEMA lists (the once-a-day stamps G.<x>Day, a bank review, the paper's dates) is on

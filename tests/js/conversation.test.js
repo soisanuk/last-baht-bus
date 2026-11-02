@@ -139,7 +139,8 @@ test("an unknown word outside a conversation is still a parse error", () => {
 test("_resolveActor binds a pronoun to the active conversation partner", () => {
   run("angela"); // sets G.convo = angela
   assert.equal(_resolveActor("her", _addressable()), "angela");
-  assert.equal(_resolveActor("him", _addressable()), "angela"); // antecedent, not gendered
+  // a gendered pronoun names a sex: HIM is never Angela (review 2026-11-01, S4-7 — "buy her a drink" bought Bert one)
+  assert.notEqual(_resolveActor("him", _addressable()), "angela");
   assert.equal(_resolveActor("them", _addressable()), "angela");
 });
 

@@ -4497,7 +4497,8 @@ function _pushMsg(from, text, gives, fromName, photo) {
   // Dog Foundation broadcast); NPC texts leave it null and render by NPCS name.
   // photo (a caption string) marks a texted selfie — rendered with her portrait
   // and filed in the gallery when read.
-  G.phone.inbox.push({ from, text, turn: G.turns, read: false, gives: gives || 0,
+  // the day it came: what she says about a text is about a text of this week (_textTalk), not one from a month ago
+  G.phone.inbox.push({ from, text, turn: G.turns, day: G.day, read: false, gives: gives || 0,
     fromName: fromName || null, photo: photo || null });
   // a hard cap, read or unread: the phone keeps the newest 80 (code review 2026-08-22 —
   // the old trim ran before insertion and kept every unread, so a player who never
@@ -6610,6 +6611,9 @@ function _textTalk(npc, topic) {
     // happened to say "mama" (Bernard, round 88: "ask jiab about her family" got the ฿400 ask back)
     const _own = /^(famil|mama|mum|mom|mother|papa|dad|father|home|plan|kid|son|daughter|sister|brother|villag|parent|grandm)/;
     if (typeof _qAsked !== "undefined" && _qAsked) return false;   // a question about her is not a question about her texts
+    // her own node on the word, not yet heard, is her answer: "ask somo about dream" is the rubber and the two rai,
+    // not her "i dream about you" text
+    if (_ownsUnheard(npc, t)) return false;
     const words = t.replace(/^(the|a|an|my|your|her|his) /, "").split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !_TEXT_STOP.has(w) && !_names.has(w) && !_own.test(w)).map(_stem);
     if (!words.length) return false;
     const _body = x => x.text || x.photo || "";   // a photo's caption is what she said too: Cream's labels were a selfie's caption (Gordie, round 72)

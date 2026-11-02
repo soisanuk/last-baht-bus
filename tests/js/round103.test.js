@@ -117,8 +117,9 @@ test("Ingrid: Hong recites the count you made, and two nights is two nights", ()
 test("Ingrid: a man's transfer is his; a text not yet opened is not said 'again'", () => {
   sandbox(); G.phone.inbox = [{ from: "nont", text: "the broker paid", turn: 1, read: false, gives: 3000, day: G.day }];
   out = []; _readMessages(); assert.match(said(), /He's transferred you ฿3,000/); assert.doesNotMatch(said(), /She's transferred/);
-  G.room = NPCS.colin.room; G.phone.inbox = [{ from: "colin", text: "somebody polite rang about the slips", read: false, day: G.day }];
-  out = []; assert.ok(_textTalk("colin", "the slips")); assert.doesNotMatch(said(), /again|Same now/); assert.match(said(), /read|look yet|sent/);
+  // (not "the slips": his own unheard node on the slips answers that before any text — review 2026-11-01, S4-3)
+  G.room = NPCS.colin.room; G.phone.inbox = [{ from: "colin", text: "somebody polite rang about the parcel", read: false, day: G.day }];
+  out = []; assert.ok(_textTalk("colin", "the parcel")); assert.doesNotMatch(said(), /again|Same now/); assert.match(said(), /read|look yet|sent/);
 });
 
 test("Ingrid: Mort pays for what HE hasn't seen — never his own notebook — and the paper by a till is a lead", () => {

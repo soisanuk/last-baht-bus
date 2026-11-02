@@ -48,3 +48,60 @@ test("S4-2: a hostess away for the season neither invites you nor is met at her 
   G.room = "beach_rd_s"; t("message dao");
   assert.ok(!/come see me tonight|you come make sanuk/.test(G.phone.inbox.slice(-1)[0].text), "MESSAGE got a floor invite from Bangkok");
 });
+
+test("S4-3: her own unheard DREAM node is her answer, not a text that says 'dream'; and a text a month old is not quoted back", () => {
+  sandbox(); const id = "somo"; G.room = NPCS[id].room; G.nightTurn = 30; G.talked[id] = [];
+  G.day = 3; G.phone.contacts[id] = {}; _pushMsg(id, "i dream about you last night na 💭❤️");
+  assert.equal(G.phone.inbox.slice(-1)[0].day, 3, "a text carries the day it came");
+  G.phone.inbox.slice(-1)[0].read = true; G.day = 5;
+  assert.match(t("ask somo about dream"), /rai/, "the rubber and the two rai");
+  G.day = 40;
+  assert.ok(!/i dream about you/.test(t("ask somo about dream")), "a 37-day-old text answered");
+});
+
+test("S4-4: a mamasan's gated returning-trip LAST TIME node plays on the second trip; the house count answers otherwise", () => {
+  sandbox(); const id = "wanida"; G.room = _npcWhere(id) || NPCS[id].room; G.nightTurn = 20;
+  G.vacation = 2; G.day = 1; G.prevBond = { wanida: 2 }; G.metDay = { wanida: -4 }; G.talked[id] = [0];
+  const node = _pickDialogue(id, "last time");
+  assert.ok(node && node.when, "the fixture: her gated node is open");
+  assert.ok(t("ask wanida about last time").includes(node.text.slice(0, 30)), "the house line took her returning-trip node");
+  G.vacation = 1; G.prevBond = {}; G.talked[id] = [0];
+  assert.match(t("ask wanida about last time"), /ago/, "the first trip still gets the house count");
+});
+
+test("S4-5: after a job for Tan, 'drive me' is still his ride offer, and 'remember me' is the job memory", () => {
+  sandbox(); G.nightTurn = 20; G.room = _npcWhere("tan"); G.quests.wallet_again = "done"; G.talked.tan = [];
+  const s = t("ask tan about drive me");
+  assert.match(s, /CALL TAN/, "the once-a-trip ride offer"); assert.ok(!/People who help/.test(s));
+  assert.ok(!/People who help/.test(t("ask tan about pick me up")), "'pick me up' read as the job memory");
+  assert.match(t("ask tan about remember me"), /Lost Wallet/);
+});
+
+test("S4-6: the day after you sent her home in a taxi, HOME is still her village", () => {
+  sandbox(); G.day = 3; const id = "somo"; G.room = NPCS[id].room; G.nightTurn = 30; G.talked[id] = [];
+  G.partyLog = { somo: { day: 2, sentHome: true, rooms: [] } };
+  const s = t("ask somo about home");
+  assert.match(s, /Nakhon Phanom/); assert.ok(!/taxi|send me home/i.test(s));
+  assert.match(t("ask somo about sent me home"), /taxi|gentleman|change/i, "the taxi is still remembered");
+});
+
+test("S4-7: HER is never the man you are talking to, and HIM never the woman", () => {
+  sandbox(); G.nightTurn = 20; G.room = "stinky_bar"; t("talk to bert");
+  let s = t("ask her about family");
+  assert.ok(!/Bert/.test(s.replace(/^Who do you mean\?.*$/m, "")), "asked Bert"); assert.match(s, /Who do you mean\?/);
+  const m = G.money; t("buy her a drink");
+  assert.equal(G.money, m, "bought Bert a drink for 'her'");
+  t("talk to manow"); s = t("ask him about pool");
+  assert.ok(!/You asked Manow/.test(s), "asked Manow about HIM");
+  assert.match(t("ask her about family"), /You asked Manow about family/, "HER with Manow is still Manow");
+});
+
+test("S4-8: CALL rings a number in the phone — not a man at the bar, not a woman who has decided — and spends battery", () => {
+  sandbox(); G.nightTurn = 20; G.room = "stinky_bar"; G.battery = 50;
+  let s = t("call bert");
+  assert.match(s, /don't have a number for Bert/); assert.ok(!/why you CALL|MESSAGE BERT/.test(s));
+  G.phone.contacts.lamai = {}; G.maiDee = { lamai: G.day }; G.room = "beach_rd_s";
+  s = t("call lamai"); assert.ok(!/why you CALL\?\?\?”/.test(s), "the verdict answered a call playfully");
+  G.phone.contacts.cake = {}; const b = G.battery; s = t("call cake");
+  assert.match(s, /why you CALL/); assert.equal(G.battery, b - 1, "a call costs battery");
+});
