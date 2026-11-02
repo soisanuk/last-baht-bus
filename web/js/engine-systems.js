@@ -9161,7 +9161,7 @@ function _partnerYes() {
   if (who === "tan") {
     _setFlag("partnerTan");
     _align("indie", 1); _align("plg", -1); _align("syndicate", 1);
-    _say("\"Good.\" It is done by Tuesday, the way he said. It costs you nothing at " +
+    _say("\"Good.\" It is done the next day, the way he said. It costs you nothing at " +
       "all \u2014 no lawyer, no signature you kept a copy of, no figure anywhere. " +
       "Just a land office that turned out to be his wife's cousin, and a lunch " +
       "afterward that he paid for. The fifty-one is settled — the deposit is still " +

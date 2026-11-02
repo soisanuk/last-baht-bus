@@ -151,3 +151,24 @@ test("a hedge or an option-word question holds every modal, not only the gates (
   }
   assert.equal(_gateGuard("cham", "maybe later"), "not tonight", "MAYBE LATER is a no, not a hedge");
 });
+
+// ── The dialogue walk's three hand-offs (2026-11-02) ──
+test("W-1: a kin word in a heard node's own alias retells her words, not the follow-up pool", () => {
+  sandbox(); G.nightTurn = 40; G.room = _npcRoom("nid"); doCommand("talk to nid");
+  t("ask nid about her papa");
+  const r = t("ask nid about her papa");
+  assert.match(r, /Korat/, "her authored short"); assert.doesNotMatch(r, /Papa is papa|call every Sunday|Okay is enough/);
+});
+test("W-2: the partner's yes names no weekday the game did not compute", () => {
+  sandbox("expat"); G.partnerWho = "tan"; G.pendingChoice = "partner"; out = [];
+  _partnerYes();
+  assert.match(said(), /the next day, the way he said/);
+  assert.doesNotMatch(said(), new RegExp("\\b(" + WEEKDAYS.join("|") + ")\\b"));
+});
+test("W-3: the walker's pronoun lint lets a pronoun after another proper noun belong to that noun", async () => {
+  const { spawnSync } = await import("node:child_process");
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL("../../tools/dialogue-walk.mjs", import.meta.url)), "--lint"], { encoding: "utf8" });
+  const rows = (r.stdout + r.stderr).split("\n").filter(l => /^\s*\[low\] \S+: narration about/.test(l));
+  // the three left name a man inside her quoted speech ("his chits", "he is squaring") — benign, and beyond a regex
+  for (const row of rows) assert.match(row, /^\s*\[low\] (orathai#18|wanida#0|tukky#5):/, row);
+});

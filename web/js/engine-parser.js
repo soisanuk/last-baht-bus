@@ -9494,6 +9494,9 @@ function _ownWordTalk(npc, topic) {
   if (!heard.length) return false;
   if (_ownsUnheard(npc, t, false)) return false;   // an unheard node of hers on it answers first
   const keys = new Set(heard.flatMap(d => String(d.topic || "").split("|").map(k => k.trim())));
+  // a HEARD node of hers whose own alias is the question ("her papa") retells as itself: the follow-up pool is for a
+  // thing named inside a story, never for a subject she has words on — a kin word in an alias must not steal the repeat
+  if ([...keys].some(k => k && k.length >= 3 && new RegExp("(?:^|\\b)" + k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?:\\b|$)").test(t))) return false;
   const texts = heard.map(d => { const ts = typeof _townStory === "function" ? _townStory(npc, d) : null; return String((ts && ts.text) || d.text).toLowerCase(); }).join(" ");
   // a subject key (family, home, plan) is her node's, retold as itself; a NAMED THING inside it (Udon, the baby) is a follow-up
   const words = t.split(/[^a-z]+/).filter(w => w.length >= 3 && !_OWN_STOP.has(w) && !(keys.has(w) && /^(family|home|plan|work|name|money|age|job|price|bar|mama|mamasan|boyfriend|husband)$/.test(w)));

@@ -9,5 +9,112 @@
       "mcp__Claude_Browser__read_console_messages",
       "mcp__Claude_Browser__tabs_context"
     ]
+  },
+  "hooks": {
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/audit_logger.py reconcile 2>/dev/null",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/gate.py 2>/dev/null",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/guardrails.py 2>/dev/null",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/guardrails.py 2>/dev/null",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/audit_logger.py 2>/dev/null",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/audit_logger.py 2>/dev/null",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/failures.py 2>/dev/null",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/audit_logger.py reconcile 2>/dev/null",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/rotate.py 2>/dev/null",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/weekly_nudge.py 2>/dev/null",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 $(cat ~/.contextr/install-path 2>/dev/null || echo ~/projects/contextr)/hooks/post_compact.py 2>/dev/null",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }

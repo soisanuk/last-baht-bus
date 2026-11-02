@@ -10,3 +10,21 @@ node_modules/
 # walkthrough tool output
 /tools/out/
 __pycache__/
+
+# contextr:begin
+# Session-scoped state (ephemeral, machine-specific)
+.contextr/state/session.md
+.contextr/state/last-analyze
+# Legacy checkpoint (no longer written)
+.contextr/state/checkpoint-latest.md
+
+# Audit log and its monthly archives (machine-specific, may contain sensitive commands)
+.contextr/state/audit.jsonl
+.contextr/state/audit-*.jsonl.gz
+
+# Gate flags written by failures.py (per-session, machine-specific)
+.contextr/state/gate-flags.json
+
+# Legacy transcript copies (Claude Code keeps transcripts in ~/.claude/projects/)
+.contextr/transcripts/
+# contextr:end

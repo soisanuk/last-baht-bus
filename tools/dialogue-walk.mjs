@@ -374,7 +374,10 @@ function lint(results) {
       if (words >= 12) { speechNodes++; const hits = (sp.match(TING) || []).length + (sp.match(/\b(I|you|she|he) (no|not) [a-z]+\b/g) || []).length; if (hits) tingNodes++; perNode.push({ key: x.key, words, hits }); }
       // pronoun: the first narration pronoun when the text opens on her name
       const nar = narration(t);
-      if (fem && nar.trim().startsWith(n.name)) { const pm = nar.match(/\b(he|she|his|her|him)\b/i); if (pm) { const isF = /^(she|her)$/i.test(pm[1]); if ((fem === "she") !== isF && !/\b(he|him|his)\b/.test(n.name)) add("pronoun", x.key, `narration about ${n.name} (${fem}) uses "${pm[1]}"`, "low"); } }
+      if (fem && nar.trim().startsWith(n.name)) { const pm = nar.match(/\b(he|she|his|her|him)\b/i); if (pm) { const isF = /^(she|her)$/i.test(pm[1]);
+        // a pronoun after another proper noun ("Nid looks at Terry; he…") belongs to that noun, not to her
+        const other = new RegExp("\\b(?!" + n.name + "\\b)[A-Z][a-z]+\\b").test(nar.slice(n.name.length, pm.index).replace(/^[^.!?]*?\. /, m => m));
+        if ((fem === "she") !== isF && !other && !/\b(he|him|his)\b/.test(n.name)) add("pronoun", x.key, `narration about ${n.name} (${fem}) uses "${pm[1]}"`, "low"); } }
       // cross-character duplicates
       const norm = t.replace(/[^a-z ]/gi, "").toLowerCase().replace(/\s+/g, " ").trim();
       if (norm.length >= 60) { const k = norm.slice(0, 120); (textIndex.get(k) || textIndex.set(k, []).get(k)).push(x.key); }
