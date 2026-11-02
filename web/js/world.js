@@ -2192,7 +2192,7 @@ const ROOMS = {
       "The Blue Dog again — the open front, the plastic chairs, the best cheap sunset at the foot of the soi.",
       "Back to the rail and the open corner. The soi roars off to the east behind you, the bay glows west past the road, and you sit in the seam and drink.",
       "You drop back into a chair aimed at the water. Nobody grabs you out here — the Blue Dog's regulars came to watch the sea, not to be sold anything.",
-      "Back to the tin roof and the corner seating. Someone points at a squid boat, someone argues about the squid boat, the Chang stays cold and the sun keeps sinking.",
+      "Back to the tin roof and the corner seating. Someone points at a squid boat, someone argues about the squid boat, the Chang stays cold and nobody here has looked at a watch since they sat down.",
     ],
     exits: { out: "beach_rd_n" },
   },

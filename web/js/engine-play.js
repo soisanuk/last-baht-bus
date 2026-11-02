@@ -201,7 +201,10 @@ function _closeTurn(id) {
   if (r.region === "Soi 6") return SOI6_CLOSE;
   return null;
 }
-// A bar that shuts before dawn (the name is older than the two o'clock rule).
+// A closing hour as the first words of a sentence: "Four o'clock", "Midnight", "Dawn", "04:30".
+function _hourSaid(h) { return /^\d/.test(h) ? h : /^(midnight|dawn)$/.test(h) ? h[0].toUpperCase() + h.slice(1) : h[0].toUpperCase() + h.slice(1) + " o'clock"; }
+// A bar that shuts before dawn (the name is older than the two o'clock rule) — "has a closing time", not "shuts at
+// midnight": an hour said aloud reads _closeTurn / _closeClock.
 function _closesMidnight(id) {
   const r = ROOMS[id];
   return !!(r && r.barType) && _closeTurn(id) != null;
@@ -1593,6 +1596,12 @@ function _closingTick() {
     "Eleven o'clock at the Vic: the barmaid calls time, the security guard comes in " +
     "behind the bar, and the last of the rail are shown the door with you among them. " +
     "The rooms upstairs are for guests." :
+    // a Soi 6 room that keeps its own later hours says ITS hour, from _closeTurn, not the soi's two o'clock
+    _closeTurn(G.room) !== SOI6_CLOSE ?
+    `${_hourSaid(_closeClock(G.room))} in ${r.name}, its own hours kept to the minute. The music stops rather than ` +
+    `fades, the table is cleared around you, and a man in a dark shirt walks the last of the members out` +
+    (r.exits && r.exits.out && ROOMS[r.exits.out] ? ` through ${/^the /i.test(ROOMS[r.exits.out].name) ? "" : "the "}${ROOMS[r.exits.out].name}, shut and dark since ${_closeClock(r.exits.out)},` : "") +
+    " to the soi." :
     "Two o'clock on Soi 6. The frontages roll down, the sound systems die mid-song, " +
     (_onShift() ? "and you are the one who shoos the last punters out onto the soi, counts the chits with the mamasan, and pulls the shutter down yourself" : "and the ladies shoo the last punters out onto the soi") + (r.exits && r.exits.out && /east|deep/.test(r.exits.out) ? ", toward Second Road" : r.exits && r.exits.out && /soi6_street/.test(r.exits.out) ? ", toward Beach Road" : "") + ". The party, such " +
     "as it was, is over.", "alert");
@@ -4050,16 +4059,16 @@ const _BELL_SOI6 = [
   "The bell, and a cheer like a goal: every stool, the mamasan, the tout at the door. Drinks go down the length of the bar and the pavement gets a look at the man who rang it.",
 ];
 const _BELL_GOGO = [
-  "The bar detonates. Cheering from the girls, a drum-roll on the counter from the cashier, " +
-    "the mamasan's first fully unguarded smile of the night. Drinks materialise down the length " +
-    "of the bar and every lady in the room now knows your name.",
+  "The room detonates. Cheering from the girls, the cashier rattling a pen on her cage, " +
+    "the mamasan's first fully unguarded smile of the night. The waitresses come out with trays, along " +
+    "the stage and down the benches, and every lady in the room now knows your name.",
   "You ring it and the whole floor turns: the girls on stage break character to cheer, the ones " +
     "off it swarm the front row, the mamasan's guard drops for exactly one smile. A round for everyone " +
     "working tonight — and everyone working tonight now knows your name.",
   "The bell goes and the place ignites — a round for the stage and the floor both. Cheers over " +
     "the bass, a drum-roll from the cashier's cage, hands on your shoulders you didn't invite and " +
     "don't mind. For one whole song you are the most popular man on the soi.",
-  "One pull and the room goes off: drinks down the whole rail, the girls whooping, the DJ " +
+  "One pull and the room goes off: trays out from the back, a drink for every girl on the stage and the benches, the girls whooping, the DJ " +
     "shouting something with your description in it. The mamasan lets you have this one.",
   "You haul the rope and the bar erupts — a round for the ladies on stage and off, every eye and " +
     "every smile suddenly aimed at you. Expensive way to be handsome. Works every time.",
@@ -4104,6 +4113,16 @@ const _BELL_PUB = [
 
 // ─ Patrons ─
 
+const _PATRON_ROUND_AGAIN = [
+  "The regular raises the Chang at you again. “Already got you one, mate. I love you, but I'm not made of baht.”",
+  "“Still the fella,” the regular says, and clinks your glass with his. The round he stood you is the round you get; the glow does the rest.",
+  "The regular grins and points his bottle at the bell. “One back's the rule. Ring it again and we'll talk.”",
+];
+const _PATRON_FOOTY_AGAIN = [
+  "The regular is still glowing about {g}. He has stood you one already tonight; this time you get the goals instead, all of them, in order.",
+  "“{g}.” The regular says it again like a man saying grace. The round's been bought; the replay is free, and long.",
+  "The regular walks you through {g} a second time, with gestures. {team} are still proof. The round was earlier, and it was the only one.",
+];
 function _doPatron() {
   const s = G.soc;
   // The anonymous bar-bore cannot be at a rail the room has just described as
@@ -4126,13 +4145,14 @@ function _doPatron() {
     return;
   }
   if (_bellActive()) {
+    // he stands you one back once a bar a night: a second word inside the glow is the toast, not another free round
+    if (G.soc.patronRound[G.room]) { _say(_pickVary(_PATRON_ROUND_AGAIN, "patronagain")); return; }
+    G.soc.patronRound[G.room] = true;
     _say("“THAT'S the fella!” The regular toasts you with a Chang the size of a " +
       "fire extinguisher and insists on buying you one back. You are, briefly, " +
       "his favourite person alive.");
-    s.drunk++;
-    G.thirst = Math.max(0, G.thirst - 20);
     _addHappy(1);
-    _checkDrunk();
+    _compDrink(1);
     return;
   }
   // Prefer a real named regular over the faceless archetype: de-hopped locals
@@ -4142,8 +4162,8 @@ function _doPatron() {
   const here = _regularsHere();
   if (here.length) { _doTalk(NPCS[here[Math.floor(_rand() * here.length)]].name); return; }
   const d = s.drunk;
-  // the football comes first; the football always comes first
-  if (_footy() && _rand() < 0.25) {
+  // the football comes first; the football always comes first — at a rail with the match on, which a go-go has not got
+  if (!_isGogo() && _footy() && _rand() < 0.25) {
     const f = _footy();
     const team = _barTeam();
     const done = f.games.filter(x => x.done);
@@ -4158,15 +4178,15 @@ function _doPatron() {
     }
     const winner = g.hs > g.as ? g.h : g.as > g.hs ? g.a : null;
     if (team && winner === team) {
-      // the one football→mechanics crossing: his team won, everybody drinks
+      // the one football→mechanics crossing: his team won, everybody drinks — once a bar a night, like the bell's round
+      if (G.soc.patronRound[G.room]) { _say(_fmt(_pickVary(_PATRON_FOOTY_AGAIN, "patronfooty"), { g: _fmtGame(g), team })); return; }
+      G.soc.patronRound[G.room] = true;
       _say(`The regular is INCANDESCENT with joy. “${_fmtGame(g)}! Did you SEE ` +
         `it?” You did not see it. It does not matter. He flags the cashier and ` +
         `buys the whole rail a round, you included, because tonight the world ` +
         `is just and ${team} are proof.`);
-      s.drunk++;
-      G.thirst = Math.max(0, G.thirst - 20);
       _addHappy(1);
-      _checkDrunk();
+      _compDrink(1);
     } else if (team && (g.h === team || g.a === team)) {
       _say(`“${_fmtGame(g)},” the regular says, and then nothing else for a ` +
         `while. Forty years he's given ${team}. The bar has learned to leave ` +
@@ -4210,7 +4230,7 @@ function _doPatron() {
   // the end of the rail, where the laser eyes never dimmed
   if (_btc() && _rand() < 0.1) {
     const b = _btc();
-    _say(`From the end of the rail, the other regular — laser eyes still on ` +
+    _say(`From the ${_isGogo() ? "far end of the front row" : "end of the rail"}, the other regular — laser eyes still on ` +
       `his profile picture — announces to nobody: “฿${_num(b.thb)} ` +
       `a coin. I told everyone in 2019. Did they listen?” They didn't listen. ` +
       `They are not listening now, either, which he takes as further proof.`);
@@ -4247,7 +4267,7 @@ function _doPatron() {
     ];
     // the white-knight gag only makes sense where there's a hostess to moon over
     if (_npcsHere().some(id => NPC_ROLES[id] === "hostess")) {
-      chat.push("The regular nods at a fresh-faced kid down the bar mooning over a hostess. " +
+      chat.push(`The regular nods at a fresh-faced kid down ${_isGogo() ? "the front row" : "the bar"} mooning over a hostess. ` +
         "“White knight. Gonna try and rescue her by Friday, skint by Sunday, Flying " +
         "Club by high season if his mates don't fly him home first. Seen it a " +
         "hundred times.” He drinks. “The girls do the arithmetic better than we do.”");
@@ -4258,7 +4278,7 @@ function _doPatron() {
   } else {
     _say("You explain your theory about baht bus economics at what turns out to " +
       "be considerable length and volume. The regular studies his beer. The " +
-      "regular moves one stool away.");
+      "regular moves one " + _seat() + " away.");
     if (d >= 6) _addHeat(1);
   }
 }
@@ -6649,6 +6669,8 @@ function _endNight(reason) {
   }
   let hangover = G.soc.drunk;
   G.soc.drunk = 0;
+  // the sobering clock is a nightTurn deadline: tomorrow's turns restart at 0, so tomorrow's first drink starts a new one
+  G.soc.soberNext = null;
   // the Sabai Palms perk: Naklua quiet takes one size off the morning after
   // …which needs you to WAKE there: a blackout on Soi Buakhao printed "Naklua quiet" (Pete, round 75)
   const _wokeOut = ((reason === "collapse" || reason === "blackout" || reason === "dawn") && G.room !== _hotelRoomId()) ||
@@ -7707,6 +7729,10 @@ function _mgrShift() {
   const j = G.job;
   if (j.shiftDay === G.day) { _say(`You're on it. ${_barName(j.room)}'s rail is yours tonight — stay on it.`); return; }
   if (G.nightTurn >= 60) { _say("Too late to declare a shift: the night is half gone and the house counts from opening."); return; }
+  // a shift the job bar's own shutter would cut short of WORK_MIN_STOOD cannot be stood, so it is not taken
+  { const close = _closeTurn(j.room);
+    if (close != null && close - G.nightTurn < WORK_MIN_STOOD) {
+      _say(`Too late to stand one tonight: ${_barName(j.room)} shuts at ${_closeClock(j.room)}, and the house counts a night from ${WORK_MIN_STOOD / 10} hours on the rail. Say it at the door tomorrow, earlier.`); return; } }
   j.shiftDay = G.day; j.shiftStood = 0;
   _say(`Tonight you stand ${_barName(j.room)}'s rail. ${WORK_MIN_STOOD / 10} hours on it before the house counts the night; ${j.nights} nights a week is the deal.`, "win");
 }

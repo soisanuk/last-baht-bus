@@ -661,8 +661,16 @@ const _ENC = {
       _say(`${name} reads the moment going past — a small smile, no harm done — and lets it go. (The offer lapses; she said she wouldn't ask twice, and she doesn't.)`, "dim");   // it used to say "still in the room" and YES then missed (Kenji, round 47)
       return "passthrough";
     }
+    const sid = G.selfBfId;
     G.selfBfId = null;
     if (!_isRefusal(input) && /\b(?:yes|yeah|sure|ok|okay|of course|why not|please)\b/.test(input)) {   // whole words, and a refusal first: "nook" has an "ok" in it
+      // the night is hers: the long-time close, the jading roll and the morning read who it was with
+      if (sid) {
+        G.lastBfId = sid; G.lastBfBase = 10; G.lastBfWhy = null;
+        (G.soc.bfBar = G.soc.bfBar || {})[G.room] = sid;
+        (G.wentWith = G.wentWith || {})[sid] = { day: G.day, turn: G.nightTurn, kind: "lt" };
+        G.soc.leftFrom = G.room;
+      }
       _say(`${name} settles her own fee with the till — a professional formality, ` +
         "handled in three seconds — and steers you out under the neon by the arm. " +
         "Being chosen, it turns out, is a different currency entirely.", "win");
