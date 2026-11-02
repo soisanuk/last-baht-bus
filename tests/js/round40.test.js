@@ -181,7 +181,7 @@ test("the deposit clears by transfer from the account, the pocket topping up —
   assert.ok(_flag("barPaid")); assert.equal(G.bank, 0); assert.equal(G.money, 3000, "the pocket was not touched");
   assert.match(text(), /account number off the docket/); assert.doesNotMatch(text(), /bar towel/);
   setup(); G.money = 30000; G.bank = 100000; _barDeposit();
-  assert.ok(_flag("barPaid")); assert.equal(G.bank, 0); assert.equal(G.money, 10000); assert.equal(G.bar.pocketDrawn, 20000);
+  assert.ok(_flag("barPaid")); assert.equal(G.bank, 0); assert.equal(G.money, 10000); assert.equal(G.barBought, BAR_DEPOSIT, "the whole deposit is the purchase's line, whichever balance paid");
   assert.match(text(), /฿20,000 light of it|฿20000 light of it/);
   setup(); G.money = 5000; G.bank = 100000; _barDeposit();
   assert.ok(!_flag("barPaid")); assert.match(text(), /฿15,000 short|฿15000 short/); assert.match(text(), /pocket and account together/);

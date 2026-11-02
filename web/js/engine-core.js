@@ -328,6 +328,8 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     atmIn: 0,          // notes put back into the account at a machine (DEPOSIT)
     weekStart: null,   // pocket + account when the Soi 6 week began: the card's "spent" is start less end
+    refundIn: 0,       // money handed back to you (a barfine refunded, the desk's recovery): named on the ledger
+    barBought: 0,      // the bar's deposit and key money paid from pocket and account: named on the ledger, never the night's spending
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
     homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, monthRate: null, barSat: {},   // the resident's integration pass (round 100)
@@ -699,7 +701,7 @@ const STATE_SCHEMA = {
   life: (
     "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
-    "bankNotes bar barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
+    "bankNotes bar barBought barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
     "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast chamNights cherryDay cliLockedDay cliSat " +
     "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
@@ -720,7 +722,7 @@ const STATE_SCHEMA = {
     "ownRescueDay paper paperFlag paperPaid paperShort paperUntil partnerWho partyLed partyMates partyRescued " +
     "patronTalk payCount payDay phone pityOwed pityRideDay pityRides player policeAt policePaid poolDay poolHold " +
     "potDay presaleSlipsDay prevRoom priewDay priewSeen priewTextDay probeAt questDoneDay questHailed questPaid " +
-    "quests quizLast quizSeen quizWon qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
+    "quests quizLast quizSeen quizWon refundIn qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
     "returnHello reviewOf revisitSaid rideEverTaken rideLog rivalLog rng rodeVenues rodeWith roofless roomNight " +
     "roomPrepaid roomWaterDay rosesGiven safeMoneyDay safeMoneyLedger saidKha saidKhrap salengRoom salengSaid " +
     "salengSeen salengUntil score seaDay season0 seenDay selfBfHold sentTotal sevenAt shiftAskText shiftCall " +

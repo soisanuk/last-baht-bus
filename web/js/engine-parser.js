@@ -15186,6 +15186,8 @@ function _doReport(arg) {
   const fee = Math.round(owed * TONIC_POLICE_CUT);
   const back = owed - fee;
   G.money += back;
+  // a refund is money back in the hand: the morning ledger names it
+  G.refundIn = (G.refundIn || 0) + back;
   G.tonicOwed = 0;
   G.curseOwed = 0;
   if (onlyCurse) {

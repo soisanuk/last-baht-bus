@@ -5915,7 +5915,7 @@ function _nightSnapshot() {
     loanB: G.loanBorrowed || 0, loanR: G.loanRepaid || 0, loanP: G.loanPrin || 0, nontP: G.nontPrin || 0,
     nontCut: G.nontCut || 0, nontOut: G.nontOut || 0,   // Nont's five percent and the notes he counted out (Clifford, round 68)
     spcB: G.massageSpend || 0, strB: G.streamSpent || 0, joinB: G.joinerPaid || 0, jobB: G.jobPaid || 0, chamB: G.chamGifts || 0, pdB: (G.bar && G.bar.pocketDrawn) || 0,
-    wonB: (G.offIn || 0) + (G.quizWon || 0), quizB: G.quizWon || 0, giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
+    wonB: (G.offIn || 0) + (G.quizWon || 0), quizB: G.quizWon || 0, giftInB: G.giftIn || 0, condoB: G.condoPaid || 0, paperB: G.paperPaid || 0, boughtB: G.barBought || 0, refundB: G.refundIn || 0,   // pots, prizes and a note pressed into your hand, named (Liam, round 93)
     nontB: G.nontBorrowed || 0, nontR: G.nontRepaid || 0, sentB: G.sentTotal || 0, skipR: G.skipRepaid || 0, polB: G.policePaid || 0, bookB: G.hotelDebt || 0,   // the bar's lender, and the banking app — both named on the ledger (Greta and Marcus, round 61)
     known: Object.keys(G.known || {}).length,
     talked: Object.keys(G.talked || {}).length + Object.keys(G.shopMet || {}).length,
@@ -5974,14 +5974,16 @@ function _morningLedger() {
   const nontBn = since("nontB", G.nontBorrowed || 0);
   const prinN = since("loanP", G.loanPrin || 0), nontPrinN = since("nontP", G.nontPrin || 0);
   const nontCutN = since("nontCut", G.nontCut || 0), nontOutN = since("nontOut", G.nontOut || 0);
+  // the bar's deposit and key money: a purchase, named by its own line (G.ledgerNotes), not the night's spending
+  const boughtN = since("boughtB", G.barBought || 0);
   // the night is what left pocket, account and Nont's hold TOGETHER, less what is not spending:
   // a loan in, principal out, the till's money and the bar's own bills, and a send (named on
   // its own); an arrival nets in, and is named too (Marguerite, round 67). Inferring the arrival from the balance lost any
   // account spend without its own counter — the card paying the room (the money audit, A and B)
   const wealth = (m, k, h) => m + k + h;
   const spent = b.bankIn != null
-    ? wealth(b.money, b.bank, b.held || 0) - wealth(G.money, G.bank || 0, G.nontStuck || 0) - sentNight + borrowed + nontBn - prinN - nontPrinN + tillDraw - barDraw
-    : b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed + nontBn - prinN - nontPrinN + nontCutN - received;
+    ? wealth(b.money, b.bank, b.held || 0) - wealth(G.money, G.bank || 0, G.nontStuck || 0) - sentNight + borrowed + nontBn - prinN - nontPrinN + tillDraw - barDraw - boughtN
+    : b.money + drawn - G.money - barDraw + fees + tillDraw + borrowed + nontBn - prinN - nontPrinN + nontCutN - received - boughtN;
   // THE FIGURE IS POCKET AND ACCOUNT TOGETHER, and on a night the machine was used
   // it has to SAY so: the assertion auditor (2026-09-14) withdrew ฿2,000, paid ฿400
   // rent, watched his pocket go UP ฿1,600 and was told "down ฿700" — which is
@@ -6025,6 +6027,8 @@ function _morningLedger() {
   if (wonN > 0) bits.push("\u0e3f" + _num(wonN) + (quizN > 0 && quizN < wonN ? " back in at the tables and the quiz" : quizN > 0 ? " back in from the quiz" : " back in at the tables") + ", netted in");
   const giftInN = (G.giftIn || 0) - (b.giftInB != null ? b.giftInB : (G.giftIn || 0));
   if (giftInN > 0) bits.push("\u0e3f" + _num(giftInN) + " pressed into your hand by somebody, netted in");
+  const refundN = since("refundB", G.refundIn || 0);
+  if (refundN > 0) bits.push("\u0e3f" + _num(refundN) + " handed back to you as a refund, netted in");
   const jobN = (G.jobPaid || 0) - (b.jobB != null ? b.jobB : (G.jobPaid || 0));   // a job's money, in cash, named (Vince, round 74: "up ฿3,100" for ฿4,000 of fees)
   const paperN = (G.paperPaid || 0) - (b.paperB != null ? b.paperB : (G.paperPaid || 0));   // the agent's fee, named (Dougal: the envelope "vanished" into it)
   if (paperN > 0) bits.push("\u0e3f" + _num(paperN) + " to the visa agent");

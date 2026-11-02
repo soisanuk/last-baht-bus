@@ -2689,6 +2689,8 @@ function _doComplain() {
   G.bfStrikes = G.bfStrikes || {};
   const strikes = (G.bfStrikes[inc.id] = (G.bfStrikes[inc.id] || 0) + 1);
   G.money += inc.fine;
+  // a refund is money back in the hand: the morning ledger names it
+  G.refundIn = (G.refundIn || 0) + inc.fine;
   G.bfIncident = null;
   const detail = inc.kind === "runner" ? "the emergency that put her back on a stool within the hour" :
     inc.kind === "mao" ? "the mao mak mak performance" :
@@ -4112,9 +4114,11 @@ const _LAUNDER_BACK = {
   verification: () => `A letter arrives at the desk for you, on a Second Road lawyer's paper: Mr Nigel has bought a business with no company behind it, at a unit that has had three, and it is suggested that the man who walked him the sheet contribute to his costs, without anyone admitting anything. It is very politely written. It costs what it says.`,
   presale: () => `The bank texts at eleven: a transfer near an account it is watching, a recovery-service complaint from twelve men in a chat group, and a list that was sent from a phone. Nobody is accused. Your account's daily cash is halved while they look.`,
 };
-function _launderPay(n) {   // the pocket first, then the account
-  const p = Math.min(G.money, n); G.money -= p; const rest = n - p;
-  if (rest > 0) G.bank = Math.max(0, (G.bank || 0) - rest);
+// the pocket first, then the account; returns what it actually took — a man with less than the figure pays what he has
+function _launderPay(n) {
+  const p = Math.max(0, Math.min(G.money, n)); G.money -= p;
+  const k = Math.max(0, Math.min(G.bank || 0, n - p)); G.bank = (G.bank || 0) - k;
+  return p + k;
 }
 function _launderRiskTick() {
   if (!Array.isArray(G.launderRisk) || !G.launderRisk.length) return;
@@ -4123,9 +4127,10 @@ function _launderRiskTick() {
     const cost = LAUNDER_COST[r.kind] || 0;
     if (_LAUNDER_BACK[r.kind]) _say(_LAUNDER_BACK[r.kind](), "alert");
     if (cost > 0) {
-      _launderPay(cost);
+      const paid = _launderPay(cost);
       const why = { covers: "to the station, over the covers you signed off", fiftyone: "back to Reginald, the walk you took the thousand for", verification: "to Nigel's lawyer, over the sheet you handed him" }[r.kind];
-      (G.ledgerNotes = G.ledgerNotes || []).push(`฿${_num(cost)} ${why}`);
+      // the ledger names what moved: the figure asked, when it was there, or what there was of it
+      (G.ledgerNotes = G.ledgerNotes || []).push(paid >= cost ? `฿${_num(cost)} ${why}` : `฿${_num(paid)} ${why} — every baht you had of the ฿${_num(cost)} asked, and the rest let go`);
     }
     if (r.kind === "presale") { G.acctUntil = Math.max(G.acctUntil || 0, G.day + ACCT_REVIEW_DAYS); G.acctWhy = "presale"; (G.ledgerNotes = G.ledgerNotes || []).push("the account's daily cash halved while the bank looks at the list you sold"); }
     _repHit(r.kind === "fiftyone" ? 1 : 2);
@@ -4212,7 +4217,12 @@ function _questTick() {
       // money sent through the bank app lands in the ACCOUNT, as every other
       // transfer does (Joanne, round 64 — the line said bank app, the pocket grew)
       const _gv0 = _qGiver(q), _byApp = !!(NPCS[_gv0] && !_npcsHere().includes(_gv0));
-      if (_byApp) _bankIn(q.reward.money); else G.money += q.reward.money;
+      if (_byApp) _bankIn(q.reward.money);
+      else {
+        G.money += q.reward.money;
+        // money handed over in person is named on the morning ledger beside the bank app's arrival
+        G.jobPaid = (G.jobPaid || 0) + q.reward.money;
+      }
       // money with nobody handing it over (Arturo, round 47): name the giver, and
       // say how it reached you when the giver is not in the room
       const _gv = _qGiver(q), _gn = NPCS[_gv] ? NPCS[_gv].name : null;
@@ -6573,10 +6583,20 @@ function _staffTextPick(id, pool) {
 }
 // PUT <n> IN THE TILL — the owner's own money into the float. It is the bar's from then on,
 // counted like the other pocket-to-bar bills so the morning ledger does not call it a spend.
+// an amount typed at the till — "1.5k", "2,000", "฿500", Thai numerals or words: "" when none was given, NaN when one
+// was and it did not read (the caller asks "how much?" rather than guessing everything)
+function _tillAmount(arg) {
+  const a = String(arg || "").toLowerCase().replace(/[฿,]/g, "")
+    .replace(/\b(the|my|from|out|of|in|into|to|till|drawer|float|money|cash|baht|takings|wages)\b/g, " ").trim();
+  if (!a) return "";
+  const m = a.match(/(\d+(?:\.\d+)?)\s*(k)?\b/);
+  if (m) return Math.round(parseFloat(m[1]) * (m[2] ? 1000 : 1));
+  const p = _amount(a);
+  return p == null || Number.isNaN(p) ? NaN : p;
+}
 function _putInTill(arg) {
-  const m = String(arg || "").replace(/,/g, "").match(/\d+/);
-  const want = m ? parseInt(m[0], 10) : (typeof _amount === "function" ? _amount(arg) : 0);
-  const n = Math.min(want || 0, G.money);
+  const want = _tillAmount(arg);
+  const n = Math.min(want > 0 ? want : 0, G.money);
   if (!n) { _say(G.money ? "How much? (PUT <amount> IN TILL.)" : "Your pocket is empty — nothing to put in the drawer."); return; }
   G.money -= n; G.bar.cash = (G.bar.cash || 0) + n;
   G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + n; G.bar.floated = (G.bar.floated || 0) + n;
@@ -8492,7 +8512,7 @@ function _acctDue() {
 }
 function _acctCall() {
   const moved = (G.nontOut || 0) - (G.acctBase || 0);
-  G.acctDay = G.day; G.acctBase = G.nontOut || 0; G.acctUntil = G.day + ACCT_REVIEW_DAYS; G.acctWhy = null;
+  G.acctDay = G.day; G.acctBase = G.nontOut || 0; G.acctUntil = Math.max(G.acctUntil || 0, G.day + ACCT_REVIEW_DAYS); if (G.acctUntil === G.day + ACCT_REVIEW_DAYS) G.acctWhy = null;
   const firm = _flag("partnerCandy") ? "from the Bangkok firm Candy's lawyer uses" : "from the shophouse on Second Road that Tan found you";
   _say(`Bert holds the bar phone out across the rail with the face of a man handing over a summons. "Khun Wipa. Your accountant. At this hour, which means it isn't the weather."`, "alert");
   _say(`"Sorry to call in the evening." Khun Wipa, ${firm}, sounds like she has the file open in front of her and has read it twice. "Can we talk about the ฿${_num(moved)} that came into the account through the Old Market? Some of what I'm seeing doesn't sit right — not wrong, not yet, only not sitting. The bank has asked me for a source of funds. I have told them it is the owner's own money, from home." A pause long enough to be a question. "They will take a month to decide whether they believe me. Until then they will let you take half your usual cash a day. Nobody is accusing anybody. That is the polite part." Another pause. "The other part is: next time, wire it from home, in your own name, like a farang. It is slower and it is cheaper and it is a story I do not have to tell."`);
@@ -9767,8 +9787,8 @@ function _sellBarYes() {
     if (net > 0) { _bankIn(net); (G.bankNotes = G.bankNotes || []).push(`the Stinky's till${owe ? `, less Nont's loan` : ""}`); }
     else if (net < 0) { const take = Math.min(-net, G.bank || 0); G.bank -= take; }
     if (till || owe) _say(`(The till comes with you: ฿${_num(till)}${owe ? `, less the ฿${_num(owe)} still on Nont's book, which the sale settles` : ""}.)`, "dim"); }
-  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
-    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0 };
+  G.bar = Object.assign({ cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0 }, _barPocketBooks(G.bar));
   _say("");
   _say(tan
     ? "Tan handles the sale the way he handles everything: one {{phone}} call you never " +
@@ -9970,8 +9990,8 @@ function _barSaleDo(via) {
   G.barSale = { day: G.day, via, health: h, paid, fee, till };
   _setFlag("barSoldOn"); if (via === "plg") _setFlag("barToPlg"); if (via === "bert") _setFlag("barToBert");
   G.flags.barOpen = false;
-  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
-    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, pocketDrawn: 0, gone: b.gone || {} };   // a girl who left before the sale is still gone after it
+  G.bar = Object.assign({ cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0, gone: b.gone || {} }, _barPocketBooks(b));   // a girl who left before the sale is still gone after it
   const trust = (id, n) => { const st = _npcState(id); st.trust = Math.max(0, Math.min(5, (st.trust || 0) + n)); };
   if (via === "plg") {
     _align("plg", 2); _align("indie", -3); _align("samson", -1);
@@ -10120,12 +10140,16 @@ function _barDeposit() {
     return;
   }
   _setFlag("barPaid");
+  // the accountant is hired with the bar: what came through Nont before it was bought is not hers to ask about
+  G.acctBase = G.nontOut || 0;
   // the account first, the pocket for whatever the account can't cover — and the
   // pocket share is the BAR's ledger, not tonight's spending (the morning line)
   const fromBank = Math.min(bank, BAR_DEPOSIT), fromPocket = BAR_DEPOSIT - fromBank;
   G.bank = bank - fromBank;
   G.money -= fromPocket;
-  if (fromPocket) G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket;
+  // the purchase is neither the night's spending nor the bar's bill, whichever balance paid it: the ledger names it
+  G.barBought = (G.barBought || 0) + BAR_DEPOSIT;
+  (G.ledgerNotes = G.ledgerNotes || []).push(`฿${_num(BAR_DEPOSIT)} deposit to the old man, for the bar`);
   G.bar.owed = BAR_PRICE - BAR_DEPOSIT;
   G.bar.lastMonthDay = G.day;
   _say("");
@@ -10216,7 +10240,8 @@ function _leaseCash() {
     return;
   }
   const fromTill = Math.min(Math.max(b.cash, 0), l.cash), fromPocket = l.cash - fromTill;
-  b.cash -= fromTill; if (fromPocket > 0) { G.money -= fromPocket; b.pocketDrawn = (b.pocketDrawn || 0) + fromPocket; }
+  b.cash -= fromTill; if (fromPocket > 0) { G.money -= fromPocket; G.barBought = (G.barBought || 0) + fromPocket; }
+  (G.ledgerNotes = G.ledgerNotes || []).push(`฿${_num(l.cash)} key money to the landlord, in notes` + (fromTill ? `, ฿${_num(fromTill)} of it from the till` : ""));
   l.paid = true; l.how = "cash";
   _say(_fmt("฿{cash} in notes, counted onto the bar, counted again into an envelope that has been ready under the till since this morning. Nobody writes anything down. \"He'll be round for a soda he doesn't drink. That's the receipt.\"{off}",
     { cash: l.cash, off: l.off ? _fmt(" ฿{saved} under the list, for keeping it off paper.", { saved: l.key - l.cash }) : "" }), "win");
@@ -10230,7 +10255,8 @@ function _leaseTransfer() {
   }
   const fromBank = Math.min(bank, l.key), fromPocket = l.key - fromBank;
   G.bank = bank - fromBank; G.money -= fromPocket;
-  if (fromPocket) G.bar.pocketDrawn = (G.bar.pocketDrawn || 0) + fromPocket;
+  G.barBought = (G.barBought || 0) + l.key;
+  (G.ledgerNotes = G.ledgerNotes || []).push(`฿${_num(l.key)} key money to the landlord, by transfer`);
   l.paid = true; l.how = "transfer";
   _say(_fmt("฿{key} across on the app to an account number Bert reads twice. The landlord's daughter sends a sticker back, which is the closest that family comes to a receipt.{off}",
     { key: l.key, off: l.off ? _fmt(" (He'd have taken ฿{cash} in notes. You paid for the paper.)", { cash: l.cash }) : "" }), "win");
@@ -10314,6 +10340,8 @@ function _nightTake(u) {
 // the night's short, if there is one: a pure hash of the night, so a count at close and the morning's settle agree
 function _tillShort(day) {
   const b = G.bar; if (!b || !b.room) return null;
+  // a count at close is the drawer's verdict: a shift that lapses after it does not re-roll the night at the away rate
+  if (b.countedDay === day && b.countSh !== undefined) return b.countSh;
   const stood = b.workedLast && b.workedDay === day;
   const rate = (stood ? TILL_SHORT_STOOD : TILL_SHORT_AWAY) + Math.min(TILL_SHORT_HABIT_MAX, (b.leakHabit || 0) * TILL_SHORT_HABIT);
   if (_hm("tillshort:" + day + ":" + G.vacation, 31) % 1000 >= rate * 1000) return null;
@@ -10332,12 +10360,13 @@ function _doCountTill() {
   if (G.nightTurn < 60) { _say("The night is still putting money in. Count it at close — after midnight the drawer means something."); return; }
   const b = G.bar;
   if (b.countedDay === G.day) { _say("Counted already. The drawer is the drawer."); return; }
-  b.countedDay = G.day;
   const k = (() => { const t = _tillKeeper(G.room); return t ? NPCS[t].name : "The till keeper"; })();
   const sh = _tillShort(G.day);
-  _passTime(3);
+  b.countedDay = G.day; b.countSh = sh || null;
   if (!sh) _say(`You sit with ${k} and count the drawer against the slips, note by note. It agrees to the baht. ${k} looks faintly offended that you checked, and pleased that it came out.`);
   else _say(_TILL_CAUGHT[sh.kind](k, sh.amt) + (sh.back ? ` (฿${_num(Math.round(sh.amt * sh.back))} of it back in the drawer by the morning.)` : " (None of it comes back. The lock on the drawer is what you bought.)"));
+  // the count is said before its three turns pass: in the night's last turns they run into the dawn
+  _passTime(3);
 }
 function _barNight(settleDay) {
   const b = G.bar;
@@ -11253,6 +11282,13 @@ function _barArrearsTick(m) {
   }
 }
 
+// what the pocket paid the bar tonight (its bills, the till's top-up, its stock) and what was drawn from the till:
+// the morning ledger reads them off G.bar after the settle, so a bar that is lost or sold tonight hands them on
+function _barPocketBooks(b) {
+  b = b || {};
+  return { pocketDrawn: b.pocketDrawn || 0, pocketNight: b.pocketNight || 0, pocketStock: b.pocketStock || 0, drawn: b.drawn || 0 };
+}
+
 function _barLost(cause) {
   const tan = _flag("partnerTan");
   _say("");
@@ -11320,8 +11356,8 @@ function _barLost(cause) {
   G.barSale = { day: G.day, via: "lost", health: "under", paid: 0, fee: 0, till: 0 };   // a bar taken for the rent went under water, and every floor knows it
   G.flags.barOpen = false;
   const _nontOwed = Math.max(0, (G.bar && G.bar.loan && G.bar.loan.owed) || 0);   // Nont's loan was forgiven with the bar (review 2026-10-25)
-  G.bar = { cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
-    best: 0, workedLast: false, rentOwed: 0, rentShort: 0 };
+  G.bar = Object.assign({ cash: 0, owed: 0, arrears: 0, months: 0, lastMonthDay: 0, nights: 0,
+    best: 0, workedLast: false, rentOwed: 0, rentShort: 0 }, _barPocketBooks(G.bar));
   if (_nontOwed) { G.bar.loan = { owed: _nontOwed, personal: true }; _say(`(Nont's ฿${_num(_nontOwed)} did not go with the bar. It is in your name now, at his table — REPAY there.)`, "dim"); }
   _addHappy(-8, "the bar is gone, and you built it");   // named beside the figure (happiness audit, H3)
 }
@@ -11362,9 +11398,10 @@ function _doDraw(arg) {
       : "The drawer is empty. A bar that has taken nothing tonight has nothing for you either.");
     return;
   }
-  const _am = typeof _amount === "function" ? _amount(arg) : null;
-  let amount = /all|everything|lot/.test(arg) ? b.cash : (_am && !Number.isNaN(_am)) ? _am : parseInt(String(arg).replace(/[^\d]/g, ""), 10);
-  if (!amount || amount <= 0) amount = b.cash;
+  // a bare DRAW is the whole drawer; an amount that does not read is asked about, never taken as everything
+  const _ta = _tillAmount(arg);
+  const amount = _ta === "" || /\b(all|everything|lot)\b/.test(arg || "") ? b.cash : /\bhalf\b/.test(arg || "") ? Math.round(b.cash / 2) : _ta;
+  if (!(amount > 0)) { _say(_fmt("How much? There's ฿{cash} in the drawer. (DRAW <amount>, or DRAW ALL.)", { cash: b.cash })); return; }
   if (amount > b.cash) {
     _say(_fmt("There's ฿{cash} in the drawer. You can't take out what the night didn't put in.", { cash: b.cash }));
     return;
