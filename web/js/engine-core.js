@@ -301,6 +301,14 @@ function _topicKnown(t) {
 
 let G = null;
 
+// AN IN-GAME RESET (RESTART, START OVER, PLAY AGAIN) is a fresh game in the month the player arrived in: the frontend
+// seeds G.season0 off the wall clock on its start panel only, so a bare newGame() here would fall back to November.
+// The Act One record and its attempt count (which unlock HINT) carry with it, as they do across a failed run.
+function _freshGame() {
+  const keep = G ? { season0: G.season0, act1Best: G.act1Best, act1Tries: G.act1Tries } : {};
+  newGame();
+  for (const k in keep) if (keep[k] != null) G[k] = keep[k];
+}
 function newGame() {
   G = {
     room: "jomtien_beach",
@@ -328,6 +336,8 @@ function newGame() {
     dogRegion: null,     // the district the un-adopted dog was first seen in — his manor
     atmIn: 0,          // notes put back into the account at a machine (DEPOSIT)
     weekStart: null,   // pocket + account when the Soi 6 week began: the card's "spent" is start less end
+    refundIn: 0,       // money handed back to you (a barfine refunded, the desk's recovery): named on the ledger
+    barBought: 0,      // the bar's deposit and key money paid from pocket and account: named on the ledger, never the night's spending
     loanBorrowed: 0, loanRepaid: 0,   // running totals, like atmTotal: a loan is not a win on the morning ledger (Malcolm, round 59)
     blackouts: 0, walletLostDay: null, walletHeld: null,   // the second wallet (2026-10-21)
     homeSeen: {}, flatTold: {}, street: null, streetDone: null, roomPrepaid: null, glass: 0, potDay: null, envelopeDue: null, ledgerNotes: [], monthAdj: 0, monthClosing: null, monthRate: null, barSat: {},   // the resident's integration pass (round 100)
@@ -689,24 +699,24 @@ function importBaton(b) {
 // its few life-long books), so its keys are "night" (reset at dawn — _endNight resets every one listed, by type) or "trip".
 const STATE_SCHEMA = {
   night: (
-    "bank battery chamNight checkoutNight crashInjury darkStreak encPrompt enteredVia game hangover hunger hurt " +
+    "battery chamNight checkoutNight crashInjury darkStreak encPrompt enteredVia game hangover hunger hurt " +
     "jaded kickedTonight kpPlayed lastBfBase lastBfHonest lastBfId lastBfPreTier lastBfWhy lastBusWarned " +
     "lastNightWas lightOn monthClosing nightTurn nontStuck offstage party partyLog peddlerNight pendingBf pendingEnc " +
     "pendingFare pendingSoapy quizPlayed rain rideSeq room roomWater roughLost safeTries salengCart selfBfId thirst " +
     "wakeTurn ").trim().split(/\s+/),
   trip: (
-    "atmDay atmToday care curseOwed everBond happy hotel weekStart lastNight lastNightSaid ledgerSeen loan loanSkipped " +
-    "loanSkippedOwed money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
+    "atmDay atmToday care curseOwed happy hotel weekStart lastNight lastNightSaid ledgerSeen loan " +
+    "money nightLog pendingChoice prevBond rep repDay returned stage testedDays tonicOwed ").trim().split(/\s+/),
   life: (
-    "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho " +
+    "_lastPick acctBase acctDay acctUntil acctWhy act1Best atmIn act1SafeDue act1Tries affair affairCool affairCoolWho bank " +
     "affairCrisis affairOutAsk affairWho afterWorkOf amuletWorn askArm askArmPrev askTold atmFees atmTotal bankIn " +
-    "bankNotes bar barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
+    "bankNotes bar barBought barSale barSat bestHappy bfIncident bfNo bfOpen bfSeq bfStrikes bkk blackouts blueDogDay boardTried " +
     "boardWon bookingDay boxJob bruise buddhaDay busAskStops busAskTurn busCameTurn busWaitTurn catDay ccibLoud " +
     "ccibLoudNight ccibLowUntil ccibRadar chamContactDay chamDays chamGifts chamLast chamNights cherryDay cliLockedDay cliSat " +
     "clozeFree cmdN codaBook codaSeen condo condoPaid condoTermsRead condoms convo convoChoiceMemo convoHour " +
     "convoIdx convoLapsed convoPage convoQ coversNights dailyId dailySeed darkDoorDay day destitute destituteDay dog " +
     "dogNudgeDay dogPhakhama dogRegion dogRoomSeen dogTagged dragDay drizzleTurn dropped drunk eddyBackDay encDone " +
-    "endKind endWarn envelopeDue examined exitSaid exitTried faction firedBars flags flatTold flowerDay flowerFor " +
+    "endKind endWarn envelopeDue everBond examined exitSaid exitTried faction firedBars flags flatTold flowerDay flowerFor " +
     "flowerSeen freeTeaDay fridgeDay fridgeWater frontierSaid giftIn giftLog gifts givenEver glass halfThaiClocked " +
     "heardOf heardRegion homeSeen hospitalVisits hotelDebt insulted introAfter introStep itNpc itemLoc jadeSaid job " +
     "jobFired jobOffer jobPaid jobPay jobQuit joinSaid joinerDay joinerPaid keptAskText keptBy keptByLog keptByUsed " +
@@ -714,14 +724,14 @@ const STATE_SCHEMA = {
     "lastCoda lastComp lastConquest lastDrizzle lastEnc lastGame lastGate lastKp lastNightBye lastNightNotice " +
     "lastNightWith lastOffer lastPeddler lastPolice lastRain lastRide lastSaleng launderBack launderRisk leaveLine " +
     "leaveOn leaveSaid ledgerNotes levelsSeen licNominees licencesRead lifeStats lightWarn loanBorrowed loanPrin " +
-    "loanRepaid lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
+    "loanRepaid loanSkipped loanSkippedOwed lockedInAt loopDay maiDee maiDeeBar maiDeeMoney mamaYaiDay massageLog massageSpend metDay metRoom " +
     "miffed missTarget mode month monthAdj monthLine monthRate mortDeclined mortDeclinedDay motBoots motoAsked motoBalkTurn " +
     "motoHomeDoor motoRides motoRiding namedBy nokLeftDay nontBorrowed nontCashCount nontCashed nontCut nontOut " +
     "nontPayNow nontPrin nontRepaid npc offIn offShift offTill officeTries over overheardSaid owed owlRead " +
     "ownRescueDay paper paperFlag paperPaid paperShort paperUntil partnerWho partyLed partyMates partyRescued " +
     "patronTalk payCount payDay phone pityOwed pityRideDay pityRides player policeAt policePaid poolDay poolHold " +
     "potDay presaleSlipsDay prevRoom priewDay priewSeen priewTextDay probeAt questDoneDay questHailed questPaid " +
-    "quests quizLast quizSeen quizWon qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
+    "quests quizLast quizSeen quizWon refundIn qvDay qvRoast rabbitDataDay rabbitWay rainDay rainOnRide returnGreetUsed " +
     "returnHello reviewOf revisitSaid rideEverTaken rideLog rivalLog rng rodeVenues rodeWith roofless roomNight " +
     "roomPrepaid roomWaterDay rosesGiven safeMoneyDay safeMoneyLedger saidKha saidKhrap salengRoom salengSaid " +
     "salengSeen salengUntil score seaDay season0 seenDay selfBfHold sentTotal sevenAt shiftAskText shiftCall " +
@@ -799,10 +809,11 @@ function _gateCarries(id) { return !!(GATES[id] && GATES[id].carry); }
 // the nightly G.soc keys _endNight does not reset by hand, reset by type at dawn (salengBar and steered were never reset:
 // three carts a night became three a trip — the architecture review, 2026-10-25)
 let _SOC_HAND_RESET = null;
-function _resetNightSoc() {
+// all: every socNight key, the ones _endNight resets by hand too — for a night that ends without passing through them
+function _resetNightSoc(all) {
   if (!_SOC_HAND_RESET) _SOC_HAND_RESET = new Set([..._endNight.toString().matchAll(/G\.soc\.([a-zA-Z_]\w*) = /g)].map(m => m[1]));
   for (const k of STATE_SCHEMA.socNight) {
-    if (_SOC_HAND_RESET.has(k)) continue;
+    if (!all && _SOC_HAND_RESET.has(k)) continue;
     const v = G.soc[k]; if (v === undefined) continue;
     G.soc[k] = Array.isArray(v) ? [] : v && typeof v === "object" ? {} : typeof v === "number" ? 0 : typeof v === "boolean" ? false : null;
   }
@@ -1727,7 +1738,7 @@ function _chargeRent(rough) {
   const _monthRoom = (n) => { if (G.stage === "expat" && G.month) { G.month.rent = (G.month.rent || 0) + n; G.roomNight = (G.roomNight || 0) + n; } };   // roomNight: the ledger counts the room into the month's spend even on a night that was "up" (Kaspar, round 101: "฿1,080 spent, ฿1,350 of it the room")   // the month's book counts what was PAID for the room (Dougal, round 97: "฿2,160 of it the room" from a book at its cap)
   if (G.money >= _hotelRate(G.hotel)) {
     G.money -= _hotelRate(G.hotel); _monthRoom(_hotelRate(G.hotel));
-    _say(`(${G.checkoutNight ? "Checkout: the last night settled at the desk on the way to the taxi" : rough ? "The folio is waiting at the desk when you finally get back" :
+    _say(`(${G.checkoutNight ? `Checkout: the last night settled at the desk on the way to the ${G.visitUntil ? "bus" : "taxi"}` : rough ? "The folio is waiting at the desk when you finally get back" :
       "The folio slides under the door"}: ฿${_num(_hotelRate(G.hotel))}` +
       (G.stage === "expat" ? " — the long-stay rate" : "") +
       `, the ${_HOTELS[G.hotel].name}. ฿${_num(G.money)} left.)`, "dim");

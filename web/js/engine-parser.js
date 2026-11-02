@@ -2649,7 +2649,7 @@ function _doExamine(arg) {
   if (G.dog && (/\b(dog|sai krok)\b/.test(arg) ||
       (G.dog.name && arg.includes(G.dog.name.toLowerCase())))) {
     _say(_dogN(`Sai Krok: a Pattaya-special soi dog with one clipped ear and the settled ` +
-      `bulk of a professional. He chose you on day ${G.dog.since} and has never once ` +
+      `bulk of a professional. He chose you ${G.dog.since >= 1 ? `on day ${G.dog.since}` : "a trip ago"} and has never once ` +
       `revisited the decision. Currently ` +
       (_room().barType === "beer" ? "under your stool, officially off duty, actually on duty." :
        (_room().bar || _room().barType) ? "outside the door, chin on paws, one ear on the room." :
@@ -13098,11 +13098,11 @@ function _doPay(arg) {
   // PAY CONDO / PAY THE OFFICE / PAY RENT at the tower: a month the payday went short is paid at the office, which
   // used to be nobody's to take (Kaspar, round 101: "Nobody's waiting to be paid", then the lock)
   if (G.condo && (G.condo.short || 0) > 0 && (/\b(condo|office|flat|apartment|juristic)\b/.test(arg || "") || (/\brent\b/.test(arg || "") && !(_atOwnBar())) || _inCondo() || G.room === "pratumnak_soi5")) {
-    const due = CONDO_RENT + CONDO_UTIL, have = (G.money || 0) + (G.bank || 0);
+    const due = _condoOwed(G.condo), have = (G.money || 0) + (G.bank || 0);
     if (have < due) { _say(`The office wants ฿${_num(due)} for the month that went short, and you have ฿${_num(have)} between the pocket and the account.`); return; }
-    const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due; G.condo.short = 0;
+    const fb = Math.min(G.bank || 0, due); G.bank = (G.bank || 0) - fb; G.money -= (due - fb); G.condoPaid = (G.condoPaid || 0) + due; G.condo.short = 0; G.condo.owed = 0;
     if (G.month) { G.month.spent = (G.month.spent || 0) + due; G.month.rent = (G.month.rent || 0) + due; }
-    _say(`฿${_num(due)} across the office counter — the rent and the electric for the month that went short. The woman tears the note off the pad and the book is square. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
+    _say(`฿${_num(due)} across the office counter — what the month that went short left on the book. The woman tears the note off the pad and the book is square. ฿${_num(G.money)} in the pocket, ฿${_num(G.bank || 0)} in the account.`);
     return;
   }
   // A LANDLORD WHO WILL NOT TAKE YOUR MONEY. He comes to the bar in person to
@@ -15231,6 +15231,8 @@ function _doReport(arg) {
   const fee = Math.round(owed * TONIC_POLICE_CUT);
   const back = owed - fee;
   G.money += back;
+  // a refund is money back in the hand: the morning ledger names it
+  G.refundIn = (G.refundIn || 0) + back;
   G.tonicOwed = 0;
   G.curseOwed = 0;
   if (onlyCurse) {
@@ -18864,6 +18866,9 @@ function doCommand(input) {
   finally { _cmdDepth--; if (!_failedThis && String(input == null ? "" : input).trim()) _failRun = 0; }
 }
 function _doCommandInner(input) {
+  // a command whose own handler crossed a night (a fresh G, or a new day) has spent its turns: the dispatcher's
+  // closing tick would be the first turn of the next morning, or of a new Act One run, before the player typed
+  const _g0 = G, _d0 = G ? G.day : null;
   _rawAnswer = String(input == null ? "" : input);
   G.askArmPrev = G.askArm || null; G.askArm = null;   // a "again to sign" arm holds for the NEXT command only (the lease, the notice — Victor, round 97)
   // YES / PAY to Nont's named fee: the locate he just priced (Mario, 2026-10-22)
@@ -19124,7 +19129,7 @@ function _doCommandInner(input) {
     if (G.endKind === "repatriated" && /^(visit|pattaya|back|go back|return)\b/.test(lower)) { _say("(The loan against your passport comes first, and it is not coming. START OVER, or SHARE the card.)", "dim"); _gameEndPrompt(); return; }
     if (/^share/.test(lower)) { _doShare(); _gameEndPrompt(); return; }
     if (/^(visit|pattaya|go back|back|week|yes)\b/.test(lower)) { _visitPattaya(); return; }
-    if (/^(start over|restart|new game|over|again|begin)\b/.test(lower)) { newGame(); engineIntro(); return; }
+    if (/^(start over|restart|new game|over|again|begin)\b/.test(lower)) { _freshGame(); engineIntro(); return; }
     _gameEndPrompt(); return;
   }
   // HER MAT (destitution, 2026-10-20): her offer, once; a question keeps it; the wrong answer keeps it
@@ -19177,7 +19182,7 @@ function _doCommandInner(input) {
       if (/^(no|nope|not now|nothing|wait)\b/.test(lower)) { _say("(Nothing to say no to. The week is done: SHARE it, CONTINUE on the same soi, PLAY AGAIN fresh, or RESTART as somebody else.)", "dim"); _vacationEndPrompt(); return; }
       _vacationEndPrompt(); return;
     }
-    if (/^restart/.test(lower)) { newGame(); engineIntro(); return; }
+    if (/^restart/.test(lower)) { _freshGame(); engineIntro(); return; }
     if (/^share/.test(lower)) { _doShare(); _vacationEndPrompt(); return; }
     // A QUESTION IS NOT AN ANSWER (Dennis, round 60): "what happens if I move to pattaya?"
     // made the permanent move, and "what does a new vacation mean?" flew him home — the
@@ -20924,7 +20929,7 @@ function _doCommandInner(input) {
         const daily = G.dailySeed ? { seed: G.dailySeed, dailyId: G.dailyId } : undefined;
         G.player = null; startSoi6Mode(daily); return;
       }
-      const b = G.act1Best || 0, t = G.act1Tries || 0; newGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
+      const b = G.act1Best || 0, t = G.act1Tries || 0; _freshGame(); G.act1Best = b; G.act1Tries = t; engineIntro(); return;
     }
     case "black": case "little":   // BLACK BOOK / LITTLE BLACK BOOK as two words; anything else falls through
       if (/^(black )?book$/.test(arg)) { _doBlackbook(); break; }
@@ -21102,7 +21107,7 @@ function _doCommandInner(input) {
   }
   // a WAIT that refused to wait has not spent anything (Kenji, round 47). Module-local and
   // cleared at dispatch, so it can never eat the NEXT command's tick (soak liveness caught that).
-  if (!_waitRefused && !_moveRefused && !_FREE_VERBS.has(v)) _tick();
+  if (!_waitRefused && !_moveRefused && !_FREE_VERBS.has(v) && G === _g0 && G.day === _d0) _tick();
   _questTick();
   _checkAct1();
 }
@@ -21332,7 +21337,7 @@ function _doShare() {
 function startSoi6Mode(opts) {
   const identity = G && G.player;  // keep who you are across the fresh-week reset
   const bestHappy = (G && G.bestHappy) || 0; // …and the best-week record PLAY AGAIN shows
-  newGame();
+  _freshGame();
   // PLAY AGAIN keeps identity AND the best-week high-water mark; a RESTART (which
   // clears G.player first) falls through here with no identity and resets both.
   if (identity && identity.origin) { G.player = identity; G.bestHappy = bestHappy; }
