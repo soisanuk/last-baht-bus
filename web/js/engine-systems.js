@@ -3731,9 +3731,9 @@ function _doAccept(arg) {
   if (G.quests[qid] === "done") { _say("That one's finished. Bask."); return; }
   // "(You now have the bottle of Sang Som.)" from a giver who was working her
   // other bar (Bronwyn, round 39): a quest with a THING to hand over is accepted
-  // where she is; a flag-only errand can be taken on from the journal
-  if (QUESTS[qid].item && NPCS[QUESTS[qid].giver] && NPCS[QUESTS[qid].giver].bars &&
-      _npcRoom(QUESTS[qid].giver) !== G.room && !_npcsHere().includes(QUESTS[qid].giver)) {
+  // where she is; a flag-only errand can be taken on from the journal. Presence, not her home room or her bar
+  // count: a one-bar giver across town (Kwan's crane) cannot hand it over either
+  if (QUESTS[qid].item && NPCS[QUESTS[qid].giver] && !_npcsHere().includes(QUESTS[qid].giver)) {
     const gv = NPCS[QUESTS[qid].giver];
     const where = _npcWhere(QUESTS[qid].giver);
     _say(`${gv.name} isn't here to hand it over` + (where && _barName(where) ? " — " + _pr(QUESTS[qid].giver).s + " is at " + _barName(where) + " tonight." : "."));
@@ -4726,8 +4726,9 @@ function _doMessage(arg) {
   }
   // an EMPTY name matched every contact ("".includes) and texted whoever was first —
   // Tan, then called "her" (Margaret, round 65)
-  const id = w && Object.keys(G.phone.contacts).find(c =>
-    c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
+  const _cn = _contactNamed(w);
+  if (Array.isArray(_cn)) { _say("Which one? (" + _cn.map(c => "MESSAGE " + NPCS[c].name.toUpperCase()).join(" · ") + ")"); return; }
+  const id = _cn;
   // the face-loss verdict is read on the contact the lookup RESOLVED, so a prefix or a few words after her name
   // ("message lamai miss you") meet the same closed door as her bare name — nothing reopens it
   if (id && _maiDee(id)) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[id].name}'s answer, tonight and after.`, "dim"); return; }
@@ -5094,14 +5095,28 @@ const _CONTACT_SWAP_LINES = [
   "{n} takes your phone off you, adds herself, and rings her own number from it to be sure. Somewhere in her bag her phone lights up with your name already in it. Efficient. Slightly chilling. Wonderful.",
 ];
 
+// A CONTACT FROM A TYPED NAME, for anything that pays or texts her: the person is resolved, never a name that merely
+// contains what was typed (Kwanjai is not Kwan, Saifon is not Fon, Mercedes is not "me"). Her exact name, last name or id
+// first (the whole line, then its first word — "lamai miss you"), then a name with a word that BEGINS with the first typed
+// word of three letters or more. One match is the id; several are returned as an array for the caller to ask "which one?".
+function _contactNamed(nameW) {
+  const w = String(nameW || "").toLowerCase().replace(/\s+/g, " ").trim(), w0 = w.split(" ")[0];
+  if (!w) return null;
+  const cs = Object.keys(G.phone.contacts || {}).filter(c => NPCS[c]), only = { filter: c => cs.includes(c) };
+  const exact = _npcByName(w, only) || (w0 !== w ? _npcByName(w0, only) : null);
+  if (exact) return exact;
+  if (w0.length < 3) return null;
+  const pre = cs.filter(c => String(NPCS[c].name).toLowerCase().split(/\s+/).some(p => p.startsWith(w0)));
+  return pre.length > 1 ? pre : pre[0] || null;
+}
 function _doSendMoney(arg) {
   if (_phoneDead()) return;
   arg = String(arg || "").replace(/(\d),(?=\d{3}\b)/g, "$1");   // "1,500" is fifteen hundred, not one baht and a contact called "500" (review 2026-10-25)
   const m = arg.match(/(\d+)/);
   const amt = m ? parseInt(m[1], 10) : null;
-  const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").trim();
-  const id = Object.keys(G.phone.contacts).find(c =>
-    c === nameW || NPCS[c].name.toLowerCase().includes(nameW.split(" ")[0] || "~"));
+  const nameW = arg.replace(/\d+|money|baht|to |฿/g, " ").replace(/\s+/g, " ").trim().toLowerCase();
+  const id = _contactNamed(nameW);
+  if (Array.isArray(id)) { _say("Which one? (" + id.map(c => "SEND " + (amt || "<amount>") + " TO " + NPCS[c].name.toUpperCase()).join(" · ") + ")"); return; }
   if (!id) { _say("Send to whom? The banking app only knows your contacts."); return; }
   if (!amt || amt <= 0) { _say("How much? (SEND <amount> TO <name>)"); return; }
   // the banking app draws on the ACCOUNT, not the notes in your pocket (Mario, round 58 —
@@ -5126,7 +5141,7 @@ function _doSendMoney(arg) {
   // the verdict: she takes it as severance, once, and the phone goes quiet (theme 6)
   if (_maiDee(id)) {
     G.bank -= amt; G.sentTotal = (G.sentTotal || 0) + amt; G.battery = Math.max(0, G.battery - 1);
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    _say(_fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
     if (!(G.maiDeeMoney = G.maiDeeMoney || {})[id]) {
       G.maiDeeMoney[id] = true;
       _pushMsg(id, _MAI_DEE_MONEY);
@@ -5166,7 +5181,7 @@ function _doSendMoney(arg) {
     _addBond(id, 1);
     _giftNote(id, { kind: "send", amt });
     _say(_npcsHere().includes(id) ? _fmt("฿{a}, phone to phone across the width of a bar. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) })
-      : _fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+      : _fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
     _pushMsg(id, _pickVary(_GIFT_ACCOUNT, "giftacct:" + id));
     _say("(📱 A reply lands before you've pocketed the phone.)", "dim");
     return;
@@ -5186,7 +5201,7 @@ function _doSendMoney(arg) {
       "and she looks at it, then at you, and doesn't quite manage not to smile. (฿{m} left in the account.)",
       { a: amt, m: _num(G.bank) }));
   else
-    _say(_fmt("฿{a} crosses town in one green blink. (฿{m} left in the account.)", { a: amt, m: _num(G.bank) }));
+    _say(_fmt("฿{a} crosses town to {n} in one green blink. (฿{m} left in the account.)", { a: amt, n: NPCS[id].name, m: _num(G.bank) }));
   // the girls who aren't in the bar economy answer in their own voices, not the
   // hostess patter (mobile playtest 2026-08-22: Priew got "tonight I take care YOU")
   if (id === "priew") {
@@ -13790,6 +13805,8 @@ function _doLesson(arg) {
   }
   const tier = _lessonTier(arg);
   if (!tier) { _say("\"Phrases, reading, or verbs.\" She holds up three fingers and does not offer a fourth. (LESSON PHRASES · LESSON READING · LESSON VERBS)"); return; }
+  // like every paid hour, refused before the money (or the free hour) moves when it would run into the dawn
+  if (_tooLateFor(LESSON_TURNS, "An hour at the board")) return;
   if (G.clozeFree) {
     G.clozeFree = false;
     _say("\"You do not pay for this one.\" She says it once and does not repeat it.", "dim");

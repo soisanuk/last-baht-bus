@@ -105,3 +105,36 @@ test("S4-8: CALL rings a number in the phone — not a man at the bar, not a wom
   G.phone.contacts.cake = {}; const b = G.battery; s = t("call cake");
   assert.match(s, /why you CALL/); assert.equal(G.battery, b - 1, "a call costs battery");
 });
+
+test("S4-9: ACCEPT hands over a quest's item only with the giver in the room, whatever her bar count", () => {
+  sandbox(); G.nightTurn = 20;
+  for (const q of ["kwan_crane", "lake_errand", "helmet", "scout"]) {
+    G.quests[q] = "offered"; G.room = "soi6_deep";
+    assert.match(t("accept " + q.replace("_", " ")), /isn't here to hand it over/, q);
+    assert.notEqual(G.itemLoc[QUESTS[q].item], "inventory", q + "'s item crossed town");
+    assert.equal(G.quests[q], "offered", q);
+  }
+  G.room = NPCS.kwan.room; t("accept kwan crane");
+  assert.equal(G.itemLoc[QUESTS.kwan_crane.item], "inventory", "with Kwan here the crane is handed over");
+});
+
+test("S4-11: a LESSON in the night's last minutes is refused before the money or the free hour moves", () => {
+  sandbox(); G.money = 2000; G.room = "cloze"; G.nightTurn = 117; assert.ok(_waenHere(), "the fixture: Waen is at the board");
+  const d = G.day; let s = t("lesson phrases");
+  assert.match(s, /Nothing is charged/); assert.equal(G.money, 2000); assert.equal(G.day, d, "the lesson ran into the dawn");
+  G.clozeFree = true; t("lesson phrases"); assert.equal(G.clozeFree, true, "the free hour was spent into the dawn");
+});
+
+test("S1-2: SEND pays the woman whose name was typed — never one whose name merely contains it — and names her", () => {
+  sandbox(); G.bank = 10000; G.battery = 80; G.phone.contacts = { kwanjai: true, kwan: true };
+  assert.match(t("send 500 to kwan"), /to Kwan in one green blink/);
+  assert.deepEqual(G.soc.given, { kwan: 500 });
+  G.phone.contacts = { saifon: true, sea_wall_fon: true }; t("send 300 to fon");
+  assert.ok(!G.soc.given.saifon, "Saifon was paid for 'fon'");
+  G.phone.contacts = { nont: true, candy: true, mercedes: true }; const b = G.bank;
+  t("send 300 to me"); assert.equal(G.bank, b, "'me' paid Mercedes");
+  G.phone.contacts = { kwanjai: true, kwan: true };
+  assert.match(t("send 100 to kwa"), /Which one\?/); assert.equal(G.bank, b);
+  // MESSAGE resolves the same way (_contactNamed): Kwan is not Kwanjai
+  G.room = "beach_rd_s"; assert.match(t("message kwan"), /You send Kwan something/);
+});
