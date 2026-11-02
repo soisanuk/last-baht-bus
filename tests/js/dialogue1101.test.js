@@ -193,3 +193,31 @@ test("Somsri's and Mint's shorts keep their own grammar, and the Firecracker's w
   const nam = NPCS.firecracker_bar_namtan.dialogue[0]; assert.match(nam.text, /\(DRINK WATER\)/); assert.doesNotMatch(nam.text, /puts a bottle in front of you/);
   sandbox(); G.nightTurn = 40; G.room = "firecracker_bar"; const m = G.money; t("drink water"); assert.ok(G.money < m, "the water is charged, as the prose now lets it be");
 });
+
+// ── slice D of the second reader pass: the Darkside, the Silk Rose, the Doghouse, Succubus (read 2026-11-02) ──
+test("Oy's message for Daeng has a door: Daeng takes it once Oy has sent you, and once only", () => {
+  sandbox(); G.nightTurn = 40; talk("oy"); t("ask oy about daeng");
+  G.room = _npcRoom("daeng"); G.convo = null; run("talk to daeng");
+  assert.match(t("ask daeng about the pig"), /Dead/); assert.ok(_flag("pigTold"));
+  assert.doesNotMatch(t("ask daeng about oy"), /The pig\?/, "told once; her old Oy node answers after");
+  const d = NPCS.daeng.dialogue.find(d => /^pig\|/.test(d.topic)); assert.ok(d && d.when && !d.when(_npcState("daeng"), Object.assign({}, G, { talked: {} })), "closed until Oy has spoken");
+});
+test("the hill's facts agree: Helmut's years, the Doghouse's two years, the Jomtien run, Wassana's gold", () => {
+  assert.match(NPCS.helmut.dialogue[0].text, /twenty-eight years/);
+  assert.match(NPCS.sunee.dialogue.find(d => d.topic === "gof").text, /two years/);
+  for (const d of NPCS.tukky.dialogue) assert.doesNotMatch(String(d.text) + String(d.short), /Naklua run/);
+  assert.match(NPCS.wassana.dialogue.find(d => /^gold\|/.test(d.topic)).text, /one salung/); assert.match(NPCS.wassana.dialogue.find(d => d.topic === "late").text, /America is awake/);
+  assert.match(NPCS.sunee.dialogue.find(d => /^rule\|/.test(d.topic)).text, /Bob's room across the road/);
+  assert.doesNotMatch(NPCS.doghouse_bow.dialogue[0].text, /a year ago/);
+  assert.doesNotMatch(NPCS.duan.dialogue.find(d => d.topic === "daeng").text, /two bar up/);
+  assert.doesNotMatch(NPCS.somjai.dialogue.find(d => /^shamrock\|/.test(d.topic)).text, /tape measure/);
+  assert.doesNotMatch(NPCS.somjai.dialogue.find(d => /^family\|/.test(d.topic)).text, /February/);
+  assert.match(NPCS.somjai.dialogue.find(d => /^plan\|/.test(d.topic)).text, /Aim will be a lawyer/);
+  assert.match(NPCS.daeng.dialogue.find(d => d.topic === "covid").text, /we ride to the beach/);
+});
+test("Wa does not carry Tarn's factory, and does not recite Nid's rules twice", () => {
+  assert.doesNotMatch(NPCS.wa.dialogue.find(d => /^factory\|/.test(d.topic)).text, /hard drives|Vietnam/);
+  assert.match(NPCS.hula_hula_tarn.dialogue[1].text, /Hard drive/);
+  assert.doesNotMatch(NPCS.wa.dialogue.find(d => d.topic === "nid").text, /never cry where a customer see/);
+  assert.match(NPCS.wa.dialogue.find(d => /^rules\|/.test(d.topic)).text, /[Nn]ever cry where a customer see/);
+});

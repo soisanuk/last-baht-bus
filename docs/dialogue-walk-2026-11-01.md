@@ -169,6 +169,20 @@ Taan's second tellings (prompted), and the bare "View" (an ordinary-word name th
 Wat Pho masseuse of twenty years, said "tilac"; Waan's sign read NO SEX in one node and NO BOOM BOOM in another where the
 room's own sticker says NO SEX. Both fixed and pinned.
 
+**Slice D — the Darkside, the Silk Rose, the Doghouse and Succubus** (21 characters, 350 nodes; Howard, Wilawan, Tul,
+Nubnab and Kinnaree clean). Fixed: Helmut's arithmetic (thirty-eight years of toolmaking from a man of sixty-one who
+has sat the same stool since 2013 — now twenty-eight); Wa carrying Tarn's factory biography word for word, and reciting
+Nid's three rules in two nodes; the Doghouse three years old in Sunee's mouth and two in everyone else's; Sunee claiming
+the lady-looks-first rule as the Doghouse's own when Bob's room across the road has kept it since 1996; Wassana's "one
+baht-weight a month" on fifteen thousand (now a salung) and "Hong Kong is open" after midnight; Tukky's husband on the
+Naklua run passing the foot of Pratumnak (the Jomtien run); Bow's "a year ago" for a return the game dates to a week;
+Duan's "two bar up" against the strip's geography; Somjai's tape measure at a Shamrock Daeng says nobody has touched,
+her February, and Aim keeping a till she is leaving for law school; Daeng walking to a beach ten kilometres from the
+Darkside; Saifon's chillies handed over by prose alone. And one promise kept: Oy's "tell her the pig is dead" had no node
+at Daeng's end — Daeng now takes the message, once, before her old Oy answer resumes. Left: Ton's twenty-five nodes dark
+in a November boot (she is away for the harvest, by design); the sixty-baht lady-drink cut said verbatim on five floors
+is an engine insert, listed below for the code review.
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in
@@ -180,18 +194,19 @@ room's own sticker says NO SEX. Both fixed and pinned.
 3. The walker's `pronoun` lint reports a pronoun that belongs to another proper noun in the sentence (six false
    positives, zero true ones this run); the `--shared` report would be more useful if it skipped the narrator
    constructions it already knows about ("says it the way…", "looks at you…").
-4. The `preempt` lint keys on the first alias only; both pre-empts this run were first-alias-only and were fixed
+4. The lady-drink tally insert ("This one, I get ฿60. The drink was ฿260") is dealt word for word to every bonded woman on five floors; a pool of three or four phrasings would stop a player hearing the author.
+5. The `preempt` lint keys on the first alias only; both pre-empts this run were first-alias-only and were fixed
    by reordering, which is the right fix, but a node whose *every* alias is pre-empted would look the same.
 
 ## Deferred, and why
 
-- **201 characters were not read by a reader this round.** Eight reader subagents were launched on the full
-  cast and all eight died on the usage limit before writing a line; the pass was then done sequentially by
-  hand on the cast with fifteen nodes or more. The floor women with `FLOOR_OWN` sets (the Soi 6 segments, the
-  Jade/Peach/Lollipop/Tamarind floors, the Darkside), the massage shops and the smaller patrons have been read
-  only by the walker's lint, the shared-line report, the audits and the pre-existing dossier ledger. The method
-  that works is in `docs/prose-review-method.md`: one subject list per reader, the rendered scripts from
-  `dialogue-walk --script <dir>`, no access to the sources, findings only.
+- **131 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
+  the Darkside, the Silk Rose, the Doghouse and Succubus: 70 more characters, 722 nodes). What is left is the rest of the
+  cast in three size-balanced slices — the Beach Road and Jomtien story characters and patrons (Duangjai, David, Wayne,
+  Waen, Wimon, Neil, Mercedes, Nee…), the Walking Street and Tree Town women and the remaining regulars (Barry, Mala,
+  Nuan, Henning, Ploy, Kwan, Joy, Nina…), and the seventy-odd small parts (Ron, Mot, Somchith, Phil, Petch, Dave, Bee,
+  Macca…). The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
+  reader at a time, 150 KB a reader, findings only.
 - The dossier sweep (`prose-corpus --dossiers`) was run per name as needed, not seeded: the ledger records who
   read what, and the author of these fixes is the wrong person to mark them read.
 - The massage shops' six women share template lines ("you have my number after work", "no boom boom, boss rule")
