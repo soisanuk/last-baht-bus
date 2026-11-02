@@ -34,15 +34,25 @@ for (const f of FILES)
 globalThis.out = [];
 engineInit(t => globalThis.out.push(t), null, () => {});
 
-// the answerer trace: each of _doTalkCore's answerers is wrapped to note when it answered (a truthy return, or the
-// _deliver that prints a node). Top-level function declarations are properties of the global object, so the engine's own
-// calls go through the wrapper. Debugging only — the game never loads this.
+// the answerer trace: each of _doTalkCore's answerers is wrapped to note when it answered. Top-level function declarations
+// are properties of the global object, so the engine's own calls go through the wrapper. The answer is the LAST listed
+// helper called straight from _doTalkCore (not from inside another listed helper) that returned something truthy or
+// printed: a predicate that gates a branch (_exitSlip, _atCamera) returns true and the branch's answerer then prints, a
+// line that prints and lets the hello follow (_stillHereTalk) is overtaken by the hello, and _doTalkCore returns as soon
+// as one answers. Debugging only — the game never loads this.
 { const { talkOrder } = await import("./talk-order.mjs");
-  let _answered = null;
+  let _answered = null, _inTalk = 0, _inAnswerer = 0;
   for (const n of talkOrder()) { const f = globalThis[n]; if (typeof f !== "function") continue;
-    globalThis[n] = function (...a) { const r = f.apply(this, a); if (r || n === "_deliver") _answered = _answered || n; return r; }; }
+    globalThis[n] = function (...a) {
+      const top = _inTalk > 0 && _inAnswerer === 0, before = globalThis.out.length;
+      _inAnswerer++;
+      let r; try { r = f.apply(this, a); } finally { _inAnswerer--; }
+      if (top && (r || globalThis.out.length > before || n === "_deliver")) _answered = n;
+      return r; }; }
+  const _core = globalThis._doTalkCore;
+  globalThis._doTalkCore = function (...a) { _inTalk++; try { return _core.apply(this, a); } finally { _inTalk--; } };
   const _dc = globalThis.doCommand; globalThis.doCommand = (c) => { _answered = null; return _dc(c); };
-  globalThis.who = () => { console.log("answered by:", _answered || "(no listed answerer — the miss pools or a verb)"); return _answered; }; }
+  globalThis.who = () => { console.log("answered by:", _answered || "(no listed answerer — an inline branch, the miss pools or a verb)"); return _answered; }; }
 globalThis.run = (...cmds) => { for (const c of cmds) doCommand(c); };
 globalThis.lastOut = () => globalThis.out.join("\n");
 globalThis.show = (label) => {

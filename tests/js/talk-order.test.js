@@ -6,7 +6,17 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { talkOrder } from "../../tools/talk-order.mjs";
 
-const ORDER = ["_seenHomeTalk", "_deedTalk", "_textTalk", "_streetTalk", "_ownNightTalk", "_ownBarTalk", "_patronRage", "_wentWithTalk", "_withHerTalk", "_partyTalk", "_oppTalk", "_lastByeDue", "_atCamera", "_lockInMemory", "_jobMemoryTalk", "_ownWordTalk", "_townTalk", "_bfRefusalSay", "_lastTimeTalk", "_flightTalk", "_mineTalk", "_myJobTalk", "_deliver", "_thaiWordTalk", "_quizTalk", "_normalGirlTalk", "_careTalk", "_moneyTalk", "_leavingTalk", "_playerSaidTalk", "_drinksOnlyWhy", "_jobFloorTalk", "_awayTalk", "_stillOpenTalk", "_openingTalk", "_busyTalk", "_closingTalk", "_leagueTalk", "_checkpointTalk", "_goneTalk", "_fixtureTalk", "_hotelTalk", "_soberTalk", "_smallTalk"];
+// Every helper _doTalkCore calls with `npc` first, in the order of its first call, whatever shape the statement has;
+// predicates, lookups and bookkeeping are named in tools/talk-order.mjs's PLUMBING. A new helper lands here or there.
+const ORDER = ["_townTalk", "_leavingTalk", "_exitSlip", "_seenHomeTalk", "_deedTalk", "_textTalk", "_streetTalk",
+  "_afterWorkTalk", "_ownNightTalk", "_ownBarTalk", "_patronRage", "_wentWithTalk", "_withHerTalk", "_partyTalk", "_oppTalk",
+  "_lastByeDue", "_lastNightBye", "_wentWithHello", "_jobMemoryTalk", "_atCamera", "_streamBusy", "_lockInMemory",
+  "_ownWordTalk", "_bfRefusalSay", "_lastTimeTalk", "_flightTalk", "_stillHereTalk", "_mineTalk", "_myJobTalk", "_paperTalk",
+  "_venueAnswer", "_smallTalk", "_deliver", "_bondTalk", "_otherLedger", "_thaiWordTalk", "_quizTalk", "_normalGirlTalk",
+  "_careTalk", "_moneyTalk", "_playerSaidTalk", "_drinksOnlyWhy", "_jobFloorTalk", "_awayTalk", "_foodWhereTalk",
+  "_stillOpenTalk", "_openingTalk", "_busyTalk", "_closingTalk", "_leagueTalk", "_badgeTalk", "_workTalk", "_poolTalk",
+  "_barfineTalk", "_priceTalk", "_kitchenTalk", "_checkpointTalk", "_dogTalk", "_keptTalk", "_goneTalk", "_selfNamedNode",
+  "_fixtureTalk", "_hotelTalk", "_soberTalk", "_patronAgain", "_askAgain", "_topicLocked", "_topicMiss"];
 
 test("the conversation's answerers are tried in the recorded order", () => {
   assert.deepEqual(talkOrder(), ORDER);
