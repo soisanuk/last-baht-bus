@@ -54,7 +54,7 @@ test("the lost card is the town's business: Tan, Doyle and the house answer it; 
   const lines = girls.map(id => t("ask " + id + " about wallet")); assert.ok(new Set(lines).size === lines.length, "three women, three sentences: " + lines.length);
   assert.match(t("ask " + girls[0] + " about wallet"), /I tell you already|Same answer|Second Road, then over/);
   G.room = "soi6_street"; run("talk to tan"); assert.match(t("ask tan about the atm"), /No card|dead to you|the machine is a wall|without the card/i);
-  G.room = NPCS.doyle.room; if (_npcsHere().includes("doyle")) assert.match(t("ask doyle about wallet"), /Twenty-six years I read rooms/);
+  G.room = NPCS.doyle.room; if (_npcsHere().includes("doyle")) assert.match(t("ask doyle about wallet"), /at a fence inside the hour/);
   _setFlag("hasWallet"); G.itemLoc.wallet = "inventory"; run("look"); assert.ok(_flag("walletBack"));
   G.room = "sunset_rail"; assert.match(t("ask " + girls[0] + " about wallet"), /got it back|come home|The wallet!|Back\./i);
   assert.match(t("tell " + girls[1] + " i got my wallet back"), /got it back|come home|The wallet!|Back\./i);

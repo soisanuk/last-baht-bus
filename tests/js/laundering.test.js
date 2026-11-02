@@ -93,7 +93,8 @@ test("PRE-SALE: the chat was a bank — the slips go to Eddy's thread, or the tw
 
 test("declining is free, and the four are well-formed", () => {
   for (const q of ["covers", "fiftyone", "verification", "presale"]) {
-    assert.ok(QUESTS[q].giver in NPCS && (QUESTS[q].at in NPCS || QUESTS[q].at in ROOMS), q);
+    const at = _qAt(QUESTS[q]);   // fiftyone's where-clause follows the step (dialogue walk 2026-11-01)
+    assert.ok(QUESTS[q].giver in NPCS && (at in NPCS || at in ROOMS), q);
     assert.equal(QUESTS[q].reward.money, undefined, q + ": the money comes from the choice, not the journal");
   }
   assert.equal(NPCS.orathai.room, "buakhao_market"); assert.equal(_npcRoom("orathai"), "buakhao_market");

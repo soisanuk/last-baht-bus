@@ -14767,7 +14767,7 @@ const QUESTS = {
   // declining is free, both outcomes complete, nobody is graded, no threat is ever made.
   nameonwall: { name: "The Name on the Wall", giver: "orathai", desc: "A name on the paper by one bar's till is on another bar's, across town. Read the frame by the till (EXAMINE LICENCE) in bars that are nobody's chain until the same name is on three, then ask the woman who signs (ASK ORATHAI ABOUT BENJAWAN).", deps: [], reqFlags: ["act1Done", "benjawanSeen"], at: "orathai", doneFlag: "benjawanFound", reward: { happy: 5 } },
   covers: { name: "The Covers", giver: "grace", desc: "Grace wants somebody who isn't her to sit in Jasmine Garden three nights and COUNT the stools — one night is a Friday, three is a pattern — then tell Hong on the till what you counted (ASK HONG ABOUT THE COUNT).", deps: [], reqFlags: ["act1Done"], at: "hong", doneFlag: "coversDone", reward: { happy: 4 } },
-  fiftyone: { name: "Fifty-One", giver: "reginald", desc: "Reginald's share papers want walking to Khun Orathai at the Old Market on Soi Buakhao, who signs the fifty-one (GIVE PAPERS TO ORATHAI) — then back to him.", deps: [], reqFlags: ["act1Done"], item: "share_papers", at: "orathai", doneFlag: "fiftyoneDone", reward: { happy: 4 } },
+  fiftyone: { name: "Fifty-One", giver: "reginald", desc: "Reginald's share papers want walking to Khun Orathai at the Old Market on Soi Buakhao, who signs the fifty-one (GIVE PAPERS TO ORATHAI) — then back to him.", deps: [], reqFlags: ["act1Done"], item: "share_papers", at: (G) => _flag("fiftyoneSigned") ? "reginald" : "orathai", doneFlag: "fiftyoneDone", reward: { happy: 4 } },
   verification: { name: "Under Verification", giver: "nont", desc: "Nont's broker wants a bar-for-sale sheet in front of Nigel. Show it to a cashier or two on the way if you like — the ones on Soi Buakhao have long memories (ASK THE CASHIER ABOUT THE LISTING) — then Nigel (ASK NIGEL ABOUT THE LISTING).", deps: [], reqFlags: ["act1Done"], item: "bar_listing", at: "nigel", doneFlag: "verifDone", reward: { happy: 3 } },
   presale: { name: "Pre-Sale", giver: "colin", desc: "Colin's chat group put forty thousand each into a friend's app and were told there is no paperwork. Ask him for the slips (ASK COLIN ABOUT THE SLIPS), then decide where twelve bank transfers go.", deps: [], reqFlags: ["act1Done"], at: "fast_eddy", doneFlag: "presaleDone", reward: { happy: 4 } },
   // Tree Town's first sandbox pull (docs/map-coverage.md). Oy is the Act One
@@ -14838,7 +14838,7 @@ const QUESTS = {
       "REGULAR, then bring it back to her (ASK SUMALEE ABOUT GORDON).",
     deps: [],
     reqFlags: ["act1Done"],
-    at: "nok",
+    at: (G) => _flag("heardGordon") ? "sumalee" : "nok",
     doneFlag: "quietSideDone",
     reward: { money: 1500, happy: 7 },
   },
@@ -14919,7 +14919,7 @@ const QUESTS = {
       "where it was taken, down at the pier, then come back and tell him " +
       "(ASK BOB ABOUT THE PHOTOGRAPH).",
     deps: ["hill_order"],
-    at: "bali_hai",
+    at: (G) => (G.visited && G.visited.bali_hai) ? "bob" : "bali_hai",
     doneFlag: "photoBetSettled",
     reward: { money: 0, happy: 8 },
   },
@@ -14965,7 +14965,7 @@ const QUESTS = {
     desc: "Get eyes on the Orchid Room's good table — the back room off the Pink Lotus — and see who " +
       "really holds it, then tell Doyle (ASK DOYLE ABOUT THE TABLE). The rope lifts for the group's friends — and Gavin, at the Golden Dragon, decides who those are.",
     deps: [],
-    at: "orchid_room",
+    at: (G) => (G.visited && G.visited.orchid_room) ? "doyle" : "orchid_room",
     doneFlag: "orchidReported",
     reward: { money: 1500, happy: 4 },
   },

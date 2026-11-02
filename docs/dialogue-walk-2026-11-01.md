@@ -92,6 +92,62 @@ has ruled); Gavin's "by Friday" and Nigel's "Thursday, which in this town is a d
 weekday idioms inside reported speech, left; Kesinee's "the ends inward" and the canon's "inner west" agree once
 you read the Kitten Corner as the far end rather than the inner east.
 
+## The place graph (Mario, 2026-11-02: "mapping out connected locations via the graph")
+
+A second graph, built from the EXIT edges of `docs/world-graph.json`: every string that puts one location next
+to another ("next door", "across the road", "opposite"), in a direction from another ("south of Soi 7", "Naklua
+Road north-east"), or at a closing hour, checked against the walked adjacency (two hops), the survey bearings
+(`ROOM_GEO`, ±75°) and `_closeTurn`. It does not repeat what exists: `references.test.js` already joins a venue
+to its district and `tools/prose-claims.mjs` already checks "X works at Y"; this is the relation between two
+places. Result over 20,991 corpus records: **0 findings in all three classes**, after two rounds of making the
+check honest — a direction word bound to the place name it modifies (not the nearest one in sixty characters),
+"south **of** X" read as X lying north, and "Soi 7" resolved per district (Jomtien's Soi 7 is not Pattaya's room).
+It is now `tests/js/place-graph.test.js`, with a `--mutate`-style test that plants a false "next door" to prove
+the check goes red. A fourth check, prose that promises a way out the room lacks ("a lane runs north"), was tried
+and dropped: both hits were scenery ("the bay glows west"), and the class has no real member to ratchet.
+
+The 23 adjacent pairs whose own prose names each other were read as pairs (both rooms' strings side by side,
+the only way a contradiction between neighbours shows). Clean, with one distance claim checked against the
+survey: the foot of Soi 6 has the Dolphin roundabout "a couple of kilometres north" — see the fix list.
+
+## The quest graph (Mario, 2026-11-02: "quest related data in the graph might also need correlation")
+
+The graph carries four quest edges — GIVEN_BY (giver), DONE_BY (the flag), AT (the journal's destination) and
+DEPENDS — plus the SETS edges that say which dialogue node fires the flag. Read together, per quest: the giver's
+room, the destination's room, the room of the character whose node closes it, and every place or person the
+quest's own prose names. What already existed and was not repeated: `world.test` ("every quest is well-formed:
+giver, deps, item, and at all resolve"), `journal.test`, `tools/dialogue-lifecycle.mjs` (a topic a quest opens
+stays answerable after it closes) and the `prose-corpus --quests` pivot.
+
+Over the 43 quests: 8 raw hits, 4 real. The real class is **a two-leg quest whose `at` is static** — the journal
+keeps pointing at the middle stop after it is made. `at` may already be a function of state (`_qAt`; the
+safe-cracker and the lake errand do it, "the where-clause follows the step", 2026-08-22), and four quests had not
+been given one: Fifty-One kept sending you to Orathai after she had signed ("Where Orathai is tonight is a thing
+to ask around for"), the photograph bet kept naming the Bali Hai pier after you had stood on it, the President's
+Table kept naming the Orchid Room after you had been through the rope, and the Quiet Side still said ASK NOK after
+Nok had told you. All four now turn home — Reginald, Bob, Doyle, Sumalee — the moment the step is done. The pin
+is general: any quest whose flag is set by one character's node and whose static destination is somewhere else
+fails, with the instruction to make `at` a function of the step.
+
+The noise, for the record: prose naming a place or person outside the quest's three rooms (the Pattaya Leisure
+offer names Kesinee and Kitten Corner because the errand is three informants; the President's Table names
+Gavin because the door is decided at the Golden Dragon) is correct, and a destination's "never seated at night"
+flag was my sandbox missing the quest state, not Barry's absence.
+
+## Encounters, items and people against the graph (Mario, 2026-11-02)
+
+The same correlation for the graph's other node kinds, over the 20,991 corpus records:
+
+- **Encounters** (23): every region name and every person's name in an encounter's prose, against the rooms the
+  encounter fires in. 0 findings. Gated in `tests/js/prose-graph.test.js`.
+- **People** (419): the description's pronouns against `_pr(id)`. 0 findings. Gated.
+- **Items** (45): no item both lies in a room and is handed over by a node (gated). A mention of an item within
+  fifty characters of a place or a person, against the item's home and the hand that gives it, was run by hand:
+  132 raw hits, 0 real. The class is semantic — an item's prose names its *destination* (the spare helmet "to Pim
+  at the Starlight", the som tam "to Ploy at Rainbow") far more often than its home, "bottle" and "Buddha" are
+  words before they are items, and "security" is a person — so it stays a reader's query, not a gate.
+- **Quests** (43): the where-clause rule above, plus the giver/target/setter table in the walk's scratch notes.
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in
@@ -121,6 +177,10 @@ you read the Kitten Corner as the far end rather than the inner east.
   across shops; a reader who visits two shops in a week hears the echo. Left for a round that owns the shops.
 
 ## Open calls (Mario's)
+
+0. The Pattaya Leisure offer and the President's Table are three-stop errands with one `at`. HINT names the
+   closer (Bert, Doyle) and the desc names the informants; `atTargets` could carry all three so the journal's
+   where-clause walks the informants too. A design call, not a defect.
 
 1. Lek's salary is now the beer-bar base in words. If `BAR_SALARY` is retuned the pin fails by design; the
    alternative is the engine learning to read a constant in node text (a `text` function), which is a shape

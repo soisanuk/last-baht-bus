@@ -123,3 +123,30 @@ test("nobody but Wayne and Tan (who quotes him) hands you their passport", () =>
   assert.deepEqual([...new Set(who)].sort(), ["tan", "wayne"]);
 });
 
+
+// ── the quest graph: GIVEN_BY, DONE_BY and AT read together ──
+// A two-leg quest's where-clause follows the step (the pattern safecracker and lake_errand set): once the
+// middle stop is done, HINT points back at the mouth that closes the quest, not at the stop already made.
+const GRAPH = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/world-graph.json", import.meta.url)), "utf8"));
+test("a quest whose flag is set by one character's node does not keep a static destination somewhere else", () => {
+  const setters = {}; for (const e of GRAPH.edges) if (e.type === "SETS") (setters[e.to] = setters[e.to] || []).push(e.from.split("#")[0]);
+  const bad = [];
+  for (const q of GRAPH.quests) {
+    const Q = QUESTS[q.id]; if (!Q || typeof Q.at === "function" || !Q.at) continue;
+    const who = [...new Set(setters[q.doneFlag] || [])]; if (!who.length) continue;
+    const atRoom = ROOMS[Q.at] ? Q.at : (NPCS[Q.at] && NPCS[Q.at].room);
+    const setRooms = who.map(w => NPCS[w] && NPCS[w].room).filter(Boolean);
+    if (!who.includes(Q.at) && atRoom && setRooms.length && !setRooms.includes(atRoom)) bad.push(`${q.id}: at ${Q.at} (${atRoom}) but ${who.join(",")} close it in ${setRooms.join(",")} — make at a function of the step`);
+  }
+  assert.deepEqual(bad, []);
+});
+test("after the middle stop, the four two-leg quests point home", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife");
+  assert.equal(_qAt(QUESTS.fiftyone), "orathai"); _setFlag("fiftyoneSigned"); assert.equal(_qAt(QUESTS.fiftyone), "reginald");
+  assert.equal(_qAt(QUESTS.quietside), "nok"); _setFlag("heardGordon"); assert.equal(_qAt(QUESTS.quietside), "sumalee");
+  assert.equal(_qAt(QUESTS.hill_photo), "bali_hai"); G.visited.bali_hai = true; assert.equal(_qAt(QUESTS.hill_photo), "bob");
+  assert.equal(_qAt(QUESTS.orchid_recon), "orchid_room"); G.visited.orchid_room = true; assert.equal(_qAt(QUESTS.orchid_recon), "doyle");
+  G.quests.fiftyone = "active"; G.room = "beach_rd_c";
+  assert.match(t("hint"), /Reginald is at|Where Reginald is/);
+  assert.doesNotMatch(said(), /Where Orathai is tonight/);
+});

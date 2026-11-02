@@ -1252,7 +1252,7 @@
  "counts": {
   "constants": 208,
   "dialogue": 4239,
-  "edges": 3850,
+  "edges": 3856,
   "encounters": 23,
   "flags": 204,
   "items": 45,
@@ -58196,7 +58196,7 @@
   }
  ],
  "edgeCounts": {
-  "AT": 44,
+  "AT": 48,
   "CONSULTS": 273,
   "DEPENDS": 13,
   "DONE_BY": 43,
@@ -58206,7 +58206,7 @@
   "GIVES": 17,
   "INTERPOLATES": 762,
   "LOCATED": 435,
-  "READ_BY_DATA": 161,
+  "READ_BY_DATA": 163,
   "READ_BY_ENGINE": 433,
   "REQUIRES": 266,
   "SETS": 109,
@@ -58275,6 +58275,12 @@
    "type": "AT"
   },
   {
+   "from": "fiftyone",
+   "kind": "npc",
+   "to": "reginald",
+   "type": "AT"
+  },
+  {
    "from": "glass_start",
    "kind": "npc",
    "to": "bert",
@@ -58308,6 +58314,12 @@
    "from": "hill_photo",
    "kind": "room",
    "to": "bali_hai",
+   "type": "AT"
+  },
+  {
+   "from": "hill_photo",
+   "kind": "npc",
+   "to": "bob",
    "type": "AT"
   },
   {
@@ -58372,6 +58384,12 @@
   },
   {
    "from": "orchid_recon",
+   "kind": "npc",
+   "to": "doyle",
+   "type": "AT"
+  },
+  {
+   "from": "orchid_recon",
    "kind": "room",
    "to": "orchid_room",
    "type": "AT"
@@ -58410,6 +58428,12 @@
    "from": "quietside",
    "kind": "npc",
    "to": "nok",
+   "type": "AT"
+  },
+  {
+   "from": "quietside",
+   "kind": "npc",
+   "to": "sumalee",
    "type": "AT"
   },
   {
@@ -72790,6 +72814,11 @@
    "type": "READ_BY_DATA"
   },
   {
+   "from": "fiftyoneSigned",
+   "to": "world.js:14770",
+   "type": "READ_BY_DATA"
+  },
+  {
    "from": "fiftyoneTipped",
    "to": "world.js:11238",
    "type": "READ_BY_DATA"
@@ -72807,6 +72836,11 @@
   {
    "from": "hasWallet",
    "to": "world.js:9942",
+   "type": "READ_BY_DATA"
+  },
+  {
+   "from": "heardGordon",
+   "to": "world.js:14841",
    "type": "READ_BY_DATA"
   },
   {
@@ -79954,6 +79988,9 @@
     "reginald#5"
    ],
    "name": "fiftyoneSigned",
+   "readByData": [
+    "world.js:14770"
+   ],
    "readByEngine": [
     "engine-parser.js:11090",
     "engine-systems.js:4141"
@@ -80612,6 +80649,9 @@
   },
   {
    "name": "heardGordon",
+   "readByData": [
+    "world.js:14841"
+   ],
    "requiredBy": [
     "sumalee#1"
    ],
@@ -87191,9 +87231,10 @@
    }
   },
   {
-   "at": "orathai",
+   "atDynamic": true,
    "atTargets": [
-    "orathai"
+    "orathai",
+    "reginald"
    ],
    "doneFlag": "fiftyoneDone",
    "giver": "reginald",
@@ -87285,9 +87326,10 @@
    }
   },
   {
-   "at": "bali_hai",
+   "atDynamic": true,
    "atTargets": [
-    "bali_hai"
+    "bali_hai",
+    "bob"
    ],
    "deps": [
     "hill_order"
@@ -87450,8 +87492,9 @@
    }
   },
   {
-   "at": "orchid_room",
+   "atDynamic": true,
    "atTargets": [
+    "doyle",
     "orchid_room"
    ],
    "doneFlag": "orchidReported",
@@ -87546,9 +87589,10 @@
    }
   },
   {
-   "at": "nok",
+   "atDynamic": true,
    "atTargets": [
-    "nok"
+    "nok",
+    "sumalee"
    ],
    "doneFlag": "quietSideDone",
    "giver": "sumalee",
