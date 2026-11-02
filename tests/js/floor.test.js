@@ -148,7 +148,7 @@ test("the Silk Rose's own subjects, and nobody wears another woman's detail", ()
   for (const id of SILK) run("talk to " + id);
   assert.match(ask("ton", "football"), /referee/);
   assert.match(ask("nid", "pension"), /cannot sell/);
-  assert.match(ask("wa", "factory"), /Vietnam/);
+  assert.match(ask("wa", "factory"), /Eastern Seaboard/);   // her line moved to Indonesia on 2026-11-02, so that Tarn's is the one that went to Vietnam
   assert.match(ask("waew", "son"), /police sergeant/);
   assert.match(ask("grace", "headset"), /homestay/);
   assert.match(ask("grace", "spend"), /\(CHECK BIN\)/);
