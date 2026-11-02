@@ -26,7 +26,7 @@ let out = [];
 engineInit((text) => out.push(String(text)));
 
 // what may NOT print in a go-go. The audit's own vocabulary, deliberately NOT the engine's _FIT_GOGO: judged by the
-// filter's own regex, a line the filter lets through ("leans against the bar", "props herself at the counter") passed
+// filter's own regex, a line the filter lets through ("leans against the bar", "perches on") passed
 // the audit too, so the audit could never find a phrase the filter lacks. Wider than the filter on purpose; OK strips
 // the go-go's own furniture before the sentence is judged.
 const RX = new RegExp([
@@ -46,7 +46,7 @@ const OK = /\b(?:my|her|your|this|that) side of the counter\b|\btaps the counter
 // --mutate bell: every go-go bell line becomes one that leans on a bar in words the engine's filter does not know; the
 // audit must report it, or its vocabulary is no wider than the filter it checks
 { const i = process.argv.indexOf("--mutate"), m = i > 0 ? process.argv[i + 1] : null;
-  if (m === "bell") { _BELL_GOGO.length = 0; _BELL_GOGO.push("The mamasan leans against the bar and claps, and the cashier props herself at the counter."); }
+  if (m === "bell") { _BELL_GOGO.length = 0; _BELL_GOGO.push("The mamasan leans against the bar and claps, and the cashier perches on her desk."); }
   else if (m) { console.error("unknown --mutate " + m + " (bell)"); process.exit(2); } }
 const ONLY = process.argv.includes("--room") ? process.argv[process.argv.indexOf("--room") + 1] : null;
 const GOGO = Object.keys(ROOMS).filter(r => ROOMS[r].barType === "gogo" && (!ONLY || r === ONLY));

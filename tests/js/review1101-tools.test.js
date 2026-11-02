@@ -44,7 +44,7 @@ test("S10-1: the talk order sees an answerer in every shape, and moving one chan
 });
 
 test("S10-2: the go-go audit judges with its own vocabulary, so a bar line the filter misses goes red", () => {
-  const line = "The mamasan leans against the bar and claps, and the cashier props herself at the counter.";
+  const line = "The mamasan leans against the bar and claps, and the cashier perches on her desk.";
   assert.equal(_FIT_GOGO.test(line), false, "the engine's filter lets this line through");
   const r = tool("tools/gogo-audit.mjs", "--json", "--quick", "--room", "hyper", "--mutate", "bell");
   assert.ok(JSON.parse(r.stdout || "[]").some(x => x.line === line), "the audit saw the planted line");

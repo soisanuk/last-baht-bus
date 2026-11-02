@@ -200,7 +200,8 @@ test("the piwin's own menu parses as the answer: 'bali hai' after 'where to?'", 
 
 test("a real building with no room behind it is refused as what it is", () => {
   vac(); G.room = "naklua_rd"; out = []; run("enter temple");
-  assert.match(text(), /monks are asleep|correct place/); assert.doesNotMatch(text(), /only know the way/);
+  // the refusal is a pool (_NOT_A_DOOR): the printed line is one of the temple's, never a fixed string
+  assert.ok(_NOT_A_DOOR.find(([re]) => re.test("temple"))[1].some(l => text().includes(l.slice(0, 40))), text()); assert.doesNotMatch(text(), /only know the way/);
   G.room = "dolphin"; out = []; run("enter terminal 21"); assert.match(text(), /mall|doorman|food court/i);
   G.room = "pattaya_klang"; out = []; run("enter gold shop"); assert.match(text(), /gold shop keeps/);
 });
