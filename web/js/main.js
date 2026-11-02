@@ -313,6 +313,11 @@ function _startGame(daily) { // START / TODAY'S SOI on the Soi 6 intro panel
   _audioForRoom(G.room, G.flags);
 }
 
+// A modal question is up: any gate but the taxi ride's (its three questions are who you are, and UNDO there is a re-pick).
+function _gateUp() {
+  return typeof G !== "undefined" && !!G && !!G.pendingChoice && G.pendingChoice !== "intro";
+}
+
 function _dispatch(cmd) {
   const v = cmd.trim().toLowerCase();
   // the start menu is up: typed commands must not drive the skeleton game behind
@@ -320,7 +325,8 @@ function _dispatch(cmd) {
   const _ov = document.getElementById("start-overlay");
   // …but UNSHELVE is offered ON that menu, so it has to survive the gate — the
   // whole point is to take back the night from the screen the mis-tap landed on.
-  if (_ov && !_ov.hidden && !_awaitingContinue && !/^toggle/.test(v) &&
+  // Only the three display switches pass: any other "toggle …" reached the skeleton game and autosaved it over the save.
+  if (_ov && !_ov.hidden && !_awaitingContinue && !/^toggle[_ ]?(v[01]|full)$/.test(v) &&
       !/^(unshelve|unshelf|restore)$/.test(v)) {
     _term.print("(Pick a mode above to start.)", "dim");
     return;
@@ -355,6 +361,24 @@ function _dispatch(cmd) {
     return;
   }
 
+  // RESET wipes the save — a destructive one-way door, so it takes a confirmation, answered by the very next line. It
+  // sits above every other frontend verb: an UNDO or SAVE that slipped past it left the arm live for a YES meant for
+  // somebody else's question.
+  if (_awaitingReset) {
+    _awaitingReset = false;
+    if (["reset", "yes", "y", "confirm", "wipe"].includes(v)) {
+      try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+      _dropUndo();      // the wipe isn't undoable — the confirm was the safety net
+      _term.print("⌫ Slate wiped — the debts, the dog, the girls' patience, all of it.", "alert");
+      _showStartMenu();
+      return;
+    } else {
+      _term.print("Reset cancelled — your night stands.", "dim");
+    }
+    _audioForRoom(G.room, G.flags);
+    return;
+  }
+
   // Take back the night you stepped away from. Only reachable while the shelf
   // holds one — it is cleared the moment a new game autosaves over the save.
   if (v === "unshelve" || v === "unshelf" || v === "restore") {
@@ -373,7 +397,7 @@ function _dispatch(cmd) {
     _dropUndo();
     _term.print("── PICKED BACK UP ──", "win");
     _describeRoom(true);
-    if (typeof _renderResume === "function") _renderResume();
+    _renderResume();
     _autosave();
     _audioForRoom(G.room, G.flags);
     _term.renderChips();
@@ -386,7 +410,9 @@ function _dispatch(cmd) {
     // dice roll hands you the answer, because the RNG stream is move-independent
     // — one wrong tap, UNDO, and the quiz is a guaranteed 5/5 (min-maxer
     // playtest 2026-08-22). QUIT concedes; that is the honest exit.
-    if (typeof G !== "undefined" && G && (G.game || G.pendingBf || G.pendingEnc)) {
+    // A question still up (any gate but the taxi's) is the same: UNDO there would un-ask it, and an ending or the end of
+    // the week is not a move to take back.
+    if (typeof G !== "undefined" && G && (G.game || G.pendingBf || G.pendingEnc || G.pendingSoapy || _gateUp())) {
       // the dice line belongs to a game: at a barfine or a policeman it offered a QUIT that
       // does nothing there (Helga, round 57)
       // in the game's own words: the quiz was told about a dice box (Darren, round 66)
@@ -396,6 +422,8 @@ function _dispatch(cmd) {
           : _gt === "c4" ? "⌫ Not mid-game. The disc is in the frame — play it out, or QUIT and lose the stake."
           : _gt === "cli" ? "⌫ Not mid-session. The terminal keeps its log — EXIT walks away with what you copied."
           : "⌫ Not mid-hand. Play it out, or QUIT and take the loss — the soi doesn't rewind, and neither does the box.")
+        : (G.pendingChoice === "gameend" || G.pendingChoice === "vacation_end" || G.pendingChoice === "soi6continue")
+          ? "⌫ That's the end of it. The soi doesn't rewind, and neither does the morning."
         : "⌫ Not mid-answer. Somebody is waiting on you, and the soi doesn't rewind — answer it.", "dim");
       return;
     }
@@ -478,21 +506,6 @@ function _dispatch(cmd) {
   // this is the keyboard path.
   if (/^(font( size)?|text ?size)$/.test(v)) { _stepFontSize(1); return; }
 
-  // RESET wipes the save — a destructive one-way door, so it takes a confirmation.
-  if (_awaitingReset) {
-    _awaitingReset = false;
-    if (["reset", "yes", "y", "confirm", "wipe"].includes(v)) {
-      try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
-      _dropUndo();      // the wipe isn't undoable — the confirm was the safety net
-      _term.print("⌫ Slate wiped — the debts, the dog, the girls' patience, all of it.", "alert");
-      _showStartMenu();
-      return;
-    } else {
-      _term.print("Reset cancelled — your night stands.", "dim");
-    }
-    _audioForRoom(G.room, G.flags);
-    return;
-  }
   if (v === "reset") {
     _awaitingReset = true;
     _term.print("⚠️  RESET erases your saved game from this device — permanently, no UNDO. " +
@@ -505,7 +518,7 @@ function _dispatch(cmd) {
   // modal is live, so "quit" still concedes a game / answers a prompt as before.
   const busy = G.game || G.pendingEnc || G.pendingChoice || G.pendingBf || G.pendingSoapy || G.pendingFare;
   if (!busy && !(G.party && G.party.ids && G.party.ids.length) && /^(quit|end|logout|log ?out|sign ?off|goodnight|good night)$/.test(v)) {   // GOODNIGHT with a girl on your arm is hers, not the session's (Ingrid, round 62)
-    const lvl = typeof _happyLevel === "function" ? _happyLevel(G.happy) : "";
+    const lvl = _happyLevel(G.happy);
     _term.print("You settle up, such as it is, and step out into it. The soi roars on without you — " +
       "it always does.", "win");
     _term.print(`Tonight so far: day ${G.day}${G.stage === "expat" ? " · Pattaya, home" : " of your trip"} · ` +
@@ -538,7 +551,7 @@ function _dispatch(cmd) {
     // already printed "HANDING OVER". Same ordering as SHARE below, and for the
     // same reason: the engine's output should land after the frontend has
     // already got what it needs.
-    const b = (typeof exportBaton === "function") ? exportBaton() : null;
+    const b = exportBaton();
     doCommand(cmd);                       // the engine prints, and rules
     if (b) {
       try {
@@ -581,7 +594,7 @@ function _dispatch(cmd) {
         if (_hadGame) _term.print("(This replaces the character that was in this browser. " +
           "UNDO puts them back — but only before you do anything else.)", "alert");
         _describeRoom(true);
-        if (typeof _renderResume === "function") _renderResume();
+        _renderResume();
         _autosave();
         _audioForRoom(G.room, G.flags);
         _term.updateFabs();   // not a bare global — it lives in term.js's closure
@@ -597,8 +610,7 @@ function _dispatch(cmd) {
   // SHARE: the engine prints the week card; the frontend also drops it on the
   // clipboard (presentation concern — the engine stays clipboard-free). Copy is
   // attempted before dispatch so the "(copied)" note lands after the card.
-  const sharing = v === "share" && typeof G !== "undefined" && G && G.mode === "soi6" &&
-    typeof _shareCard === "function";
+  const sharing = v === "share" && typeof G !== "undefined" && G && G.mode === "soi6";
   if (sharing && navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(_shareCard().join("\n"))
       .then(() => _term.print("(Week card copied to the clipboard — paste it anywhere.)", "dim"))
@@ -614,10 +626,13 @@ function _dispatch(cmd) {
   // is over", and every one shows up as the day not being the day it was.
   // …but _act1Fail's rebuild lands on day 2 again from day 2, so the day alone could not see it and UNDO rewound a
   // lost Act One (the 2026-10-25 review): the attempt count and the trip count are part of the boundary too.
-  const _mark = () => (typeof G !== "undefined" && G) ? [G.day, G.act1Tries || 0, G.vacation || 0].join(":") : null;
+  // An ending (TAKE THE PLANE, SELL UP) and the one-way choice of stage (MOVE TO PATTAYA) change none of those three, so
+  // the stage and the ending are part of the mark as well.
+  const _mark = () => (typeof G !== "undefined" && G) ? [G.day, G.act1Tries || 0, G.vacation || 0, G.stage, G.endKind || ""].join(":") : null;
   const _dayBefore = _mark();
-  // a game that ENDS on this command was live in the snapshot: rewinding it hands back the answer (a quiz's fifth question)
-  const _gameBefore = (typeof G !== "undefined" && G) && !!(G.game || G.pendingBf || G.pendingEnc);
+  // a game that ENDS on this command was live in the snapshot: rewinding it hands back the answer (a quiz's fifth question);
+  // so was a gate's question — rewinding its answer let a player read one outcome and choose the other
+  const _gameBefore = (typeof G !== "undefined" && G) && !!(G.game || G.pendingBf || G.pendingEnc || G.pendingSoapy || _gateUp());
   doCommand(cmd);
   const _dayAfter = _mark();
   if (_dayBefore !== null && _dayAfter !== null && _dayAfter !== _dayBefore) _dropUndo();

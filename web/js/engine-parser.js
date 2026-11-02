@@ -14973,13 +14973,12 @@ function _doCheckout() {
       return;
     }
   }
-  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly);
   G.pendingChoice = "checkout";
   _say(`You set the key card on the desk at the ${_HOTELS[G.hotel].name}. The ` +
     "clerk produces the folio with the speed of a man who has seen farang " +
     "restlessness before, and gestures at the wide world:");
-  _say(others.map(k =>
-    `· (${_HOTELS[k].name.toUpperCase()} — ฿${_num(_hotelRate(k))}/night)`).join("\n"), "dim");
+  _say(_checkoutOptions().map(o =>
+    `· (${o.name.toUpperCase()} — ฿${_num(o.rate)}/night)`).join("\n"), "dim");
   _say("(Name your new hotel — or STAY.)", "dim");
 }
 
@@ -15542,7 +15541,7 @@ function _stillOpenTalk(npc, topic) {
   const names = open.map(o => _barName(o.id)).join(open.length > 1 ? " or " : "");
   const near = open[0].n <= 2 ? "just along" : open[0].n <= 5 ? "a short walk" : "a fair walk";
   // "till the last man goes" only of a bar that does — not of two that shut at two (Callum)
-  const dawn = open.every(o => typeof _closeTurn !== "function" || _closeTurn(o.id) == null);
+  const dawn = open.every(o => _closeTurn(o.id) == null);
   const until = dawn ? (reg === "floor" ? "they no close, na — sun come up, still open" : th ? "They pour till the last man go home." : "They pour till the last man goes.")
     : (reg === "floor" ? `open till ${_closeClock(open[0].id)}` : th ? `Open till ${_closeClock(open[0].id)} only.` : `Open till ${_closeClock(open[0].id)}, mind.`);
   return reg === "floor" ? `“${later ? "After " + label + "? " : "Still open? "}${names} — ${near}, ${until}.”`.replace(/\.\.”$/, ".”")
@@ -16385,6 +16384,8 @@ const _MISC_VERBS = {
   tell: "Telling isn't the verb here — this town runs on ASKING. ASK <someone> ABOUT <it>, and mind who's in earshot.",
   verbose: "It's already all here, tilac — the soi hides nothing and explains less. (LOOK for the room, EXAMINE for the thing.)",
   restore: "The night restores itself after every command — there's no load screen on a life. To take back your last move, use UNDO.",
+  save: "The night saves itself after every command — there's no save screen on a life. To take back your last move, use UNDO.",
+  undo: "UNDO belongs to the screen you're playing on, not to the soi: where the screen keeps one, it takes back your last command. The soi itself doesn't rewind.",
   move: "You can't shift it, and you don't need to. Try a direction (N/S/E/W), or GO somewhere worth going.",
   close: "Leave it. Nothing here wants closing — this is a town that runs with the doors open and the shutters up until dawn.",
   jump: "You jump. The pavement, a lifelong connoisseur of falling farangs, scores it a four.",
@@ -16662,10 +16663,8 @@ function _chipSet() {
     add("yes", G.partnerWho === "tan" ? "yes — Tan's 51%" : "yes — Candy's 51%"); add("no"); return chips;
   }
   if (G.pendingChoice === "checkout") {
-    if (G.hotel !== "sabai") add("sabai", "Sabai ฿400");
-    if (G.hotel !== "queenvic") add("queen vic", "Queen Vic ฿700");
-    if (G.hotel !== "areca") add("areca", "Areca ฿900");
-    if (G.hotel !== "metropole") add("metropole", "Metropole ฿1300");
+    const _short = { sabai: "Sabai", queenvic: "Queen Vic", areca: "Areca", metropole: "Metropole" };
+    for (const o of _checkoutOptions()) { const s = _short[o.k] || o.name; add(s.toLowerCase(), `${s} ฿${_num(o.rate)}`); }
     add("stay", "stay put");
     return chips;
   }
@@ -16799,12 +16798,13 @@ function _chipSet() {
     add("joke", "joke");
     if (_npcState(partner).trust >= 3) add("tease", "tease"); // banter unlocks once you're close
     const _first = _convoName(partner).split(" ")[0].toLowerCase();
-    if (NPCS[partner] && NPC_ROLES[partner] === "hostess") add("flirt", "flirt");
+    if (NPCS[partner] && NPC_ROLES[partner] === "hostess" && !_orchidRefuses("flirt")) add("flirt", "flirt");
     // every working role takes a lady drink, and a patron/manager takes a beer —
     // the chip bar hid the actual loop behind a wheel a thumb may never find
     // (thumbs-only playtest 2026-08-22: ~12 turns with a mamasan and no drink chip)
-    if (NPCS[partner] && NPC_ROLES[partner] && _servesDrinks() && !(_shutHere())) add("buy drink for " + _first, `buy her a drink ฿${_num(_ladyPrice())}`);   // not on a shut street (Dagny, round 91)   // the price before the till, not after (Ron, round 82)
-    else if (_inBar()) add("buy drink for " + _first, "stand a beer");
+    if (_orchidRefuses("drink")) { /* the Orchid: her glass is the room's */ }
+    else if (NPCS[partner] && NPC_ROLES[partner] && _servesDrinks() && !(_shutHere())) add("buy drink for " + _who, `buy her a drink ฿${_num(_ladyPrice())}`);   // not on a shut street (Dagny, round 91)   // the price before the till, not after (Ron, round 82)
+    else if (_inBar()) add("buy drink for " + _who, "stand a beer");
     add("bye", "say goodbye"); // "leave" read as walking out of the bar (playtest #9)
     // the night-ending goodbye is its own chip, named for what it does
     if (G.party && G.party.ids && G.party.ids.includes(partner)) add("send " + _first + " home", "send her home");
@@ -16873,7 +16873,8 @@ function _chipSet() {
     const label = (ROOMS[id].bar || ROOMS[id].name).replace(/\s*\(.*\)$/, "");
     add("enter " + label.toLowerCase(), label);
   }
-  if (r.motosai) add("motosai to ", "motosai…");
+  // the week's frame refuses every motosai off the soi, as it does every bus
+  if (r.motosai && G.mode !== "soi6") add("motosai to ", "motosai…");
   if (r.busStop && G.mode !== "soi6") add("ride bus", "bus");   // the week's frame refuses every bus
   if (r.atm) {   // the fee on the button, not after it (Ron, round 82: two ฿5k pulls cost him ฿300 he never saw coming)
     const _fee = typeof _atmFee === "function" ? _atmFee() : 0, _f = _fee ? ` (+฿${_num(_fee)} fee)` : "";
@@ -16943,7 +16944,8 @@ function _cAmounts(verb) {
 }
 
 function _completePool(verb, ctx) {
-  const girls = () => _npcsHere().filter(id => NPC_ROLES[id])
+  // `kind`: what the verb asks of her; the Orchid's women are offered for none of what the room refuses (_orchidRefuses)
+  const girls = (kind) => kind && _orchidRefuses(kind) ? [] : _npcsHere().filter(id => NPC_ROLES[id])
     .map(id => NPCS[id].name.toLowerCase());
   const contacts = () => Object.keys(G.phone.contacts)
     .filter(id => G.phone.contacts[id]).map(id => NPCS[id].name.toLowerCase());
@@ -16951,10 +16953,10 @@ function _completePool(verb, ctx) {
     case "talk": case "chat": case "wai": return _cNpcsHere();
     case "photo": case "selfie": case "photograph": case "snap":
       return ctx.length >= 2 ? [] : _cNpcsHere();
-    case "flirt": case "kiss": case "spank": case "fondle":
-    case "barfine": case "bf": return girls();
+    case "flirt": case "kiss": case "spank": case "fondle": return girls("flirt");
+    case "barfine": case "bf": return girls("barfine");
     // TIP is not one of those: it takes a person AND THEN an amount
-    case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls();
+    case "tip": return ctx.length >= 2 ? _cAmounts("tip") : girls("tip");
     case "follow": return ctx.length >= 2 ? [] : _cNpcsHere();
     case "see": return ctx.length >= 2 ? ["home"] : _cNpcsHere().filter(n => _seeHomeOpen(_findNpc(n)));
     case "cash": return _nontHere() ? _cAmounts("send") : [];
@@ -17008,7 +17010,7 @@ function _completePool(verb, ctx) {
       // of the chips — an undocumented find, like the pastie game.
       const rest = ctx.slice(1);
       if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
-        return _room().hostBar ? _cNpcsHere() : girls();
+        return _room().hostBar ? _cNpcsHere() : girls("drink");
       }
       // Only suggest what THIS room actually sells — toastie/condom at a 7-Eleven
       // room, food at a food stall, chargers where there's a shop/seven — else a
@@ -17070,7 +17072,7 @@ function _completePool(verb, ctx) {
       return [...new Set(lines.flatMap(l => BUS_LINES[l]))]
         .filter(s => s !== G.room).map(s => ROOMS[s].name.toLowerCase());
     }
-    case "motosai": case "moto": case "taxi": return Object.keys(MOTOSAI_DESTS);
+    case "motosai": case "moto": case "taxi": return G.mode === "soi6" ? [] : Object.keys(MOTOSAI_DESTS);
     case "accept":
       return Object.keys(QUESTS).filter(q =>
         G.quests[q] === "offered" || _questAvailable(q));
@@ -17113,8 +17115,11 @@ function _completePool(verb, ctx) {
   }
 }
 
-function engineComplete(input) {
+// `opts.all`: every match, for a tap menu (a chip that fans out); the cap of eight is for typed suggestions only — under
+// it the motosai… menu could never reach nine of its seventeen destinations.
+function engineComplete(input, opts) {
   if (!G) return [];
+  const cap = opts && opts.all ? Infinity : 8;
   const raw = String(input || "").replace(/^\s+/, "").toLowerCase();
   if (!raw) return [];
   const endsSpace = /\s$/.test(raw);
@@ -17200,7 +17205,7 @@ function engineComplete(input) {
     if (!k || seen.has(k) || !k.startsWith(last) || k === last) continue;
     seen.add(k);
     out.push(k);
-    if (out.length >= 8) break;
+    if (out.length >= cap) break;
   }
   return out;
 }
@@ -18223,6 +18228,9 @@ const _HER_ROUTE = [
   [/\b(?:hard|tough|difficult) (?:job|work)\b|\bdo you (?:like|enjoy) (?:working|it) here\b|\bis the job hard\b|\bis (?:this|it) hard\b/, "work"],   // "is this a hard job" was "Really?" (Margit, round 101)
   [/\bwhy (?:do|d'?you) (?:you )?call me\b|\bwhat does (?:that|my nickname|mister \w+|\w+ \w+) mean\b|\bmy nickname\b/, "nickname"],
 ];
+// The verbs that act (money, a look, a greeting, a gesture): a line led by one is a command even when it names the mamasan
+// or the girls here. GIVE ME YOUR NUMBER stays a question.
+const _HER_ROUTE_SKIP = /^(?:buy|tip|ring|bell|x|examine|look|l|wai|barfine|drink|order|pay|flirt|kiss|hug|say|call|contact|take|give (?!me\b))\b/;
 // A SENTENCE SAID TO HER (the routing rule and the last-resort floor share it). In order: food, a night she shared,
 // how many drinks, a question as a subject (soft — her own answer if she has one), a subject she has, a compliment,
 // then her voice by bucket. `addressed`: he spoke to her by name or endearment, so even a one-word line is hers.
@@ -18646,12 +18654,17 @@ function _vacationEndPrompt() {
   _say("(NEW VACATION — fly back next month. No lost wallet this time. Probably. The สนุก count starts again at zero; the best trip is kept.)", "dim");   // the reset was never said (Pete, round 75)
   _say("(MOVE TO PATTAYA — stop pretending you're going home. Make the move; live the sandbox.)", "dim");
 }
+// The hotels the clerk offers and what each costs YOU tonight (an expat pays the long-stay rate): the live list, the
+// reprompt and redraw, and the chips all read this, so the three surfaces quote one price.
+function _checkoutOptions() {
+  return Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly)
+    .map(k => ({ k, name: _HOTELS[k].name, rate: _hotelRate(k) }));
+}
 function _checkoutPrompt() {
-  const others = Object.keys(_HOTELS).filter(k => k !== G.hotel && !_HOTELS[k].monthly);
   // With their nightly rates: the live list is priced, and a resume that drops
   // the prices leaves three hotel names and no way to tell them apart (round 17).
   _say("The clerk waits. (" +
-    others.map(k => `${_HOTELS[k].name.toUpperCase()} — ฿${_num(_HOTELS[k].rate)}/night`).join(" · ") +
+    _checkoutOptions().map(o => `${o.name.toUpperCase()} — ฿${_num(o.rate)}/night`).join(" · ") +
     " · or STAY.)", "dim");
 }
 // The driver's patience, in escalating flavors. A module-local counter (like
@@ -18966,11 +18979,11 @@ function _doCommandInner(input) {
   }
   // YES at "SLEEP again if you mean it" is meaning it — "that moment has passed" for the one word a man types at a question (Graham, round 74)
   if (G.endWarn && G.endWarn.day === G.day && G.turns - G.endWarn.turn <= 1 && /^(y|yes|yeah|yep|ok|okay|sure|do it|confirm|i mean it)[.!]*$/i.test(raw.trim()))
-    raw = G.endWarn.cmd || { sleep: "sleep", sunrise: "watch sunrise", embassy: "take the plane" }[G.endWarn.kind] || raw;
+    raw = G.endWarn.cmd || { sleep: "sleep", sunrise: "watch sunrise", embassy: "take the plane", restart: "restart" }[G.endWarn.kind] || raw;
   // …and ANY other command disarms it: a free LOOK cost no turn, so the warning stayed armed and the next
   // SLEEP ended the night without asking again (Ilse, round 80). Only the same choice repeated commits.
   if (G.endWarn && !({ sleep: /^(sleep|go to (bed|sleep)|bed|turn in|nap|zz+)\b/, sunrise: /^(watch|see|wait for) (the )?(sunrise|dawn|sun ?rise)\b/, wait: /^wait\b|^z$/,
-    embassy: /^(take|plane|the plane|go home|fly|i'?ll go|yes|ok|okay|accept|go|home|y)\b/ }[G.endWarn.kind] || /^$/).test(raw.trim().toLowerCase())) G.endWarn = null;
+    embassy: /^(take|plane|the plane|go home|fly|i'?ll go|yes|ok|okay|accept|go|home|y)\b/, restart: /^(restart|reset)$/ }[G.endWarn.kind] || /^$/).test(raw.trim().toLowerCase())) G.endWarn = null;
   // THAI AT A PROMPT (Pieter, round 73: Cream's GO ignored ไป, the GIFT ignored สามร้อย, the police ignored ไม่).
   // The gates below read the English they were written for, and the script translation used to run only after
   // all of them. While a gate owns the input, a line of pure Thai script that the command table reads is answered
@@ -19712,7 +19725,9 @@ function _doCommandInner(input) {
       if (/^((can|could|may) i (buy|get) you a drink|(do you )?want a drink|let me buy you a drink|have a drink on me|you want drink)/.test(q) && NPC_ROLES[pid]) { doCommand("buy drink for " + _her); return; }
       // WHAT DO YOU THINK (OF) NANGFAH: her opinion of a person is that person, asked (Martin, round 85)
       { const wt = q.match(/^what do you think (?:of |about )?([a-z]+)$/); if (wt && _findNpc(wt[1])) { doCommand("ask " + _her + " about " + wt[1]); return; } }
-      const r = /^(?:ask|talk|tell) /.test(lower) ? null : _HER_ROUTE.find(([rx]) => rx.test(q));   // never re-route a command it made
+      // never re-route a command it made, nor a line led by a verb that acts: BUY DRINK FOR THE MAMASAN, TIP THE GIRLS
+      // HERE, SAY SAWASDEE IN THAI are the verb's, not a subject that happens to name the mamasan or the girls
+      const r = /^(?:ask|talk|tell) /.test(lower) || _HER_ROUTE_SKIP.test(lower) ? null : _HER_ROUTE.find(([rx]) => rx.test(q));
       const qShaped = _read(lower).kind === "question";
       const topic = r ? r[1] : (qShaped && typeof _SMALL_TALK_KEYS !== "undefined" && _SMALL_TALK_KEYS.some(([, rx]) => rx.test(q)) ? q : null);
       if (topic === "number" && NPC_ROLES[pid] && !/^ask /.test(lower)) { doCommand("contact " + _her); return; }   // "how many drinks before you give me your number?" is the number, asked
@@ -20878,6 +20893,11 @@ function _doCommandInner(input) {
       // beach-only (newGame resets mode to null), which wrongly dropped a Soi 6
       // challenge player onto the beach/Act One. Clearing identity re-runs the taxi
       // intro; keep the Act One record + hint unlock on the full-game path.
+      // It ends the whole game, so it asks once, like every choice that ends a night (the end-of-week and ending cards
+      // list it as an answer and take it in their own intercepts).
+      if (!_endConfirm("restart", G.mode === "soi6"
+        ? "(That starts the week over from the taxi — tonight and everything this week has built are gone, and UNDO will not bring them back. RESTART again if you mean it.)"
+        : "(That starts the whole game over from the taxi — this trip and everything in it are gone, and UNDO will not bring them back. RESTART again if you mean it.)")) return;
       if (G.mode === "soi6") { // re-pick + fresh Soi 6 week — the DAILY stays the daily (replayer playtest 2026-08-22)
         const daily = G.dailySeed ? { seed: G.dailySeed, dailyId: G.dailyId } : undefined;
         G.player = null; startSoi6Mode(daily); return;
@@ -20886,6 +20906,10 @@ function _doCommandInner(input) {
     }
     case "black": case "little":   // BLACK BOOK / LITTLE BLACK BOOK as two words; anything else falls through
       if (/^(black )?book$/.test(arg)) { _doBlackbook(); break; }
+    // SAVE and UNDO are the frontend's (main.js answers them before the engine sees them), but the completion offers
+    // them in every host, so the engine answers them too, the way it answers LOAD; anything else falls through
+    case "save": case "undo":
+      if (!arg && (v === "save" || v === "undo")) { _say(_MISC_VERBS[v]); break; }
     default:
       if (/^(?:how do i|how to|how much\b|which way|directions?|what'?s the way|ok(?:ay)?\b|yes\b|right\b|fine\b|alright\b|number\b|your number|let'?s\b|lets\b|come\b|back to mine|is my\b|when\b|how many\b|what'?s to\b|anything to\b|something to\b|is there\b|i(?:'ll| will)? take\b|i accept|deal\b|i take it)/.test(lower) && _naturalHelp(lower)) break;   // "how do i get to soi buakhao" (Owain, round 99); "ok i take the job", "number now", "is my shift done" (Willem, round 100)
       // the piwin just asked "where to?" and the player answered with a place, not a verb

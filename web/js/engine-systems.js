@@ -698,7 +698,9 @@ function _npcActions(id, full) {
   // Yusuf rediscovered Pauline's finding from scratch in round 68. It is outside
   // now, which is what "always" has to mean: the quick tap gets it too.
   if (NPCS[id] && !acts.includes("wai")) acts.push("wai");   // …but not at a name nobody has
-  return acts;
+  // the Orchid's women: the wheel offers nothing the room refuses
+  const _orch = { buyher: "drink", barfine: "barfine", flirt: "flirt", tip: "tip", danceher: "dance" };
+  return acts.filter(a => !(_orch[a] && _orchidRefuses(_orch[a])));
 }
 
 function _hostBar() { return !!_room().hostBar; }

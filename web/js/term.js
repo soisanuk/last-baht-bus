@@ -1061,13 +1061,14 @@ const _term = (() => {
     __info: "The time, the map, your phone" };
   function _prefillMenu(cmd) {
     let opts = [];
-    try { opts = (typeof engineComplete === "function" ? engineComplete(cmd) : []) || []; } catch (e) { opts = []; }
+    // every match, not the keyboard's eight: a tap menu is the only way a thumb reaches the ninth destination
+    try { opts = (typeof engineComplete === "function" ? engineComplete(cmd, { all: true }) : []) || []; } catch (e) { opts = []; }
     // a person in the picker by her NAME, with her job beside it: "pukky · bussaba · numfon" said nothing
     // about who is the girl and who is the mamasan (Gary, round 79)
     let here = [];
     try { here = typeof _npcsHere === "function" ? _npcsHere() : []; } catch (e) {}
     const ROLE = { mamasan: "mamasan", cashier: "on the till" };
-    return opts.slice(0, 12).map(o => {
+    return opts.slice(0, 40).map(o => {
       const full = /\s$/.test(cmd) ? cmd + o : cmd + " " + o;
       let label = o;
       const id = here.find(i => NPCS[i] && String(NPCS[i].name).toLowerCase() === String(o).toLowerCase());

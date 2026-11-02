@@ -25,3 +25,28 @@ test("engine-internal typeof guards only ever fall", () => {
     for (const m of D(f).matchAll(/typeof (_\w+) === "function"/g)) if (defs.has(m[1])) { n++; where[f] = (where[f] || 0) + 1; }
   assert.ok(n <= CEILING, `${n} engine-internal typeof guards (ceiling ${CEILING}) — a new one hides a rename; call the function directly. ${JSON.stringify(where)}`);
 });
+
+// The same hazard in every spelling. `typeof _closeTurn !== "function" || …` made dawn always true under a rename, and
+// `typeof NIGHT_TURNS !== "undefined"` guards a constant the engine itself defines; the frontend (main, term, scene) runs
+// the same guards over engine functions, where a rename silently empties the wheel or skips the modal redraw. Each
+// count is a ceiling: lower it when you remove guards, never raise it.
+const WIDE = { engine: 346, frontend: 55 };
+const FORMS = /typeof (\w+) [!=]== "(?:function|undefined)"/g;
+function wideDefs() {
+  const defs = new Set();
+  for (const f of ["thai", "world", "games", "engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"]) {
+    const s = D(f);
+    for (const m of s.matchAll(/^function (\w+)\s*\(/gm)) defs.add(m[1]);
+    for (const m of s.matchAll(/^(?:const|let|var) (\w+)\s*=/gm)) defs.add(m[1]);
+  }
+  for (const m of D("cli-sim").matchAll(/^(?:function (\w+)\s*\(|(?:const|let|var) (\w+)\s*=)/gm)) defs.delete(m[1] || m[2]);
+  return defs;
+}
+for (const [side, files] of [["engine", ["engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"]], ["frontend", ["main", "term", "scene"]]]) {
+  test(`typeof guards over engine-defined names, every form, in the ${side} files only ever fall`, () => {
+    const defs = wideDefs();
+    let n = 0; const where = {};
+    for (const f of files) for (const m of D(f).matchAll(FORMS)) if (defs.has(m[1])) { n++; where[f] = (where[f] || 0) + 1; }
+    assert.ok(n <= WIDE[side], `${n} typeof guards over engine names in the ${side} files (ceiling ${WIDE[side]}) — call it directly. ${JSON.stringify(where)}`);
+  });
+}

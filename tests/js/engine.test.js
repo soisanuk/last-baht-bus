@@ -2897,13 +2897,13 @@ test("RESTART re-runs character creation in the CURRENT mode (Soi 6 stays Soi 6)
   // challenge player onto the beach/Act One. It must re-open the mode you're in.
   state().mode = "soi6"; state().player.origin = "monger"; state().room = "qv_room";
   state().flags.act1Done = true;
-  run("restart");
+  run("restart"); assert.equal(state().pendingChoice, null, "RESTART asks once first"); run("restart");
   assert.equal(state().pendingChoice, "intro", "the taxi intro re-runs");
   assert.equal(state().introAfter, "soi6", "and it re-opens the Soi 6 week, not the beach");
   assert.equal(state().player.origin, null, "identity is cleared for the re-pick");
   // Full game: RESTART re-runs the taxi toward the beach opening, keeping the record
   newGame(); state().player.origin = "pi"; state().act1Best = 4; state().act1Tries = 2;
-  run("restart");
+  run("restart"); run("restart");
   assert.equal(state().pendingChoice, "intro", "taxi re-runs in the full game too");
   assert.equal(state().introAfter, "beach", "toward the beach opening");
   assert.equal(state().act1Best, 4, "the personal-best record survives the restart");
@@ -3031,7 +3031,7 @@ test("QUIT/END/LOGOUT get a voiced refusal, not 'didn't parse'; RESET aliases RE
   }
   // RESET now means RESTART (start over from the taxi), not a parse miss
   newGame(); state().player.origin = "pi";
-  out = []; run("reset");
+  out = []; run("reset"); run("reset");
   assert.equal(state().pendingChoice, "intro", "RESET re-runs character creation like RESTART");
 });
 

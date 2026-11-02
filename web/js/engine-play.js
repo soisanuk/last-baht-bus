@@ -3512,6 +3512,13 @@ function _orchidBottle(arg) {
   return ORCHID_BOTTLES.find(b => b.aliases.some(x => new RegExp("\\b" + x + "\\b").test(a))) || null;
 }
 function _orchidTable() { return G.room === "orchid_room" && !!G.soc.orchidBottle; }
+// What the Orchid's women will not take: a lady drink, a barfine or a bell, ever; a tip, a flirt or a dance until a bottle
+// has made it your table. The parser refuses each of these, and the wheel, the conversation chips and the completion read
+// this so that none of them offers one (`kind`: drink, barfine, bell, tip, flirt, dance).
+function _orchidRefuses(kind) {
+  if (G.room !== "orchid_room") return false;
+  return /^(?:drink|barfine|bell)$/.test(kind) || !_orchidTable();
+}
 const _ORCHID_TABLE_NO = "The table is yours till four, and she is at it because the bottle is. She is still the room's. " +
   "A bottle in here buys company; the night is not on the list, and the quiet man at the good table would notice you asking.";
 // BARFINE at the bar you OWN: a fine paid to the bar is a fine paid to yourself.
@@ -6039,7 +6046,7 @@ function _morningLedger() {
   // on a payday morning last night belongs to the month that just CLOSED — "to last night's close" was a line written
   // before the ledger had added last night (Ingrid's ฿320 and Tomás's ฿180, rounds 103: the payday night fell in the new month)
   const _mb = G.monthClosing || G.month;
-  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0) - (G.monthClosing ? condoN : 0)) + pdN; G.monthAdj = 0; _mb.barDraw = (_mb.barDraw || 0) + Math.max(0, pdN); _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99) G.month.days = (G.month.days || 0) + 1; }   // the month's book: what went OUT, before what came back in (Victor: Mort's ฿200 made a ฿130 night read ฿0)
+  if (G.stage === "expat" && _mb) { _mb.spent = (_mb.spent || 0) + roomN + Math.max(0, spent - roomN + wonN + giftInN + jobN + received - (G.roughLost || 0) + (walletIn ? (G.walletLedgerN != null ? G.walletLedgerN : WALLET_CASH) : 0) - (G.monthAdj || 0) - (G.monthClosing ? condoN : 0)) + pdN; G.monthAdj = 0; _mb.barDraw = (_mb.barDraw || 0) + Math.max(0, pdN); _mb.days = (_mb.days || 0) + 1; if ((_mb.spent || 0) < (_mb.rent || 0)) _mb.spent = _mb.rent; }   // the room is part of the spending, never more than all of it (Brendan, round 102)   // a deposit held is not a month's spending (Renata, round 100);   // the month's book: what went OUT, before what came back in (Victor); a theft is not spending, and the night the wallet came back still had a bill (Frank, round 99)
   if (jobN > 0) bits.push("\u0e3f" + _num(jobN) + " paid to you for a job");
   const joinN = (G.joinerPaid || 0) - (b.joinB != null ? b.joinB : (G.joinerPaid || 0));
   if (joinN > 0) bits.push("\u0e3f" + _num(joinN) + " the joiner fee at the desk");
