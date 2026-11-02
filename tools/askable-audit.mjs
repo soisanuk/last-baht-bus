@@ -4,6 +4,7 @@
 //   node tools/askable-audit.mjs            # full report
 //   node tools/askable-audit.mjs --json
 //   node tools/askable-audit.mjs --fact closing
+//   node tools/askable-audit.mjs --fact closing --mutate unanswer   # prove it goes red: closing answered with a shrug
 //
 // THE FOURTH SIBLING, and the first one that runs the other way round.
 // promises.test.js asserts a printed hint PARSES; afford-audit plays everything
@@ -39,6 +40,7 @@
 
 import vm from "node:vm";
 import fs from "node:fs";
+import { parseMissLines } from "./parse-miss.mjs";
 
 const JS = new URL("../web/js/", import.meta.url);
 for (const f of ["thai", "world", "games", "engine-core", "engine-encounters",
@@ -53,6 +55,11 @@ const asJson = args.includes("--json");
 const fi = args.indexOf("--fact");
 const onlyFact = fi !== -1 ? args[fi + 1] : null;
 const SHOW = args.includes("--show");   // every question and its answer, for reading a batch by hand
+// --mutate unanswer: the closing-time answerer gives the speaker's own miss line instead; the audit must report the
+// shrugs, or its per-mouth oracle is not judging the answers
+const MUTATE = args.includes("--mutate") ? args[args.indexOf("--mutate") + 1] : null;
+if (MUTATE === "unanswer") globalThis._closingTalk = npc => _topicMiss(npc);
+else if (MUTATE) { console.error("unknown --mutate " + MUTATE + " (unanswer)"); process.exit(2); }
 
 // ── the table: a fact the engine computes → the words a player types ────────
 // `hour` is a nightTurn (10 per hour from 18:00); `day` is G.day, whose %7 the
@@ -196,7 +203,7 @@ function oracleFor(room, who, hour, day, pre) {
     for (const l of replyLines(ask(room, who, NONSENSE[i % NONSENSE.length], hour, day, pre)))
       lines.add(l.slice(0, 40));
   // the parser's own last resorts, which are not topic misses at all
-  for (const s of ["I didn't understand", "That one didn't parse", "Nobody by that name",
+  for (const s of [...parseMissLines(), "Nobody by that name",
     "isn't at this bar", "isn't around right now", "They're not here to ask",
     "Telling isn't the verb here"])
     lines.add(s.slice(0, 40));

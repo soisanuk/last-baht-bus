@@ -56,7 +56,6 @@ const SHRUG = /Not mine to know|Not my story|wrong girl|wrong woman|Not a thing 
 
 const MUTATIONS = {
   wenthello: () => { globalThis._wentWithHello = () => false; globalThis._wentWithTalk = () => false; },
-  witness: () => { const o = globalThis._endNight; globalThis._endNight = function (...a) { const r = o.apply(this, a); if (G.lastNightWas) G.lastNightWas.bars = {}; return r; }; },
 };
 if (MUTATE) { if (!MUTATIONS[MUTATE]) { console.error("no mutation " + MUTATE); process.exit(2); } MUTATIONS[MUTATE](); }
 

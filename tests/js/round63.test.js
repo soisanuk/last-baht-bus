@@ -126,8 +126,12 @@ test("an answer is a meeting: a woman who answered you does not introduce hersel
 // ── The witness rule (2026-10-02): prose that says the town saw it is a promise ─────────
 test("every witness claim in the corpus is classed: general, kept by a mechanic, or answered by a witness", async () => {
   const { witnessClaims } = await import("../../tools/witness-audit.mjs");
-  const un = witnessClaims().filter(c => !c.cls).map(c => c.key);
+  const all = witnessClaims(), un = all.filter(c => !c.cls).map(c => c.key);
+  // an empty harvest (the corpus changing shape) is not a clean one
+  assert.ok(all.length > 150, "the harvest found only " + all.length + " claims");
   assert.deepEqual(un, [], "class it in tools/witness-audit.mjs CLASS — and if it is a witness, wire the mouth and test it here");
+  // and it goes red: a classed claim that loses its class is reported
+  assert.deepEqual(witnessClaims({ mutate: "unclass" }).filter(c => !c.cls).map(c => c.key), ["engine-play.js:_REL_GREET|spoken for"]);
 });
 test("the witnesses answer: colleagues on the girl who is yours and on her ride; the man who runs the league on who won it", () => {
   G.room = "stinky_bar"; G.nightTurn = 30; G.day = 5;

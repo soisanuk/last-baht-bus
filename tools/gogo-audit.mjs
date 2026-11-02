@@ -12,7 +12,9 @@
 //
 //   node tools/gogo-audit.mjs            report (exit 1 on findings)
 //   node tools/gogo-audit.mjs --json     machine-readable
-//   --quick                              one hour, two bond tiers: the test's gate (the full run is ~1 min)
+//   --quick                              one hour, two bond tiers: the test's gate (the full run is ~3 min)
+//   --mutate bell                        prove it goes red: a bell line the engine's filter lets through
+//   --room <id>                          one go-go only
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
@@ -23,9 +25,31 @@ for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-enc
 let out = [];
 engineInit((text) => out.push(String(text)));
 
-// what may NOT print in a go-go: the same shape the engine's own _FIT_GOGO filter skips
-const RX = _FIT_GOGO;
-const GOGO = Object.keys(ROOMS).filter(r => ROOMS[r].barType === "gogo");
+// what may NOT print in a go-go. The audit's own vocabulary, deliberately NOT the engine's _FIT_GOGO: judged by the
+// filter's own regex, a line the filter lets through ("leans against the bar", "props herself at the counter") passed
+// the audit too, so the audit could never find a phrase the filter lacks. Wider than the filter on purpose; OK strips
+// the go-go's own furniture before the sentence is judged.
+const RX = new RegExp([
+  // the beer bar's furniture and staff
+  String.raw`\bbar ?stools?\b`, String.raw`\bstools?\b`, String.raw`\bthe rail\b`, String.raw`\b(?:down|along|over|across) the rail\b`,
+  String.raw`\bbar[- ]?top\b`, String.raw`\bbelly up\b`, String.raw`\bbartenders?\b`, String.raw`\bbarm[ae]n\b`, String.raw`\bthe counter\b`,
+  // somebody AT the bar: any preposition that puts a body against it
+  String.raw`\b(?:at|on|against|along|behind|across|over|up to|onto|beside|by|from|leans? on|leans? against|propped on|elbows? on) the bar\b`,
+  String.raw`\b(?:end|far end|other end|length) of the bar\b`,
+  String.raw`\bperch(?:es|ed|ing)? (?:on|at|against)\b`, String.raw`\bprops? (?:herself|himself|themselves|an elbow|her elbows?|his elbows?) (?:at|on|against)\b`,
+  String.raw`\bpulls? up (?:a stool|to the)\b`,
+  // the beer bar's texture
+  String.raw`\bfootball\b`, String.raw`\bthe telly\b`, String.raw`\bthe tv\b`, String.raw`\bpours\b`, String.raw`\bon the mat\b`,
+].join("|"), "i");
+// a go-go has a cashier's desk: her side of the counter is hers, and so is the counter she taps
+const OK = /\b(?:my|her|your|this|that) side of the counter\b|\btaps the counter\b/gi;
+// --mutate bell: every go-go bell line becomes one that leans on a bar in words the engine's filter does not know; the
+// audit must report it, or its vocabulary is no wider than the filter it checks
+{ const i = process.argv.indexOf("--mutate"), m = i > 0 ? process.argv[i + 1] : null;
+  if (m === "bell") { _BELL_GOGO.length = 0; _BELL_GOGO.push("The mamasan leans against the bar and claps, and the cashier props herself at the counter."); }
+  else if (m) { console.error("unknown --mutate " + m + " (bell)"); process.exit(2); } }
+const ONLY = process.argv.includes("--room") ? process.argv[process.argv.indexOf("--room") + 1] : null;
+const GOGO = Object.keys(ROOMS).filter(r => ROOMS[r].barType === "gogo" && (!ONLY || r === ONLY));
 const TOPICS = ["", "family", "home", "plan", "price", "wallet", "late", "free", "salary", "quota", "number", "drink", "bar", "here", "work", "mamasan", "girls", "money"];
 const VERBS = id => [`talk to ${id}`, ...TOPICS.slice(1).map(t => `ask ${id} about ${t}`), `buy ${id} a drink`, `flirt with ${id}`, `kiss ${id}`, `spank ${id}`, `fondle ${id}`, `tip ${id} 100`, `examine ${id}`, `photo ${id}`, `contact ${id}`, `barfine ${id}`, "no"];
 const ROOMVERBS = ["look", "buy beer", "buy water", "ring bell", "sit", "dance", "listen", "smell", "wait 3", "wait 30", "examine stage", "examine seat", "examine floor", "examine bar", "tao rai", "time", "throw cover", "go up"];
@@ -35,7 +59,7 @@ const findings = new Map();   // line → {room, cmd}
 const keep = (room, cmd, day) => {
   if (G.room !== room || (day != null && G.day !== day)) { out = []; return; }
   for (const t of out) for (const sentence of t.split(/(?<=[.!?”"])\s+/)) {
-    if (!RX.test(sentence)) continue;
+    if (!RX.test(sentence.replace(OK, ""))) continue;
     const k = sentence.trim().slice(0, 220);
     if (!findings.has(k)) findings.set(k, { room, cmd });
   }

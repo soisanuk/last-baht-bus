@@ -5,6 +5,7 @@
 //
 //   node tools/witness-audit.mjs            # the unclassified claims (exit 1 if any)
 //   node tools/witness-audit.mjs --all      # every claim with its class
+//   node tools/witness-audit.mjs --mutate unclass   # prove it goes red: one classed claim loses its class
 //
 // Harvests every corpus record (tools/prose-corpus.mjs --json: data, pools and function-body
 // prose) for a WITNESS CLAIM — the whole bar / the soi / everybody saw, knows, clocks, will
@@ -30,7 +31,7 @@ const RX = new RegExp("\\b((the whole|half the|all the|the entire|every(?:one|bo
   "|the (soi|town|floor|rail|girls|bar|street|room|mamasan|staff) " + W +
   "|word (?:gets|goes|got|went|will get) (?:round|around)|by (?:morning|tomorrow)[^.]{0,40}(?:everybody|the whole|the soi|the girls|the town)" +
   "|the grapevine|spoken for|news travels|the story (?:goes|went|will go) round|the talk of" +
-  "|in front of (?:the whole|everybody|everyone|the girls|her friends)|nobody (?:missed|misses) it|tomorrow the (?:whole|soi))\\b", "i");
+  "|in front of (?:the whole|everybody|everyone|the girls|her friends)|nobody (?:missed|misses) it|tomorrow the (?:whole|soi))\\b", "gi");
 
 const G_ = "general", C_ = "consequence", W_ = "witness";
 const CLASS = {
@@ -78,6 +79,10 @@ const CLASS = {
   "patron.nigel.dialogue.text|the girls knew": [G_, "the same record under the patron harvest"],
   "engine-play.js:_REL_GREET|the whole bar clocks": [W_, "her colleagues answer about her as yours, and about a recent ride (_doTalkCore, the witness rule; round63.test)"],
   "engine-play.js:_REL_GREET|spoken for": [W_, "the same: 'Your girl. Everybody know, tilac.'"],
+  "engine-play.js:_REL_GREET|everyone knows": [W_, "the same sentence's second claim: her colleagues are the everyone, and they answer it"],
+  "engine-parser.js:_doTalkCore|everyone knows": [W_, "the witness rule's comment quoting _REL_GREET's second claim"],
+  "engine-systems.js:_SIGHT_OVER|the street watches": [C_, "the same GO OVER line's second claim: rep −1 and G.phone.cut keep it"],
+  "engine-parser.js:_doBuy|the floor talks": [G_, "the mamasan's drink at your own bar, the same moment as 'the floor notices'"],
   "engine-core.js:_quizTalk|the whole bar watched": [W_, "this IS the witness's answer (G.quizLast)"],
   "engine-core.js:_quizTalk|everybody see": [W_, "this IS the witness's answer (G.quizLast)"],
   "engine-parser.js:_leagueTalk|everybody see": [W_, "this IS the witness's answer (G.lastKp); 'who won' routes here too"],
@@ -168,26 +173,36 @@ const CLASS_RX = [
   [/^npc\.[a-z0-9_]+\.desc\|the floor knows$/, [G_, "the badge sentence on a go-go dancer's stored desc"]],
 ];
 
-export function witnessClaims() {
-  const raw = execFileSync("node", [REPO + "tools/prose-corpus.mjs", "--json"], { encoding: "utf8", maxBuffer: 1 << 28 });
+// mutate "unclass": the witness rule's own claim (_REL_GREET's "spoken for") loses its class — the audit must report it
+let _raw = null;
+export function witnessClaims({ mutate = null } = {}) {
+  const raw = _raw = _raw || execFileSync("node", [REPO + "tools/prose-corpus.mjs", "--json"], { encoding: "utf8", maxBuffer: 1 << 28 });
+  const CLS = mutate === "unclass" ? Object.fromEntries(Object.entries(CLASS).filter(([k]) => k !== "engine-play.js:_REL_GREET|spoken for")) : CLASS;
+  if (mutate && mutate !== "unclass") throw new Error("unknown mutate " + mutate + " (unclass)");
   const out = [];
   for (const line of raw.split("\n")) {
     if (!line.startsWith("{")) continue;
-    const r = JSON.parse(line), m = RX.exec(String(r.text || ""));
-    if (!m) continue;
-    const key = r.ref.replace(/\[\d+\]/g, "") + "|" + m[0].toLowerCase();
-    out.push({ key, ref: r.ref, phrase: m[0], cls: CLASS[key] || (CLASS_RX.find(([rx]) => rx.test(key)) || [])[1] || null, text: r.text });
+    // every claim in the record, not the first: a second "the floor talks" behind a classed "the floor notices" is its own
+    // claim and needs its own class
+    const r = JSON.parse(line), keys = new Set();
+    for (const m of String(r.text || "").matchAll(RX)) {
+      const key = r.ref.replace(/\[\d+\]/g, "") + "|" + m[0].toLowerCase();
+      if (keys.has(key)) continue;
+      keys.add(key);
+      out.push({ key, ref: r.ref, phrase: m[0], at: m.index, cls: CLS[key] || (CLASS_RX.find(([rx]) => rx.test(key)) || [])[1] || null, text: r.text });
+    }
   }
   return out;
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const all = witnessClaims(), un = all.filter(c => !c.cls);
+  const mi = process.argv.indexOf("--mutate");
+  const all = witnessClaims({ mutate: mi > 0 ? process.argv[mi + 1] : null }), un = all.filter(c => !c.cls);
   if (process.argv.includes("--all")) for (const c of all) console.log(`${(c.cls ? c.cls[0] : "UNCLASSED").padEnd(11)} ${c.key}${c.cls && c.cls[1] ? "  — " + c.cls[1] : ""}`);
   const by = {}; for (const c of all) { const k = c.cls ? c.cls[0] : "unclassed"; by[k] = (by[k] || 0) + 1; }
   console.log(`witness audit: ${all.length} claims — ` + Object.entries(by).map(([k, v]) => k + " " + v).join(" · "));
   for (const c of un) {
-    const i = c.text.search(RX);
+    const i = c.at;
     console.log(`  UNCLASSED ${c.key}\n    …${c.text.slice(Math.max(0, i - 100), i + 80).replace(/\n/g, " ")}…`);
   }
   if (un.length) {

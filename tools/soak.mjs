@@ -38,7 +38,7 @@
 //
 // Heuristics (WARN, reported not fatal): the HINT-TAP — every parenthesized
 // CAPS command the game prints (the decorate() tap idiom) is preferentially
-// played back while still in that room; a "didn't understand" reply flags an
+// played back while still in that room; a parse-failure reply (tools/parse-miss.mjs) flags an
 // undelivered promise. In soi6 mode, printed off-pocket place names flag too.
 //
 // Policy: same seed → same run (policy has its own LCG; G.rng is seeded from
@@ -47,6 +47,7 @@
 import vm from "node:vm";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import { isParseMiss } from "./parse-miss.mjs";
 
 // ── engine load (probe.mjs pattern: import.meta-relative, cwd-proof) ─────────
 if (typeof globalThis.newGame === "undefined") {
@@ -571,7 +572,7 @@ export function runSoak(opts = {}) {
     // parser then refused: the surfaces disagreeing with each other (2026-09-27)
     if (source === "vocab" && !VOCAB_HUH_OK.has(cmd) && typeof _HUH !== "undefined" && lines.some(l => _HUH.includes(String(l))))
       warns.push({ kind: "vocab-huh", cmd, room: G.room, at: stats.commands });
-    if (source === "hint" && lines.some(l => /didn't understand/i.test(l))) {
+    if (source === "hint" && lines.some(isParseMiss)) {
       stats.understoodMisses++;
       warns.push({ kind: "hint-miss", cmd, room: G.room, at: stats.commands });
     }

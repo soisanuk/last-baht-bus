@@ -4,6 +4,7 @@
 //
 //   node tools/asktopic-audit.mjs            # full report
 //   node tools/asktopic-audit.mjs --json
+//   node tools/asktopic-audit.mjs --mutate unanswer   # prove it goes red: Glam loses his music node
 //
 // WHAT THIS IS, AND WHAT IT IS NOT — the honest version, because the first
 // design of this tool was wrong and the wrongness is worth recording.
@@ -46,6 +47,11 @@ engineInit(t => out.push(String(t)), null, () => {});
 
 const args = process.argv.slice(2);
 const asJson = args.includes("--json");
+// --mutate unanswer: Glam loses the node that answers his quest's promise (ASK GLAM ABOUT MUSIC, "the tour"); the audit
+// must report it, or it is not asking the character
+const MUTATE = args.includes("--mutate") ? args[args.indexOf("--mutate") + 1] : null;
+if (MUTATE === "unanswer") NPCS.glam.dialogue = NPCS.glam.dialogue.filter(d => !/(?:^|\|)music(?:\||$)/.test(String(d.topic || "")));
+else if (MUTATE) { console.error("unknown --mutate " + MUTATE + " (unanswer)"); process.exit(2); }
 
 // ── harvest: the promises the game prints ────────────────────────────────────
 // (a) parenthesised CAPS hints, the decorate() tap idiom; (b) quest descriptions,
