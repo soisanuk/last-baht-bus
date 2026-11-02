@@ -221,3 +221,73 @@ test("Wa does not carry Tarn's factory, and does not recite Nid's rules twice", 
   assert.doesNotMatch(NPCS.wa.dialogue.find(d => d.topic === "nid").text, /never cry where a customer see/);
   assert.match(NPCS.wa.dialogue.find(d => /^rules\|/.test(d.topic)).text, /[Nn]ever cry where a customer see/);
 });
+
+// ── slice E1 of the second reader pass: the Beach Road and Jomtien story characters and patrons (read 2026-11-02) ──
+const node = (id, re) => NPCS[id].dialogue.find(d => re.test(String(d.topic || "")));
+test("Neil's record holds: no boy at the move, the stool line said once, the Boathouse man 'wasn't' as she puts it", () => {
+  const n = NPCS.neil.dialogue;
+  assert.doesNotMatch(node("neil", /^darkside/).text, /took the boy/); assert.match(node("neil", /^darkside/).text, /She went to her cousin's/);
+  assert.doesNotMatch(node("neil", /^nigel/).text, /from a stool it looked the same/); assert.match(node("neil", /^mates/).text, /looked the same from a stool/);
+  assert.doesNotMatch(nodeText("neil", 9), /went home/); assert.match(node("neil", /boathouse/).text, /then he wasn't, as she puts it/);
+  assert.match(node("duangjai", /^father/).text, /then he was not/);
+});
+test("Jerry's calendar: out by noon on his beer days, no weekday asserted, and a short that adds nothing", () => {
+  const hello = NPCS.david.dialogue[1]; assert.match(hello.text, /out by noon/); assert.doesNotMatch(hello.text, /days off|one of THOSE days/);
+  assert.doesNotMatch(node("david", /^money/).short, /super happy|colder/);
+});
+test("Wayne stays Gold Coast: no 'bosh', no 'motor', no narrator's verdict, his own words for the nominee, no fixed capital", () => {
+  const w = NPCS.wayne.dialogue;
+  for (const d of w) assert.doesNotMatch(nodeText("wayne", w.indexOf(d)), /\bBosh\b|\bmotor\b/i, "wayne#" + w.indexOf(d));
+  assert.doesNotMatch(w[5].text, /sort of man you cannot/);
+  assert.deepEqual(shared(w[7].text, node("tan", /^licence/).text).filter(g => /nominee|company is real/.test(g)), []);
+  assert.doesNotMatch(w[7].text, /hundred and twenty/); assert.match(w[7].text, /haven't got two million/);
+  assert.match(w[8].text, /has priced it/); assert.match(w[8].text, /one, two or four/);
+  sandbox(); G.nightTurn = 40; G.room = _npcRoom("wayne"); run("talk to wayne"); assert.match(t("ask wayne about work permit"), /one, two or four/);
+});
+test("Waen's shorts keep her uncontracted English, her beer is priced by the helper not the line, and the tap hint sits outside her quote", () => {
+  for (const i of [3, 6, 11]) assert.doesNotMatch(String(NPCS.waen.dialogue[i].short), /n't|I'm|they're/, "waen#" + i);
+  assert.doesNotMatch(node("waen", /two jobs/).text, /eighty baht/);
+  assert.match(node("waen", /^online/).text, /nobody can\."\s*\(TEACH ONLINE/);
+  assert.doesNotMatch(NPCS.waen.dialogue[0].text, /eight farang/);
+});
+test("the keys hang in one place — the hook under Diamond's shrine behind the till — and Wimon counts no week", () => {
+  assert.match(node("wimon", /shrine/).text, /shrine behind the till/); assert.match(node("diamond", /^keys/).text, /hook under my shrine, behind the till/);
+  assert.doesNotMatch(nodeText("wimon", 0), /one week/);
+  assert.match(node("diamond", /^hyper/).text, /LIVED upstairs/); assert.doesNotMatch(node("diamond", /^hyper/).text, /they live UPSTAIRS/);
+  for (const d of NPCS.diamond.dialogue) assert.doesNotMatch(String(d.text), /kathoey/); assert.doesNotMatch(NPCS.diamond.desc, /kathoey/);
+});
+test("Thip: the dress is going with customers again, the tense beat lands, two hours to Suvarnabhumi", () => {
+  assert.match(node("thip", /^work/).text, /now I go with customer again/);
+  assert.match(node("thip", /^husband/).text, /WORKED/); assert.doesNotMatch(node("thip", /^husband/).text, /past tense/);
+  assert.match(node("thip", /^airport/).text, /Two hours on the bus/);
+});
+test("the old-soi mamasans keep their Tinglish in the shared pool, and Toi sells Mercedes's German, not her English", () => {
+  assert.match(nodeText("toi", 8), /Best German/); assert.doesNotMatch(nodeText("toi", 8), /Best English/);
+  assert.doesNotMatch(NPCS.toi.dialogue[6].text, /On the house/);
+  assert.doesNotMatch(_OLD_SOI_KNOWS.peung[0].text, /puts four|its landlords|is a victim/); assert.match(_OLD_SOI_KNOWS.peung[0].text, /Nobody here is victim/);
+  assert.doesNotMatch(_OLD_SOI_KNOWS.malai[0].text, /gets skipped|gets a folder/);
+  assert.doesNotMatch(_OLD_SOI_KNOWS.toi[0].text, /trained half|finishes the other side|they will look/); assert.match(_OLD_SOI_KNOWS.toi[0].text, /keep walking/);
+  for (const i of [3, 6]) assert.doesNotMatch(NPCS.peung.dialogue[i].text, /pours the beer|sets the beer down without a bill/, "peung#" + i);
+  assert.doesNotMatch(node("peung", /^free/).text, /The beer I send you/);
+});
+test("Mercedes says 'furniture' once, her German drops its ending, Nee's narrator passes no sentence, Chompoo is thirty and on the relook queue", () => {
+  assert.doesNotMatch(nodeText("mercedes", 4), /furniture/); assert.match(node("mercedes", /^german/).text, /Warm Haus/); assert.doesNotMatch(node("mercedes", /^german/).text, /Warmes/);
+  assert.doesNotMatch(NPCS.nee.dialogue[4].text, /will not survive/);
+  assert.match(NPCS.chompoo.look, /of thirty/); assert.match(FLOOR_STAFF.chompoo ? FLOOR_STAFF.chompoo.look : NPCS.chompoo.look, /of thirty/);
+  const relook = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-relook.json", import.meta.url)), "utf8")).ids;
+  assert.ok(relook.chompoo && /twenty-five/.test(relook.chompoo.was));
+  assert.doesNotMatch(node("pukky", /^family/).text, /quite proud, actually/); assert.doesNotMatch(String(node("pukky", /^home/).short), /weren't/);
+});
+test("Pim's helmet bargain is one free answer in both mouths, Bank's boy is not judged in the short, and his hello asks before it answers", () => {
+  assert.match(NPCS.pim.dialogue[9].text, /one answer, free/); assert.doesNotMatch(nodeText("pim", 9), /whatever you like/);
+  assert.doesNotMatch(node("pim", /^bank/).short, /did right by/); assert.match(node("pim", /^bank/).short, /knows your face/);
+  assert.match(NPCS.bank.dialogue[6].text, /^"You looking for Mot\?/); assert.match(NPCS.bank.dialogue[1].text, /in my own life/);
+  assert.match(node("preeda", /^funeral/).text, /My husband had just bought a car/);
+});
+test("Cream's shorts speak her own English; Vasseur keeps his French register; Wilf's emphasis is caps; Nok's water has no hour; Duangjai points at NONT", () => {
+  for (const i of [4, 5, 6, 8]) assert.doesNotMatch(String(NPCS.cream.dialogue[i].short), /says|tells|works|I'm|doesn't|She's/, "cream#" + i);
+  assert.doesNotMatch(NPCS.powers.dialogue[2].choices[1].text, /Bit RICH/); assert.match(NPCS.powers.dialogue[2].choices[1].text, /"Rich, from a man drinking in one\."/);
+  assert.doesNotMatch(node("wilf", /^pension/).text, /\*taking\*/); assert.match(node("wilf", /^pension/).text, /has been taking\./);
+  assert.doesNotMatch(node("nok", /^regular/).text, /evening water/);
+  assert.match(node("duangjai", /^family/).text, /Ask me about NONT/);
+});

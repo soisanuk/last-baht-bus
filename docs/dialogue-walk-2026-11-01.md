@@ -183,6 +183,43 @@ at Daeng's end — Daeng now takes the message, once, before her old Oy answer r
 in a November boot (she is away for the harvest, by design); the sixty-baht lady-drink cut said verbatim on five floors
 is an engine insert, listed below for the code review.
 
+**Slice E1 — the Beach Road and Jomtien story characters and patrons** (22 characters, 235 nodes; Duangjai, David/Jerry,
+Wayne, Waen, Wimon, Neil, Mercedes, Nee, Cream, Vasseur, Thip, Wilf, Toi, Peung, Pukky, Pim, Chompoo, Bank, Preeda, Malai,
+Diamond, Auntie Nok; reader report in this session's scratch notes, 74 findings, 46 fixed). The Western men's voices held
+(Neil's Sunderland, Jerry's Saskatoon, Bob's and Bert's register untouched) except Wayne, whose Gold Coast slipped twice
+("bosh", "motor") and whose licence lecture was Tan's words in his mouth — re-voiced, the overlap with Tan pinned to zero,
+his "you've got a hundred and twenty" (a capital the game never computed) gone, and his capital node left ungated because
+`licence.test` pins the grid in three mouths. Fixed: Neil's son at a move that happened before he was born, his stool line
+told under two topics, and the Boathouse man "went home" where Duangjai herself does not know; Jerry's Monday-and-Friday
+days off against his Monday-to-Friday school and a hello that asserted the weekday; the keys of the dead foreman hanging in
+three places (a shrine by the office, the hook behind the till, "up to my shrine") — now one hook under Diamond's shrine
+behind the till; Wimon measuring the player's week; the brothers still living upstairs in one node and the rooms kept for
+friends in another; Diamond's two spellings of katoey; Thip putting the dress on as if new after nine years of working
+his off-season (she now says what changed: she goes with customers again), her "WORK, past tense" that was not past tense,
+and four hours to Suvarnabhumi; Toi selling Mercedes's "best English on the street" when her lines are Tinglish (now her
+German); three free beers given in prose at the Golden Dragon and the Cherry Pop that the house never poured; Mercedes
+closing two nodes on "I was furniture" and a "Warmes Haus" the narrator said had lost its ending; the narrator's "the one
+you will not survive" at the Lotus; Pim's helmet bargain priced as "whatever you like" in one node and one free answer in
+the next; Bank's "my own house" for a woman he is not living with and a hello that answered a question nobody asked;
+Preeda's "He had just bought a car" with her father the nearest "he"; Cream's four shorts, Waen's three and Pukky's one
+conjugated into the narrator's English; Waen's beer priced in her line, the tap hint spoken inside her quote, and a counted
+crowd; the three shared old-soi nodes (`_OLD_SOI_KNOWS`) written as the author's essay in three Tinglish mouths — roughened,
+Toi's "keep walking" kept for its pin; Vasseur's "Bit RICH" from a Frenchman; Wilf's Markdown asterisks; Nok's evening
+water; Duangjai's "ask me about HIM" pointing at a node with no such alias. Chompoo's arithmetic (a scholarship, five years
+in Berlin, six on the stage) makes her about thirty; her look said twenty-five and her thumb has shipped, so the look is
+thirty and she is on `docs/portrait-relook.json`.
+
+Verified and not a defect: Bank's fares already read `MOTOSAI_TOWN`/`MOTOSAI_FAR` (the walker renders the digits); both
+helmet hellos carry `gives`; Nont does try to hand the ฿500 back; Sumalee takes Gordon's news (`heardGordon`); Glam has a
+music node and Oy a debts node for the two hand-offs; Terry's "never here in the flesh" is the soi, not the Orchid; Mala's
+hook holds the headdress, not the keys; Thip's bond hello repeats its own short in a live probe (the reader saw the
+walker's pooled rendering); Alcazar is named five times as a landmark and attaches no allegation to anyone. Left as
+written: Diamond's "my father build this place two time" covering both the builder who raised her and Glam (deliberate —
+"Nobody say it"); Preeda and Mercedes landing the same "not cruel, careful" line about two different European husbands
+(taste, two bars apart); four mamasans answering FREE with the same confession (the house rule); "Grandma Toi" at
+forty-five; Chompoo's ungated "buy me a drink and I might". Reported, not verified: Vasseur's insulted hello repeating as
+the flattered one (only if both flags are set, which the walker's stub does and the game may not).
+
 ## Handed to the code review (findings only; prose fixes go through Fable)
 
 1. **A kin word in a topic alias steals the repeat.** Nid's "her papa" node (about her daughter's father, in
@@ -197,13 +234,17 @@ is an engine insert, listed below for the code review.
 4. The lady-drink tally insert ("This one, I get ฿60. The drink was ฿260") is dealt word for word to every bonded woman on five floors; a pool of three or four phrasings would stop a player hearing the author.
 5. The `preempt` lint keys on the first alias only; both pre-empts this run were first-alias-only and were fixed
    by reordering, which is the right fix, but a node whose *every* alias is pre-empted would look the same.
+6. The repeat pools: "Buy one more round — then I make it new for you" (`engine-core.js`) promises that a bought
+   round re-tells a node, which nothing delivers, and "I don't mind saying it twice. It won't be better the second time"
+   is the narrator's contracted English dealt to Tinglish mamasans (Wimon, Toi, Peung, Malai); both want voicing by
+   register the way `_voiceKind` already sorts the patrons.
 
 ## Deferred, and why
 
-- **131 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
-  the Darkside, the Silk Rose, the Doghouse and Succubus: 70 more characters, 722 nodes). What is left is the rest of the
-  cast in three size-balanced slices — the Beach Road and Jomtien story characters and patrons (Duangjai, David, Wayne,
-  Waen, Wimon, Neil, Mercedes, Nee…), the Walking Street and Tree Town women and the remaining regulars (Barry, Mala,
+- **109 characters are still unread by a reader** (after the second pass read the eight Soi 6 floors, the massage shops,
+  the Darkside, the Silk Rose, the Doghouse and Succubus, and then slice E1, the Beach Road and Jomtien story characters
+  and patrons: 92 more characters, 957 nodes). What is left is the rest of the
+  cast in two size-balanced slices — the Walking Street and Tree Town women and the remaining regulars (Barry, Mala,
   Nuan, Henning, Ploy, Kwan, Joy, Nina…), and the seventy-odd small parts (Ron, Mot, Somchith, Phil, Petch, Dave, Bee,
   Macca…). The method and the brief are in `docs/prose-review-method.md` §4 and `docs/dialogue-reader-brief.md`; one
   reader at a time, 150 KB a reader, findings only.

@@ -11,10 +11,11 @@
       "patron": 26
     },
     "filler": 227,
-    "unrendered": 4,
-    "relook": 4
+    "unrendered": 5,
+    "relook": 5
   },
   "unrendered": [
+    "chompoo",
     "peach_lounge_noot",
     "hot_pepper_gina",
     "hula_hula_min",
@@ -24,7 +25,8 @@
     "peach_lounge_noot",
     "hula_hula_min",
     "hot_pepper_gina",
-    "hula_hula_noon"
+    "hula_hula_noon",
+    "chompoo"
   ],
   "characters": [
     {
@@ -893,7 +895,7 @@
       "th": "ไดมอนด์",
       "room": "hyper",
       "tags": [],
-      "desc": "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open letters with, and a kathoey's hard-won certainty that she is the most finished thing in any room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers have made it shine. Nothing on this stage happens that Diamond didn't allow.",
+      "desc": "The mamasan of Hyper A Go-Go — six feet of poise in heels, cheekbones you could open letters with, and a katoey's hard-won certainty that she is the most finished thing in any room. She ran the floor here when it was a dump and stayed to run it now the Samson brothers have made it shine. Nothing on this stage happens that Diamond didn't allow.",
       "rendered": true
     },
     {
@@ -1350,14 +1352,16 @@
       "source": "NPCS",
       "role": "hostess",
       "sex": "f",
-      "look": "Thai ladyboy of twenty-five, high cheekbones, dancer's build, cool amused expression, stage bikini.",
+      "look": "Thai ladyboy of thirty, high cheekbones, dancer's build, cool amused expression, stage bikini.",
       "venueKind": "soi6",
       "emoji": "🦋",
       "th": "ชมพู่",
       "room": "ruby_kiss",
       "tags": [],
       "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
-      "rendered": true
+      "rendered": false,
+      "relook": true,
+      "relookWas": "Thai ladyboy of twenty-five, high cheekbones, dancer's build, cool amused expression, stage bikini."
     },
     {
       "id": "dear",
