@@ -2648,7 +2648,7 @@ function _doExamine(arg) {
   if (G.dog && (/\b(dog|sai krok)\b/.test(arg) ||
       (G.dog.name && arg.includes(G.dog.name.toLowerCase())))) {
     _say(_dogN(`Sai Krok: a Pattaya-special soi dog with one clipped ear and the settled ` +
-      `bulk of a professional. He chose you on day ${G.dog.since} and has never once ` +
+      `bulk of a professional. He chose you ${G.dog.since >= 1 ? `on day ${G.dog.since}` : "a trip ago"} and has never once ` +
       `revisited the decision. Currently ` +
       (_room().barType === "beer" ? "under your stool, officially off duty, actually on duty." :
        (_room().bar || _room().barType) ? "outside the door, chin on paws, one ear on the room." :

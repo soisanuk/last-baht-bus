@@ -7232,7 +7232,8 @@ function _soi6Stay() {
 // trip's length and a month, so the next trip reads it as a while ago — never a negative, never "last night".
 function _ageBooks(off) {
   const shiftMap = m => { if (m && typeof m === "object") for (const k of Object.keys(m)) if (typeof m[k] === "number") m[k] -= off; };
-  const shiftDay = o => { if (o && typeof o === "object" && typeof o.day === "number") o.day -= off; };
+  const _aged = new Set();
+  const shiftDay = o => { if (o && typeof o === "object" && typeof o.day === "number" && !_aged.has(o)) { o.day -= off; _aged.add(o); } };
   shiftMap(G.metDay); shiftMap(G.seenDay); shiftMap(G.leaveSaid); shiftMap(G.visitDay); shiftMap(G.barSat);
   for (const book of [G.wentWith, G.partyLog, G.rideLog, G.homeSeen, G.kissLog, G.giftLog, G.streamBells, G.streamDrinks]) if (book && typeof book === "object") for (const k of Object.keys(book)) {
     const v = book[k]; if (Array.isArray(v)) v.forEach(shiftDay); else shiftDay(v);
@@ -7249,6 +7250,20 @@ function _ageBooks(off) {
   shiftDay(G.std);   // an infection carried home is days old, not days in the future
   if (G.massageLog && typeof G.massageLog === "object") for (const r of Object.keys(G.massageLog)) { const e = G.massageLog[r]; if (e && typeof e.last === "number") e.last -= off; }
   for (const list of [G.jobPay, G.launderRisk]) if (Array.isArray(list)) for (const r of list) if (r && typeof r.due === "number") r.due -= off;
+  // THE CLASS, NOT A LIST: every record G keeps stamped { day: G.day } — a field's own record, a list of them, or a map
+  // of them by id — is on the old trip's count (the league night "already played" a month later, "he chose you on day 6"
+  // on day 1). One level down only, the records the code writes; G.soc is rebuilt by the trip, and the ending card's
+  // lifeStats.day is a count of days, not a date.
+  const _sweep = v => { if (Array.isArray(v)) v.forEach(shiftDay); else shiftDay(v); };
+  for (const k of Object.keys(G)) {
+    if (k === "soc" || k === "lifeStats") continue;
+    const v = G[k]; if (!v || typeof v !== "object") continue;
+    if (Array.isArray(v) || typeof v.day === "number") { _sweep(v); continue; }
+    for (const kk of Object.keys(v)) { const w = v[kk]; if (w && typeof w === "object") _sweep(w); }
+  }
+  // …and the day numbers kept under another name: the dog's, the phone's once-a-day stamps
+  if (G.dog && typeof G.dog === "object") for (const k of ["since", "btfDay"]) if (typeof G.dog[k] === "number") G.dog[k] -= off;
+  if (G.phone && typeof G.phone === "object") for (const k of Object.keys(G.phone)) if (/Day$/.test(k)) { if (typeof G.phone[k] === "number") G.phone[k] -= off; else shiftMap(G.phone[k]); }
 }
 function _newVacation(opts) {
   const _soi6 = !!(opts && opts.soi6);   // CONTINUE at the Soi 6 week's end (Mario, 2026-10-20): the same street a month on, the people remembering you

@@ -63,14 +63,17 @@ test("S1-3: the bar's deposit and key money are named on the morning ledger and 
 });
 
 test("S1-4: the morning the landlord takes the bar, the pocket's top-up is still named and not called the night's spending", () => {
-  owner(14, 3000, 0);
-  G.bar.lastMonthDay = G.day - 29; G.bar.cash = 0; G.bar.rentShort = RENT_GRACE - 1;
-  sleep();
-  assert.ok(_flag("barLost"), "the bar was lost at the wake");
-  const topUp = said().match(/The till didn't cover it\. ฿([\d,]+) of your own money/);
-  assert.ok(topUp, "the till went under and the pocket topped it up");
-  assert.match(ledger(), new RegExp(`฿${topUp[1]} of your own money into the till`), ledger());
-  assert.doesNotMatch(ledger(), /down ฿[\d,]{5,} on the night/);
+  // the same night twice on the same dice, once with the bar lost at the wake: the money lines must not differ
+  const money = [];
+  for (const lose of [false, true]) {
+    owner(14, 3000, 0); G.rng = 424242;
+    G.bar.lastMonthDay = G.day - 29; G.bar.cash = 0; G.bar.rentShort = lose ? RENT_GRACE - 1 : 0;
+    sleep();
+    assert.equal(_flag("barLost"), lose);
+    money.push(ledger().replace(/[+-]\d+ สนุก · /, "").replace(/ — ฿[\d,]+ in the pocket now/, ""));
+  }
+  assert.match(money[0], /own money into the till/, "the seed must put the pocket into the till");
+  assert.equal(money[1], money[0]);
 });
 
 test("S1-5: a laundering cost that finds empty pockets is named at what it took, not at the figure that never moved", () => {
@@ -196,4 +199,18 @@ test("S2-8: the visit's last night is put away — the room billed at checkout, 
   assert.match(said(), /on the way to the bus/);
   t("visit pattaya");
   assert.deepEqual([G.soc.banned, G.soc.heat, G.soc.lockIn, G.soc.drinkCount, G.soc.drunk, G.soc.helloed], [{}, {}, {}, {}, 0, {}]);
+});
+
+test("S2-9: every { day } record ages across a trip — the league night is not 'already played' a month later, the dog is a trip ago", () => {
+  sandbox(); const pool = Object.keys(ROOMS).find(r => ROOMS[r].pool && ROOMS[r].region !== "Darkside");
+  G.day = 6; G.room = pool; G.nightTurn = 30; t("play killer"); assert.ok(G.lastKp && G.lastKp.day === 6);
+  G.game = null; G.dog = { since: 6 }; _setFlag("hasDog");
+  G.rivalLog = { lek: { day: 6 } }; G.bfNo = [{ day: 6 }]; G.phone.jokeDay = 6;
+  G.day = 7; sleep(); t("new vacation"); assert.equal(G.day, 1);
+  for (const [what, d] of [["lastKp", G.lastKp.day], ["dog", G.dog.since], ["a map's record", G.rivalLog.lek.day], ["a list's record", G.bfNo[0].day], ["the phone's stamp", G.phone.jokeDay]])
+    assert.ok(d < 1, `${what} still on the old trip's count: ${d}`);
+  G.day = 6; G.room = pool; G.nightTurn = 30; G.money = 5000;
+  assert.doesNotMatch(t("play killer"), /played for tonight/);
+  G.game = null; G.room = _hotelRoomId(); G.lightOn = true;
+  assert.doesNotMatch(t("examine dog"), /on day -?\d/);
 });
