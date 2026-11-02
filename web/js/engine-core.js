@@ -466,6 +466,7 @@ function newGame() {
       roundFor: {},      //   npcId → you stood them one, so the next story comes in full
       patronBusy: {},    //   roomId → the regular has a girl's attention
       patronMiffed: {},  //   roomId → you drink-sniped his girl (bad form)
+      patronRound: {},   //   roomId → the regular has stood you his round here tonight (the bell, his team's win)
       bra: {},           //   npcId → you bought her the bra (fondle bumps a tier)
       mgrShot: {},       //   roomId → the manager's free welcome shot poured tonight (nightly)
       mgrChat: {},       //   managerId → how hard you've leaned on him since your last man drink (nightly)
@@ -743,8 +744,8 @@ const STATE_SCHEMA = {
     "huhHint apologized backDoorTonight banned barTurns bellAt bells bfBar bfNight bfRefused bondCapSaid bondNight bought " +
     "bra butterflyTeased charmed charmedN contested danceNoted dancePaid dogFavor drinkCount drinkNight drunk fed " +
     "gaveCondom giftLines goWith greeted heat heatWhy helloed hostOut joyRooms lastCall leftEarly leftFrom " +
-    "leftLockIn lockIn mgrChat mgrShot orchidBottle patronBusy patronMiffed photoJoy photoNoted salengBar selfBf selfDrinks " +
-    "steered streamJoy streamLast streamMine streamSeenBy tanWas tipBond tries ").trim().split(/\s+/),
+    "leftLockIn lockIn mgrChat mgrShot orchidBottle patronBusy patronMiffed patronRound photoJoy photoNoted salengBar selfBf selfDrinks " +
+    "soberNext steered streamJoy streamLast streamMine streamSeenBy tanWas tipBond tries ").trim().split(/\s+/),
   socTrip: (
     "arriveBook arriveMoney askedHere awaySaid beats bondHeard bondSaid byeSaid chamDrinks clinicCompany coconutDone " +
     "comped craneDay declined depositNagDay dogScenesSeen drinks fonPour freeNight gapSeen gifted given glassRooms " +
@@ -752,7 +753,7 @@ const STATE_SCHEMA = {
     "lockInCoda lockInDare lockInLast maiDeeSaid mamaTreat mamaTreatNight mamaWarm manDrinks massaged mgrTrustNight " +
     "moneyTick motelWith ninaFed niraWater noEnglish nontTold padded policeRoll policeTell policeWarned pubShut " +
     "quitSaid qvCrisped retHello rivalSaw roastGoneSeen roundFor roundTold seenHome shutOut sightedOff sighting " +
-    "soapyDone soberNext softDrink special specialAsk spentTurn sponsorPix staySaid stoodFor storyTold streamAway " +
+    "soapyDone softDrink special specialAsk spentTurn sponsorPix staySaid stoodFor storyTold streamAway " +
     "streamBell streamWon streetLook tanFedDay thaiPraised thaiSpy tickRoom torchNoticed " +
     "townSaid usualSaid waiBack walletPointed wentHello whaleBell whaleBellAt witnessSaid workSaid ").trim().split(/\s+/),
 };
@@ -948,6 +949,8 @@ function _atJobBar() { return !!(G && G.job && G.job.kind === "manager" && G.roo
 function _onShift() { return _atJobBar() && G.job.shiftDay === G.day; }
 // a woman on the floor he manages, wherever he is standing: a manager does not barfine his own girls (Mario, 2026-10-22)
 function _myFloorGirl(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && NPC_ROLES[id] === "hostess" && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room))); }
+// a manager's staff he may not barfine or take home: his floor, and the cashier the house counts as his staff too
+function _myBarfineStaff(id) { return _myFloorGirl(id) || (_jobBarStaff(id) && NPC_ROLES[id] === "cashier"); }
 function _jobBarStaff(id) { return !!(G && G.job && G.job.kind === "manager" && NPCS[id] && (NPCS[id].room === G.job.room || (NPCS[id].bars || []).includes(G.job.room)) && (NPC_ROLES[id] || NPCS[id].manager)); }
 // what the recovered wallet gives back — the opening's ฿500, or what the second wake took
 function _walletCash() { return G && G.walletHeld != null ? G.walletHeld : WALLET_CASH; }
@@ -1040,7 +1043,7 @@ const _FIT_TILL = /\b(cashier|the till|on the till)\b/i;
 // there), the wall benches with small tables, and a VIP area or gallery; drinks come from the
 // waitresses. The women dance, sit with customers, work the door, or are on a break. So in a go-go a
 // pooled line that puts anybody on a stool, at the rail or along a bar is skipped.
-const _FIT_GOGO = /\b(the fan|near the fan|to the fan|bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
+const _FIT_GOGO = /\b(the fan|near the fan|to the fan|bar ?stools?|stools?|the rail|down the rail|along the rail|(?:along|down|up|across|behind|over|on|at|leans? on|propped on|elbows? on) the bar\b|(?:end|far end|other end) of the bar|whole rail|down the whole bar|length of the (?:rail|bar)|bar[- ]?top|belly up|bartenders?|barm[ae]n|football|the telly|the tv|pours|polish(?:es|ing)|wip(?:es|ing) (?:the|a|her) glass|on the mat|the rail is)\b/i;   // …nor the beer bar's texture: the match on, a dancer pouring, the usual on the mat (Henrik, round 69)
 function _isGogo(room) { const r = ROOMS[room || G.room]; return !!(r && r.barType === "gogo"); }
 // the room's furniture in one word, for a line that must print in a bar AND a go-go: a beer bar keeps
 // its stools and its bar top, a go-go has seats and small tables (Mario, 2026-10-07)

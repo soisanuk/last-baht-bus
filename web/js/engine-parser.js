@@ -7000,6 +7000,12 @@ const _TEETOTAL_BROKEN = [
   "(The soda-water man orders a beer, and the bar does the thing bars do, which is nothing at all. The declaration is off the books.)",
   "(Sober-as-ordered lasted exactly as long as it lasted. The room does not judge; the room pours.)",
 ];
+// a drink he orders himself un-says I DON'T DRINK, out loud — every self-ordered pour calls this
+function _selfPour() {
+  if (!(G.player && G.player.teetotal)) return;
+  G.player.teetotal = false;
+  _say(_pickVary(_TEETOTAL_BROKEN, "teetotalbroke"), "dim");
+}
 
 // I'M NOT HERE FOR THAT — the trade's equivalent of I DON'T DRINK (2026-10-10): said once, and the
 // app stops sending girls and nobody tells you to collect numbers (the street still asks — that is the street). A paid night or a flirt undoes it.
@@ -11423,7 +11429,7 @@ function _buyManDrink(id) {
   _say(`“Now you're speaking the language.” ${name} pours himself a proper one and ` +
     `chinks it against yours. ฿${_num(_beerPrice())} well spent — a manager who likes you is the ` +
     `best friend a farang has out here. (฿${_num(G.money)} left.)`, "win");
-  if (_rand() < 0.5) { G.soc.drunk++; _say("He racks up two more “for the road” before you can argue.", "dim"); }
+  if (_rand() < 0.5) { _say("He racks up two more “for the road” before you can argue.", "dim"); _compDrink(1); }
 }
 
 // Lean on a manager's time and he'll (genially) angle for a man drink back.
@@ -11747,6 +11753,7 @@ function _doBuy(arg) {
     if (/beer|chang|leo|singha/.test(arg) && !arg.includes("drink")) {
       if (G.money < HOST_BEER) { _say(`฿${_num(HOST_BEER)} a bottle here — premium end. You have ฿${_num(G.money)}.`); return; }
       G.money -= HOST_BEER;
+      _selfPour();
       G.soc.drunk++;
       G.thirst = Math.max(0, G.thirst - 20);
       _say(`฿${_num(HOST_BEER)} for your own bottle at host-bar prices — cold, ceremonial, and ` +
@@ -11983,6 +11990,7 @@ function _doBuy(arg) {
     if (G.money < YA_DONG_SHOT) { _say(_fmt("The unlabelled bottle is ฿{p} a shot. You have ฿{m}. Prik shrugs — more for the brave.", { p: YA_DONG_SHOT, m: G.money })); return; }
     G.money -= YA_DONG_SHOT;
     (G.soc.selfDrinks = G.soc.selfDrinks || {})[G.room] = (G.soc.selfDrinks[G.room] || 0) + 1;   // the midnight drink-each rule (Marguerite, round 67)
+    _selfPour();
     G.soc.drunk += 2;
     _say(`Prik pours from the unlabelled bottle without measuring. It tastes like bark, ` +
       `chilli, and a decision — Mek bangs the bar once the shot's down, and the whole ` +
@@ -12017,6 +12025,7 @@ function _doBuy(arg) {
     // 2026-08-24). He meant it; this is him meaning it. Once, at his own bar.
     if (_flag("bertFreeBeer") && G.room === "stinky_bar" && _npcsHere().includes("bert")) {
       G.flags.bertFreeBeer = false;
+      _selfPour();
       G.soc.drunk++;
       G.thirst = Math.max(0, G.thirst - 20);
       _say("Bert has it open before you've finished asking, and waves your hand off your " +
@@ -12236,11 +12245,12 @@ function _doBuy(arg) {
       if (_rand() < 0.5) {
         if (G.player && G.player.teetotal) _say("She flicks two fingers at the cashier and a cold soda lands in front of you — she heard you the first time. On the house.", "dim");   // I DON'T DRINK is honoured (review 2026-10-25)
         else {
-          _compDrink(1);
-          G.thirst = Math.max(0, G.thirst - 20);
           _say("She flicks two fingers at the cashier and a cold one lands in front " +
             "of you. On the house.", "dim");
-          _checkDrunk();
+          // the comp can end the night (a blackout): the rest of this purchase belongs to a bar you have left
+          const day = G.day;
+          _compDrink(1);
+          if (G.day !== day) return;
         }
       }
     }
@@ -15690,7 +15700,15 @@ function _closingTalk(npc, topic) {
       "“Two. Five past two you still here? Okay — you help me stack the stool.”",
     ],
   });
-  if (_closesMidnight(G.room)) return pick({
+  // a room that keeps its own later hours (the Orchid's four) says its own hour, from _closeClock — never midnight
+  { const ct = _closeTurn(G.room);
+    if (ct != null && ct !== 60) { const h = _closeClock(G.room), H = _hourSaid(h); return pick({
+      floor: [`“${H}, tilac. This room keep its own hours — not the soi's.”`, `“We close ${h}. Nobody shout last call in here — the bottle finish, you finish.”`, `“${H}. Outside already sleeping by then, na.”`],
+      punter: [`“${H}. This room keeps its own clock, and nobody calls time on the men in here.”`, `“Not till ${h}. The rest of the soi's long shut by then.”`, `“${H}. Whoever runs this place keeps his own hours.”`],
+      house: [`“${H}. This room keeps its own hours.”`, `“${H}, and not a minute before. The members prefer it.”`, `“We close at ${h}. Last orders are when the table says so.”`],
+      thai: [`“${H}. This room, own hours.”`, `“${H}. Member hour — nobody call last order.”`, `“We close ${h}. Outside already sleep.”`],
+    }); } }
+  if (_closeTurn(G.room) === 60) return pick({
     floor: [
       "“Midnight, tilac. Last call half past eleven, then shutter come down — police, na. You come back tomorrow.”",
       "“Twelve o'clock. Not our choice — this road must close. Half eleven you order the last one.”",
@@ -19594,7 +19612,11 @@ function _doCommandInner(input) {
   // THE SENTENCE READER routes the acts the word-matcher misreads (2026-10-14)
   if (_readRoute(raw)) return;
   // a sober man's sentence, and the hand that pushes a glass back (Neville, round 53)
-  if (/^(i (don'?t|do not|never) drink( alcohol)?|teetotal(ler)?|no alcohol( for me)?|i'?m sober|sober)[.!]?$/.test(lower)) { _doTeetotal(); _tick(); return; }
+  // The clause may follow a "no thanks," — said to a free pour, it hands the glass back AND declares.
+  if (/^(?:(?:no(?: thanks?| thank you)?|sorry|thanks?|thank you)[,.!]? )?(?:i (?:don['’]?t|do not|never) drink(?: alcohol)?|teetotal(?:ler)?|no alcohol(?: for me)?|(?:i['’]?m|i am) (?:a )?(?:sober|teetotal(?:ler)?)|sober)[.!]?$/.test(lower)) {
+    if (G.lastComp && G.lastComp.room === G.room && G.turns - G.lastComp.turn <= 2) _doRefuseDrink();
+    _doTeetotal(); _tick(); return;
+  }
   // A QUESTION TO THE WOMAN YOU'RE TALKING TO, in a man's own words (Kevin, round 84 — "where are you
   // from?" got the map, "do you have kids?" did not parse, "goodnight Somo" was asked as a topic): the
   // sentence goes to her, as the subject it is about; what you tell her about yourself is kept.
@@ -19767,7 +19789,7 @@ function _doCommandInner(input) {
         const _gone = _npcByName(_hm[1]);
         if (_gone && NPCS[_gone] && _met(_gone)) { _say(`${NPCS[_gone].name} isn't here — the floor goes home at the shutter, like every night. (MESSAGE her, or ask her tomorrow.)`); _flushTrace(_room0); _checkAct1(); return; }
       }
-      if (_who && _myFloorGirl(_who) && !(G.party && G.party.ids && G.party.ids.includes(_who))) {   // a manager does not take his own girls home (Mario, 2026-10-22)
+      if (_who && _myBarfineStaff(_who) && !(G.party && G.party.ids && G.party.ids.includes(_who))) {   // a manager does not take his own girls home (Mario, 2026-10-22)
         _say(_pickVary(_JOB_BARFINE_NO, "jobbf")(NPCS[_who].name), "alert"); _flushTrace(_room0); _tick(); _checkAct1(); return; }
       if (_who && _ownBarStaff(_who) && _atOwnBar() && !(G.party && G.party.ids && G.party.ids.includes(_who))) {   // "First you talk to the bar (BARFINE MANOW)" → BARFINE refused: a loop with no door (Kaspar, round 101)
         _say(_fmt(_pickVary([

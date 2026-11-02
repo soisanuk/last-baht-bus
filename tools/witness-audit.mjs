@@ -113,6 +113,7 @@ const CLASS = {
   "engine-systems.js:_sightOver|the soi saw": [C_, "G.phone.cut"],
   "engine-systems.js:_bfRefusalSay|everybody saw": [C_, "G.soc.bfBar: no colleague goes with you tonight"],
   "engine-systems.js:_bfRefusalSay|everybody see": [C_, "G.soc.bfBar"],
+  "engine-systems.js:_BF_PEEK_SAY|everybody see": [C_, "G.soc.bfBar, read by _bfDayPeek: the floor rule said before any price"],
   "engine-systems.js:_affairYes|the bar knows": [C_, "floorSour and the colleague review's 'your girl'"],
   "engine-systems.js:_affairNight|the floor knows": [C_, "the affair's floor meters"],
   "engine-systems.js:_affairWarn|the room heard": [C_, "floorSour stops the other girls' floor moments"],

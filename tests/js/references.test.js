@@ -240,7 +240,7 @@ test("a character quotes the price their OWN bar charges", () => {
 // lint whose every hit is benign teaches people to skip it. This one matches the
 // present-tense claim only, catches three of the four that shipped, and is clean.
 test("no revisit line claims a time of day it cannot know", () => {
-  const NOW = /\b(?:another sunset|sunset (?:over|dying|going)|(?:the )?sun (?:going|goes|is going|setting|sinking)|last (?:of the light|smear of sunset)[^.]{0,30}(?:dying|going|left)|still warm|quiet end of the evening|end of the evening|early evening|this afternoon|it is (?:morning|afternoon|evening))\b/i;
+  const NOW = /\b(?:another sunset|sunset (?:over|dying|going)|(?:the )?sun (?:keeps |is |still )?(?:going|goes|setting|sinking|dropping)|last (?:of the light|smear of sunset)[^.]{0,30}(?:dying|going|left)|still warm|quiet end of the evening|end of the evening|early evening|this afternoon|it is (?:morning|afternoon|evening))\b/i;
   const bad = [];
   for (const [id, r] of Object.entries(ROOMS))
     for (const [i, t] of (r.revisit || []).entries())
