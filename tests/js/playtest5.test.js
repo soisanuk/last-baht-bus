@@ -676,7 +676,8 @@ test("the daily survives RESTART; LOOK is the full description; leads stay in th
   startSoi6Mode({ seed: 12345, dailyId: "2026-08-22" });
   G.player = { origin: "monger", personality: "joker", orientation: "straight" };
   assert.equal(G.dailySeed, 12345);
-  doCommand("restart");
+  // RESTART asks once, then goes
+  doCommand("restart"); doCommand("restart");
   assert.equal(G.dailyId, "2026-08-22", "RESTART keeps the daily");
   // LOOK: the full desc, even on a revisit
   sandbox(); G.room = "khao_talo"; G.visited.khao_talo = true; out = [];
