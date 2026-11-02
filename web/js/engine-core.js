@@ -1897,19 +1897,13 @@ function _convoStart(id) {
   // old asker's numbered answer prompt kept re-printing under the new partner's
   // turns while a typed digit routed to the new partner (mobile playtest,
   // 2026-08-17, Bpom's question haunting Roger's conversation).
+  // TWO PARTIES ONLY (Mario, 2026-11-03): a question belongs to the conversation it was asked in. Turning to somebody
+  // else drops it — not kept, not re-asked, never answered through the new partner (an answer typed after the turn is
+  // the new partner's). She asked once; another woman may put the same question herself. Only an interruption by the
+  // room (the cart, the bell, a kick-out: _convoInterrupt) keeps a question for the same two people to come back to.
   if (G.convoQ && G.convoQ.id !== id) {
-    const who = _convoName(G.convoQ.id), _qid = G.convoQ.id;
-    // the question isn't spent — next time that node lands it can be asked again
-    const ost = _npcState(G.convoQ.id);
-    if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key];
-    // …but clearing `asked_` was NOT enough on its own: the dialogue ENTRY that
-    // carried the ask is already in G.talked, so re-talking gave the brush-off
-    // and the question was never put again — while the whole consistency system
-    // hangs on answering it (persona report B#15, 2026-08-23). Remember it, and
-    // re-ask on the next conversation with that person.
-    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q || "", day: G.day };
+    _say(`(You turn to ${_convoName(id)}; ${_convoName(G.convoQ.id)} lets ${_sheHe(G.convoQ.id).p} question go.)`, "dim");
     G.convoQ = null;
-    _say(`(${who}'s question will keep — you've turned to ${_convoName(id)}, and ${_sheHe(_qid).s} will ask again.)`, "dim");   // "goes unanswered" read as a penalty for greeting the room (Margaret, round 78)
   }
   const _same = G.convo === id;
   G.convo = id; G.itNpc = id;
@@ -1942,8 +1936,7 @@ function _convoActive() {
   const id = G.convo;
   if (!id) return null;
   const here = NPCS[id] && _npcsHere().includes(id);
-  if (!here) { // partner gone → conversation over; the question isn't spent, she can ask again
-    if (G.convoQ) { const ost = _npcState(G.convoQ.id); if (ost && ost.know) delete ost.know["asked_" + G.convoQ.key]; }
+  if (!here) { // partner gone → conversation over, and her question with her (two parties only)
     G.convo = null; _convoDrop(true); return null;
   }
   return id;
@@ -2015,10 +2008,11 @@ function _sheHe(id) {
 
 function _convoEnd(quiet) {
   const id = G.convo;
-  // an unanswered question survives the interruption: she comes back to it
-  // next time, same as when you turn to somebody else mid-ask
+  // an unanswered question survives an INTERRUPTION by the room (quiet: the cart, the bell, a kick-out) — the same
+  // two people come back to it. A leave-taking or walking out is yours, and the question goes with it (two parties only)
   if (G.convoQ && G.convoQ.q) {
-    (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, day: G.day };
+    if (quiet) (G.convoLapsed = G.convoLapsed || {})[G.convoQ.id] = { key: G.convoQ.key, q: G.convoQ.q, day: G.day };
+    else _say(`(${_convoName(G.convoQ.id)}'s question goes unanswered.)`, "dim");
   }
   G.convo = null;
   G.convoQ = null;

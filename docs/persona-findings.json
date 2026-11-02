@@ -43818,12 +43818,12 @@
    "instrument": "",
    "between": "",
    "claim": "Somo asked 'Who you support?'; the answer went to Nu after 'talk to nu' — and Doyle took the answer to Angela's reprinted question",
-   "verdict": "deferred",
-   "note": "the pending question follows the partner, not the asker; repro: ask Somo's team question, talk to nu, answer — needs a probe of the conversation layer's partner switch while an ask is pending",
+   "verdict": "fixed",
+   "note": "the pending question follows the partner, not the asker; repro: ask Somo's team question, talk to nu, answer — needs a probe of the conversation layer's partner switch while an ask is pending — 2026-11-03 Mario: conversations are two-party only. A question belongs to the conversation it was asked in: turning to somebody else drops it (not kept, not re-asked, never routed by its words to an earlier asker — _answerOwner retired); only an interruption by the room keeps it for the same two people",
    "system": "conversation",
    "cls": "G",
    "sev": "severe",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",

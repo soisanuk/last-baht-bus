@@ -88,7 +88,7 @@ test("a pending question lapses OUT LOUD when you turn to someone else, and the 
   assert.equal(cues(), 1);
   out = [];
   doCommand("talk to dave");                       // switch partners
-  assert.match(text(), /Bert's question will keep/);
+  assert.match(text(), /Bert lets his question go/);   // two parties only (Mario, 2026-11-03)
   assert.equal(G.convoQ, null);
 });
 
@@ -448,13 +448,13 @@ test("own-prose instructions parse: Kesinee's bar, Nigel's bar(s), Tan's coffee;
   doCommand("ask candy about bert"); assert.match(text(), /We go back/);
 });
 
-test("a lapsed question can be asked again next time the node lands", () => {
+test("a question you turned away from is spent — two parties only (Mario, 2026-11-03)", () => {
   G.room = "stinky_bar"; G.player.origin = "pi"; G.player.personality = "blunt";
   doCommand("talk to bert");
   assert.equal(G.convoQ && G.convoQ.key, "why");
   doCommand("talk to dave");
   assert.equal(G.convoQ, null);
-  assert.ok(!_npcState("bert").know["asked_why"], "the ask is un-spent — the next node that carries it asks again");
+  assert.ok(_npcState("bert").know["asked_why"], "he asked once; walking off is your answer, and he does not nag");
 });
 
 // ── round seven: the one-girl man (Tomas) ──
@@ -876,12 +876,12 @@ test("HINT signposts the bar chain's hidden step; a typed choice label outlives 
     out = []; doCommand("goodbye");
     assert.match(text(), /take your leave|leave|Goodbye|bye/i);
   }
-  // forfeit by leaving: the ask is un-spent
+  // forfeit by leaving: the question goes with the conversation, and stays asked (two parties only, 2026-11-03)
   sandbox(); G.room = "stinky_bar"; G.player.origin = "pi"; G.player.personality = "blunt";
   doCommand("talk to bert");
   assert.equal(G.convoQ && G.convoQ.key, "why");
   G.room = "buakhao_n"; _convoActive();
-  assert.ok(!_npcState("bert").know["asked_why"]);
+  assert.equal(G.convoQ, null); assert.ok(_npcState("bert").know["asked_why"]);
 });
 
 test("texts: no identical line twice running from one sender, the inbox is capped; the ledger nets out ATM cash; the violence refusal is a pool", () => {
@@ -1269,11 +1269,11 @@ test("a question you walked away from is put to you again", () => {
   assert.ok(G.convoQ, "she asked something");
   const key = G.convoQ.key;
   out = []; doCommand("ask mort about column");
-  assert.equal(G.convoQ, null, "turning away lapses it");
-  assert.ok(G.convoLapsed && G.convoLapsed.angela, "…and it is remembered");
+  assert.equal(G.convoQ, null, "turning away drops it");
+  assert.ok(!(G.convoLapsed && G.convoLapsed.angela), "…and it is not kept: two parties only (Mario, 2026-11-03)");
   out = []; doCommand("talk to angela");
-  assert.ok(G.convoQ && G.convoQ.key === key, "she comes back to it");
-  assert.match(out.join("\n"), /comes back to it/);
+  assert.equal(G.convoQ, null, "she does not come back to it");
+  assert.doesNotMatch(out.join("\n"), /comes back to it/);
 });
 
 test("darts checks out from a real three-dart range and says when a command didn't land", () => {

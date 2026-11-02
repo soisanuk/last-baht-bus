@@ -698,7 +698,7 @@ test("a lapsed question re-asked on return prints its paragraph once, not twice"
   for (let i = 0; i < 8 && !G.convoQ; i++) { out = []; doCommand("talk to angela"); }
   assert.ok(G.convoQ, "she asked");
   const q = G.convoQ.q;
-  doCommand("ask mort about column");         // lapse it
+  _convoInterrupt();                          // the cart: an interruption keeps it (turning to Mort would drop it)
   out = []; doCommand("talk to angela");      // she comes back to it
   const text = out.join("\n");
   const firstIdx = text.indexOf(q.slice(0, 40));

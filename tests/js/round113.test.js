@@ -70,3 +70,16 @@ test("Keith: Somsri diagnoses the third night on the third night, not the second
   sandbox(); G.room = "ladybird_bar"; G.nightTurn = 30;
   G.day = 3; r = t("talk to somsri"); assert.match(r, /Third night\?/, r);
 });
+
+// ── Mario's ruling on Keith's severe row (2026-11-03): conversations are two-party only ──
+test("Keith: a question belongs to the conversation it was asked in — turning away drops it, and the new partner takes the line", () => {
+  sandbox(); G.room = _npcRoom("somo"); G.nightTurn = 40;
+  t("talk to somo"); assert.equal(G.convoQ && G.convoQ.key, "team", "Somo asks");
+  const r = t("talk to nu");
+  assert.match(r, /Somo lets her question go/); assert.equal(G.convoQ, null);
+  assert.ok(!(G.convoLapsed && G.convoLapsed.somo), "not kept for later");
+  t("leeds united");
+  assert.ok(!(G.player.said && G.player.said.team), "Somo never got the answer through Nu");
+  t("talk to somo"); assert.equal(G.convoQ, null, "and she does not come back to it");
+  assert.equal(typeof _answerOwner, "undefined", "no answer is routed to another asker by its words");
+});

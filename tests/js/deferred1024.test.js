@@ -136,12 +136,10 @@ test("Ingrid: a job's fee by text is named as the job's on the ledger", () => {
 
 // ── the pending answer (Gareth, round 103): an answer belongs to the question it answers ─────────
 const atVic = () => { sandbox(); G.room = "queen_vic"; G.nightTurn = 20; quiet(); run("talk to doyle"); run("talk to angela"); };
-test("Gareth: Doyle's options answered while Angela's question is on the table go to Doyle; hers keeps", () => {
-  atVic(); assert.equal(G.convoQ.id, "angela"); assert.ok(G.convoLapsed.doyle);
-  assert.match(t("the getting-away"), /Doyle's question/);
-  assert.equal(_npcState("doyle").heard.here, "the getting-away"); assert.equal((_npcState("angela").heard || {}).home, undefined);
-  assert.ok(G.convoLapsed.angela && !G.convoLapsed.angela.dodged, "Angela's question lapses, still hers to answer");
-  atVic(); t("the money, mostly"); assert.ok(_npcState("doyle").heard.here, "a word his question offered outweighs one in her canned reply");
+test("Gareth, re-ruled: the question on the table takes the answer; Doyle's was dropped when you turned to Angela (two parties only, 2026-11-03)", () => {
+  atVic(); assert.equal(G.convoQ.id, "angela"); assert.ok(!(G.convoLapsed && G.convoLapsed.doyle), "Doyle's question went when you turned");
+  assert.doesNotMatch(t("the getting-away"), /Doyle's question/);
+  assert.equal(_npcState("angela").heard.home, "the getting-away"); assert.equal((_npcState("doyle").heard || {}).here, undefined);
 });
 test("Gareth: a free answer, or one of her own replies, stays with the question on the table", () => {
   atVic(); t("manchester"); assert.equal(_npcState("angela").heard.home, "manchester"); assert.equal((_npcState("doyle").heard || {}).here, undefined);

@@ -6695,32 +6695,6 @@ function _saidAgrees(a, b) {
   return ta.some(w => tb.has(w));
 }
 
-// whose question a line answers, when it is not the one on the table: the asker is in the room, his question lapsed
-// tonight and was not dodged, and the line's content words appear in HIS question (or his canned replies) and in
-// neither the pending question nor its replies. A free answer ("Manchester") names nothing either offered, and stays.
-function _answerOwner(bare, q) {
-  if (!q || !G.convoLapsed) return null;
-  const words = String(bare || "").toLowerCase().replace(/[^a-z' -]/g, " ").split(/[\s-]+/)
-    .filter(w => w.length >= 3 && !(typeof _READ_STOP !== "undefined" && _READ_STOP.has(w)) && !/^(the|and|you|yes|but|for|not|just|maybe|both|all|any)$/.test(w));
-  if (!words.length) return null;
-  // a word the question itself OFFERED counts two, one in a canned reply counts one ("Perth, mostly" is a reply, not an offer)
-  const score = (key, text) => {
-    const qs = String(text || "").toLowerCase();
-    const canned = (typeof ASK_REPLIES !== "undefined" ? ASK_REPLIES[key] || [] : []).map(r => typeof r === "string" ? r : r.text).join(" ").toLowerCase();
-    let n = 0;
-    for (const w of words) { const re = new RegExp("\\b" + w.replace(/[^a-z']/g, "") + "\\b"); if (re.test(qs)) n += 2; else if (re.test(canned)) n += 1; }
-    return n;
-  };
-  const mine = score(q.key, q.q);
-  const here = typeof _npcsHere === "function" ? _npcsHere() : [];
-  let best = null, top = mine;
-  for (const id of Object.keys(G.convoLapsed)) {
-    const l = G.convoLapsed[id];
-    if (id === q.id || !l || !l.q || l.dodged || l.day !== G.day || !here.includes(id)) continue;
-    const n = score(l.key, l.q); if (n > top) { top = n; best = id; }
-  }
-  return best;
-}
 function _convoAnswer(text) {
   // a QUESTION back is not her answer: "who's playing tonight" was filed as the answer to hers (Steve, the baseline)
   { const _R = typeof _read === "function" ? _read(text) : null;
@@ -10324,21 +10298,7 @@ function _convoResolve(lower) {
       (!_firstPerson && _isRealCommand(bare.split(/\s+/)[0]) && bare.split(/\s+/).length <= 3) ||   // "topics nina" was his childhood name (Hal, round 96)
       _findNpc(bare) ||
       (!_reacts && !_firstPerson && _partnerHasTopic(G.convoQ.id, _convoTopic(lower)));
-    if (!changingSubject) {
-      // AN ANSWER BELONGS TO THE QUESTION IT ANSWERS (Gareth, round 103): Doyle asked "the girls, the money, or the
-      // getting-away?", Angela asked where home was, and "the getting-away" was filed as Angela's home town. A line
-      // that names words only an earlier question tonight offered — and that the question on the table does not —
-      // goes back to the man who asked it; hers lapses (not dodged), still hers to answer.
-      const owner = _answerOwner(bare, G.convoQ);
-      if (owner) {
-        const lq = G.convoLapsed[owner]; _convoDrop(false); delete G.convoLapsed[owner];
-        _convoStart(owner);
-        G.convo = owner; G.convoQ = { id: owner, key: lq.key, q: lq.q };
-        _say(`(You answer ${_convoName(owner)}'s question.)`, "dim");
-        return _convoAnswer(lower);
-      }
-      return _convoAnswer(lower);
-    }
+    if (!changingSubject) return _convoAnswer(lower);   // the question on the table is the only one (two parties only)
     _convoDrop(true); // dodged (or a question back) — fall through; a late digit still gets the drift line, never "didn't understand" (Gareth, round 46)
   }
   // 0) A canned reply typed a beat late — the chip was still on screen after you
@@ -10348,6 +10308,7 @@ function _convoResolve(lower) {
   if (!G.convoQ && G.convoLapsed && typeof ASK_REPLIES !== "undefined") {
     const norm = t => String(t).trim().replace(/[.!?"“”]+$/, "").toLowerCase();
     for (const [lid, l] of Object.entries(G.convoLapsed)) {
+      if (lid !== G.convo) continue;   // a beat late is still hers only while she is the one you are talking to
       const canned = (ASK_REPLIES[l.key] || []).map(r => typeof r === "string" ? r : r.text);
       if (canned.some(t => norm(t) === norm(lower))) {
         delete G.convoLapsed[lid];
@@ -10374,7 +10335,7 @@ function _convoResolve(lower) {
   const id = _convoActive();
   // "her question will keep" — and a digit straight after IS her answer, if she is still here (Dagny, round 91: "drifted past")
   if (/^[1-9]$/.test(bare) && G.convoLapsed) {
-    const pid = Object.keys(G.convoLapsed).find(x => _npcsHere().includes(x) && G.convoLapsed[x].day === G.day && !G.convoLapsed[x].dodged && G.convoLapsed[x].q);
+    const pid = Object.keys(G.convoLapsed).find(x => x === G.convo && _npcsHere().includes(x) && G.convoLapsed[x].day === G.day && !G.convoLapsed[x].dodged && G.convoLapsed[x].q);
     const reps = pid ? _askReplies(G.convoLapsed[pid].key) : [];
     if (pid && reps[+bare - 1]) {
       const lq = G.convoLapsed[pid]; delete G.convoLapsed[pid];

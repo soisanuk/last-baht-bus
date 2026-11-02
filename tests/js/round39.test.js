@@ -96,7 +96,7 @@ test("฿5 and a ฿15 fare on the opening night: the phone has one number in it
 
 test("a canned reply typed a beat late still answers the question that lapsed (Bronwyn)", () => {
   const key = Object.keys(ASK_REPLIES)[0]; const reply = ASK_REPLIES[key][0]; const t = typeof reply === "string" ? reply : reply.text;
-  G.convoQ = null; G.convoLapsed = { bert: { key, q: "?" } }; G.room = "stinky_bar";
+  G.convoQ = null; G.convoLapsed = { bert: { key, q: "?" } }; G.room = "stinky_bar"; G.convo = "bert";   // a beat late is hers only while she is the partner (two parties only, 2026-11-03)
   run(t);
   assert.equal(G.player.said[key] && G.player.said[key].length > 0, true, "the answer landed");
   assert.match(text(), /a beat late/);
