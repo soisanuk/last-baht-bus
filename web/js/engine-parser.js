@@ -1564,7 +1564,7 @@ function _arriveAt(to) {
   // both fired back to back ("lights up like payday" twice in a row, Alan
   // playtest 2026-08-17), so the invite consumes the greeting slot.
   const _invHere = G.phone.invite && G.phone.invite.day === G.day &&
-    _npcRoom(G.phone.invite.id) === to;
+    _npcWhere(G.phone.invite.id) === to;
   // A month later, she still knows the face: the one-girl playtest (2026-08-22)
   // came back to "a name and a number" after five nights, three LTs and the ride.
   // Once per girl per vacation — a beat and a small head start, not the old ledger.
@@ -1638,9 +1638,10 @@ function _arriveAt(to) {
   }
   // quiz night: walk in during the window and the microphone finds you
   if (_quizHere()) { _startQuiz(); return; }
-  // a standing invitation, honoured: she said come, and you came
+  // a standing invitation, honoured: she said come, and you came — and only if she is on the floor to see it
+  // (her home bar is not her presence: a woman away for the season keeps no seat)
   const inv = G.phone.invite;
-  if (inv && inv.day === G.day && _npcRoom(inv.id) === G.room) {
+  if (inv && inv.day === G.day && _npcsHere().includes(inv.id)) {
     G.phone.invite = null;
     _addBond(inv.id, 1);
     (G.soc.greeted = G.soc.greeted || {})[G.room] = true; // this IS tonight's greeting

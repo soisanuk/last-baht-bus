@@ -4723,12 +4723,13 @@ function _doMessage(arg) {
     _say(_pickVary(_CHAM_TEXT_REPLIES, "chamtext"));
     return;
   }
-  const _judged = Object.keys(G.phone.contacts).find(c => (c === w || (NPCS[c] && NPCS[c].name.toLowerCase() === w)) && _maiDee(c));
-  if (_judged) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[_judged].name}'s answer, tonight and after.`, "dim"); return; }   // Marcus, round 61: "miss you na" thirty seconds after "we finish"
   // an EMPTY name matched every contact ("".includes) and texted whoever was first —
   // Tan, then called "her" (Margaret, round 65)
   const id = w && Object.keys(G.phone.contacts).find(c =>
     c === w || NPCS[c].name.toLowerCase().includes(w.split(" ")[0]));
+  // the face-loss verdict is read on the contact the lookup RESOLVED, so a prefix or a few words after her name
+  // ("message lamai miss you") meet the same closed door as her bare name — nothing reopens it
+  if (id && _maiDee(id)) { G.battery = Math.max(0, G.battery - 1); _say(`Read. No reply. The two blue ticks sit there like a closed door with a window in it, and that is the whole of ${NPCS[id].name}'s answer, tonight and after.`, "dim"); return; }
   if (!id) {
     // a bare MESSAGE with texts in the phone is the inbox first — ข้อความ (the messages) opened a
     // send prompt to a man who wanted to read (Jens, round 67)
@@ -4774,6 +4775,13 @@ function _doMessage(arg) {
   // like themselves, which for a number without a voice of its own is briefly
   if (!NPC_ROLES[id]) {
     _pushMsg(id, _pickVary(["👍", "ok 🙂", "haha. later na", "thumbs up, busy — talk soon"], "plainreply"));
+  } else if (_awayForSeason(id)) {
+    // a woman away for the season answers from where she is — never "come see me tonight" from a floor she is not on
+    _pushMsg(id, _awayForSeason(id) === "harvest"
+      ? _pickVary(["cutting rice 🌾 phone in the mud all day 555. back soon na", "home for harvest, signal one bar 😩 back ten day, keep my seat",
+          "🌾🌾 mama say i talk phone more than i cut. back soon", "rice time na. tired tired. you wait me ok? 😤"], "awayreply_harvest")
+      : _pickVary(["i in bangkok na, till rain stop 🌧️ pattaya too quiet now. back high season", "bangkok busy busy 😩 come back when farang come back na",
+          "not in pattaya na, bangkok till the rain finish. you miss me? 555", "work bangkok now, small room, big rent 😩 back in pattaya when sun come back"], "awayreply_bkk"));
   } else
   {   // a woman with her own voice answers in it: Somo, who "doesn't do the sweetheart thing", texted "miss you na 🥺" (Kevin, round 84)
     const _tv = NPCS[id] && NPCS[id].textVoice && NPCS[id].textVoice.reply;
@@ -5311,7 +5319,7 @@ function _doPhoneScreen() {
       ? "📭 No messages yet. (CONTACT a lady and she'll start texting.)"
       : "📭 No messages — nobody has your number yet. (CONTACT a lady and she'll start texting.)", "dim");
   }
-  if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id]) {
+  if (G.phone.invite && G.phone.invite.day === G.day && NPCS[G.phone.invite.id] && !_awayForSeason(G.phone.invite.id)) {
     _say(`📌 ${NPCS[G.phone.invite.id].name} asked you to come by her bar tonight.` +
       ((_closedNow(_npcRoom(G.phone.invite.id))) ? " (Her bar has shut for the night — she'll keep the seat tomorrow.)" : ""), "dim");
   }
@@ -6041,7 +6049,10 @@ function _maybeIncomingText() {
   // Presence check: a girl you are LOOKING AT does not text that she misses you
   // — Nong texted "i keep you seat every night, you no come i sad" from the next
   // stool (Alan playtest, 2026-08-17). Girls in the room sit the round out.
-  const away = contacts.filter(c => _npcRoom(c) !== G.room);
+  // a woman away for the season is not on a floor to invite you to: she texts her one away-text (the harvest's,
+  // below) and is otherwise out of the round
+  const away = contacts.filter(c => _npcRoom(c) !== G.room &&
+    (!_awayForSeason(c) || (_awayForSeason(c) === "harvest" && (G.phone.harvestTexted || {})[c] !== G.vacation)));
   if (!away.length) return;
   const pool = [];
   for (const c of away) for (let i = 0; i <= _bondTier(c); i++) pool.push(c);
@@ -6073,6 +6084,7 @@ function _maybeIncomingText() {
     _say("(📱 Your phone buzzes — CHECK MESSAGES.)", "dim");
     return;
   }
+  if (_awayForSeason(id)) return;
   if (id === "priew") {
     if (G.day - (G.priewTextDay || -9) < 3) return;
     G.priewTextDay = G.day;
