@@ -168,3 +168,48 @@ Subagents get the batch file, a brief, and no access to `web/js/*.js`. They repo
 only — refs, short quotes, the class, one sentence — and never edit. Triage is the author's:
 verify with `tools/probe.mjs` before fixing (a third of "bugs" are reading-order artefacts),
 pin every real fix in a test, and send design calls to the user rather than into the code.
+
+## 4. The graph pass — "does the prose agree with the EDGE between two nodes?" (2026-11-01)
+
+```sh
+node tools/dialogue-walk.mjs --script <dir>   # every character rendered in gate order; the reader's input
+node tools/dialogue-walk.mjs --lint --all     # dead, pre-empt, residue, fact, pronoun — before paying a reader
+node tools/dialogue-walk.mjs --shared --all   # one sentence in two mouths (430 runs; ~8 are real each round)
+node tools/graph-prose.mjs                    # places, pairs, quests, items, encounters against the world graph
+node tools/gen-world-graph.mjs                # regenerate first if an engine or world file moved
+```
+
+The first three passes read a string, a subject or a quest. None of them reads a **relation**: a room that puts
+another "next door" when the exits say four hops, a desc that puts a place "south of" another when the survey says
+north, a quest whose journal keeps pointing at the middle stop after it is made, an encounter that names a street it
+never fires on. `docs/world-graph.json` already holds every such edge (EXIT, LOCATED, GIVEN_BY, DONE_BY, AT, SETS,
+GIVES), so the check is a join, not a reading.
+
+What is gated, and where:
+
+| relation | checked against | test |
+|---|---|---|
+| "next door / across the road / opposite" + a named place | ≤ 2 hops on the EXIT graph | `place-graph.test.js` |
+| a direction word bound to a named place | survey bearing (`ROOM_GEO`), ±75° | `place-graph.test.js` |
+| a closing hour given for a named venue | `_closeTurn` | `place-graph.test.js` |
+| a quest's static `at` vs the character whose node sets its `doneFlag` | same room, or `at` is a function of the step | `dialogue1101.test.js` |
+| an encounter's prose naming a district or a person | the regions and people of the rooms it fires in | `prose-graph.test.js` |
+| a person's description pronouns | `_pr(id)` | `prose-graph.test.js` |
+| an item with both a room and a GIVES node | one home | `prose-graph.test.js` |
+
+What stays a reader's query (`tools/graph-prose.mjs --pairs`, `--items`, the informant rows of `--quests`): the
+adjacent room pairs whose prose names each other (read each pair as one document — the only way a contradiction
+between neighbours shows), an item named near a place that is not its home (prose names an item's *destination*
+far more often than its home; 132 raw, 0 real), and a quest that names its informants.
+
+Rules learned the expensive way, now in the code: a direction word is bound to the name it modifies, not the
+nearest one in sixty characters; "south **of** X" means X lies north; "Soi N" is per district; adjacency is the
+walked graph and bearings are the survey, and neither is bent to flatter the other; the pre-empt lint keys on a
+node's FIRST alias, so the fix for a pre-empted node is usually to reorder its aliases.
+
+**The reader half.** The walker's scripts are the input to a reader pass — the brief is `docs/dialogue-reader-brief.md`
+(voice axes, shorts, retelling, moralising, claims, hours, witness, promises, guardrails; a strict one-line finding
+format; no access to the sources). Batch by size (~150 KB a reader), run them one at a time under a tight window,
+triage every finding with `tools/probe.mjs`, pin every fix, and never seed the dossier ledger as the author. The
+2026-11-01 round read the 25 characters with fifteen nodes or more by hand after eight parallel readers died on the
+usage limit; the write-up (`docs/dialogue-walk-2026-11-01.md`) lists who is still unread.
