@@ -128,6 +128,16 @@ test("the committed manifest is REPRODUCIBLE from the committed generator", () =
     (r.stderr || r.stdout || ""));
 });
 
+test("the portrait manifest (the art agent's render queue) is what its generator makes from world.js today", () => {
+  // A changed `look` or a new character that is never regenerated leaves `unrendered`/`relook` stale, and the
+  // render queue silently omits the face. The generator's --check ignores the date line.
+  const r = spawnSync("node", [path.join(root, "scripts", "gen-portrait-manifest.mjs"), "--check"],
+    { cwd: root, encoding: "utf8" });
+  assert.equal(r.status, 0,
+    "docs/portrait-manifest.json does not match world.js, docs/portrait-relook.json and the thumbs on disk. " +
+    "Run: node scripts/gen-portrait-manifest.mjs\n" + (r.stderr || r.stdout || ""));
+});
+
 test("the scene manifest is in sync with world.js", () => {
   // NOT conditional. This used to `return` when the file was missing, on the
   // reasoning that absence meant a fresh clone — but the manifest is COMMITTED,

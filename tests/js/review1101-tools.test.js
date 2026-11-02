@@ -49,3 +49,10 @@ test("S10-2: the go-go audit judges with its own vocabulary, so a bar line the f
   const r = tool("tools/gogo-audit.mjs", "--json", "--quick", "--room", "hyper", "--mutate", "bell");
   assert.ok(JSON.parse(r.stdout || "[]").some(x => x.line === line), "the audit saw the planted line");
 });
+
+test("S10-3: a test compares the portrait manifest with its generator, and it is in sync today", () => {
+  const art = readFileSync(fileURLToPath(new URL("./art.test.js", import.meta.url)), "utf8");
+  assert.match(art, /gen-portrait-manifest\.mjs"\), "--check"\]/, "art.test runs the portrait manifest's --check");
+  const r = tool("scripts/gen-portrait-manifest.mjs", "--check");
+  assert.equal(r.status, 0, r.stderr || r.stdout);
+});
