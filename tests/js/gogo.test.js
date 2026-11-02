@@ -17,6 +17,13 @@ test("nobody leans on a bar in a go-go: every go-go, played", () => {
   assert.deepEqual(rows.map(r => `[${r.room}] ${r.cmd}: ${r.line}`), []);
 });
 
+test("the go-go audit goes red on a bar line the engine's filter lets through (--mutate bell)", () => {
+  let raw;
+  try { raw = execFileSync(process.execPath, [fileURLToPath(new URL("../../tools/gogo-audit.mjs", import.meta.url)), "--json", "--quick", "--room", "hyper", "--mutate", "bell"], { encoding: "utf8", maxBuffer: 1 << 26 }); }
+  catch (e) { raw = String(e.stdout || ""); if (!raw.trim()) throw e; }
+  assert.ok(JSON.parse(raw).some(r => /leans against the bar/.test(r.line)), "the planted bell line went unseen");
+});
+
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"])

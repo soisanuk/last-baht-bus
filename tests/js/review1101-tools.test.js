@@ -7,6 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import { spawnSync } from "node:child_process";
 import { talkOrder } from "../../tools/talk-order.mjs";
 for (const f of ["thai", "world", "games", "cli-sim", "engine-core", "engine-encounters", "engine-play", "engine-systems", "engine-parser"])
   vm.runInThisContext(readFileSync(fileURLToPath(new URL(`../../web/js/${f}.js`, import.meta.url)), "utf8"), { filename: f + ".js" });
@@ -22,6 +23,7 @@ const sandbox = (stage = "vacation") => {
 };
 const dice = (v, fn) => { const s = _rand; try { _rand = () => v; return fn(); } finally { _rand = s; } };
 beforeEach(() => { newGame(); });
+const tool = (path, ...args) => spawnSync(process.execPath, [fileURLToPath(new URL(`../../${path}`, import.meta.url)), ...args], { encoding: "utf8", maxBuffer: 1 << 26 });
 const PARSER = readFileSync(fileURLToPath(new URL("../../web/js/engine-parser.js", import.meta.url)), "utf8");
 
 test("S10-1: the talk order sees an answerer in every shape, and moving one changes the order", () => {
@@ -39,4 +41,11 @@ test("S10-1: the talk order sees an answerer in every shape, and moving one chan
   // and the real entry point: the answerer the order names is the one that answers
   sandbox(); G.mode = "soi6"; G.room = "orchid_room"; G.nightTurn = 30; G.metDay = { nune: G.day - 2 }; G.soc.drinks.nune = 4;
   assert.match(t("ask nune about price"), /Johnnie Walker/, "Nune's price list comes from _priceTalk");
+});
+
+test("S10-2: the go-go audit judges with its own vocabulary, so a bar line the filter misses goes red", () => {
+  const line = "The mamasan leans against the bar and claps, and the cashier props herself at the counter.";
+  assert.equal(_FIT_GOGO.test(line), false, "the engine's filter lets this line through");
+  const r = tool("tools/gogo-audit.mjs", "--json", "--quick", "--room", "hyper", "--mutate", "bell");
+  assert.ok(JSON.parse(r.stdout || "[]").some(x => x.line === line), "the audit saw the planted line");
 });
