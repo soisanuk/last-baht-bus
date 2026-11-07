@@ -142,8 +142,9 @@ const _TOAST_LINES = [
 function _toastFor(id) {
   const r = NPC_ROLES[id] || (NPCS[id] && NPCS[id].role);
   const _dry = !((G.soc.selfDrinks || {})[G.room]);   // "clinks the glass against your bottle" with no drink in front of you (Priya, round 58)
+  const _free = _atJobBar();   // the manager's drink is the house's: nobody writes a chit for it, so no toast catches the cashier's eye for one
   return _TOAST_LINES.filter(f => !(r === "mamasan" && /mamasan/.test(f.toString())) && !(r === "cashier" && /cashier/.test(f.toString())) &&
-    !(_dry && /your (bottle|beer)/.test(f.toString())));
+    !(_dry && /your (bottle|beer)/.test(f.toString())) && !(_free && /chit/.test(f.toString())));
 }
 // the guv'nor asking twice is not a punter to be sold a drink ("you forget so fast?
 // buy a drink — maybe it come back", to the owner, about her own mother — Rolf, round 55)
@@ -8659,6 +8660,14 @@ function _wentWithTalk(npc, topic) {
   if (w.kind === "out" && (G.partyLog || {})[npc]) return false;   // the night out has its own memory (_partyTalk)
   if (/\blast night\b/.test(t) && G.day - w.day !== 1) return false;   // "Upstairs, 2 nights ago" to LAST NIGHT after an unpaid night with her (Eoin, round 101)
   const ago = G.day - w.day, when = ago === 0 ? "tonight" : ago === 1 ? "last night" : ago <= 6 ? `${ago} nights ago` : ago > 20 ? "last trip" : "before";
+  // a night still running has no morning to remember: "all night, and in the morning you make me laugh" was said at
+  // half past nine of the night it described (Ray, round 113)
+  if (ago === 0 && w.kind !== "st") {
+    _say(_pickVary([`"Tonight?" ${n} laughs. "Tonight is not finished, tilac. Ask me tomorrow — then I tell you."`,
+      `${n} squeezes your arm. "Last time is now. You are in it. Don't talk about it like it already happened."`,
+      `"Our night is this one." ${n} looks at you sideways. "You want the story before the end? Buy the ending first."`], "wenttonight:" + npc));
+    return true;
+  }
   _say(_pickVary(w.kind === "st" ? [`"Upstairs, ${when}." ${n} grins. "Short time, long talk after. You remember the talk? I remember the talk."`,
       `"${_cap(when)}, upstairs." ${n} shrugs, easy. "You were nice. Nice is not so common, na."`]
     : [`"${_cap(when)}." ${n} looks at you properly. "All night, and in the morning you make me laugh before I open my eyes. I remember."`,
@@ -11556,6 +11565,15 @@ const _SNIPE_LINES = [
   (n, s) => `${n} takes it with a professional smile, and the regular she was sitting with ${s === "all evening" ? "becomes very interested in the football" : "finds something to read on his phone"}. Nobody says anything. Everybody noticed.`,
 ];
 function _snipeSince() { return G.nightTurn < 20 ? "since he sat down" : "all evening"; }
+// the regular at her elbow has been buying her drinks: a lady drink over his head is bad form, and the barfine that
+// says "one drink first, then upstairs" is a promise the room will not keep — both read this. Legacy saves stored `true`
+// for "any hostess". The guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54).
+function _snipeOn(id) {
+  const busyId = (G.soc.patronBusy || {})[G.room];
+  return (busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId) &&
+    _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id) && !_atOwnBar() &&
+    !_regularsHere().length && (typeof _bellHeads !== "function" || _bellHeads(G.room).men > 0);   // …and is somebody: an empty rail has no buyer to go still (Ruth, round 105); the anonymous buyer is not on a rail of named men (Aurelio, round 71)
+}
 
 // A lady drink leaves your pocket; at the bar you OWN it also rings INTO your own
 // till, instead of vanishing from the economy (Ronnie, 2026-08-26).
@@ -12261,10 +12279,7 @@ function _doBuy(arg) {
     }
     // drink-sniping the specific girl the regular was attending: bad form. Legacy
     // saves stored `true` — treat that as "any hostess" so old games don't crash.
-    const busyId = G.soc.patronBusy[G.room];
-    const sniped = (busyId === true ? NPC_ROLES[id] === "hostess" : id === busyId) &&
-      _bondTier(id) < 2 && !((G.party && G.party.ids) || []).includes(id) &&
-      !_regularsHere().length && (typeof _bellHeads !== "function" || _bellHeads(G.room).men > 0);   // …and is somebody: an empty rail has no buyer to go still (Ruth, round 105)   // the anonymous buyer is not on a rail of named men: Helmut has bought nothing in thirteen years (Aurelio, round 71)
+    const sniped = _snipeOn(id);   // …and is somebody: an empty rail has no buyer to go still (Ruth, round 105)   // the anonymous buyer is not on a rail of named men: Helmut has bought nothing in thirteen years (Aurelio, round 71)
     // the guv'nor buying his own girl a drink is not sniping a punter's (Rolf, round 54)
     if (sniped && !G.soc.patronMiffed[G.room] && !(_atOwnBar())) {
       G.soc.patronMiffed[G.room] = true;
@@ -14236,8 +14251,11 @@ function _doTime() {
     // name the venues: _quizBars() is a pure hash (no dice), and an unfindable
     // quiz is an unplayed one — the optimizer walked 6 bars in-window and hit
     // none (2026-08-22)
-    const qv = (typeof _quizBars === "function" ? _quizBars() : [])
-      .map(r => _barName(r)).filter(Boolean).join(" · ");
+    // never at the bar you own (_quizHere): the venue list said "The Stinky Pinky" to its owner, who stood a shift waiting for it
+    const _ownQ = _barOwned() && G.bar && G.bar.room;
+    const _qb = (typeof _quizBars === "function" ? _quizBars() : []);
+    const qv = _qb.filter(r => r !== _ownQ).map(r => _barName(r)).filter(Boolean).join(" · ") +
+      (_ownQ && _qb.includes(_ownQ) ? " — the third is your own rail, where you are the house, not a team" : "");
     _say(t < 20 ? _fmt(_L("(Quiz night tonight: 20:00–22:00 — {venues} — teachers in from Rayong.)"), { venues: qv || _L("three bars") }) :
       (G.game && G.game.type === "quiz") ? _fmt(_L("(Quiz night is ON right now: {venues}.)"), { venues: qv || _L("three bars, somewhere") }) :
       // …and a man who has played his round has played it (Liam, round 93: "ON right now" after he'd won)
@@ -16955,7 +16973,7 @@ function _cAmounts(verb) {
   }
 }
 
-function _completePool(verb, ctx) {
+function _completePool(verb, ctx, words) {   // words: the input unfiltered, for the one case where a dropped "for" matters
   // `kind`: what the verb asks of her; the Orchid's women are offered for none of what the room refuses (_orchidRefuses)
   const girls = (kind) => kind && _orchidRefuses(kind) ? [] : _npcsHere().filter(id => NPC_ROLES[id])
     .map(id => NPCS[id].name.toLowerCase());
@@ -17024,6 +17042,8 @@ function _completePool(verb, ctx) {
       if (rest.some(w => /^(drink|lady)$/.test(w)) && !rest.includes("man")) {
         return _room().hostBar ? _cNpcsHere() : girls("drink");
       }
+      // the lingerie cart's "BUY LINGERIE FOR <lady>" fills in the women here, the way a drink does — the row offered beer (Ray, round 113)
+      if (rest[0] === "lingerie" && rest.length === 1) return (words || []).includes("for") ? girls("drink") : girls("drink").map(n => "for " + n);
       // Only suggest what THIS room actually sells — toastie/condom at a 7-Eleven
       // room, food at a food stall, chargers where there's a shop/seven — else a
       // Soi 6 bar's "buy " chips include items it flatly refuses ("Not for sale here").
@@ -17193,7 +17213,7 @@ function engineComplete(input, opts) {
     return pool; // a menu, not a completion: no prefix filtering
   }
   else if (G.game && !ctx.length) pool = _gameVerbs();
-  else if (ctx.length) pool = _completePool(ctx[0], ctx);
+  else if (ctx.length) pool = _completePool(ctx[0], ctx, words);
   // REPORT only makes sense at the station (surfaced there, first), or anywhere
   // you're still owed money by the tonic shop; COMPLAIN while a barfine
   // grievance is on the books.

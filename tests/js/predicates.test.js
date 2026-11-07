@@ -81,7 +81,8 @@ const MUST_CONSULT = {
   // for every purpose the room has.
   "G.party": [
     { fn: "_bfResolve", why: "the jilt loop — a regular of yours souring must not count the girl you are WITH" },
-    { fn: "_doBuy", why: "the lady-drink line: a drink for the woman on your arm is not 'a smile calibrated to ฿150' (Keith, round 113)" },
+    { fn: "_snipeOn", why: "the woman on your arm is not sniped from the regular beside her — the drink and the barfine read it here (Ray, round 113)" },
+    { fn: "_doBuy", needs: "_outWithMe", why: "the lady-drink line: a drink for the woman on your arm is not 'a smile calibrated to ฿150' (Keith, round 113); the snipe's own party check moved into _snipeOn" },
     { fn: "_describeRoom", why: "the Here: line — she is standing there" },
     { fn: "_doBarfine", why: "the ledger only sells you another companion" },
     { fn: "_nursed", why: "her drinks are on the chit; nobody pitches a lady drink across her" },
@@ -163,6 +164,7 @@ const MUST_CONSULT = {
     { fn: "_lastCall", why: "last call is his to call, not a nudge to him" },
     { fn: "_closingTick", needs: "_onShift", why: "the two o'clock close is his to lock up, not a walk-out — on a night he declared it (round 102)" },
     { fn: "_doTalkCore", why: "the floor greets its manager once a night" },
+    { fn: "_toastFor", why: "the manager's drink is the house's — no toast catches the cashier's eye for a chit nobody writes (Gordon, round 113)" },
   ],
   "_jobBarStaff()": [
     { fn: "_maybeIncomingText", why: "she texts her manager in the staff register" },
@@ -184,6 +186,7 @@ const MUST_CONSULT = {
   "_atOwnBar()": [
     { fn: "_addHeat", why: "you cannot be thrown out of your own bar" },
     { fn: "_doBuy", why: "the lady-drink branch: busy/contested does not apply to your own girl" },
+    { fn: "_snipeOn", why: "the guv'nor buying his own girl a drink is not sniping a punter's; the barfine reads the same predicate (Ray, round 113)" },
     { fn: "_ladyDrinkCharge", why: "her drink rings into your own till" },
     { fn: "_housePatience", why: "the seat-rent clock — and by delegation _nursed, which calls it first" },
     { fn: "_endNight", why: "the own-bar rescue: your staff carry you home with your pockets intact" },

@@ -15464,7 +15464,7 @@ const QUESTS = {
 const WORK_NIGHTS = [
   // ── the good ones ────────────────────────────────────────────────────────
   {
-    id: "millionaires", weight: 5, happy: 4, money: 4000, when: G => !_lowSeason(),
+    id: "millionaires", label: "the two-week millionaires", weight: 5, happy: 4, money: 4000, when: G => !_lowSeason(),
     text: "Two lads three days into a two-week holiday and a bonus they haven't " +
       "told their wives about find your bell early and ring it roughly " +
       "hourly until one. The girls are laughing at them, not with them, and they " +
@@ -15473,7 +15473,7 @@ const WORK_NIGHTS = [
       "in off the sea.",
   },
   {
-    id: "allin", weight: 4, happy: 5, money: 1500, when: G => !_lowSeason(), minGapDays: 10,   // three times in 22 nights (Rolf, round 55); it pays, and the docket names it (Greta, round 61)
+    id: "allin", label: "every regular in at once", weight: 4, happy: 5, money: 1500, when: G => !_lowSeason(), minGapDays: 10,   // three times in 22 nights (Rolf, round 55); it pays, and the docket names it (Greta, round 61)
     text: "Every regular you have is in tonight. Not arranged, not a promotion — " +
       "they simply all came, the way a room sometimes decides to be full. Two of " +
       "them are arguing about a football match from 1998. Somebody's put the " +
@@ -15482,7 +15482,7 @@ const WORK_NIGHTS = [
       "six of them a year.",
   },
   {
-    id: "birthday", weight: 4, happy: 4, money: -2500, minGapDays: 12,   // four in three weeks, same paragraph (Graham, round 47)
+    id: "birthday", label: "a girl's birthday, the crate on the house", weight: 4, happy: 4, money: -2500, minGapDays: 12,   // four in three weeks, same paragraph (Graham, round 47)
     text: [
       "It's one of the girls' birthdays, which means a cake from the market, " +
         "a crate on the house, and a speaker turned up past the point Bert " +
@@ -15501,7 +15501,7 @@ const WORK_NIGHTS = [
     ],
   },
   {
-    id: "footy", weight: 4, happy: 3, money: 2200,
+    id: "footy", label: "the football finish", weight: 4, happy: 3, money: 2200,
     text: "A match nobody expected to matter goes to the last ten minutes with " +
       "the room split down the middle, and the bar makes more in that half hour " +
       "than it did all the night before. Two men who were shouting at each other buy each " +
@@ -15511,7 +15511,7 @@ const WORK_NIGHTS = [
   {
     // the faction system, finally doing something. Inside the arrangement this
     // simply does not happen — that is what being inside IS.
-    id: "police", weight: 0, happy: -3, money: -3000,
+    id: "police", label: "the officers' visit", weight: 0, happy: -3, money: -3000,
     when: G => (G.syn && G.syn.friction >= 2) && _faction("syndicate") < 2,
     // tuned down from 3+2f: at the old weight it was 40% of all events and
     // crowded the good nights out entirely, which flattened the texture. Being
@@ -15545,7 +15545,7 @@ const WORK_NIGHTS = [
       "raise it.",
   },
   {
-    id: "runner", weight: 2, happy: -1, money: -1800,
+    id: "runner", label: "a table that ran its tab", weight: 2, happy: -1, money: -1800,
     text: "A table of six runs a tab all evening and then simply isn't there. " +
       "Bert saw it coming twenty minutes out and still couldn't stop it without " +
       "making a scene in front of the whole rail, which is exactly what they " +
@@ -16573,9 +16573,9 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "by the notebook, older than the notebook and better polished. \"I write Last Orders — the " +
         "back page, the one your granddad read on the toilet. Retired twice on paper, un-retired twice; a man " +
         "needs a deadline or the days run together and the mind goes to soup.\" He clicks the pen. " +
-        "\"So I watch, I write it down, and I don't much mind who minds. READ THE COLUMN if you like " +
-        "— it's mostly true.\"",
-        short: "\"I write Last Orders. READ THE COLUMN — mostly true. Keeps me sane.\"" },
+        "\"So I watch, I write it down, and I don't much mind who minds. Read it if you like " +
+        "— it's mostly true.\" (READ THE COLUMN)",
+        short: "\"I write Last Orders. Mostly true. Keeps me sane.\" (READ THE COLUMN)" },
       { topic: "amulet", req: ["amuletReturned"],
         text: "\"The one off the far end of the beach.\" Mort does not ask how you know he " +
           "knows; he has been sitting in this window for twenty years. He clicks the biro " +
@@ -16591,7 +16591,7 @@ desc: "Fifty-four, heavy through the shoulders the way a man gets from lifting t
         "gets old because the punters keep arriving new. A reader letter, a bar listing, " +
         "a joke, and whatever the street taught me that day. I don't moralise — I report " +
         "the weather and the women and let a man draw his own conclusions.\" A dry look. " +
-        "\"He never does. READ THE COLUMN — you can pull it up anywhere now.\"" },
+        "\"He never does.\" (READ THE COLUMN — you can pull it up anywhere now.)" },
       { topic: "sponsor", text: "\"The kept ones?\" He clicks the pen, pleased to be asked. " +
         "\"I have filed that story eleven times and never once got a letter about it, which " +
         "tells you it is the least interesting arrangement on this coast and the most " +

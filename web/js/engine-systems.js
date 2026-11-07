@@ -994,6 +994,12 @@ function _doBarfine(arg) {
   // rule) — one lady drink tonight from a stranger, none from a regular, counted in drinks
   const _onSoi6 = bt === "soi6" || _room().region === "Soi 6";   // the middle's beer bars are Soi 6 too (Gary, round 79: "3 more" at the Shady Lady)
   if (_onSoi6 && !bertAlly) {
+    // the regular at her elbow is buying her drinks: "one drink first, then upstairs" sent a man into that drink and the
+    // room's bad-form verdict, with the stairs shut after it (Ray, round 113) — say whose evening it is, and point elsewhere
+    if (_snipeOn(id) && !G.soc.patronMiffed[G.room]) {
+      _say(_fmt(_pickVary(_BF_SNIPED, "bfsniped"), { n: name, s: _snipeSince() }) + " (Another lady, or another bar.)");
+      return;
+    }
     const _had = ((G.soc.drinkCount || {})[id]) || 0;
     // money already in her hand TONIGHT is better than a drink — the same test _bfRefusal reads, never the trip's running total
     const _tipped = ((G.gifts || {})[id] || []).some(g => g.day === G.day && (g.kind === "tip" || g.kind === "give") && (g.amt || 0) >= _ladyPrice(G.room));
@@ -6222,7 +6228,7 @@ function _maybeIncomingText() {
     ] : _role === "cashier" ? [
       "float right. i count 2 time. goodnight boss",
       "the fan in the back is dying again. telling boss. telling boss twice 😤",
-      "tomorrow i need small notes. 20s. bank close at 4 so you bring na",
+      "float is all 100s tonight. tomorrow i go bank before open for 20s. no problem boss",
       "book is balance. 🙏",
       "the card machine print blank again. i write by hand. all ok",
       "one chit missing tonight. i find it under the ice bucket. all ok. i tell you so you know",
@@ -8814,7 +8820,7 @@ const _FLOOR_CASHIER = [
   "{who} keeps the book in a hand so small and so exact that you can read a whole night off one page. She turns it round so you can.",
   "A note comes over the bar and {who} holds it up to the light for half a second before it goes in the drawer, the way you hold up every note now, because she does, because there are two floating on the soi this week and she has already seen one.",
   "A big farang tries to pay a ฿180 tab with a fistful of ten-baht coins, half a joke and half a test. {who} counts it in front of him faster than he can follow, gets to the number, and thanks him so sincerely that the joke dies of embarrassment.",
-  "At close {who} squares the drawer to the baht, writes the figure, and turns the book to you — and whatever the figure says, she does not soften it or explain it. She just shows you. A till that lies to the owner is no use to anybody, and she has decided you are the kind who can read a bad night straight.",
+  "At close {who} squares the drawer to the baht, writes the figure in the book, and turns it to you — the same figure BOOKS gives you — and whatever it says, she does not soften it or explain it. She just shows you. A till that lies to the owner is no use to anybody, and she has decided you are the kind who can read a bad night straight.",
 ];
 
 function _floorPool(id) {
@@ -10016,6 +10022,11 @@ function _barDebts() {
   return { note: Math.max(0, b.owed || 0), arrears: Math.max(0, b.arrears || 0), rent: Math.max(0, b.rentOwed || 0),
     nont: Math.max(0, (b.loan && b.loan.owed) || 0) };
 }
+const _BF_SNIPED = [
+  "{n} tips her head, very slightly, at the man beside her. He has been buying her drinks {s}, and the stairs are his to ask for tonight, not yours to buy over him.",
+  "\u201cTonight I have customer, na.\u201d {n} says it kindly and does not look at him, which is how you know. The man at her elbow has been paying {s}.",
+  "The glass in front of {n} is not her first and none of them were yours: the regular beside her has stood every one {s}. Soi 6 has one other rule, and it is his.",
+];
 function _barSellable() { return ((G.bar && G.bar.nights) || 0) >= BAR_SALE_MIN; }
 function _barSaleTanOk() { return !!(_met("tan") || (G.known && G.known.tan) || (G.phone && G.phone.contacts && G.phone.contacts.tan)); }
 function _barSaleBertOk() { return _barHealth() !== "under" && _npcRoom("bert") === "stinky_bar"; }
@@ -10068,6 +10079,14 @@ function _barSaleDo(via) {
   // what the bar owed goes with it, named to the baht: the note was the biggest number in the deal and the ledger never said it (Graham, round 112)
   const d = _barDebts(), owedBits = [d.note && `the note to Ohio, ฿${_num(d.note)}`, d.arrears && `฿${_num(d.arrears)} of the note in arrears`,
     d.rent && `฿${_num(d.rent)} of rent owed`, d.nont && `Nont's ฿${_num(d.nont)}`].filter(Boolean);
+  // a regular's slate still under the till is the bar's to collect, and the bar is somebody else's now: say so, or the
+  // docket simply vanishes between the night he drank and the pay-day that never comes (an owner who kept books)
+  const _buyer = via === "plg" ? "Pattaya Leisure" : via === "bert" ? "Bert" : "the Chonburi man";
+  if (b.tabDue && b.tabDue.amt) {
+    _say(`(A regular's slate, ฿${_num(b.tabDue.amt)}, is still on the docket under the till. It goes with the bar — ${_buyer}'s to collect on pay-day, not yours. The stock was booked the night he drank it.)`, "dim");
+    (G.ledgerNotes = G.ledgerNotes || []).push(`a regular's slate of ฿${_num(b.tabDue.amt)} left on the docket with the Stinky, ${_buyer}'s to collect`);
+  }
+  if (via === "tan" && d.note) (G.ledgerNotes = G.ledgerNotes || []).push(`the note to Ohio, ฿${_num(d.note)}, went to the Chonburi man with the Stinky — what it fetched over the note was Tan's fee`);
   if (owedBits.length) _say(`(On the paper, the bar went with what it owed — ${owedBits.join(", ")}.${via === "bert" && (d.arrears || d.nont) ? " The arrears and Nont's book came off Bert's price; he carries the rest." : ""}${paid ? ` The ฿${_num(paid)} is clear of all of it.` : " Tan's buyer pays it; what the bar fetched over it is Tan's fee."})`, "dim");
   if (till) {
     _bankIn(till); (G.bankNotes = G.bankNotes || []).push(`the Stinky's till, ฿${_num(till)}`);
@@ -10602,6 +10621,13 @@ function _barRent() {
   const mult = (r && RENT_MULT[r.barType]) || 1;
   // the landlord's rises — success is what moves it, and only ever up (the bar-failure cycle)
   return Math.round(BAR_RENT * mult * (1 + ((G.bar && G.bar.rentUp) || 0)) / 500) * 500;
+}
+// the rise as the books show it: the rent rounds to ฿500, so a fifteen-percent step on ฿15,000 lands at ฿17,500, which is
+// not fifteen percent, and the man who reads both numbers notices
+function _barRentUpPct() {
+  const r = ROOMS[G.bar && G.bar.room ? G.bar.room : "stinky_bar"];
+  const base = Math.round(BAR_RENT * ((r && RENT_MULT[r.barType]) || 1) / 500) * 500;
+  return base > 0 ? Math.round((_barRent() / base - 1) * 100) : 0;
 }
 
 // ── The bar that closed next door — the owner's two levers ──────────────────
@@ -11572,7 +11598,7 @@ function _doBooks() {
   }
   if (((b.perf && b.perf.n) || 0) >= 7) _say(`What a buyer would read: ${_barHealthLine()}.`, "dim");
   _say(_fmt("Rent: ฿{r} a month to the landlord, every thirty days from the night you opened{up}.", { r: _num(_barRent()),
-    up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: Math.round(b.rentUp * 100) }) : "" }), "dim");
+    up: (b.rentUp || 0) > 0 ? _fmt(" — up {p}% since you opened, because he could see you were busy", { p: _barRentUpPct() }) : "" }), "dim");
   if (G.room === b.room) _say(_PRICES_BOARD(b) + (b.terms === "salary" ? _fmt(" The girls are on a flat salary — ฿{n} a night on the wages line, and they stay.", { n: BAR_SALARY_NIGHT }) : " The girls are on the trade's cut, and a thin month is theirs before it is yours."), "dim");
   if (b.kept && b.kept.stage === "paying") _say(_fmt("{n}: out with her sponsor — his fee ฿{f} a night into the till, ฿{t} so far. On the board as out with a customer while he pays.", { n: NPCS[b.kept.id].name, f: _num(KEPT_FEE), t: _num(b.kept.fee) }), "dim");
   if (b.kept && b.kept.stage === "lapsed") _say(_fmt("{n}: ‘out with customer’ on the board — the fee stopped {d} night{s} ago, and no word.", { n: NPCS[b.kept.id].name, d: G.day - b.kept.lapsed, s: G.day - b.kept.lapsed === 1 ? "" : "s" }), "dim");

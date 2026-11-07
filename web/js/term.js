@@ -551,7 +551,7 @@ const _term = (() => {
         hire:    l => ({ t: "hire",            c: "hire " + l,         go: true }),
         wai:     l => ({ t: "wai",             c: "wai " + l,          go: true }),
         follow:  l => ({ t: "eat with him",    c: "follow " + l,       go: true }),
-        leadme:  l => ({ t: "let her lead",    c: "follow " + l,       go: true }),
+        leadme:  l => ({ t: "follow her",      c: "follow " + l,       go: true }),   // the chip says "follow <name>": one label for one action (Ray, round 113)
         danceher: l => ({ t: "dance with her",  c: "dance with " + l,   go: true }),
         sendhome: l => ({ t: "send her home",   c: "send " + l + " home", go: true }),
         gohome:  l => ({ t: "go home with her", c: "follow " + l,      go: true }),
