@@ -5037,10 +5037,12 @@ function _doTalkCore(arg, topic) {
     const _owns = _hits.some(({ i }) => !_seen.includes(i)) || (_hits.length && !(_giftMatch(npc, _tl)));
     if (!_owns && _streetTalk(npc, topic)) { _questOffer(npc); return; }
   }
-  // where SHE goes after work, before her "work" node takes the word (Callum, round 89) — her own late/after node wins
-  if (topic && _AFTER_WORK_RE.test(String(topic).toLowerCase()) && !/\bopen\b/.test(String(topic).toLowerCase()) &&
-      !(NPCS[npc].dialogue || []).some(x => x.topic && /(^|\|)(late|after|after hours|after work)(\||$)/.test(String(x.topic)))) {
-    const _aw = _afterWorkTalk(npc); if (_aw) { _say(_aw); _questOffer(npc); return; } }
+  // where SHE goes after work, before her "work" node takes the word (Callum, round 89) — her own late/after node wins,
+  // and wins every phrasing the pool would have answered ("after the shift"), not only the ones that spell its alias
+  if (topic && _AFTER_WORK_RE.test(String(topic).toLowerCase()) && !/\bopen\b/.test(String(topic).toLowerCase())) {
+    const _own = (NPCS[npc].dialogue || []).find(x => x.topic && /(^|\|)(late|after|after hours|after work)(\||$)/.test(String(x.topic)));
+    if (_own) { if (_nodeOpen(npc, _own)) topic = String(_own.topic).split("|")[0]; }   // her node's own key: the pick below lands on it exactly
+    else { const _aw = _afterWorkTalk(npc); if (_aw) { _say(_aw); _questOffer(npc); return; } } }
   // a regular at the bar you own greets the guv'nor, not a new face (Piet, round 62: "New face. You here long?")
   if (!topic && NPCS[npc].patron && _atOwnBar() && !(G.talked && G.talked[npc])) {   // not _met(): this function has its own _met further down
     _say(_pickVary(_RAIL_GUVNOR, "railguv")(NPCS[npc].name));

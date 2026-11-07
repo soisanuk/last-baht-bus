@@ -128,6 +128,9 @@ for (const [id, n] of Object.entries(NPCS)) {
     add("npc", `npc.${id}.desc`, n.name, n.desc);
     // her OWN lines (FLOOR_OWN) are hers to review; they lead her dialogue, so the indices match
     if (typeof FLOOR_OWN !== "undefined" && FLOOR_OWN[id]) walk("npc", `npc.${id}`, n.name, { dialogue: n.dialogue.slice(0, FLOOR_OWN[id].nodes.length) });
+    // a record's own after-work answer (`after`) is hers too, never a pool line
+    const rec = typeof FLOOR_STAFF !== "undefined" && FLOOR_STAFF[id];
+    if (rec && rec.after) { add("npc", `npc.${id}.after`, n.name, rec.after); if (rec.afterShort) add("npc", `npc.${id}.afterShort`, n.name, rec.afterShort); }
     continue;
   }
   walk("npc", `npc.${id}`, n.name, n);

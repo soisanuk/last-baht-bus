@@ -35,8 +35,11 @@ test("SEVERE: 'where is still open after two' at half eight names what pours aft
 
 test("SEVERE: 'where do you go after work' is her own answer, the same when asked again, and not the closing time", () => {
   G.room = _npcRoom("pukky"); run("ask pukky where do you go after work"); const a = said();
-  assert.ok(_AFTER_WORK.floor.some(l => a.includes(l.slice(2, 40))) || _AFTER_WORK.house.some(l => a.includes(l.slice(2, 40))), a);
-  out = []; run("ask pukky what do you do after closing"); assert.equal(said().split("\n")[0], a.split("\n")[0], "kept");
+  // since 2026-11-03 a Soi 6 woman's answer is her own node, never the pool (Mario's ruling, round 113); the pool still deals elsewhere
+  const own = NPCS.pukky.dialogue.find(d => d.topic === "after work|after hours");
+  assert.ok(own && a.includes(String(own.text).replace(/\{\{|\}\}/g, "").slice(0, 40)), a);
+  assert.ok(!_AFTER_WORK.floor.some(l => a.includes(l.slice(2, 40))) && !_AFTER_WORK.house.some(l => a.includes(l.slice(2, 40))), a);
+  out = []; run("ask pukky what do you do after closing"); assert.ok(said().includes(String(own.short).replace(/\{\{|\}\}/g, "").slice(1, 25)), "kept: asked again, her own short");
   const g = _npcsHere().find(i => i !== "pukky" && NPC_ROLES[i] === "hostess");
   if (g) { out = []; run(`ask ${lc(g)} where do you go after work`); assert.notEqual(said().split("\n")[0], a.split("\n")[0], "two women, two answers"); }
 });

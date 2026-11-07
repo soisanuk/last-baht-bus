@@ -130,6 +130,9 @@ for (const bar of SPEC) {
     // the Connect 4 tier is read off her LOOK, not her donor's: a "New enough…"/"Baby-faced…" face
     // is the beatable new girl, and only that face is (engine.test's skill ladder)
     if (role === "hostess" && /^(New enough|Baby-faced)/.test(look)) rec.c4 = 2;
+    // her after-work answer is authored on the record after it is generated (2026-11-03); a re-run keeps it
+    const prev = typeof FLOOR_STAFF !== "undefined" && FLOOR_STAFF[id];
+    if (prev && prev.after) { rec.after = prev.after; if (prev.afterShort) rec.afterShort = prev.afterShort; }
     out.push([id, rec, role === "hostess" && bar.authored]);
   });
 }

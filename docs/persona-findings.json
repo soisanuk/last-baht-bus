@@ -43893,12 +43893,12 @@
    "instrument": "",
    "between": "",
    "claim": "ask pukky about after work AGAIN retold her text ('bike flat tire'), not the after-work answer",
-   "verdict": "deferred",
-   "note": "the AGAIN retell picked the phone memory over the node; needs a probe of _deliver's retell order",
+   "verdict": "fixed",
+   "note": "with her own after-work node and short, AGAIN retells that node and a plain re-ask deals the short; the phone memory no longer wins",
    "system": "conversation",
    "cls": "H",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -43923,12 +43923,12 @@
    "instrument": "",
    "between": "",
    "claim": "'after work' is one deck dealt round the soi — 14 verbatim repeats across 7 bars (Nuch's cigarette = Sopha = View; Belle = Bright at the same ran lao)",
-   "verdict": "deferred",
-   "note": "the after-work answers come from a shared pool dealt per woman; a per-woman answer is authoring across ~40 hostesses — Mario's call on the budget; the pool could at least be keyed so two women in one segment never share",
+   "verdict": "fixed",
+   "note": "Mario (2026-11-03): each woman gets her own answer, authored in her record, not a deeper pool. Every woman the after-work answerer serves in the Soi 6 region — 92: 55 hostesses, 18 mamasans, 16 cashiers, the Vic's three — has an `after work|late|after` node of her own (a hand-authored woman's dialogue; `after`/`afterShort` on a FLOOR_STAFF record or in _houseOwn), which the parser already prefers to the pool; no two share a sentence, none is a pool line. The pool still deals to any woman outside Soi 6.",
    "system": "worldprose",
    "cls": "M",
    "sev": "major",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -43939,7 +43939,7 @@
    "between": "",
    "claim": "'open after two' — seven women, two sentences, on nights 1–2",
    "verdict": "deferred",
-   "note": "the after-two pool is two lines deep; wants six or more, voiced by register",
+   "note": "NOT the after-work deck (checked 2026-11-03): on Soi 6 the chip deals _stillOpenTalk's venue answer — which bars pour after two — in one floor template and one house template, and round 89 pins that a question with 'open' in it names venues, not where she goes. The two sentences are the templates' openers; voicing them by register (six or more each) is an engine-prose change in _stillOpenTalk, left for its own pass",
    "system": "worldprose",
    "cls": "Q",
    "sev": "moderate",

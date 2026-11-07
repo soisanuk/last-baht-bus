@@ -328,8 +328,10 @@ simply doing a job.
 1. Lek's salary is now the beer-bar base in words. If `BAR_SALARY` is retuned the pin fails by design; the
    alternative is the engine learning to read a constant in node text (a `text` function), which is a shape
    change.
-2. Two PLG-run mamasans (Nee at the Lotus, Jinda at the Jade) both say "they have the paper, I run the room".
-   Read as the company's phrasing it is a feature; read cold it is one line in two mouths. Left as is.
+2. Two PLG-run mamasans (Nee at the Lotus, Jinda at the Jade) both said "they have the paper, I run the room".
+   **Ruled 2026-11-03 (Mario): Jinda gets her own words for the same fact** — her `bar` line now reads "The name on
+   the paper by the till is theirs. The name the girls shout when a man is trouble is mine." Nee keeps the company's
+   phrasing. Pinned in `tests/js/round113.test.js`.
 3. Orathai's register (above). A ruling either way is cheap; a rewrite is not.
 4. Real names as landmarks and fandom: Alcazar and Tiffany's in five strings (Mala, Petch, the scout quest, the flyer),
    Somo's 1995 Liverpool squad. No allegation attaches to any of them; `docs/guardrails.md` says identifiability is what

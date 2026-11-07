@@ -107,3 +107,45 @@ test("Mario: a three-stop errand's where-clause follows the step — no atTarget
   _align("plg", 2); assert.equal(QUESTS.orchid_recon.at(G), "orchid_room");
   G.visited.orchid_room = 1; assert.equal(QUESTS.orchid_recon.at(G), "doyle");
 });
+
+// ── Mario's ruling on Keith's major row (2026-11-03): each Soi 6 woman gets her own after-work answer, in her record ──
+test("Keith: no two Soi 6 women share the after-work sentence — every one answers from her own record, never the town pool", () => {
+  sandbox();
+  const pool = [..._AFTER_WORK.floor, ..._AFTER_WORK.house, ..._AFTER_WORK.thai];
+  const women = Object.keys(NPCS).filter(id => { const r = _npcRoom(id); return r && ROOMS[r] && ROOMS[r].region === "Soi 6" && _afterWorkTalk(id); });
+  assert.ok(women.length >= 90, `the Soi 6 roster the answerer serves: ${women.length}`);
+  const seen = new Map();
+  for (const id of women) {
+    const own = (NPCS[id].dialogue || []).find(d => d.topic === "after work|after hours");
+    assert.ok(own && own.text && own.short, `${id} has her own after-work node, with a short for the retell`);
+    assert.ok(!pool.includes(own.text), `${id}'s answer is not a pool line`);
+    assert.ok(!seen.has(own.text), `${id} shares her answer with ${seen.get(own.text)}`);
+    seen.set(own.text, id);
+  }
+  // through the real path, the three Keith heard share one cigarette: Nuch at the Vic, Sopha at Front Row, View at the Tamarind
+  const ask = (id) => { sandbox(); G.nightTurn = 30; G.room = _npcRoom(id); const nm = NPCS[id].name.toLowerCase(); t(`talk to ${nm}`); return t(`ask ${nm} about after work`); };
+  const a = ask("nuch"), b = ask("sopha"), c = ask("sweet_tamarind_view");
+  assert.match(a, /count the keys/, a); assert.match(b, /four screen off/, b); assert.match(c, /cards down from the wall/, c);
+  for (const s of [a, b, c]) assert.ok(!pool.some(p => s.includes(p.slice(1, 30))), "not the pool: " + s);
+  // asked twice, she retells her own short — not the engine's brush-off, and not (Keith's minor row) her phone memory
+  sandbox(); G.nightTurn = 30; G.room = _npcRoom("pukky"); t("talk to pukky"); t("ask pukky about after work");
+  const again = t("ask pukky about after work");
+  assert.match(again, /fan on three/, again); assert.doesNotMatch(again, /lonely ten|flat tire|Buy a drink|something new/);
+  assert.match(t("ask pukky about after work again"), /lonely ten/);
+  // a typed sentence reaches her line; a question with "open" in it keeps naming what pours after two (round 89's pin)
+  sandbox(); G.nightTurn = 30; G.room = _npcRoom("kwan"); t("talk to kwan");
+  assert.match(t("where do you go after work"), /last crane of the night/);
+  assert.match(t("ask kwan about late"), /crane/);
+  const open = t("ask kwan about open after two"); assert.doesNotMatch(open, /crane/, open);
+  assert.ok(Object.keys(ROOMS).some(r => ROOMS[r].barType && _closeTurn(r) == null && open.includes(_barName(r))), open);
+  sandbox(); G.nightTurn = 30; G.room = _npcRoom("air"); t("talk to air");
+  assert.ok(pool.some(p => t("ask air about after work").includes(p.slice(1, 30))), "Air, the Blue Dog's cashier on Beach Road, still deals the pool");
+});
+
+test("Keith: Jinda's paper-and-the-room line is her own, not Nee's", () => {
+  const jinda = NPCS.jade_lounge_jinda.dialogue.find(d => /^bar\|/.test(String(d.topic))).text;
+  const nee = NPCS.nee.dialogue.filter(d => d.topic === "pattaya leisure").map(d => d.text);
+  assert.ok(nee.length >= 1 && nee.every(x => /They own the paper\. I run the room\./.test(x)), "Nee keeps the company's phrasing");
+  assert.doesNotMatch(jinda, /I run the room|have the paper/);
+  assert.match(jinda, /name on the paper by the till is theirs/); assert.match(jinda, /is mine/);
+});
