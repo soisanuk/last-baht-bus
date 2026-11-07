@@ -188,7 +188,8 @@ test("the platform's first payday is the days held, and the school's paper needs
 
 test("at your own bar the till is the house side of a game, and a bell's round rings into it", () => {
   const src = readFileSync(fileURLToPath(new URL("../../web/js/engine-play.js", import.meta.url)), "utf8");
-  assert.match(src, /a game the house lost/); assert.match(src, /G\.bar\.ownBells/);
+  assert.match(src, /a bet is personal/); assert.doesNotMatch(src, /a game the house lost/);   // the stake is the owner's pocket now (Mario, 2026-11-08)
+  assert.match(src, /G\.bar\.ownBells/);
 });
 
 test("Cream, Sao and the Orchid read the room", () => {

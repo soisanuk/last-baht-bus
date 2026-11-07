@@ -44253,12 +44253,12 @@
    "instrument": "",
    "between": "",
    "claim": "declining Tan's screen narrates buying one from two lads cheaper by half, and no baht moved",
-   "verdict": "design",
-   "note": "both arms of an arrangement are the bar's capital, abstracted into the nut; the decline is free by doctrine, the prose narrates the cheaper screen as scenery — whether a declined arrangement should cost a one-off is Mario's",
+   "verdict": "fixed",
+   "note": "both arms of an arrangement are the bar's capital, abstracted into the nut; the decline is free by doctrine, the prose narrates the cheaper screen as scenery — whether a declined arrangement should cost a one-off is Mario's — 2026-11-08 Mario: the list price — the screen goes up anyway, SCREEN_LIST off the bar's books, no man on call; declining the arrangement is not free",
    "system": "procurement",
    "cls": "D",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44268,12 +44268,12 @@
    "instrument": "",
    "between": "",
    "claim": "PLAY POOL against a customer off the rail: the till recorded 'a game the house lost −฿50' — the opponent was a punter, not the house",
-   "verdict": "design",
-   "note": "the review of 2026-10-25 made the house's side of the table the owner's till both ways; a stake against a customer costing the till is that ruling's edge — Mario's",
+   "verdict": "fixed",
+   "note": "the review of 2026-10-25 made the house's side of the table the owner's till both ways; a stake against a customer costing the till is that ruling's edge — Mario's — 2026-11-08 Mario: a bet is personal — the owner's pocket against the customer's; the till never sees it (the 2026-10-25 edge reversed)",
    "system": "games",
    "cls": "I",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44568,12 +44568,12 @@
    "instrument": "",
    "between": "",
    "claim": "the barfine picker lists women who always refuse — Buddha-day girls, Somo 'drink only', the mamasan and the till girl",
-   "verdict": "design",
-   "note": "the picker is the parser's own pool, and each refusal is authored (the cashier's bell path, the Buddha day); the labels say who is on the till — whether a thumb should be told who is worth a tap is Mario's",
+   "verdict": "fixed",
+   "note": "the picker is the parser's own pool, and each refusal is authored (the cashier's bell path, the Buddha day); the labels say who is on the till — whether a thumb should be told who is worth a tap is Mario's — 2026-11-08 Mario: the picker drops the mamasan and the till; the Buddha-day girls and a \"drink only\" refusal stay, their refusal is content",
    "system": "barfine",
    "cls": "H",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44643,12 +44643,12 @@
    "instrument": "",
    "between": "",
    "claim": "Pukky asks 'What they call you when you were small?' and there is no chip to answer it",
-   "verdict": "design",
-   "note": "a free-text asks node (key nickname) has no options to chip; whether every ask must carry chips or a SKIP chip is Mario's (chips are the interface, 2026-10-25)",
+   "verdict": "fixed",
+   "note": "a free-text asks node (key nickname) has no options to chip; whether every ask must carry chips or a SKIP chip is Mario's (chips are the interface, 2026-10-25) — 2026-11-08 Mario: a question with no canned replies gets an open \"answer her…\" chip",
    "system": "conversation",
    "cls": "G",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",
@@ -44718,12 +44718,12 @@
    "instrument": "",
    "between": "",
    "claim": "'send May home' runs on one tap with no confirm straight after a ฿10,250 take-out; everything else that ends something asks once",
-   "verdict": "design",
-   "note": "_endConfirm is for choices that end a night; whether sending a paid woman home should ask once is Mario's",
+   "verdict": "fixed",
+   "note": "_endConfirm is for choices that end a night; whether sending a paid woman home should ask once is Mario's — 2026-11-08 Mario: SEND HER HOME asks once (the askArm two-step), FOLLOW her keeps her",
    "system": "party",
    "cls": "G",
    "sev": "minor",
-   "pin": ""
+   "pin": "tests/js/round113.test.js"
   },
   {
    "round": "113",

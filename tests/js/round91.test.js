@@ -76,7 +76,7 @@ test("she remembers a dance only if you danced, the room and the morning, and th
   const [a] = tam(); out_(a); G.room = _hotelRoomId(); _endNight("sleep"); G.room = "sweet_tamarind"; G.nightTurn = 20;
   out = []; run(`ask ${lc(a)} about last night`); assert.doesNotMatch(said(), /dance like a farang uncle/);
   out = []; run(`ask ${lc(a)} about your room`); assert.doesNotMatch(said(), MISS);
-  const [, b] = tam(); out_(b); run(`send ${lc(b)} home`); _endNight("sleep"); G.room = "sweet_tamarind"; G.nightTurn = 20;
+  const [, b] = tam(); out_(b); run(`send ${lc(b)} home`); run(`send ${lc(b)} home`); _endNight("sleep"); G.room = "sweet_tamarind"; G.nightTurn = 20;
   out = []; run(`ask ${lc(b)} about the taxi`); assert.doesNotMatch(said(), MISS);
 });
 

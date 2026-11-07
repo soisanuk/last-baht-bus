@@ -30,17 +30,17 @@ const two = () => {
 
 test("SEVERE: sending ONE of two companions home sends only her, at her own half-fare", () => {
   const [a, b] = two(); const m = G.money;
-  run(`send ${NPCS[b].name.toLowerCase()} home`);
+  run(`send ${NPCS[b].name.toLowerCase()} home`); run(`send ${NPCS[b].name.toLowerCase()} home`);   // it asks once (Mario, 2026-11-08)
   assert.deepEqual(G.party.ids, [a], "the other one stays on your arm");
   assert.equal(m - G.money, Math.round(PARTY_TAXI / 2), "one taxi, hers");
   assert.match(said(), new RegExp(`${NPCS[a].name} stays with you`));
 });
 
 test("…by every wording: GOODBYE <first>, SEND <second> HOME; HER with two asks which; THEM sends both", () => {
-  let [a, b] = two(); run(`goodbye ${NPCS[a].name.toLowerCase()}`); assert.deepEqual(G.party.ids, [b]);
+  let [a, b] = two(); run(`goodbye ${NPCS[a].name.toLowerCase()}`); run(`goodbye ${NPCS[a].name.toLowerCase()}`); assert.deepEqual(G.party.ids, [b]);
   [a, b] = two(); out = []; run("send her home"); assert.deepEqual(G.party.ids, [a, b], "ambiguous: nobody leaves"); assert.match(said(), /Which of them/);
-  [a, b] = two(); run("send them home"); assert.equal(G.party, null, "THEM is both");
-  [a, b] = two(); run("goodbye"); assert.equal(G.party, null, "a bare goodbye is everyone, as before");
+  [a, b] = two(); run("send them home"); run("send them home"); assert.equal(G.party, null, "THEM is both");
+  [a, b] = two(); run("goodbye"); run("goodbye"); assert.equal(G.party, null, "a bare goodbye is everyone, as before");
 });
 
 test("a name that is not on your arm parts with nobody", () => {

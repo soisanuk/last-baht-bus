@@ -11951,6 +11951,12 @@ function _synNoBody(job) {
   // no _align: staying out is not a deed against anybody, and nothing is done
   // to you. The cost is that nothing is done FOR you either.
   _say(job.no);
+  // the screen goes up anyway — at the list price, and the bar pays it (Gordon, round 113: a decline narrated a
+  // cheaper screen that cost nothing; Mario, 2026-11-08: the list price, BOOKS carries it)
+  if (job.id === "screen" && G.bar) {
+    G.bar.cash -= SCREEN_LIST; _barEvent(-SCREEN_LIST, "the screen, at the list price");
+    _say(`(The screen goes up the following week, at the list price — ฿${_num(SCREEN_LIST)} off the bar's books, no man on call when it dies. BOOKS carries it.)`, "dim");
+  }
   _say("Nothing is done to you. Nothing at all is done to you, and that turns " +
     "out to be the whole of it.", "dim");
   if (st.friction === 1) {

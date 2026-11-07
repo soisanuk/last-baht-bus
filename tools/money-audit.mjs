@@ -512,7 +512,7 @@ const SCENARIOS = [
       { c: "buy beer", slip: true },
       { c: "check bin", k: "none" },
       { go: "short_time_motel", c: "get room", rand: 0.5, expect: /฿/ },
-      { c: "send @girl home", expect: /฿/ },
+      { c: "send @girl home" }, { c: "send @girl home", expect: /฿/ },   // it asks once (2026-11-08)
       { go: HOME, c: "sleep" },
     ],
   ] },
@@ -573,7 +573,7 @@ const SCENARIOS = [
       { c: "barfine @girl", rand: 0.99, expect: /TAKE HER OUT/ }, { c: "take her out", rand: 0.99, expect: /฿/ },
       { go: "stinky_bar", rand: 0.99 },
       { c: "buy drink for @girl", expect: /฿/ },
-      { c: "send @girl home" },
+      { c: "send @girl home" }, { c: "send @girl home" },   // it asks once (2026-11-08)
       { go: HOME, c: "sleep" },
     ],
     [ { go: HOME, c: "sleep" } ],

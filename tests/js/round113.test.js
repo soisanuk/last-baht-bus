@@ -281,3 +281,34 @@ test("Ray: the wheel and the chip name the woman-on-your-arm action the same way
   const term = readFileSync(fileURLToPath(new URL("../../web/js/term.js", import.meta.url)), "utf8");
   assert.match(term, /leadme:\s*l => \(\{ t: "follow her"/); assert.doesNotMatch(term, /let her lead/);
 });
+
+// ── Mario's five calls on Gordon's and Ray's rows (2026-11-08) ──
+test("Mario: a declined screen goes up at the list price, on the bar's books", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife"); _setFlag("partnerTan"); G.bar = { room: "stinky_bar", cash: 50000, drawn: 0 }; _setFlag("barOpen");
+  const job = _synJobById("screen"); assert.ok(job);
+  const cash = G.bar.cash; out = []; _synNoBody(job);
+  assert.equal(G.bar.cash, cash - SCREEN_LIST); assert.match(said(), /list price/);
+});
+test("Mario: a bet is the owner's pocket — a lost stake never rings into his till", () => {
+  sandbox(); G.stage = "expat"; _setFlag("expatLife"); G.bar = { room: "stinky_bar", cash: 50000, drawn: 0 }; _setFlag("barOpen"); G.room = "stinky_bar";
+  G.game = { type: "c4", stake: 500 }; const cash = G.bar.cash, money = G.money; out = [];
+  _endGame(false, 0, "lost");
+  assert.equal(G.bar.cash, cash, "the till is untouched"); assert.equal(G.money, money, "the stake left the pocket when it was laid, not now");
+});
+test("Ray: a question with no canned replies gets an open chip", () => {
+  sandbox(); G.room = _npcRoom("pukky"); G.nightTurn = 30; t("talk to pukky");
+  G.convoQ = { id: "pukky", key: "nickname_xyz", q: "what they call you when you were small?" };
+  const chips = _chipSet();
+  assert.ok(chips.some(c => c.label === "answer her…" && c.cmd.endsWith(" ")), JSON.stringify(chips.slice(0, 6)));
+});
+test("Ray: SEND HER HOME asks once, and FOLLOW keeps her", () => {
+  sandbox(); G.room = "soi6_street"; G.nightTurn = 70; G.party = { ids: ["pukky"], stops: 0, spent: 0, seen: {} };
+  assert.match(t("send pukky home"), /again if you mean it/); assert.ok(G.party && G.party.ids.includes("pukky"), "still on your arm");
+  t("send pukky home"); assert.ok(!(G.party && G.party.ids && G.party.ids.includes("pukky")), "the second time means it");
+});
+test("Ray: the barfine picker never offers the mamasan or the till", () => {
+  sandbox(); G.room = "ruby_kiss"; G.nightTurn = 40;
+  const names = _completePool("barfine", ["barfine"]);
+  for (const id of _npcsHere()) if (NPC_ROLES[id] === "mamasan" || NPC_ROLES[id] === "cashier") assert.ok(!names.some(n => n.toLowerCase() === NPCS[id].name.toLowerCase()), NPCS[id].name + " is on the list");
+  assert.ok(_npcsHere().some(id => NPC_ROLES[id] === "hostess" && names.some(n => n.toLowerCase() === NPCS[id].name.toLowerCase())), "the hostesses are");
+});

@@ -16801,7 +16801,11 @@ function _chipSet() {
     // touch player has something to SAY rather than only ways to change the
     // subject (topics still follow — dodging stays a legitimate move).
     if (G.convoQ && G.convoQ.id === partner) {
-      for (const t of _askReplies(G.convoQ.key)) add(t, `“${t}”`, "reply");
+      const _reps = _askReplies(G.convoQ.key);
+      for (const t of _reps) add(t, `“${t}”`, "reply");
+      // a question with no canned replies (Pukky's "what they call you when you were small?") opens the input, so a
+      // thumb can answer it (Ray, round 113; Mario, 2026-11-08: an open prefill, nothing authored)
+      if (!_reps.length) add(" ", "answer her…", "reply");
     }
     // Beat-specific action-choices the partner just offered come first (the
     // "player's side" of the exchange); they crowd out most of the topic list.
@@ -16975,7 +16979,7 @@ function _cAmounts(verb) {
 
 function _completePool(verb, ctx, words) {   // words: the input unfiltered, for the one case where a dropped "for" matters
   // `kind`: what the verb asks of her; the Orchid's women are offered for none of what the room refuses (_orchidRefuses)
-  const girls = (kind) => kind && _orchidRefuses(kind) ? [] : _npcsHere().filter(id => NPC_ROLES[id])
+  const girls = (kind) => kind && _orchidRefuses(kind) ? [] : _npcsHere().filter(id => NPC_ROLES[id] && !(kind === "barfine" && (NPC_ROLES[id] === "mamasan" || NPC_ROLES[id] === "cashier")))
     .map(id => NPCS[id].name.toLowerCase());
   const contacts = () => Object.keys(G.phone.contacts)
     .filter(id => G.phone.contacts[id]).map(id => NPCS[id].name.toLowerCase());
@@ -19687,10 +19691,24 @@ function _doCommandInner(input) {
         if (/^(her|she)$/.test(_nm) && G.party.ids.length > 1) { _say(`Which of them? (${G.party.ids.map(i => `SEND ${NPCS[i].name.toUpperCase()} HOME`).join(" · ")} · SEND THEM HOME)`, "dim"); return; }   // both names (Martin, round 85)
         const _who = /^(her|she)$/.test(_nm) ? G.party.ids[0]
           : (G.party.ids.find(i => String(NPCS[i].name).toLowerCase() === _nm) || _findNpc(_nm) || (typeof _npcByName === "function" ? _npcByName(_nm, { first: true }) : null));
-        if (_who && G.party.ids.includes(_who)) { _partyGoodbyeOne(_who); _tick(); return; }
+        if (_who && G.party.ids.includes(_who)) {
+          // one tap sent a ฿10,250 night home (Ray, round 113): it asks once, the same way CANCEL does (Mario, 2026-11-08)
+          if (G.askArmPrev !== "sendhome:" + _who) {
+            G.askArm = "sendhome:" + _who;
+            _say(`(Send ${NPCS[_who].name} home? The night was hers till morning. SEND ${NPCS[_who].name.toUpperCase()} HOME again if you mean it — or keep her: FOLLOW ${NPCS[_who].name.toUpperCase()}.)`, "dim");
+            return;
+          }
+          _partyGoodbyeOne(_who); _tick(); return;
+        }
         // a PERSON who is not on your arm parts with nobody — it never sends the women who are (Ilse, round 80);
         // a word that is nobody ("goodnight sweetheart") is the goodbye it always was
         if (_who && NPCS[_who]) { _say(`${NPCS[_who].name} isn't with you tonight — ${_partyLabel()} ${G.party.ids.length > 1 ? "are" : "is"}.`, "dim"); return; }
+      }
+      // …and sending everyone on your arm home asks once too (the same tap that a paid night rides on)
+      if (G.askArmPrev !== "sendhome:all") {
+        G.askArm = "sendhome:all";
+        _say(`(Send ${_partyLabel()} home? The night was ${G.party.ids.length > 1 ? "theirs" : "hers"} till morning. Say it again if you mean it.)`, "dim");
+        return;
       }
       _partyGoodbye(); _tick(); return;
     }

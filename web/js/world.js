@@ -15833,6 +15833,7 @@ const SHIFT_CALLS = [
   },
 ];
 
+const SCREEN_LIST = 18000;   // a screen bought without Tan: the uncle's list price, the bar's books carry it (Mario, 2026-11-08: declining the arrangement is not free)
 const SYNDICATE_JOBS = [
   {
     id: "cleaning",

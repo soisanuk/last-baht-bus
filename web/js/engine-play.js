@@ -1905,7 +1905,7 @@ function _c4Input(input) {
   if (c4Win(g.board) === 2) {
     // (the stake rings into your own till in _endGame now, for every game)   // and named in BOOKS (the money audit, E2)   // "joins the till" — your own (Marta, round 63)
     _endGame(false, 0, _pickVary(_C4_LOSS, "c4loss")(g.opp, ai + 1) +
-      (g.stake ? ` Your ฿${_num(g.stake)} joins the till.` : ""));
+      (g.stake ? ` Your ฿${_num(g.stake)} goes across the table.` : ""));
     return;
   }
   if (c4Full(g.board)) {
@@ -2042,7 +2042,7 @@ function _jpFinish() {
   _say(`${g.opp} takes the cup. ${her.rolls.join(" · ")}.`, "dim");
   if (her.score === 0) {
     _endGame(false, 0, `Every tile down — JACKPOT, hers. The bar erupts. You drink again, ` +
-      `on principle${g.stake ? `, and your ฿${_num(g.stake)} stays with the till` : ""}.`);
+      `on principle${g.stake ? `, and your ฿${_num(g.stake)} stays on her side of the table` : ""}.`);
   } else if (her.score < you) {
     _endGame(false, 0, `Her score: ${her.score}. Low wins — she wins.` +
       (g.stake ? ` Your ฿${_num(g.stake)} vanishes into the bra of commerce.` : " Sanuk, they said."));
@@ -2831,11 +2831,8 @@ function _dartsInput(input) {
 // won: true / false / null (push). payout is added to money (escrow already taken).
 function _endGame(won, payout, text) {
   G.money += payout; G.offIn = (G.offIn || 0) + payout;   // …and the pot coming back is not a refund on the chits
-  // at your own bar the house's side of the table IS your till, both ways: a lost stake rings in, a won one is paid out
-  // of it (a win came from nowhere, and only Connect 4 rang a loss in — review 2026-10-25)
-  { const st = (G.game && G.game.stake) || 0, own = _atOwnBar() && G.bar && G.game && G.game.type !== "kp";
-    if (own && won === false && st) { G.bar.cash += st; if (typeof _barEvent === "function") _barEvent(st, "a game's stake lost to the house"); }
-    else if (own && won === true && payout > st) { const h = payout - st; G.bar.cash -= h; if (typeof _barEvent === "function") _barEvent(-h, "a game the house lost"); } }
+  // a bet is personal, at your own bar too: the stake is the owner's pocket against the customer's, and the till
+  // never sees it (Mario, 2026-11-08, reversing the 2026-10-25 edge that rang a lost stake into the owner's till)
   if (G.game) G.lastGame = { type: G.game.type, stake: G.game.stake || 0, room: G.room }; // REMATCH / DOUBLE
   G.game = null;
   _say(text, won === false ? "alert" : "win");

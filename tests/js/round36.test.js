@@ -112,10 +112,10 @@ test("GOODBYE / SEND HER HOME parts with a companion on your terms (Lionel)", ()
   const g = girlAt("neon_palm");
   G.party = { ids: [g], stops: 2, spent: 0, seen: {} }; G.room = "neon_palm"; G.money = 1000;
   const b = G.soc.drinks[g] || 0;
-  run("goodbye");
+  run("goodbye"); run("goodbye");   // it asks once (Mario, 2026-11-08)
   assert.ok(_PARTY_GOODBYE.some(l => text().includes(_fmt(l, { who: NPCS[g].name, c: PARTY_TAXI / 2 }))));
   assert.equal(G.party, null); assert.equal(G.money, 1000 - PARTY_TAXI / 2); assert.equal(G.soc.drinks[g], b + 1);
-  G.party = { ids: [g], stops: 0, spent: 0, seen: {} }; out = []; run(`send ${NPCS[g].name.toLowerCase()} home`);
+  G.party = { ids: [g], stops: 0, spent: 0, seen: {} }; out = []; run(`send ${NPCS[g].name.toLowerCase()} home`); run(`send ${NPCS[g].name.toLowerCase()} home`);
   assert.equal(G.party, null, "the banking app doesn't eat it");
   out = []; run("send bee home"); assert.match(text(), /Nobody on your arm/, "voiced when there is nobody to send");
 });
