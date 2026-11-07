@@ -3,14 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya tourism lags as flight costs jump up to 40%, group warns",
-    "s": "Thaiger",
-    "d": "05 Nov 2026"
-  },
-  {
-    "t": "Pattaya Mail offers special Fireworks Festival promotion for businesses at 5,000 baht NET",
-    "s": "Pattaya Mail",
-    "d": "05 Nov 2026"
+    "t": "Kenny G joins two-day Pattaya jazz festival on November 6–7",
+    "s": "Nation Thailand",
+    "d": "06 Nov 2026"
   },
   {
     "t": "Pattaya unveils 2.75 billion baht plan to tackle chronic flooding",
@@ -18,29 +13,34 @@ var NEWS_FEED = [
     "d": "06 Nov 2026"
   },
   {
-    "t": "Pakistani family unaccounted for after Pattaya house fire",
+    "t": "Crane obstructs and damages North Pattaya pavement, putting pedestrians at risk",
+    "s": "Pattaya Mail",
+    "d": "06 Nov 2026"
+  },
+  {
+    "t": "Pattaya tourism lags as flight costs jump up to 40%, group warns",
     "s": "Thaiger",
     "d": "05 Nov 2026"
   },
   {
-    "t": "Pattaya tourism faces high-season uncertainty as airfares rise and advance bookings remain unclear",
-    "s": "Pattaya Mail",
-    "d": "05 Nov 2026"
+    "t": "American man with terminal cancer dies in suspected suicide in Pattaya",
+    "s": "Thaiger",
+    "d": "06 Nov 2026"
   },
   {
-    "t": "Pattaya studies waste-to-energy technology to manage 500–600 tons of rubbish daily",
+    "t": "Pattaya has plenty of events, but retirees seek a different kind of entertainment",
     "s": "Pattaya Mail",
-    "d": "05 Nov 2026"
+    "d": "06 Nov 2026"
   },
   {
-    "t": "Chemical tanker leaks corrosive substance after crashing into guardrail on Pattaya bypass",
+    "t": "Pattaya prepares Jomtien Beach for international powerboat grand prix November 14–15",
     "s": "Pattaya Mail",
-    "d": "05 Nov 2026"
+    "d": "06 Nov 2026"
   },
   {
-    "t": "Pattaya removes century-old tamarind tree from Walking Street over safety fears",
+    "t": "Fire damages Banglamung Police Station investigation room and case files",
     "s": "Pattaya Mail",
-    "d": "05 Nov 2026"
+    "d": "06 Nov 2026"
   },
   {
     "t": "Why Doctors in Thailand Fear KFC",
@@ -48,19 +48,14 @@ var NEWS_FEED = [
     "d": "04 Nov 2026"
   },
   {
-    "t": "Automatic passport control extended to 33 countries",
-    "s": "Bangkok Post",
-    "d": "04 Nov 2026"
-  },
-  {
-    "t": "Thailand EV Tax Gets Carmakers Weighing More Local Production",
-    "s": "Bloomberg.com",
+    "t": "A ‘dream’ lifestyle: Could Thailand be your second home?",
+    "s": "Euronews.com",
     "d": "06 Nov 2026"
   },
   {
-    "t": "Police detain Panadda and husband this morning",
-    "s": "Thai PBS World",
-    "d": "06 Nov 2026"
+    "t": "At least 56 Malaysians jailed in southern Thailand, 44 for drug offences, says consul-general",
+    "s": "Yahoo",
+    "d": "07 Nov 2026"
   },
   {
     "t": "Thailand’s Inflation Accelerates Past Central Bank’s Target",
@@ -68,20 +63,25 @@ var NEWS_FEED = [
     "d": "06 Nov 2026"
   },
   {
-    "t": "\"Giant rat\" weighing 66 pounds once roamed Thailand, fossilized teeth reveal",
-    "s": "CBS News",
-    "d": "05 Nov 2026"
+    "t": "Thailand EV Tax Gets Carmakers Weighing More Local Production",
+    "s": "Bloomberg.com",
+    "d": "06 Nov 2026"
+  },
+  {
+    "t": "Asian Angle | Thailand once had an economic miracle. It needs another",
+    "s": "South China Morning Post",
+    "d": "07 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-05","USD":33.44,"AUD":23.41,"GBP":45.01,"EUR":37.53};
+var FX_RATES = {"date":"2026-11-06","USD":33.55,"AUD":23.05,"GBP":44.91,"EUR":37.46};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-06","temp":28,"humid":84,"code":80,"hi":30,"rain":93};
+var WX_NOW = {"date":"2026-11-07","temp":28,"humid":83,"code":95,"hi":29,"rain":94};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-01","first":"423224","last2":"85","front3":["300","950"],"back3":["393","804"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4047,"date":"2026-11-06","baht":64000};
+var GOLD = {"usd":4072,"date":"2026-11-07","baht":64600};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":75658,"thb":2536046};
+var BTC = {"usd":75956,"thb":2545955};
