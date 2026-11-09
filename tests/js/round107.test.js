@@ -12,7 +12,10 @@ engineInit((text) => out.push(String(text)));
 const said = () => out.join("\n");
 const run = c => doCommand(c);
 const t = c => { out = []; run(c); return said(); };
-const quiet = () => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.flowerDay = G.day; G.rain = 0; G.lastSaleng = 1e9; G.salengCart = null; };
+// the arrival's dice that no pin here is about: encounters, the peddler, the flower girl, rain, the saleng — and the
+// regular at a woman's elbow (_arriveAt rolls him 2 in 5, on a random hostess), whose snipe refusal answers her barfine
+// before the pin's sentence is read
+const quiet = () => { for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2; G.flowerDay = G.day; G.rain = 0; G.lastSaleng = 1e9; G.salengCart = null; (G.soc.patronBusy = G.soc.patronBusy || {})[G.room] = false; };
 const sandbox = () => {
   newGame(); G.player = { origin: "monger", personality: "joker", orientation: "straight", said: {}, lang: "en" };
   _setFlag("act1Done"); _setFlag("hasWallet"); G.stage = "vacation"; quiet(); G.money = 20000; G.bank = 50000;
