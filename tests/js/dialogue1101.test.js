@@ -167,8 +167,9 @@ test("a floor woman's look is the one her own words describe", () => {
   assert.match(FLOOR_STAFF.hot_pepper_gina.look, /Half-moon glasses/); assert.ok(NPCS.hot_pepper_gina.dialogue.filter(d => /glasses/i.test(d.text)).length >= 3, "her glasses are in her own words");
   assert.match(FLOOR_STAFF.hula_hula_noon.look, /neat bun/); assert.match(NPCS.hula_hula_noon.dialogue[1].text, /neat bun/);
   for (const id of ["peach_lounge_noot", "hula_hula_min", "hot_pepper_gina", "hula_hula_noon"]) assert.ok(FLOOR_STAFF[id].desc.startsWith(FLOOR_STAFF[id].look.replace(/\.$/, "")), id + ": desc opens on the look");
-  const relook = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-relook.json", import.meta.url)), "utf8")).ids;
-  for (const id of ["peach_lounge_noot", "hula_hula_min", "hot_pepper_gina", "hula_hula_noon"]) assert.ok(relook[id] && relook[id].was, id + " is on the relook queue");
+  // The relook QUEUE is work-in-progress, not a fact about the world, so it is not
+  // pinned here: an id leaves it the day its render ships (these four, 2026-11-10).
+  // What is permanent is the line above — her look is the one her own words describe.
   assert.match(NPCS.firecracker_bar_napa.dialogue[1].text, /Early fifties.*bun.*gold hoops/);
   for (const i of [0, 1]) assert.match(NPCS.sweet_tamarind_tukta.dialogue[i].text, /cropped hair/);
 });
@@ -272,12 +273,11 @@ test("the old-soi mamasans keep their Tinglish in the shared pool, and Toi sells
   for (const i of [3, 6]) assert.doesNotMatch(NPCS.peung.dialogue[i].text, /pours the beer|sets the beer down without a bill/, "peung#" + i);
   assert.doesNotMatch(node("peung", /^free/).text, /The beer I send you/);
 });
-test("Mercedes says 'furniture' once, her German drops its ending, Nee's narrator passes no sentence, Chompoo is thirty and on the relook queue", () => {
+test("Mercedes says 'furniture' once, her German drops its ending, Nee's narrator passes no sentence, Chompoo is thirty", () => {
   assert.doesNotMatch(nodeText("mercedes", 4), /furniture/); assert.match(node("mercedes", /^german/).text, /Warm Haus/); assert.doesNotMatch(node("mercedes", /^german/).text, /Warmes/);
   assert.doesNotMatch(NPCS.nee.dialogue[4].text, /will not survive/);
   assert.match(NPCS.chompoo.look, /of thirty/); assert.match(FLOOR_STAFF.chompoo ? FLOOR_STAFF.chompoo.look : NPCS.chompoo.look, /of thirty/);
-  const relook = JSON.parse(readFileSync(fileURLToPath(new URL("../../docs/portrait-relook.json", import.meta.url)), "utf8")).ids;
-  assert.ok(relook.chompoo && /twenty-five/.test(relook.chompoo.was));
+  // Her queue entry is gone with her re-render (2026-11-10); "of thirty" above is the pin.
   assert.doesNotMatch(node("pukky", /^family/).text, /quite proud, actually/); assert.doesNotMatch(String(node("pukky", /^home/).short), /weren't/);
 });
 test("Pim's helmet bargain is one free answer in both mouths, Bank's boy is not judged in the short, and his hello asks before it answers", () => {

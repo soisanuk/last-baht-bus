@@ -1,25 +1,4 @@
 {
  "_about": "Characters whose portrait PROMPT changed after their render shipped. The prompt is the character's `look` field — appearance only, kept apart from the desc (Mario, 2026-10-07), so deepening a desc never sends anyone here. gen-portrait-manifest marks them rendered:false / relook:true; the art agent's ship path removes an id once its new render is in web/portraits/thumb/.",
- "ids": {
-  "peach_lounge_noot": {
-   "was": "Rings on every finger and a voice that cuts the music when she wants it",
-   "why": "her look and Min's were dealt swapped; her own hello is the broad, motherly one (dialogue walk 2026-11-02)"
-  },
-  "hula_hula_min": {
-   "was": "Broad, motherly, and entirely able to have you removed by smiling",
-   "why": "the rings-and-voice look is hers; two of her nodes say rings (dialogue walk 2026-11-02)"
-  },
-  "hot_pepper_gina": {
-   "was": "A cloud of perfume and authority, hair lacquered against the fans",
-   "why": "seven of her eleven nodes put half-moon glasses on her nose (dialogue walk 2026-11-02)"
-  },
-  "hula_hula_noon": {
-   "was": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling.",
-   "why": "her signature is a neat bun and an engagement ring on a chain, in four nodes (dialogue walk 2026-11-02)"
-  },
-  "chompoo": {
-   "was": "Thai ladyboy of twenty-five, high cheekbones, dancer's build, cool amused expression, stage bikini.",
-   "why": "a scholarship, five years in Berlin and six on the stage add to about thirty, not twenty-five (dialogue walk 2026-11-02)"
-  }
- }
+ "ids": {}
 }

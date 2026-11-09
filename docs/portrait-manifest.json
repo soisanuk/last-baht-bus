@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-02",
+  "generated": "2026-11-09",
   "note": "Distinct, hand-authored characters with a portrait (excludes the 181 generic `filler` NPCs). Derived from web/js/world.js — regenerate with scripts/gen-portrait-manifest.mjs, do not hand-edit. `sex`/`venueKind` are generator heuristics for portrait archetype selection, not game canon.",
   "counts": {
     "total": 192,
@@ -11,23 +11,11 @@
       "patron": 26
     },
     "filler": 227,
-    "unrendered": 5,
-    "relook": 5
+    "unrendered": 0,
+    "relook": 0
   },
-  "unrendered": [
-    "chompoo",
-    "peach_lounge_noot",
-    "hot_pepper_gina",
-    "hula_hula_min",
-    "hula_hula_noon"
-  ],
-  "relook": [
-    "peach_lounge_noot",
-    "hula_hula_min",
-    "hot_pepper_gina",
-    "hula_hula_noon",
-    "chompoo"
-  ],
+  "unrendered": [],
+  "relook": [],
   "characters": [
     {
       "id": "aey",
@@ -1359,9 +1347,7 @@
       "room": "ruby_kiss",
       "tags": [],
       "desc": "The one on the little stage who dances like she's bored of being the most interesting person in the room, because she is. Cheekbones, a dancer's line, and an amused, appraising calm that reads a man in a glance and prices him in the next. Drops a German word now and then like she's forgotten you might not follow.",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Thai ladyboy of twenty-five, high cheekbones, dancer's build, cool amused expression, stage bikini."
+      "rendered": true
     },
     {
       "id": "dear",
@@ -6411,9 +6397,7 @@
       "tags": [],
       "desc": "Broad, motherly, and entirely able to have you removed by smiling — the mamasan of Peach Lounge, from Buriram. She danced this same street before you were her problem.",
       "look": "Broad, motherly, and entirely able to have you removed by smiling",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Rings on every finger and a voice that cuts the music when she wants it"
+      "rendered": true
     },
     {
       "id": "peach_lounge_farida",
@@ -6525,9 +6509,7 @@
       "tags": [],
       "desc": "Half-moon glasses down her nose, appraising you over the top of them — the mamasan of Hot Pepper Bar, from Mukdahan. She married a farang, buried the marriage, and kept the house.",
       "look": "Half-moon glasses down her nose, appraising you over the top of them",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "A cloud of perfume and authority, hair lacquered against the fans"
+      "rendered": true
     },
     {
       "id": "hot_pepper_chom",
@@ -6559,9 +6541,7 @@
       "tags": [],
       "desc": "Rings on every finger and a voice that cuts the music when she wants it — the mamasan of Hula Hula Bar, from Maha Sarakham. She came up from the rice fields and never once looked back.",
       "look": "Rings on every finger and a voice that cuts the music when she wants it",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Broad, motherly, and entirely able to have you removed by smiling"
+      "rendered": true
     },
     {
       "id": "hula_hula_noon",
@@ -6577,9 +6557,7 @@
       "tags": [],
       "desc": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes. — the cashier at Hula Hula Bar, from Sakon Nakhon.",
       "look": "Thai woman of thirty-eight, hair in a neat bun, an engagement ring on a chain at her throat, plain white blouse, careful eyes.",
-      "rendered": false,
-      "relook": true,
-      "relookWas": "Thai woman of thirty-eight, cropped grey-black hair, strong brows, one gold tooth, black singlet, unsmiling."
+      "rendered": true
     },
     {
       "id": "ladybird_bar_ratsamee",
