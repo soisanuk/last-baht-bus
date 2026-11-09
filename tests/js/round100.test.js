@@ -17,6 +17,9 @@ const t = c => { out = []; run(c); return said(); };
 const resident = () => {
   newGame(); G.player = { origin: "pension", personality: "straight", orientation: "straight", said: {}, lang: "en" };
   _setFlag("act1Done"); _setFlag("hasWallet"); _setFlag("expatLife"); G.itemLoc.wallet = "inventory"; for (const k in ENCOUNTERS) G.encDone[k] = true; G.peddlerNight = 2;
+  // no saleng cart: one rolls in 1 in 10 at a bar, and the woman you are talking to may go to it mid-sentence and end
+  // the conversation the next sentence was meant for
+  G.lastSaleng = 1e9; G.salengCart = null;
   G.stage = "expat"; G.paper = "longstay"; G.thaiAccount = true; G.hotel = "sabai"; G.day = 20; G.money = 8000; G.bank = 60000; G.payDay = 20; G.month = { spent: 0, rent: 0, rough: 0, days: 0 };
   G.room = "hotel_room"; G.nightTurn = 30; out = [];
 };
