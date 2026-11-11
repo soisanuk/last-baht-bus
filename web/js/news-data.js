@@ -3,9 +3,9 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Two transgender women arrested over theft of Chinese tourist's $600,000 Patek Philippe watch in Pattaya",
+    "t": "9 injured after speedboat crashes into fishing boat near Pattaya’s Laem Bali Hai Pier",
     "s": "Khaosod English",
-    "d": "09 Nov 2026"
+    "d": "10 Nov 2026"
   },
   {
     "t": "Nine women injured in Pattaya speedboat collision near Bali Hai Pier",
@@ -13,13 +13,23 @@ var NEWS_FEED = [
     "d": "10 Nov 2026"
   },
   {
-    "t": "2 transgender women, 30 & 24, allegedly steal S$765,000 Patek Philippe watch from Chinese tourist in Pattaya",
-    "s": "Mothership",
-    "d": "09 Nov 2026"
+    "t": "Foreign man held over alleged convenience store theft in Pattaya",
+    "s": "Thaiger",
+    "d": "10 Nov 2026"
   },
   {
-    "t": "Pattaya steps up mpox education for nightlife workers",
-    "s": "Thaiger",
+    "t": "Pattaya’s Dicey Reilly’s serves up a Sunday Brunch worth celebrating",
+    "s": "Pattaya Mail",
+    "d": "10 Nov 2026"
+  },
+  {
+    "t": "Pattaya restricts boat departures after speedboat collision injures eight",
+    "s": "Pattaya Mail",
+    "d": "10 Nov 2026"
+  },
+  {
+    "t": "Thailand ends easy walk-in access to cannabis sales",
+    "s": "Pattaya Mail",
     "d": "10 Nov 2026"
   },
   {
@@ -28,19 +38,9 @@ var NEWS_FEED = [
     "d": "10 Nov 2026"
   },
   {
-    "t": "Pattaya motorcycle taxi rider shines laser at ride-hailing rider",
-    "s": "Thaiger",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "9 injured after speedboat crashes into fishing boat near Pattaya’s Laem Bali Hai Pier",
-    "s": "Khaosod English",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "Bulgarian tourist left homeless in Pattaya gets help to fly home",
+    "t": "Pattaya nightlife operators concerned about possible Mpox impact on service businesses",
     "s": "Pattaya Mail",
-    "d": "09 Nov 2026"
+    "d": "10 Nov 2026"
   },
   {
     "t": "Uyghurs facing deportation by Thailand say they will be ‘like slaves’ in China",
@@ -48,14 +48,9 @@ var NEWS_FEED = [
     "d": "08 Nov 2026"
   },
   {
-    "t": "Wiz flies employees to Thailand for luxury vacation featuring $4 million Katy Perry concert",
-    "s": "CTech",
-    "d": "08 Nov 2026"
-  },
-  {
-    "t": "Why Doctors in Thailand Fear KFC",
-    "s": "The New York Times",
-    "d": "04 Nov 2026"
+    "t": "Thailand to Raise Arsenic-Tainted Rivers in Talks With Myanmar",
+    "s": "Bloomberg.com",
+    "d": "11 Nov 2026"
   },
   {
     "t": "Built for heat and humidity, Thailand’s beauty brands might be the next big thing",
@@ -63,25 +58,30 @@ var NEWS_FEED = [
     "d": "10 Nov 2026"
   },
   {
-    "t": "Chief rabbi’s citizenship revoked as Thailand’s Jews question their future",
-    "s": "The Jerusalem Post",
-    "d": "07 Nov 2026"
+    "t": "Giant, prehistoric rodent fossils discovered in southern Thailand",
+    "s": "EurekAlert!",
+    "d": "10 Nov 2026"
   },
   {
-    "t": "Thailand officially enters cold season",
+    "t": "Why doctors in Thailand fear KFC",
+    "s": "The Seattle Times",
+    "d": "08 Nov 2026"
+  },
+  {
+    "t": "Police hunt Panadda's hidden designer-bag stash",
     "s": "Bangkok Post",
-    "d": "09 Nov 2026"
+    "d": "10 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-09","USD":33.49,"AUD":23.09,"GBP":44.93,"EUR":37.49};
+var FX_RATES = {"date":"2026-11-10","USD":33.46,"AUD":23.1,"GBP":44.91,"EUR":37.52};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-10","temp":30,"humid":60,"code":1,"hi":30,"rain":8};
+var WX_NOW = {"date":"2026-11-11","temp":29,"humid":61,"code":1,"hi":29,"rain":4};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-01","first":"423224","last2":"85","front3":["300","950"],"back3":["393","804"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":4118,"date":"2026-11-10","baht":65250};
+var GOLD = {"usd":4061,"date":"2026-11-11","baht":64250};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":74637,"thb":2491014};
+var BTC = {"usd":73822,"thb":2481902};
