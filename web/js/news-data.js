@@ -3,9 +3,29 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Pattaya fireworks festival returns with free shows and concerts",
+    "t": "Nine women injured in Pattaya speedboat collision near Bali Hai Pier",
     "s": "Nation Thailand",
-    "d": "11 Nov 2026"
+    "d": "10 Nov 2026"
+  },
+  {
+    "t": "British man throws cocaine from Pattaya condo during police raid",
+    "s": "Thaiger",
+    "d": "13 Nov 2026"
+  },
+  {
+    "t": "Pattaya fireworks festival 2026: full schedule for both nights",
+    "s": "Thaiger",
+    "d": "12 Nov 2026"
+  },
+  {
+    "t": "Taiwanese man wanted on 15 warrants, including murder, arrested in Pattaya",
+    "s": "Thaiger",
+    "d": "13 Nov 2026"
+  },
+  {
+    "t": "Former police volunteer arrested in Pattaya over drug-planting, extortion",
+    "s": "Thaiger",
+    "d": "12 Nov 2026"
   },
   {
     "t": "Swiss man arrested in Pattaya amid child sexual abuse allegations",
@@ -13,39 +33,29 @@ var NEWS_FEED = [
     "d": "12 Nov 2026"
   },
   {
-    "t": "Pattaya restricts boat departures after speedboat collision injures eight",
-    "s": "Pattaya Mail",
+    "t": "Russian man held with 40,000 baht linked to call centre scam",
+    "s": "Thaiger",
+    "d": "12 Nov 2026"
+  },
+  {
+    "t": "Foreign man held over alleged convenience store theft in Pattaya",
+    "s": "Thaiger",
     "d": "10 Nov 2026"
   },
   {
-    "t": "Wrong parking in Pattaya comes with a price",
-    "s": "Pattaya Mail",
-    "d": "10 Nov 2026"
+    "t": "Indonesia, Thailand, Philippines to set up shared oil reserves",
+    "s": "Nikkei Asia",
+    "d": "12 Nov 2026"
   },
   {
-    "t": "Nine women injured in Pattaya speedboat collision near Bali Hai Pier",
-    "s": "Nation Thailand",
-    "d": "10 Nov 2026"
+    "t": "Can the Eurovision Song Contest succeed in Asia?",
+    "s": "BBC",
+    "d": "13 Nov 2026"
   },
   {
-    "t": "Pattaya nightlife operators concerned about possible Mpox impact on service businesses",
-    "s": "Pattaya Mail",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "Futurium opens doors to future technologies and career opportunities",
-    "s": "Pattaya Mail",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "Teen's body found in suitcase has some in notorious Thai party town on edge",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "22 Sep 2026"
-  },
-  {
-    "t": "Lao singer arrested in Thailand for performing without work permit",
-    "s": "Khaosod English",
-    "d": "11 Nov 2026"
+    "t": "Thailand Lets Tourists Turn Crypto Into Baht for Spending",
+    "s": "Bloomberg.com",
+    "d": "13 Nov 2026"
   },
   {
     "t": "Built for heat and humidity, Thailand’s beauty brands might be the next big thing",
@@ -53,28 +63,18 @@ var NEWS_FEED = [
     "d": "10 Nov 2026"
   },
   {
-    "t": "Thailand’s Tourism Comeback Slips Further Out of Reach",
-    "s": "Bloomberg.com",
-    "d": "12 Nov 2026"
+    "t": "Thailand bets on local AI as Chinese drones dominate its skies",
+    "s": "South China Morning Post",
+    "d": "13 Nov 2026"
   },
   {
-    "t": "JR assembles 2,500 portraits into a collective image of thailand’s creative scene",
-    "s": "Designboom",
-    "d": "11 Nov 2026"
-  },
-  {
-    "t": "Wairimu told detectives ‘missing’ husband Cohen was in Thailand",
-    "s": "Daily Nation",
-    "d": "11 Nov 2026"
-  },
-  {
-    "t": "Thailand poll finds most feel ready for a 72-hour emergency — but want backup internet plans",
-    "s": "Yahoo",
+    "t": "Thailand plans stronger cybersecurity measures for five key sectors",
+    "s": "Nation Thailand",
     "d": "12 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-11","USD":33.69,"AUD":23.11,"GBP":44.83,"EUR":37.49};
+var FX_RATES = {"date":"2026-11-12","USD":33.81,"AUD":23.06,"GBP":44.82,"EUR":37.47};
 // Pattaya right now — the other moaning index
 var WX_NOW = {"date":"2026-11-12","temp":30,"humid":60,"code":51,"hi":30,"rain":12};
 // the bar TV's one true channel
@@ -82,6 +82,6 @@ var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-01","first":"423224","last2":"85","front3":["300","950"],"back3":["393","804"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3963,"date":"2026-11-12","baht":63150};
+var GOLD = {"usd":3896,"date":"2026-11-13","baht":62300};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":73457,"thb":2480383};
+var BTC = {"usd":68767,"thb":2328003};
