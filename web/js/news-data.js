@@ -8,49 +8,44 @@ var NEWS_FEED = [
     "d": "10 Nov 2026"
   },
   {
-    "t": "British man throws cocaine from Pattaya condo during police raid",
-    "s": "Thaiger",
-    "d": "13 Nov 2026"
-  },
-  {
-    "t": "Pattaya fireworks festival 2026: full schedule for both nights",
-    "s": "Thaiger",
+    "t": "Park Hang-seo Suspended for Two Matches Despite Racial Slurs by Pattaya United",
+    "s": "조선일보",
     "d": "12 Nov 2026"
   },
   {
-    "t": "Taiwanese man wanted on 15 warrants, including murder, arrested in Pattaya",
-    "s": "Thaiger",
-    "d": "13 Nov 2026"
-  },
-  {
-    "t": "Former police volunteer arrested in Pattaya over drug-planting, extortion",
-    "s": "Thaiger",
+    "t": "Fitz Club Pattaya hosts ITF Masters Tennis Championship",
+    "s": "TTR Weekly",
     "d": "12 Nov 2026"
   },
   {
-    "t": "Swiss man arrested in Pattaya amid child sexual abuse allegations",
-    "s": "Thaiger",
+    "t": "Two transgender women arrested over theft of Chinese tourist's $600,000 Patek Philippe watch in Pattaya",
+    "s": "Khaosod English",
+    "d": "09 Nov 2026"
+  },
+  {
+    "t": "Tomorrowland Thailand fills Pattaya as the festival’s Asian debut nears",
+    "s": "We Rave You",
+    "d": "08 Nov 2026"
+  },
+  {
+    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
+    "s": "Reuters",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "6 crew missing after oil tanker sinks off Chon Buri",
+    "s": "Bangkok Post",
+    "d": "11 Nov 2026"
+  },
+  {
+    "t": "Pattaya, once Thailand’s ‘Sin City,’ beckons weary sailors from the USS Abraham Lincoln",
+    "s": "AP News",
+    "d": "02 Sep 2026"
+  },
+  {
+    "t": "Fishing Tender Goes Down off Thailand, Leaving Six Missing",
+    "s": "The Maritime Executive",
     "d": "12 Nov 2026"
-  },
-  {
-    "t": "Russian man held with 40,000 baht linked to call centre scam",
-    "s": "Thaiger",
-    "d": "12 Nov 2026"
-  },
-  {
-    "t": "Foreign man held over alleged convenience store theft in Pattaya",
-    "s": "Thaiger",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "Indonesia, Thailand, Philippines to set up shared oil reserves",
-    "s": "Nikkei Asia",
-    "d": "12 Nov 2026"
-  },
-  {
-    "t": "Can the Eurovision Song Contest succeed in Asia?",
-    "s": "BBC",
-    "d": "13 Nov 2026"
   },
   {
     "t": "Thailand Lets Tourists Turn Crypto Into Baht for Spending",
@@ -58,23 +53,28 @@ var NEWS_FEED = [
     "d": "13 Nov 2026"
   },
   {
-    "t": "Built for heat and humidity, Thailand’s beauty brands might be the next big thing",
-    "s": "CNN",
-    "d": "10 Nov 2026"
-  },
-  {
-    "t": "Thailand bets on local AI as Chinese drones dominate its skies",
-    "s": "South China Morning Post",
+    "t": "Skipton man found 'unresponsive' in Thailand hotel bed – inquest",
+    "s": "BBC",
     "d": "13 Nov 2026"
   },
   {
-    "t": "Thailand plans stronger cybersecurity measures for five key sectors",
-    "s": "Nation Thailand",
-    "d": "12 Nov 2026"
+    "t": "The Bank of England, the Monetary Authority of Singapore, and the Bank of Thailand: Project Meridian FX APAC",
+    "s": "Bank of England",
+    "d": "13 Nov 2026"
+  },
+  {
+    "t": "Not Ranbir Kapoor, Not Yash. Thailand Is Crushing Over This Ramayana Actor",
+    "s": "NDTV",
+    "d": "13 Nov 2026"
+  },
+  {
+    "t": "Premier Li on advancing China-Thailand community with a shared future",
+    "s": "CGTN",
+    "d": "13 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-12","USD":33.81,"AUD":23.06,"GBP":44.82,"EUR":37.47};
+var FX_RATES = {"date":"2026-11-13","USD":33.92,"AUD":23.01,"GBP":44.86,"EUR":37.48};
 // Pattaya right now — the other moaning index
 var WX_NOW = {"date":"2026-11-12","temp":30,"humid":60,"code":51,"hi":30,"rain":12};
 // the bar TV's one true channel
@@ -82,6 +82,6 @@ var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-01","first":"423224","last2":"85","front3":["300","950"],"back3":["393","804"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3896,"date":"2026-11-13","baht":62300};
+var GOLD = {"usd":3888,"date":"2026-11-14","baht":62350};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":68767,"thb":2328003};
+var BTC = {"usd":67311,"thb":2283701};
