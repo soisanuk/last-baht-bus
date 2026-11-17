@@ -3,8 +3,28 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Swedish man wanted in eight fraud cases arrested in Pattaya",
-    "s": "Scandasia",
+    "t": "Two Singaporeans arrested in Pattaya over visa overstays amid drug trafficking investigation",
+    "s": "Khaosod English",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Driver blames shadows after car kills Russian woman in Pattaya",
+    "s": "Thaiger",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Russian cocaine trafficking boss arrested in Pattaya condo",
+    "s": "Thaiger",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Tip-off from Pattaya hotel employee leads to arrest of Chinese man and 4 Thai nationals",
+    "s": "Thaiger",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Pattaya-area hospital admits drilling near sick teen should not have happened",
+    "s": "Thaiger",
     "d": "14 Nov 2026"
   },
   {
@@ -13,75 +33,25 @@ var NEWS_FEED = [
     "d": "02 Sep 2026"
   },
   {
-    "t": "Fitz Club Pattaya hosts ITF Masters Tennis Championship",
-    "s": "TTR Weekly",
-    "d": "12 Nov 2026"
+    "t": "Swedish man wanted in eight fraud cases arrested in Pattaya",
+    "s": "Scandasia",
+    "d": "14 Nov 2026"
   },
   {
     "t": "Pattaya, once Thailand’s ‘Sin City,’ beckons weary sailors from the USS Abraham Lincoln",
     "s": "AP News",
     "d": "02 Sep 2026"
-  },
-  {
-    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
-    "s": "The Guardian",
-    "d": "05 Sep 2026"
-  },
-  {
-    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
-    "s": "DW.com",
-    "d": "07 Sep 2026"
-  },
-  {
-    "t": "USS Abraham Lincoln: US sailors unwind in Thailand by shopping and bar-hopping",
-    "s": "BBC",
-    "d": "03 Sep 2026"
-  },
-  {
-    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
-    "s": "France 24",
-    "d": "04 Sep 2026"
-  },
-  {
-    "t": "Giant, prehistoric rodent fossils discovered in southern Thailand",
-    "s": "Phys.org",
-    "d": "15 Nov 2026"
-  },
-  {
-    "t": "11 killed in fire on island in southern Thailand popular with tourists",
-    "s": "The Times of Israel",
-    "d": "16 Nov 2026"
-  },
-  {
-    "t": "A fire in a building in southern Thailand killed 11 people",
-    "s": "Newsday",
-    "d": "16 Nov 2026"
-  },
-  {
-    "t": "11 Dead, Over A Dozen Injured As Fire Rips Through Buildings In Thailand",
-    "s": "NDTV",
-    "d": "16 Nov 2026"
-  },
-  {
-    "t": "Thailand’s elderly kept in cages",
-    "s": "Al Jazeera",
-    "d": "15 Nov 2026"
-  },
-  {
-    "t": "As foreigners in Thailand lose homes, Malaysia courts wealthy buyers",
-    "s": "South China Morning Post",
-    "d": "16 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-13","USD":33.92,"AUD":23.01,"GBP":44.86,"EUR":37.48};
+var FX_RATES = {"date":"2026-11-16","USD":33.89,"AUD":22.9,"GBP":44.73,"EUR":37.33};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-16","temp":31,"humid":73,"code":95,"hi":32,"rain":93};
+var WX_NOW = {"date":"2026-11-17","temp":30,"humid":76,"code":51,"hi":31,"rain":82};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
-var LOTTO = {"date":"2026-11-01","first":"423224","last2":"85","front3":["300","950"],"back3":["393","804"]};
+var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3855,"date":"2026-11-16","baht":61850};
+var GOLD = {"usd":3875,"date":"2026-11-17","baht":62100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64446,"thb":2182782};
+var BTC = {"usd":64649,"thb":2188592};
