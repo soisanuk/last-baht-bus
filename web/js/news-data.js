@@ -8,7 +8,12 @@ var NEWS_FEED = [
     "d": "17 Nov 2026"
   },
   {
-    "t": "Driver blames shadows after car kills Russian woman in Pattaya",
+    "t": "French tourist crashes motorbike in Pattaya, refuses treatment",
+    "s": "Thaiger",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Pattaya man accused of running scam tour to Japan, causing 1.3 million baht loss",
     "s": "Thaiger",
     "d": "17 Nov 2026"
   },
@@ -18,40 +23,65 @@ var NEWS_FEED = [
     "d": "17 Nov 2026"
   },
   {
-    "t": "Tip-off from Pattaya hotel employee leads to arrest of Chinese man and 4 Thai nationals",
+    "t": "Singaporean drug boss wanted back home arrested in Pattaya",
     "s": "Thaiger",
     "d": "17 Nov 2026"
   },
   {
-    "t": "Pattaya-area hospital admits drilling near sick teen should not have happened",
+    "t": "Driver blames shadows after car kills Russian woman in Pattaya",
     "s": "Thaiger",
-    "d": "14 Nov 2026"
+    "d": "17 Nov 2026"
   },
   {
-    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
+    "t": "Tip-off from Pattaya hotel employee leads to arrest of Chinese man, 4 Thais",
+    "s": "Thaiger",
+    "d": "17 Nov 2026"
+  },
+  {
+    "t": "Norwegian tourist survives 7-storey fall at Pattaya hotel",
+    "s": "Bangkok Post",
+    "d": "18 Nov 2026"
+  },
+  {
+    "t": "Trump says US trade deal with Thailand to be signed soon",
     "s": "Reuters",
-    "d": "02 Sep 2026"
+    "d": "17 Nov 2026"
   },
   {
-    "t": "Swedish man wanted in eight fraud cases arrested in Pattaya",
-    "s": "Scandasia",
-    "d": "14 Nov 2026"
+    "t": "Inspur International Cooperation Conference 2026 Held in Bangkok, Thailand",
+    "s": "Yahoo Finance",
+    "d": "18 Nov 2026"
   },
   {
-    "t": "Pattaya, once Thailand’s ‘Sin City,’ beckons weary sailors from the USS Abraham Lincoln",
-    "s": "AP News",
-    "d": "02 Sep 2026"
+    "t": "Thailand Sees New US Chip Curbs as Risk to Data Center Drive",
+    "s": "Bloomberg",
+    "d": "18 Nov 2026"
+  },
+  {
+    "t": "As foreigners in Thailand lose homes, Malaysia courts wealthy buyers",
+    "s": "South China Morning Post",
+    "d": "16 Nov 2026"
+  },
+  {
+    "t": "Deadly blaze rips through building in Thailand",
+    "s": "CNN",
+    "d": "16 Nov 2026"
+  },
+  {
+    "t": "Huge 66-Lbs. Prehistoric Rodent That Lived 34 Million Years Ago Discovered in Thailand",
+    "s": "People.com",
+    "d": "17 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-16","USD":33.89,"AUD":22.9,"GBP":44.73,"EUR":37.33};
+var FX_RATES = {"date":"2026-11-17","USD":33.84,"AUD":22.79,"GBP":44.64,"EUR":37.19};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-17","temp":30,"humid":76,"code":51,"hi":31,"rain":82};
+var WX_NOW = {"date":"2026-11-18","temp":28,"humid":86,"code":51,"hi":32,"rain":78};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3875,"date":"2026-11-17","baht":62100};
+var GOLD = {"usd":3773,"date":"2026-11-18","baht":60400};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":64649,"thb":2188592};
+var BTC = {"usd":64674,"thb":2192955};
