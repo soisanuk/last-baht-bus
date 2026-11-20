@@ -3,9 +3,19 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Norwegian tourist survives 7-storey fall at Pattaya hotel",
-    "s": "Bangkok Post",
-    "d": "18 Nov 2026"
+    "t": "Thai official disguises himself as homeless rubbish collector to catch drug dealer in Pattaya",
+    "s": "Khaosod English",
+    "d": "19 Nov 2026"
+  },
+  {
+    "t": "Pakistani tourist loses 100,000 baht after meeting woman in Pattaya",
+    "s": "Thaiger",
+    "d": "20 Nov 2026"
+  },
+  {
+    "t": "400 million baht scam network crackdown in Pattaya: 3 Chinese and 1 Taiwanese arrested",
+    "s": "Khaosod English",
+    "d": "19 Nov 2026"
   },
   {
     "t": "Pattaya police arrest suspect over alleged 74,000 baht theft from Turkish tourist",
@@ -18,28 +28,28 @@ var NEWS_FEED = [
     "d": "19 Nov 2026"
   },
   {
-    "t": "Best pool villas in Pattaya (2027): Our top picks for groups & families",
-    "s": "Thaiger",
-    "d": "18 Nov 2026"
-  },
-  {
-    "t": "Singaporean drug boss wanted back home arrested in Pattaya",
-    "s": "Thaiger",
-    "d": "17 Nov 2026"
-  },
-  {
-    "t": "Driver blames shadows after car kills Russian woman in Pattaya",
-    "s": "Thaiger",
-    "d": "17 Nov 2026"
-  },
-  {
     "t": "Turkish tourist loses 75,000 baht while meeting Pattaya transwoman",
     "s": "Thaiger",
     "d": "19 Nov 2026"
   },
   {
+    "t": "Foreign investors target luxury Bangkok condos, India eyes Pattaya properties",
+    "s": "Thaiger",
+    "d": "09 Jun 2023"
+  },
+  {
     "t": "Pattaya man makes 3 motorcycle thieves crawl on beach as punishment",
     "s": "Thaiger",
+    "d": "19 Nov 2026"
+  },
+  {
+    "t": "‘45 is the new 60’: Thailand’s Kasikornbank is paying staff to retire early as it prepares for AI",
+    "s": "Fortune",
+    "d": "19 Nov 2026"
+  },
+  {
+    "t": "Thailand’s fertility rate is collapsing",
+    "s": "The Economist",
     "d": "19 Nov 2026"
   },
   {
@@ -48,33 +58,23 @@ var NEWS_FEED = [
     "d": "18 Nov 2026"
   },
   {
-    "t": "Thailand to seek US tariff cut after reaching key terms of trade deal, minister says",
-    "s": "Reuters",
-    "d": "18 Nov 2026"
-  },
-  {
-    "t": "Trump says US trade deal with Thailand to be signed soon",
-    "s": "Reuters",
-    "d": "17 Nov 2026"
-  },
-  {
-    "t": "Thailand Says US Agrees to Lower Forced-Labor Tariff to 10%",
-    "s": "Bloomberg.com",
+    "t": "Thailand considers raising investment requirement for citizenship to $3 million",
+    "s": "Khaosod English",
     "d": "19 Nov 2026"
   },
   {
-    "t": "Myanmar-linked arsenic pollution prompts clean water scramble in Thailand",
-    "s": "Al Jazeera",
-    "d": "18 Nov 2026"
+    "t": "Trump Signs Thailand Trade Deal: Which Stocks Will Benefit?",
+    "s": "Yahoo Finance",
+    "d": "19 Nov 2026"
   },
   {
-    "t": "Thailand Sees New US Chip Curbs as Risk to Data Center Drive",
+    "t": "Thailand Opens Door to US Pork, Raising Risks for Farmers",
     "s": "Bloomberg.com",
-    "d": "18 Nov 2026"
+    "d": "20 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-18","USD":33.98,"AUD":22.87,"GBP":44.74,"EUR":37.26};
+var FX_RATES = {"date":"2026-11-19","USD":33.91,"AUD":22.75,"GBP":44.59,"EUR":37.27};
 // Pattaya right now — the other moaning index
 var WX_NOW = {"date":"2026-11-19","temp":32,"humid":59,"code":51,"hi":33,"rain":29};
 // the bar TV's one true channel
@@ -82,6 +82,6 @@ var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3741,"date":"2026-11-19","baht":60100};
+var GOLD = {"usd":3560,"date":"2026-11-20","baht":57100};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":63543,"thb":2154028};
+var BTC = {"usd":61942,"thb":2101272};
