@@ -3,9 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Thai official disguises himself as homeless rubbish collector to catch drug dealer in Pattaya",
-    "s": "Khaosod English",
-    "d": "19 Nov 2026"
+    "t": "Creating a More Sustainable Future at U Jomtien Pattaya",
+    "s": "The Des Moines Register",
+    "d": "20 Nov 2026"
+  },
+  {
+    "t": "Taiwanese man held for scam operation after argument with Pattaya neighbour",
+    "s": "Thaiger",
+    "d": "20 Nov 2026"
   },
   {
     "t": "Pakistani tourist loses 100,000 baht after meeting woman in Pattaya",
@@ -13,17 +18,17 @@ var NEWS_FEED = [
     "d": "20 Nov 2026"
   },
   {
-    "t": "400 million baht scam network crackdown in Pattaya: 3 Chinese and 1 Taiwanese arrested",
-    "s": "Khaosod English",
-    "d": "19 Nov 2026"
-  },
-  {
-    "t": "Pattaya police arrest suspect over alleged 74,000 baht theft from Turkish tourist",
-    "s": "Khaosod English",
-    "d": "19 Nov 2026"
+    "t": "The definitive beachfront deal: The Panora Estuaria set to dominate Pattaya’s 2026 property market",
+    "s": "Thaiger",
+    "d": "04 Mar 2026"
   },
   {
     "t": "Pattaya man loses girlfriend in hit-and-run, occurred shortly after their argument",
+    "s": "Thaiger",
+    "d": "19 Nov 2026"
+  },
+  {
+    "t": "Pattaya man makes 3 motorcycle thieves crawl on beach as punishment",
     "s": "Thaiger",
     "d": "19 Nov 2026"
   },
@@ -33,19 +38,9 @@ var NEWS_FEED = [
     "d": "19 Nov 2026"
   },
   {
-    "t": "Foreign investors target luxury Bangkok condos, India eyes Pattaya properties",
-    "s": "Thaiger",
-    "d": "09 Jun 2023"
-  },
-  {
-    "t": "Pattaya man makes 3 motorcycle thieves crawl on beach as punishment",
-    "s": "Thaiger",
-    "d": "19 Nov 2026"
-  },
-  {
-    "t": "‘45 is the new 60’: Thailand’s Kasikornbank is paying staff to retire early as it prepares for AI",
-    "s": "Fortune",
-    "d": "19 Nov 2026"
+    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
+    "s": "Bangkok Post",
+    "d": "10 Oct 2026"
   },
   {
     "t": "Thailand’s fertility rate is collapsing",
@@ -53,35 +48,40 @@ var NEWS_FEED = [
     "d": "19 Nov 2026"
   },
   {
+    "t": "‘45 is the new 60’: Thailand’s third largest bank paid staff to retire early to get ready for AI",
+    "s": "Fortune",
+    "d": "19 Nov 2026"
+  },
+  {
+    "t": "Woman feeds elephant from open door in Thailand",
+    "s": "ABC News - Breaking News, Latest News and Videos",
+    "d": "20 Nov 2026"
+  },
+  {
     "t": "This Company Wants to Import New Tiny Toyota Trucks from Thailand",
     "s": "Car and Driver",
     "d": "18 Nov 2026"
   },
   {
-    "t": "Thailand considers raising investment requirement for citizenship to $3 million",
-    "s": "Khaosod English",
-    "d": "19 Nov 2026"
-  },
-  {
-    "t": "Trump Signs Thailand Trade Deal: Which Stocks Will Benefit?",
-    "s": "Yahoo Finance",
-    "d": "19 Nov 2026"
-  },
-  {
     "t": "Thailand Opens Door to US Pork, Raising Risks for Farmers",
     "s": "Bloomberg.com",
+    "d": "20 Nov 2026"
+  },
+  {
+    "t": "Thailand’s Myanmar engagement does not conflict with ICJ genocide ruling",
+    "s": "Thai PBS World",
     "d": "20 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-19","USD":33.91,"AUD":22.75,"GBP":44.59,"EUR":37.27};
+var FX_RATES = {"date":"2026-11-20","USD":33.91,"AUD":22.6,"GBP":44.5,"EUR":37.26};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-19","temp":32,"humid":59,"code":51,"hi":33,"rain":29};
+var WX_NOW = {"date":"2026-11-21","temp":31,"humid":63,"code":0,"hi":31,"rain":0};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3560,"date":"2026-11-20","baht":57100};
+var GOLD = {"usd":3539,"date":"2026-11-21","baht":56750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":61942,"thb":2101272};
+var BTC = {"usd":58220,"thb":1968722};
