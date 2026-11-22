@@ -3,9 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Creating a More Sustainable Future at U Jomtien Pattaya",
-    "s": "The Des Moines Register",
+    "t": "South Korean sexual offence fugitive arrested in Pattaya",
+    "s": "Bangkok Post",
     "d": "20 Nov 2026"
+  },
+  {
+    "t": "4 new luxury hotels set for Bangkok and Pattaya",
+    "s": "Thaiger",
+    "d": "31 Aug 2020"
   },
   {
     "t": "Taiwanese man held for scam operation after argument with Pattaya neighbour",
@@ -13,14 +18,14 @@ var NEWS_FEED = [
     "d": "20 Nov 2026"
   },
   {
-    "t": "Pakistani tourist loses 100,000 baht after meeting woman in Pattaya",
-    "s": "Thaiger",
+    "t": "Woman arrested for stealing $2,000 from Turkish tourist in Pattaya",
+    "s": "VnExpress International",
     "d": "20 Nov 2026"
   },
   {
-    "t": "The definitive beachfront deal: The Panora Estuaria set to dominate Pattaya’s 2026 property market",
+    "t": "Pakistani tourist loses 100,000 baht after meeting woman in Pattaya",
     "s": "Thaiger",
-    "d": "04 Mar 2026"
+    "d": "20 Nov 2026"
   },
   {
     "t": "Pattaya man loses girlfriend in hit-and-run, occurred shortly after their argument",
@@ -38,18 +43,13 @@ var NEWS_FEED = [
     "d": "19 Nov 2026"
   },
   {
-    "t": "Suspects flee country after B37m robbery of Turk in Pattaya",
-    "s": "Bangkok Post",
-    "d": "10 Oct 2026"
+    "t": "What It’s Like to Retire in Thailand",
+    "s": "WSJ",
+    "d": "21 Nov 2026"
   },
   {
     "t": "Thailand’s fertility rate is collapsing",
     "s": "The Economist",
-    "d": "19 Nov 2026"
-  },
-  {
-    "t": "‘45 is the new 60’: Thailand’s third largest bank paid staff to retire early to get ready for AI",
-    "s": "Fortune",
     "d": "19 Nov 2026"
   },
   {
@@ -58,30 +58,30 @@ var NEWS_FEED = [
     "d": "20 Nov 2026"
   },
   {
-    "t": "This Company Wants to Import New Tiny Toyota Trucks from Thailand",
-    "s": "Car and Driver",
-    "d": "18 Nov 2026"
+    "t": "Thailand Plans to Ban Exports of Chemicals as It Tackles Pollution",
+    "s": "Bloomberg",
+    "d": "22 Nov 2026"
   },
   {
-    "t": "Thailand Opens Door to US Pork, Raising Risks for Farmers",
-    "s": "Bloomberg.com",
-    "d": "20 Nov 2026"
+    "t": "‘45 is the new 60’: Thailand’s Kasikornbank paid staff to retire early as it prepares for AI",
+    "s": "Yahoo Finance",
+    "d": "19 Nov 2026"
   },
   {
-    "t": "Thailand’s Myanmar engagement does not conflict with ICJ genocide ruling",
-    "s": "Thai PBS World",
-    "d": "20 Nov 2026"
+    "t": "PM rejects Cambodia conciliation",
+    "s": "Bangkok Post",
+    "d": "21 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
 var FX_RATES = {"date":"2026-11-20","USD":33.91,"AUD":22.6,"GBP":44.5,"EUR":37.26};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-21","temp":31,"humid":63,"code":0,"hi":31,"rain":0};
+var WX_NOW = {"date":"2026-11-22","temp":31,"humid":61,"code":3,"hi":31,"rain":20};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3539,"date":"2026-11-21","baht":56750};
+var GOLD = {"usd":3539,"date":"2026-11-22","baht":56750};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":58220,"thb":1968722};
+var BTC = {"usd":59084,"thb":1998314};
