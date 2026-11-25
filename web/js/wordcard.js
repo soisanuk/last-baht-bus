@@ -235,6 +235,7 @@ function openWordModal(word) {
       ${rtgs ? `<div class="wc-rtgs">${_wcEsc(rtgs)}</div>` : ""}
       ${english ? `<div class="wc-en">${_wcEsc(english)}</div>` : ""}
       ${rtgs || english ? "" : `<div class="wc-nogloss">Not in the course — here's how it's written.</div>`}
+      ${(typeof WORD_NOTES !== "undefined" && WORD_NOTES[thai]) ? `<div class="wc-wordnote" style="margin:0.6rem 0 0;font-size:0.9rem;line-height:1.45">${_wcEsc(WORD_NOTES[thai].text)}</div>` : ""}
       <div id="${decompId}" style="display:none"></div>
       <hr class="divider-accent">
       <div id="${exId}" class="wc-example example-block" style="display:none"></div>
