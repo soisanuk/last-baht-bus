@@ -3,29 +3,14 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
-    "t": "Two Chinese women kidnapped by Chinese man in Pattaya",
-    "s": "Khaosod English",
-    "d": "24 Nov 2026"
-  },
-  {
     "t": "Para table tennis legends serve up double the excitement at World Championships",
     "s": "Paralympic.org.",
     "d": "23 Nov 2026"
   },
   {
-    "t": "TAT and AirAsia agree to prioritise Pattaya in joint 2027 tourism plans",
-    "s": "Nation Thailand",
+    "t": "Two Chinese women kidnapped by Chinese man in Pattaya",
+    "s": "Khaosod English",
     "d": "24 Nov 2026"
-  },
-  {
-    "t": "Pattaya International Fireworks Festival 2026 returns to the seaside this November",
-    "s": "Lifestyle Asia Hong Kong",
-    "d": "24 Nov 2026"
-  },
-  {
-    "t": "Supalai targets Pattaya's resilient condo market",
-    "s": "Bangkok Post",
-    "d": "23 Nov 2026"
   },
   {
     "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
@@ -43,24 +28,19 @@ var NEWS_FEED = [
     "d": "05 Sep 2026"
   },
   {
-    "t": "What It’s Like to Retire in Thailand",
-    "s": "WSJ",
-    "d": "21 Nov 2026"
-  },
-  {
-    "t": "American tourist beaten to death in Thailand by MMA fighter called ‘Frank the Tank’",
-    "s": "New York Post",
-    "d": "23 Nov 2026"
-  },
-  {
-    "t": "Thailand’s oldest established multinational company takes on the region’s energy challenges",
-    "s": "CNN",
+    "t": "TAT and AirAsia agree to prioritise Pattaya in joint 2027 tourism plans",
+    "s": "Nation Thailand",
     "d": "24 Nov 2026"
   },
   {
-    "t": "Thailand’s Informal Economy Keeps 78% of Firms Off the Books",
-    "s": "Bloomberg.com",
-    "d": "24 Nov 2026"
+    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
+    "s": "DW.com",
+    "d": "07 Sep 2026"
+  },
+  {
+    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
+    "s": "France 24",
+    "d": "04 Sep 2026"
   },
   {
     "t": "Thailand plans to block exports of chemicals used in Myanmar rare earth mining",
@@ -68,15 +48,35 @@ var NEWS_FEED = [
     "d": "22 Nov 2026"
   },
   {
-    "t": "Australians face Thai court over $1.9m investment scam",
-    "s": "ABC News & Headlines – Australian Broadcasting Corporation",
-    "d": "23 Nov 2026"
+    "t": "Thailand’s Shrinking Budget Room Raises Pressure for Tax Hikes",
+    "s": "Bloomberg.com",
+    "d": "25 Nov 2026"
+  },
+  {
+    "t": "Chula Experts Outline Thailand’s Path to Quantum Computing Opportunities",
+    "s": "Cincinnati Enquirer",
+    "d": "25 Nov 2026"
+  },
+  {
+    "t": "‘People are going to die’: Thailand’s toxic rivers, ‘zombie’ fish sow dread",
+    "s": "South China Morning Post",
+    "d": "24 Nov 2026"
+  },
+  {
+    "t": "US aluminium scrap exports surge 17.6% in Jan–Aug 2026: Thailand continues to lead among top five destinations",
+    "s": "AL Circle",
+    "d": "24 Nov 2026"
+  },
+  {
+    "t": "Thailand vehicle production hits 6-year low after flooding",
+    "s": "Nikkei Asia",
+    "d": "24 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-23","USD":34.04,"AUD":22.53,"GBP":44.51,"EUR":37.24};
+var FX_RATES = {"date":"2026-11-24","USD":33.93,"AUD":22.53,"GBP":44.44,"EUR":37.2};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-24","temp":31,"humid":63,"code":3,"hi":33,"rain":20};
+var WX_NOW = {"date":"2026-11-25","temp":31,"humid":59,"code":51,"hi":32,"rain":24};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
@@ -84,4 +84,4 @@ var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","
 // XAU, plus Thai baht-weight gold (96.5%)
 var GOLD = {"usd":3622,"date":"2026-11-24","baht":58300};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":59901,"thb":2032436};
+var BTC = {"usd":59266,"thb":2021222};
