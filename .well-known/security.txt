@@ -1,0 +1,28 @@
+# security.txt — RFC 9116
+#
+# The Last Baht Bus. A text adventure about Pattaya, served as static files:
+# no backend, no accounts, no database, no telemetry, nothing collected. The
+# whole game is unminified JavaScript you can read in the tab you are reading
+# this in, which makes the attack surface roughly a bar mat.
+#
+# Reports about the deploy, the workflow, or a dependency are welcome anyway.
+
+Contact: https://github.com/soisanuk/last-baht-bus/issues
+Expires: 2027-08-01T00:00:00.000Z
+Preferred-Languages: en, th
+Canonical: https://soisanuk.github.io/last-baht-bus/.well-known/security.txt
+
+# ── There is, however, one thing worth your time ──────────────────────────
+#
+# The town paper runs a column. Its author has printed the same small ad at
+# the foot of every issue for forty years and has never once had a reply,
+# which he mentions more often than he thinks he does.
+#
+# In the game: READ COLUMN. Look at Box 15.
+#
+# It is solvable in an evening with no tools you do not already have, and the
+# key has been on the page the entire time. Nothing needs to be attacked,
+# fuzzed, or brute-forced; if you find yourself doing any of those, the answer
+# is somewhere gentler than where you are looking.
+#
+# Format: sanuk{...}
