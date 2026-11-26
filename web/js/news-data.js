@@ -3,6 +3,11 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Thailand and AirAsia to push the destination Pattaya in 2027",
+    "s": "TravelMole",
+    "d": "26 Nov 2026"
+  },
+  {
     "t": "Para table tennis legends serve up double the excitement at World Championships",
     "s": "Paralympic.org.",
     "d": "23 Nov 2026"
@@ -23,14 +28,14 @@ var NEWS_FEED = [
     "d": "02 Sep 2026"
   },
   {
+    "t": "Woman arrested for stealing $2,000 from Turkish tourist in Pattaya",
+    "s": "VnExpress International",
+    "d": "20 Nov 2026"
+  },
+  {
     "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
     "s": "The Guardian",
     "d": "05 Sep 2026"
-  },
-  {
-    "t": "TAT and AirAsia agree to prioritise Pattaya in joint 2027 tourism plans",
-    "s": "Nation Thailand",
-    "d": "24 Nov 2026"
   },
   {
     "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
@@ -38,43 +43,38 @@ var NEWS_FEED = [
     "d": "07 Sep 2026"
   },
   {
-    "t": "USS Lincoln crew hits the streets of Thailand's Pattaya after nine-month deployment",
-    "s": "France 24",
-    "d": "04 Sep 2026"
-  },
-  {
-    "t": "Thailand plans to block exports of chemicals used in Myanmar rare earth mining",
+    "t": "Thailand, Myanmar agree to monitor border rivers amid pollution fears",
     "s": "Reuters",
-    "d": "22 Nov 2026"
+    "d": "25 Nov 2026"
   },
   {
-    "t": "Thailand’s Shrinking Budget Room Raises Pressure for Tax Hikes",
+    "t": "AI Is Buying Thailand Time to Fix Tourism",
     "s": "Bloomberg.com",
     "d": "25 Nov 2026"
   },
   {
-    "t": "Chula Experts Outline Thailand’s Path to Quantum Computing Opportunities",
-    "s": "Cincinnati Enquirer",
+    "t": "Billionaire Harald Link’s B. Grimm, Japan’s NTT To Build $3.3 Billion Data Center In Thailand",
+    "s": "Forbes",
     "d": "25 Nov 2026"
   },
   {
-    "t": "‘People are going to die’: Thailand’s toxic rivers, ‘zombie’ fish sow dread",
-    "s": "South China Morning Post",
-    "d": "24 Nov 2026"
+    "t": "PHINIA to Acquire the Business of the FMP Group with Operations in Australia, Thailand and Malaysia, a Leading Asia-Pacific Aftermarket Comp",
+    "s": "Business Wire",
+    "d": "25 Nov 2026"
   },
   {
-    "t": "US aluminium scrap exports surge 17.6% in Jan–Aug 2026: Thailand continues to lead among top five destinations",
-    "s": "AL Circle",
-    "d": "24 Nov 2026"
+    "t": "Thailand seeks to buy eight remaining Gripen E/F fighters in one order",
+    "s": "AeroTime",
+    "d": "25 Nov 2026"
   },
   {
-    "t": "Thailand vehicle production hits 6-year low after flooding",
-    "s": "Nikkei Asia",
-    "d": "24 Nov 2026"
+    "t": "New US tariffs worry Thai exporters",
+    "s": "Bangkok Post",
+    "d": "26 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-24","USD":33.93,"AUD":22.53,"GBP":44.44,"EUR":37.2};
+var FX_RATES = {"date":"2026-11-25","USD":34.13,"AUD":22.42,"GBP":44.57,"EUR":37.32};
 // Pattaya right now — the other moaning index
 var WX_NOW = {"date":"2026-11-25","temp":31,"humid":59,"code":51,"hi":32,"rain":24};
 // the bar TV's one true channel
@@ -82,6 +82,6 @@ var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3622,"date":"2026-11-24","baht":58300};
+var GOLD = {"usd":3565,"date":"2026-11-26","baht":57550};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":59266,"thb":2021222};
+var BTC = {"usd":60578,"thb":2061811};
