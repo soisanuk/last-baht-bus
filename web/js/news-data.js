@@ -3,63 +3,63 @@
 // flavor ONLY (bar TVs, newspapers): never gate game logic on headlines.
 var NEWS_FEED = [
   {
+    "t": "Road closures and diversions announced for Pattaya’s 2026 fireworks",
+    "s": "Nation Thailand",
+    "d": "27 Nov 2026"
+  },
+  {
+    "t": "Russian man survives 15th-floor fall into Pattaya condo pool",
+    "s": "Thaiger",
+    "d": "27 Nov 2026"
+  },
+  {
+    "t": "Chon Buri police gear up for Tomorrowland Thailand as 150,000 fans expected",
+    "s": "Thaiger",
+    "d": "27 Nov 2026"
+  },
+  {
     "t": "Thailand and AirAsia to push the destination Pattaya in 2027",
     "s": "TravelMole",
     "d": "26 Nov 2026"
   },
   {
-    "t": "Para table tennis legends serve up double the excitement at World Championships",
-    "s": "Paralympic.org.",
-    "d": "23 Nov 2026"
+    "t": "Pattaya transwoman says Chinese date steal cash, camera worth nearly 70,000 baht",
+    "s": "Thaiger",
+    "d": "25 Nov 2026"
   },
   {
-    "t": "Two Chinese women kidnapped by Chinese man in Pattaya",
-    "s": "Khaosod English",
+    "t": "Chinese man kidnaps two Chinese women in Pattaya ransom case",
+    "s": "Thaiger",
     "d": "24 Nov 2026"
   },
   {
-    "t": "US carrier visit to Thailand's Pattaya lifts hope and sex-tourism risk",
+    "t": "17 women and transwomen along Pattaya Beach questioned over street soliciting",
+    "s": "Thaiger",
+    "d": "24 Nov 2026"
+  },
+  {
+    "t": "Finnish fireworks team to perform at Pattaya festival",
+    "s": "Scandasia",
+    "d": "27 Nov 2026"
+  },
+  {
+    "t": "Thailand's Bangchak shuts all units at Bangkok refinery after fire, says 9 workers injured",
     "s": "Reuters",
-    "d": "02 Sep 2026"
+    "d": "26 Nov 2026"
   },
   {
-    "t": "Pattaya, once Thailand’s ‘Sin City,’ beckons weary sailors from the USS Abraham Lincoln",
-    "s": "AP News",
-    "d": "02 Sep 2026"
+    "t": "At least 9 injured by large explosion and fire at major oil facility in Bangkok",
+    "s": "CNN",
+    "d": "26 Nov 2026"
   },
   {
-    "t": "Woman arrested for stealing $2,000 from Turkish tourist in Pattaya",
-    "s": "VnExpress International",
-    "d": "20 Nov 2026"
-  },
-  {
-    "t": "Pedicures and a pair of socks: sailors from USS Abraham Lincoln go wild in party resort of Pattaya",
-    "s": "The Guardian",
-    "d": "05 Sep 2026"
-  },
-  {
-    "t": "Thailand: After 286 days at sea, US sailors hit Pattaya",
-    "s": "DW.com",
-    "d": "07 Sep 2026"
-  },
-  {
-    "t": "Thailand, Myanmar agree to monitor border rivers amid pollution fears",
-    "s": "Reuters",
-    "d": "25 Nov 2026"
+    "t": "Bangkok oil refinery explosion injures at least 9, Thailand company monitoring air quality",
+    "s": "Fox News",
+    "d": "26 Nov 2026"
   },
   {
     "t": "AI Is Buying Thailand Time to Fix Tourism",
     "s": "Bloomberg.com",
-    "d": "25 Nov 2026"
-  },
-  {
-    "t": "Billionaire Harald Link’s B. Grimm, Japan’s NTT To Build $3.3 Billion Data Center In Thailand",
-    "s": "Forbes",
-    "d": "25 Nov 2026"
-  },
-  {
-    "t": "PHINIA to Acquire the Business of the FMP Group with Operations in Australia, Thailand and Malaysia, a Leading Asia-Pacific Aftermarket Comp",
-    "s": "Business Wire",
     "d": "25 Nov 2026"
   },
   {
@@ -68,20 +68,20 @@ var NEWS_FEED = [
     "d": "25 Nov 2026"
   },
   {
-    "t": "New US tariffs worry Thai exporters",
-    "s": "Bangkok Post",
+    "t": "Nvidia said to halt server shipments to Malaysia, Singapore, Thailand and Indonesia",
+    "s": "The Edge Malaysia",
     "d": "26 Nov 2026"
   }
 ];
 // THB per 1 unit — the expat moaning index
-var FX_RATES = {"date":"2026-11-25","USD":34.13,"AUD":22.42,"GBP":44.57,"EUR":37.32};
+var FX_RATES = {"date":"2026-11-26","USD":34.06,"AUD":22.6,"GBP":44.64,"EUR":37.39};
 // Pattaya right now — the other moaning index
-var WX_NOW = {"date":"2026-11-25","temp":31,"humid":59,"code":51,"hi":32,"rain":24};
+var WX_NOW = {"date":"2026-11-27","temp":32,"humid":53,"code":3,"hi":32,"rain":6};
 // the bar TV's one true channel
 var FOOTY = {"league":"Premier League","games":[{"d":"2026-09-12","done":true,"h":"Bournemouth","hs":2,"a":"Brentford","as":2},{"d":"2026-09-12","done":true,"h":"Aston Villa","hs":1,"a":"Nottm Forest","as":2},{"d":"2026-09-12","done":true,"h":"Chelsea","hs":2,"a":"Hull","as":2},{"d":"2026-09-12","done":true,"h":"C Palace","hs":2,"a":"Ipswich","as":3},{"d":"2026-09-12","done":true,"h":"Liverpool","hs":0,"a":"Fulham","as":0},{"d":"2026-09-12","done":true,"h":"Spurs","hs":0,"a":"Everton","as":0},{"d":"2026-09-12","done":true,"h":"Sunderland","hs":0,"a":"Arsenal","as":2},{"d":"2026-09-13","done":true,"h":"Coventry","hs":0,"a":"Brighton","as":5},{"d":"2026-09-13","done":true,"h":"Man United","hs":0,"a":"Man City","as":1},{"d":"2026-09-14","done":true,"h":"Leeds","hs":4,"a":"Newcastle","as":1},{"d":"2026-09-18","done":false,"h":"Brentford","hs":0,"a":"Chelsea","as":0},{"d":"2026-09-19","done":false,"h":"Spurs","hs":0,"a":"Aston Villa","as":0}]};
 // GLO draw — the girls' retirement plan
 var LOTTO = {"date":"2026-11-16","first":"645654","last2":"06","front3":["101","938"],"back3":["106","782"]};
 // XAU, plus Thai baht-weight gold (96.5%)
-var GOLD = {"usd":3565,"date":"2026-11-26","baht":57550};
+var GOLD = {"usd":3672,"date":"2026-11-27","baht":59150};
 // the coin, for the laser-eyed regular
-var BTC = {"usd":60578,"thb":2061811};
+var BTC = {"usd":61735,"thb":2093387};
